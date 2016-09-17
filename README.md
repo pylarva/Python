@@ -9,7 +9,7 @@
 3. 作业程序源代码
   
 ### 博客更新
-[www.lichengbing.com](https://www.lichengbing.com)
+[www.lichengbing.com](http://www.lichengbing.com)
 
 
 
