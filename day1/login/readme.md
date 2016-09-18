@@ -32,12 +32,15 @@ print (str.split(' ',1)) # num=1 分片次数
 ['123', '456', '789']
 ['123', '\n456 \n789']
 </pre>
-### user.txt
+###user.txt   
 Jordan 123   
 kobe 456   
 wade 789   
-### user_lock.txt
+###user_lock.txt   
 gasol
+
+###程序设计图
+![login](http://i.imgur.com/DunQRGR.png)
 
 
 
