@@ -5,27 +5,15 @@ import sys,os,time
 
 id_db = {
     '亚洲': {
-        '中国': {
-            '北京',
-            '上海',
-            '广州',
-        },
-        '日本': {
-            '东京',
-            '大板',
-            '名古屋',
-        }
+        '中国': ['北京','上海','广州'],
+        '日本': ['东京','大板','名古屋'],
     },
     '欧洲': {
         '法国',
         '荷兰',
     },
     '美洲': {
-        '美国': {
-            '纽约',
-            '洛杉矶',
-            '休斯顿',
-        }
+        '美国': ['纽约','洛杉矶','休斯顿'],
     },
 }
 
@@ -115,11 +103,17 @@ def country_show(country_name):
     else:
         pass
 
-
-
-
-
-
+    while B_NAME:
+        if type(id_db[A_NAME][B_NAME]) is list:
+            city_dict = {}
+            for i,j in enumerate(id_db[A_NAME][B_NAME]):
+                city_dict[i] = j
+                print('%d.%s'% (i,j))
+            city_index = input('请输入编号： ')
+            city_index = input_handle(city_index)
+            C_NAME = id_db[A_NAME][B_NAME][city_index]
+            show(A_NAME,B_NAME,C_NAME)
+            sys.exit(0)
 
 def show(A_NAME='',B_NAME='',C_NAME=''):
     print('''

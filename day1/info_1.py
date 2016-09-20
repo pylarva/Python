@@ -36,9 +36,21 @@ a = {
         31:[7,8,9]
     }
 }
-print(type(a))
-print(type(a[2]))
-print(type(a[3][31]))
+#print(type(a))
+#print(type(a[2][21]))
+#print(type(a[3][31]))
 
-b = a[2]
-print(b)
+haha_dict = {}
+for i,j in enumerate(a[2][21]):
+    haha_dict[i] = j
+    print('%d.%s' % (i, j))
+#print(haha_dict)
+b = a[2][21]
+#print(b)
+#print('%d.%s'% (i,j))
+
+c = {
+    100:['1','2','3']
+}
+print(type(c[100]))
+print(c[100][0])
