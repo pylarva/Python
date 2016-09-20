@@ -33,7 +33,6 @@ a = {
 print(type(a))
 print(type(a[2][21]))
 print(type(a[3][31]))
-
 输出：
 class 'dict'
 class 'set'
