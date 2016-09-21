@@ -39,7 +39,7 @@ a = {
 #print(type(a))
 #print(type(a[2][21]))
 #print(type(a[3][31]))
-'''
+
 haha_dict = {}
 for i,j in enumerate(a[2][21]):
     haha_dict[i] = j
@@ -54,12 +54,3 @@ c = {
 }
 print(type(c[100]))
 print(c[100][0])
-'''
-b = {
-    '家电类':[('iphone',5888),2,3],
-    2:[4,5,6],
-}
-print(b['家电类'])
-for i in enumerate(b['家电类']):
-    x = i[0]
-    y = i[1]
