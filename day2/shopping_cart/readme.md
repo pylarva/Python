@@ -11,3 +11,6 @@
 
 ### 新知识
 
+###流程图
+![](http://i.imgur.com/ekchbGN.png)
+
