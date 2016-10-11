@@ -36,6 +36,16 @@ print(ret)
 #    **       默认将传入的参数，全部放置在列表中
 # 5、万能参数 *args，**kwargs
 
+# str.format() 格式化输出
+s1 = "i am {0}, age {1}".format("kobe",18)
+print(s1)
+s2 = "i am {0}, age {1}".format(*["kobe",18])
+print(s2)
+s3 = "i am {name}, age {age}".format(name='kobe',age='18')
+print(s3)
+dic_01 = {'name':'kobe','age':18}
+s4 = "i am {name}, age {age}".format(**dic_01)
+print(s4)
 
 def f1(*args):
     print(args,type(args))
@@ -62,3 +72,31 @@ def f3(*args,**kwargs):     # 万能参数只能放置在args后
     print(kwargs)
 f3(11,22,33,k1="v1",k2="v2")
 
+
+# 函数扩展01，重复函数定义（垃圾内存将被Python回收）
+def f4(a1,a2):
+    return a1 + a2
+def f4(a1,a2):
+    return a1 * a2
+ret = f4(8,8)
+print(ret)
+
+
+# 函数扩展02(函数传参是原值引用还是重新创建的新值？)
+def f5(a1):
+    a1.append(999)
+li_01 = [11,22,33]
+f5(li_01)
+print(li_01)
+
+
+# 函数扩展03
+# 全局变量，所有的作用域都可读
+NAME = "kobe"      # 全局变量(潜规则：全局变量都用大写)
+def f6():
+    age = 18       # 局部变量
+    global NAME    # 修改全局变量
+# 如果需要修改的变量是一个列表，则在函数里面可以读，可以append添加，但是不可以修改或者赋值
+    name = "jordan"
+    print(NAME,age)
+f6()
