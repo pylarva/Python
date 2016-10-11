@@ -4,12 +4,12 @@
 
 
 def login(user,pwd):
-    '''
+    """
     用户用户登陆验证
     :param: user 用户名
     :param: pwd  密码
     :return: Ture 登陆成功 False 登陆失败
-    '''
+    """
     f = open('db','r')
     for line in f:
         if line.split('|')[0] == user and line.split('|')[1] == pwd:
@@ -18,12 +18,12 @@ def login(user,pwd):
 
 
 def register(user, pwd):
-    '''
+    """
     用户用户注册
     :param user: 用户名
     :param pwd: 密码
     :return: 默认None
-    '''
+    """
     f = open('db', 'a')
     temp = "\n" + user + "|" + pwd
     f.write(temp)
