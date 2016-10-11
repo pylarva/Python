@@ -47,6 +47,7 @@ dic_01 = {'name':'kobe','age':18}
 s4 = "i am {name}, age {age}".format(**dic_01)
 print(s4)
 
+
 def f1(*args):
     print(args,type(args))
 

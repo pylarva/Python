@@ -6,6 +6,7 @@
 se1 = {11,22}
 print(type(se1))
 se2 = set([22,33])
+print(se2)
 # li = []
 # list((11,22)) 创建列表的时候调用 __init__,内部执行for循环里面的元组tuple
 
