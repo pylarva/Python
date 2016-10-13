@@ -5,5 +5,6 @@ Haproxy 配置文件操作
 3. 可修改backend 和sever信息
 4. 可删除backend 和sever信息
 5. 操作配置文件前进行备份
-6 添加server信息时，如果ip已经存在则修改;如果backend不存在则创建；若信息与已有信息重复则不操作
+6  添加server信息时，如果ip已经存在则修改;如果backend不存在则创建；若信息与已有信息重复则不操作
+
 
