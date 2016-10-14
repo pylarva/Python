@@ -2,19 +2,37 @@
 # -*- coding:utf-8 -*-
 # Author:lichengbing
 import sys, re
+from collections import defaultdict,OrderedDict
 
 # 向用户展示当前backend列表
 def backend_show(haproxy_file):
     backend_list = []
     backend_list_show = {}
+    backend_list_server = defaultdict(list)
+
     with open(haproxy_file, 'r') as file:
         for line in file:
             if re.match('backend', line):
                 backend_name = line.split()[1]
                 backend_list.append(backend_name)
-    for k,v in enumerate(backend_list,1):
-        backend_list_show[k] = v
-        print('\033[31m%s\033[0m. \033[31m%s\033[0m'% (k,v))
+            elif re.match('\s+server', line):
+                line = line.split()
+                server_dict = {}
+                server_dict['name'] = line[1]
+                server_dict['server'] = line[2]
+                server_dict['weight'] = line[4]
+                server_dict['maxconn'] = line[6]
+                backend_list_server[backend_name].append(server_dict)
+    #             check_dic = backend_list_server.get(backend_name)
+    #             if check_dic is None:
+    #                 backend_list_server.setdefault(backend_name, line)
+    #             else:
+    #                 backend_list_server[backend_name].append(line)
+    # print(backend_list_server)
+    # for k,v in enumerate(backend_list,1):
+    #     backend_list_show[k] = v
+    #     print('\033[31m%s\033[0m. \033[31m%s\033[0m'% (k,v))
+    return(backend_list,backend_list_show, backend_list_server)
 
 
 # 打印登陆选项菜单
@@ -27,7 +45,10 @@ def menu_show():
 当前系统backend列表如下：
         ''')
     # 调用backend显示函数
-    backend_show(haproxy_file)
+    (backend_list, backend_list_show, backend_list_server) = backend_show(haproxy_file)
+    for k,v in enumerate(backend_list,1):
+        backend_list_show[k] = v
+        print('\033[31m%s\033[0m. \033[31m%s\033[0m'% (k,v))
     print('--------------------------------------------')
     print(
         '''
@@ -50,7 +71,7 @@ def user_select():
         user_select = input("请输入编号： ")
         if user_select.isdigit():
             user_select =int(user_select)
-            if user_select > 0 and user_select < 6:
+            if 0 < user_select < 6:
                 return user_select
             else:
                 print("编号不存在...")
@@ -58,8 +79,21 @@ def user_select():
             print("输入错误...")
 
 # 显示haproxy server信息
-def haproxy_show():
-    backend = input("请输入backend: ")
+def haproxy_show(backend_list_server):
+    while True:
+        backend = input("请输入backend: ")
+        value = backend_list_server[backend]
+        print(value)
+        if backend in backend_list_server:
+            print('''
+-------------------------------------------
+序号    名称     地址      权重     最大连接数
+                  ''')
+            for k,v in enumerate(value,1):
+                print('%-5s'% k,end='')
+                print(value[k]['name'],value[k]['server'])
+        else:
+            print('输入错误，请重新输入...')
 
 
 # 增加haproxy server函数
@@ -68,12 +102,15 @@ def haproxy_show():
 #def haproxy_dell():
 # 修改haproxy server函数
 #def haproxy_change():
+
+
 # 开始主程序
 def main():
     menu_show()
+    (backend_list, backend_list_show, backend_list_server) = backend_show(haproxy_file)
     ret = user_select()
     if ret == 1:
-        haproxy_show()
+        haproxy_show(backend_list_server)
     if ret == 2:
         haproxy_add()
     if ret == 3:
