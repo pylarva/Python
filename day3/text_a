@@ -1,5 +1,9 @@
-100 1
-    server 200 300
+backend www.oldboy.org
+        server 100.1.7.9 100.1.7.9 weight 20 maxconn 3000
+
+backend buy.oldboy.org
+        server 100.1.7.90 100.1.7.90 weight 20 maxconn 3000
+        server 100.1.7.91 100.1.7.91 weight 2 maxconn 3
 
 100 2
     server 400 500

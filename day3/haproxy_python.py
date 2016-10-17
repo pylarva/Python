@@ -1,38 +1,41 @@
 #！/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author:lichengbing
-import sys, re
+
+import os,sys,re,time
 from collections import defaultdict,OrderedDict
 
+
 # 向用户展示当前backend列表
-def backend_show(haproxy_file):
+def file_read():
     backend_list = []
-    backend_list_show = {}
-    backend_list_server = defaultdict(list)
+    server_flag = False
+    backend_name_dict = defaultdict(list)
 
     with open(haproxy_file, 'r') as file:
         for line in file:
-            if re.match('backend', line):
-                backend_name = line.split()[1]
-                backend_list.append(backend_name)
-            elif re.match('\s+server', line):
-                line = line.split()
+            if line.split():
                 server_dict = OrderedDict()
-                server_dict['name'] = line[1]
-                server_dict['server'] = line[2]
-                server_dict['weight'] = line[4]
-                server_dict['maxconn'] = line[6]
-                backend_list_server[backend_name].append(server_dict)
-    #             check_dic = backend_list_server.get(backend_name)
-    #             if check_dic is None:
-    #                 backend_list_server.setdefault(backend_name, line)
-    #             else:
-    #                 backend_list_server[backend_name].append(line)
-    # print(backend_list_server)
-    # for k,v in enumerate(backend_list,1):
-    #     backend_list_show[k] = v
-    #     print('\033[31m%s\033[0m. \033[31m%s\033[0m'% (k,v))
-    return(backend_list,backend_list_show, backend_list_server)
+                line = line.split()
+
+                if line[0] == 'backend':
+                    backend_name = line[1]
+                    backend_list.append(backend_name)
+
+                    server_flag = True
+                elif line[0] == 'server' and server_flag:
+                    server_info = line
+                    server_dict['name'] = server_info[1]
+                    server_dict['server'] = server_info[2]
+                    server_dict['weight'] = server_info[4]
+                    server_dict['maxconn'] = server_info[6]
+                    backend_name_dict[backend_name].append(server_dict)
+
+                else:
+                    server_flag = False
+
+    #print(backend_name_dict)
+    return(backend_list,backend_name_dict)
 
 
 # 打印登陆选项菜单
@@ -45,10 +48,12 @@ def menu_show():
 当前系统backend列表如下：
         ''')
     # 调用backend显示函数
-    (backend_list, backend_list_show, backend_list_server) = backend_show(haproxy_file)
-    for k,v in enumerate(backend_list,1):
-        backend_list_show[k] = v
-        print('\033[31m%s\033[0m. \033[31m%s\033[0m'% (k,v))
+    show_dict = {}
+    backend_list = ''
+    (backend_list, backend_name_dict) = file_read()
+    for k,v in enumerate(backend_list, 1):
+        show_dict[k] = v
+        print('\033[31m%s\033[0m. \033[31m%s\033[0m' % (k, v))
     print('--------------------------------------------')
     print(
         '''
@@ -79,23 +84,25 @@ def user_select():
             print("输入错误...")
 
 # 显示haproxy server信息
-def haproxy_show(backend_list_server):
-    while True:
-        backend = input("请输入backend: ")
-        if backend in backend_list_server:
-            value = backend_list_server[backend]
-            print(value)
-            print('''
--------------------------------------------
-序号    名称     地址      权重     最大连接数
-                  ''')
-            for k,v in enumerate(value,1):
-                print('%-5s'% k,end='')
-                for kk,vv in v.items:
-                    print('%-20s ' % vv, end='')
-                print()
-        else:
-            print('输入错误，请重新输入...')
+def haproxy_show(inquiry_flag,backend_server_dict):
+    backend_name = input('请输入所查询的backend名称（ \'b\' 返回）： ')
+    if backend_name in backend_server_dict:
+        print('\n================================================================')
+        print('%-5s %-10s %-15s %-15s %-15s' % ('序号', '名称', 'IP', '权重', '最大连接数'))
+        server_list = backend_server_dict[backend_name]
+        for k, v in enumerate(server_list, 1):
+            print('%-5s ' % k,end='')
+            for m,n in v.items():
+                print('%-15s ' % n,end='')
+            print()
+        print('\n================================================================')
+        return inquiry_flag
+    if backend_name == 'b':
+        inquiry_flag = False
+    else:
+        print('输入错误，请重新输入...')
+    return inquiry_flag
+
 
 
 # 增加haproxy server函数
@@ -108,20 +115,24 @@ def haproxy_show(backend_list_server):
 
 # 开始主程序
 def main():
-    menu_show()
-    (backend_list, backend_list_show, backend_list_server) = backend_show(haproxy_file)
-    ret = user_select()
-    if ret == 1:
-        haproxy_show(backend_list_server)
-    if ret == 2:
-        haproxy_add()
-    if ret == 3:
-        haproxy_dell()
-    if ret == 4:
-        haproxy_change()
-    if ret == 5:
-        print("退出系统成功！")
-        sys.exit()
+    backend_flag = True
+    while backend_flag:
+        menu_show()
+        (backend_name_dict, backend_server_dict) = file_read()
+        ret = user_select()
+        if ret == 1:
+            inquiry_flag = True
+            while inquiry_flag:
+                inquiry_flag = haproxy_show(inquiry_flag,backend_server_dict)
+        if ret == 2:
+            haproxy_add()
+        if ret == 3:
+            haproxy_dell()
+        if ret == 4:
+            haproxy_change()
+        if ret == 5:
+            print("退出系统成功！")
+            sys.exit()
 
 haproxy_file = 'haproxy_conf_ori'
 main()
