@@ -47,10 +47,9 @@ def name_add():
             name_flag = False
         elif re.match('[0-9a-zA-Z\_]+', name_input):
             name = name_input
-            name_flag = False
+            return name
         else:
             print('输入有误...')
-    return name
 
 
 def ip_add():
@@ -94,10 +93,9 @@ def maxconn_add():
             maxconn_flag = False
         elif maxconn_input.isdigit():
             maxconn = int(maxconn_input)
-            maxconn_flag = False
+            return maxconn
         else:
             print('输入有误...')
-    return maxconn
 
 
 def backend_server_add(backend_server_dict):
@@ -125,6 +123,7 @@ def backend_server_add(backend_server_dict):
                 write_file.write(line)
                 add_flag = False
     print('更新server成功！')
+    time.sleep(2)
 
 
 def check_repeat(backend_name, backend_server_dict, add_server_dict):
@@ -145,7 +144,7 @@ def menu_show():
 \033[32m=========================================\033[0m
 当前系统backend列表如下：
         ''')
-    # 调用file_read函数1
+    # 调用file_read函数显示backend列表
     show_dict = {}
     backend_list = ''
     (backend_list, backend_name_dict) = file_read()
@@ -209,7 +208,7 @@ def haproxy_add(backend_server_dict):
 
     if backend_name in backend_server_dict:
         add_server_dict = OrderedDict()
-        print('请依次输入想要添加的server信息（按q退出）： ')
+        print('请依次输入想要添加的server信息： ')
         add_server_dict['name'] = name_add()
         add_server_dict['ip'] = ip_add()
         add_server_dict['weight'] = weight_add()
@@ -291,7 +290,11 @@ def haproxy_del(backend_server_dict):
 
 
 # 修改haproxy server函数
-#def haproxy_change():
+def haproxy_change(backend_server_dict):
+    user_choose_backend = input('请输入要修改的bankend名称： ')
+    if user_choose_backend in backend_server_dict:
+        haproxy_show(user_choose_backend, backend_server_dict)
+
 
 
 # 开始主程序
@@ -315,7 +318,9 @@ def main():
             while del_flag:
                 (del_flag, backend_server_dict) = haproxy_del(backend_server_dict)
         if ret == 4:
-            haproxy_change()
+            change_flag = True
+            while change_flag:
+                (change_flag, backend_server_dict) = haproxy_add(backend_server_dict)
         if ret == 5:
             print("退出系统成功！")
             sys.exit()
