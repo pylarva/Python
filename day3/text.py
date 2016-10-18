@@ -13,9 +13,8 @@ import re
 #             line = line.split()
 #             print(line)
 
-name = input('shuru: ')
-if name == '[y|Y]':
-    print('yse')
-else:
-    print('no')
+with open('text_a', 'a+') as file:
+    name = input('shuru: ')
+    file.write('\n'*2 + '%s' % name)
+print('ok')
 

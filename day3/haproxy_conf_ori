@@ -31,3 +31,5 @@ backend www.oldboy.org
 backend buy.oldboy.org
         server 100.1.7.90 100.1.7.90 weight 20 maxconn 3000
         server 100.1.7.91 100.1.7.91 weight 2 maxconn 3
+
+backend www.li.com

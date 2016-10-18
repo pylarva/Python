@@ -10,7 +10,7 @@ from collections import defaultdict,OrderedDict
 def file_read():
     backend_list = []
     server_flag = False
-    backend_name_dict = defaultdict(list)
+    backend_server_dict = defaultdict(list)
 
     with open(haproxy_file, 'r') as file:
         for line in file:
@@ -29,13 +29,13 @@ def file_read():
                     server_dict['ip'] = server_info[2]
                     server_dict['weight'] = server_info[4]
                     server_dict['maxconn'] = server_info[6]
-                    backend_name_dict[backend_name].append(server_dict)
+                    backend_server_dict[backend_name].append(server_dict)
 
                 else:
                     server_flag = False
 
     #print(backend_name_dict)
-    return(backend_list,backend_name_dict)
+    return(backend_list,backend_server_dict)
 
 def name_add():
     name_flag = True
@@ -108,8 +108,11 @@ def backend_server_add(backend_server_dict):
                 write_file.write(line)
                 backend_name = line.split()[1]
                 for server_dict in backend_server_dict[backend_name]:
-                    server_line = '\tserver {name} {ip} weight {weight} maxconn {maxconn}\n'
-                    write_file.write(server_line.format(**server_dict))
+                    if server_dict:
+                        server_line = '\tserver {name} {ip} weight {weight} maxconn {maxconn}\n'
+                        write_file.write(server_line.format(**server_dict))
+                    else:
+                        write_file.write('\n')
                 add_flag = True
             elif add_flag and re.match('\s+server', line):
                 pass
@@ -130,7 +133,7 @@ def menu_show():
 \033[32m=========================================\033[0m
 当前系统backend列表如下：
         ''')
-    # 调用file_read函数
+    # 调用file_read函数1
     show_dict = {}
     backend_list = ''
     (backend_list, backend_name_dict) = file_read()
@@ -203,14 +206,30 @@ def haproxy_add(backend_server_dict):
         server_commit = input('是否添加该条server信息[Y/N]： ')
         if server_commit == 'Y' or server_commit == 'y':
             backend_server_dict[backend_name].append(add_server_dict)
+            print(backend_server_dict)
             backend_server_add(backend_server_dict)
             add_flag = False
-            return add_flag
+            return (add_flag, backend_server_dict)
+        else:
+            add_flag = False
+            return (add_flag, backend_server_dict)
+    else:
+        add_backend_name = input('Backend不存在，是否添加？[Y/N] ')
+        if add_backend_name == 'Y' or add_backend_name == 'y':
+            with open(haproxy_file, 'a+') as file:
+                file.write('\n'*2 + 'backend ' + '%s' % backend_name)
+                server_dict = OrderedDict()
+                # server_dict['name'] = ''
+                # server_dict['ip'] = ''
+                # server_dict['weight'] = ''
+                # server_dict['maxconn'] = ''
+                backend_server_dict[backend_name].append(server_dict)
+                print('添加成功！')
+                add_flag = True
+                return (add_flag, backend_server_dict)
         else:
             add_flag = False
             return add_flag
-    else:
-        print('输入不正确...')
 
 # 删除haprxoy server函数
 #def haproxy_dell():
@@ -232,7 +251,7 @@ def main():
         if ret == 2:
             add_flag = True
             while add_flag:
-                add_flag = haproxy_add(backend_server_dict)
+                (add_flag, backend_server_dict) = haproxy_add(backend_server_dict)
         if ret == 3:
             haproxy_dell()
         if ret == 4:
