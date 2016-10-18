@@ -28,5 +28,3 @@ frontend oldboy.org
 backend www.oldboy.org
 	server 100.1.7.9 100.1.7.9 weight 20 maxconn 3000
 
-backend buy
-	server 100.1.7.91 100.1.7.91 weight 2 maxconn 3

@@ -102,24 +102,29 @@ def maxconn_add():
 
 def backend_server_add(backend_server_dict):
     add_flag = False
+    #print(backend_server_dict)
     with open(haproxy_file, 'r') as read_file,open('newfile', 'w') as write_file:
         for line in read_file:
             if re.match('backend', line):
-                write_file.write(line)
-                backend_name = line.split()[1]
-                for server_dict in backend_server_dict[backend_name]:
-                    if server_dict:
-                        server_line = '\tserver {name} {ip} weight {weight} maxconn {maxconn}\n'
-                        write_file.write(server_line.format(**server_dict))
-                    else:
-                        write_file.write('\n')
+                if backend_server_dict[line.split()[1]]:
+                    write_file.write(line)
+                    backend_name = line.split()[1]
+                    for server_dict in backend_server_dict[backend_name]:
+                        if server_dict:
+                            server_line = '\tserver {name} {ip} weight {weight} maxconn {maxconn}\n'
+                            write_file.write(server_line.format(**server_dict))
+                        else:
+                            write_file.write('\n')
+                    add_flag = True
+                else:
+                    pass
                 add_flag = True
             elif add_flag and re.match('\s+server', line):
                 pass
             else:
                 write_file.write(line)
                 add_flag = False
-    print('添加新server成功！')
+    print('更新server成功！')
 
 
 def check_repeat(backend_name, backend_server_dict, add_server_dict):
@@ -127,6 +132,7 @@ def check_repeat(backend_name, backend_server_dict, add_server_dict):
     for k, v in enumerate(de):
         if de[k]['ip'] == add_server_dict['ip']:
             del de[k]
+    de.append(add_server_dict)
     return backend_server_dict
 
 
@@ -175,9 +181,10 @@ def user_select():
         else:
             print("输入错误...")
 
+
 # 显示haproxy server信息
-def haproxy_show(inquiry_flag,backend_server_dict):
-    backend_name = input('请输入所查询的backend名称（ \'b\' 返回）： ')
+def haproxy_show(backend_name, backend_server_dict):
+    inquiry_flag = True
     if backend_name in backend_server_dict:
         print('\n================================================================')
         print('%-5s %-10s %-15s %-15s %-15s' % ('序号', '名称', 'IP', '权重', '最大连接数'))
@@ -213,7 +220,7 @@ def haproxy_add(backend_server_dict):
         if server_commit == 'Y' or server_commit == 'y':
             # 检查是否有重复ip
             backend_server_dict = check_repeat(backend_name, backend_server_dict, add_server_dict)
-            # 进行文件的添加
+            # 进行server的添加
             backend_server_add(backend_server_dict)
             add_flag = False
             return (add_flag, backend_server_dict)
@@ -240,8 +247,19 @@ def haproxy_add(backend_server_dict):
 
 
 # 删除haprxoy server函数
-def haproxy_del():
-    user_choose = input('')
+def haproxy_del(backend_server_dict):
+    user_choose = input('删除整个backend【按1】，删除单个server【按2】： ')
+    if user_choose == '1':
+        user_choose_backend = input('请输入bankend名称： ')
+        if user_choose_backend in backend_server_dict:
+            haproxy_show(user_choose_backend, backend_server_dict)
+            affir_del = input('确认全部删除吗？[Y/N]: ')
+            if affir_del == 'Y' or affir_del == 'y':
+                del backend_server_dict[user_choose_backend]
+                # 写入文件
+                backend_server_add(backend_server_dict)
+                a = input('a')
+
 # 修改haproxy server函数
 #def haproxy_change():
 
@@ -256,7 +274,8 @@ def main():
         if ret == 1:
             inquiry_flag = True
             while inquiry_flag:
-                inquiry_flag = haproxy_show(inquiry_flag,backend_server_dict)
+                backend_name = input('请输入所查询的backend名称（ \'b\' 返回）： ')
+                inquiry_flag = haproxy_show(backend_name, backend_server_dict)
         if ret == 2:
             add_flag = True
             while add_flag:
