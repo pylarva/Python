@@ -13,8 +13,11 @@ import re
 #             line = line.split()
 #             print(line)
 
-with open('text_a', 'a+') as file:
-    name = input('shuru: ')
-    file.write('\n'*2 + '%s' % name)
-print('ok')
+# with open('text_a', 'a+') as file:
+#     name = input('shuru: ')
+#     file.write('\n'*2 + '%s' % name)
+# print('ok')
 
+a = [1,2,3]
+del a[0]
+print(a)

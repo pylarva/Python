@@ -122,6 +122,12 @@ def backend_server_add(backend_server_dict):
     print('添加新server成功！')
 
 
+def check_repeat(backend_name, backend_server_dict, add_server_dict):
+    de = backend_server_dict[backend_name]
+    for k, v in enumerate(de):
+        if de[k]['ip'] == add_server_dict['ip']:
+            del de[k]
+    return backend_server_dict
 
 
 # 打印登陆选项菜单
@@ -205,8 +211,9 @@ def haproxy_add(backend_server_dict):
         print(add_server_dict['name'],add_server_dict['ip'],add_server_dict['weight'],add_server_dict['maxconn'])
         server_commit = input('是否添加该条server信息[Y/N]： ')
         if server_commit == 'Y' or server_commit == 'y':
-            backend_server_dict[backend_name].append(add_server_dict)
-            print(backend_server_dict)
+            # 检查是否有重复ip
+            backend_server_dict = check_repeat(backend_name, backend_server_dict, add_server_dict)
+            # 进行文件的添加
             backend_server_add(backend_server_dict)
             add_flag = False
             return (add_flag, backend_server_dict)
@@ -229,10 +236,12 @@ def haproxy_add(backend_server_dict):
                 return (add_flag, backend_server_dict)
         else:
             add_flag = False
-            return add_flag
+            return (add_flag, backend_server_dict)
+
 
 # 删除haprxoy server函数
-#def haproxy_dell():
+def haproxy_del():
+    user_choose = input('')
 # 修改haproxy server函数
 #def haproxy_change():
 
@@ -253,7 +262,9 @@ def main():
             while add_flag:
                 (add_flag, backend_server_dict) = haproxy_add(backend_server_dict)
         if ret == 3:
-            haproxy_dell()
+            del_flag = True
+            while del_flag:
+                (del_flag, backend_server_dict) = haproxy_del(backend_server_dict)
         if ret == 4:
             haproxy_change()
         if ret == 5:
