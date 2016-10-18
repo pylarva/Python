@@ -8,6 +8,10 @@ from collections import defaultdict,OrderedDict
 
 # 读取haproxy配置文件，得到backend列表和server字典
 def file_read():
+    """
+    读原始配置文件，得到backend列表和保存有server信息的字典
+    :return: backend列表，server字典
+    """
     backend_list = []
     server_flag = False
     backend_server_dict = defaultdict(list)
@@ -34,10 +38,14 @@ def file_read():
                 else:
                     server_flag = False
 
-    #print(backend_name_dict)
     return(backend_list,backend_server_dict)
 
+
 def name_add():
+    """
+    添加server信息时对name有效性检查
+    :return: name 名称
+    """
     name_flag = True
     while name_flag:
         name_input = input('请输入名称(以字母数字或者下划线开头)： ')
@@ -53,6 +61,10 @@ def name_add():
 
 
 def ip_add():
+    """
+    添加server信息时对ip有效性检查
+    :return: ip
+    """
     ip_flag = True
     while ip_flag:
         ip_input = input('请输入IP地址： ')
@@ -68,7 +80,12 @@ def ip_add():
             continue
     return ip
 
+
 def weight_add():
+    """
+    添加server信息时对weight有效性检查
+    :return: 权重
+    """
     weight_flag = True
     while weight_flag:
         weight_input = input('请输入权重值： ')
@@ -83,7 +100,12 @@ def weight_add():
             print('输入有误...')
     return weight
 
+
 def maxconn_add():
+    """
+    添加server信息时对maxconn有效性检查
+    :return: 最大连接数
+    """
     maxconn_flag = True
     while maxconn_flag:
         maxconn_input = input('请输入最大文件打开数： ')
@@ -99,8 +121,13 @@ def maxconn_add():
 
 
 def backend_server_add(backend_server_dict):
+    """
+    根据server字典写文件操作，一个文件读，一个文件写
+    :param backend_server_dict: server字典
+    :return:
+    """
     add_flag = False
-    #print(backend_server_dict)
+    newfile = ''
     with open(haproxy_file, 'r') as read_file,open('newfile', 'w') as write_file:
         for line in read_file:
             if re.match('backend', line):
@@ -123,10 +150,19 @@ def backend_server_add(backend_server_dict):
                 write_file.write(line)
                 add_flag = False
     print('更新server成功！')
+    os.system('mv %s %s.bak' % (read_file, read_file))
+    os.system('mv %s %s' % (newfile, read_file))
     time.sleep(2)
 
 
 def check_repeat(backend_name, backend_server_dict, add_server_dict):
+    """
+    检查同backend里面是否有相同ip，做更新操作
+    :param backend_name: 名称
+    :param backend_server_dict: server字典
+    :param add_server_dict: 要添加的server信息
+    :return: 更新后的server字典
+    """
     de = backend_server_dict[backend_name]
     for k, v in enumerate(de):
         if de[k]['ip'] == add_server_dict['ip']:
@@ -137,6 +173,10 @@ def check_repeat(backend_name, backend_server_dict, add_server_dict):
 
 # 打印登陆选项菜单
 def menu_show():
+    """
+    打印登陆互动菜单
+    :return:
+    """
     print(
         '''
 \033[32m=========================================\033[0m
@@ -146,7 +186,6 @@ def menu_show():
         ''')
     # 调用file_read函数显示backend列表
     show_dict = {}
-    backend_list = ''
     (backend_list, backend_name_dict) = file_read()
     for k,v in enumerate(backend_list, 1):
         show_dict[k] = v
@@ -163,6 +202,7 @@ def menu_show():
 =========================================
         '''
     )
+
 
 # 用户输入编号判断
 def user_select():
@@ -181,8 +221,11 @@ def user_select():
             print("输入错误...")
 
 
-# 显示haproxy server信息
+# 显示相应的backend server信息
 def haproxy_show(backend_name, backend_server_dict):
+    """
+    根据backend，遍历backend_server_dict字典展现给用户
+    """
     inquiry_flag = True
     if backend_name in backend_server_dict:
         print('\n================================================================')
@@ -204,6 +247,11 @@ def haproxy_show(backend_name, backend_server_dict):
 
 # 增加haproxy server函数
 def haproxy_add(backend_server_dict):
+    """
+    对server字典进行增加操作，将字典信息再写入到文件
+    :param backend_server_dict: 保存有server信息的字典
+    :return: 返回更新后的server字典
+    """
     backend_name = input('请输入要修改的backend: ')
 
     if backend_name in backend_server_dict:
@@ -247,6 +295,11 @@ def haproxy_add(backend_server_dict):
 
 # 删除haprxoy server函数
 def haproxy_del(backend_server_dict):
+    """
+    删除server信息还是基于对总的server字典操作，然后根据字典写文件
+    :param backend_server_dict: 总的server字典
+    :return: 更新后的字典
+    """
     user_choose = input('删除整个backend【按1】，删除单个server【按2】： ')
     if user_choose == '1':
         user_choose_backend = input('请输入bankend名称： ')
@@ -263,6 +316,7 @@ def haproxy_del(backend_server_dict):
         else:
             del_flag = False
             return (del_flag, backend_server_dict)
+
     elif user_choose == '2':
         user_choose_backend = input('请输入backend名称： ')
         if user_choose_backend in backend_server_dict:
@@ -289,38 +343,37 @@ def haproxy_del(backend_server_dict):
         return (del_flag, backend_server_dict)
 
 
-# 修改haproxy server函数
-def haproxy_change(backend_server_dict):
-    user_choose_backend = input('请输入要修改的bankend名称： ')
-    if user_choose_backend in backend_server_dict:
-        haproxy_show(user_choose_backend, backend_server_dict)
-
-
-
 # 开始主程序
 def main():
     main_flag = True
     while main_flag:
         menu_show()
+        # 调用file_read读取文件，得到一个backend列表和一个保存有server信息的字典
         (backend_name_dict, backend_server_dict) = file_read()
+
         ret = user_select()
+
         if ret == 1:
             inquiry_flag = True
             while inquiry_flag:
                 backend_name = input('请输入所查询的backend名称（ \'b\' 返回）： ')
                 inquiry_flag = haproxy_show(backend_name, backend_server_dict)
+
         if ret == 2:
             add_flag = True
             while add_flag:
                 (add_flag, backend_server_dict) = haproxy_add(backend_server_dict)
+
         if ret == 3:
             del_flag = True
             while del_flag:
                 (del_flag, backend_server_dict) = haproxy_del(backend_server_dict)
+
         if ret == 4:
             change_flag = True
             while change_flag:
                 (change_flag, backend_server_dict) = haproxy_add(backend_server_dict)
+
         if ret == 5:
             print("退出系统成功！")
             sys.exit()
