@@ -258,7 +258,37 @@ def haproxy_del(backend_server_dict):
                 del backend_server_dict[user_choose_backend]
                 # 写入文件
                 backend_server_add(backend_server_dict)
-                a = input('a')
+            else:
+                del_flag = False
+                return(del_flag, backend_server_dict)
+        else:
+            del_flag = False
+            return (del_flag, backend_server_dict)
+    elif user_choose == '2':
+        user_choose_backend = input('请输入backend名称： ')
+        if user_choose_backend in backend_server_dict:
+            haproxy_show(user_choose_backend, backend_server_dict)
+            user_choose_ip = input('请输入要删除的IP地址： ')
+            if re.match('(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}(\:\d{1,5})?$', user_choose_ip):
+                de = backend_server_dict[user_choose_backend]
+                for k, v in enumerate(de):
+                    if de[k]['ip'] == user_choose_ip:
+                        del de[k]
+                backend_server_add(backend_server_dict)
+                time.sleep(1)
+                del_flag = False
+                return (del_flag, backend_server_dict)
+            else:
+                print('输入错误...')
+                time.sleep(1)
+                del_flag = False
+                return (del_flag, backend_server_dict)
+    else:
+        print('输入错误')
+        time.sleep(1)
+        del_flag = False
+        return (del_flag, backend_server_dict)
+
 
 # 修改haproxy server函数
 #def haproxy_change():
