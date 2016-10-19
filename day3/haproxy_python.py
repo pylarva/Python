@@ -127,8 +127,8 @@ def backend_server_add(backend_server_dict):
     :return:
     """
     add_flag = False
-    newfile = ''
-    with open(haproxy_file, 'r') as read_file,open('newfile', 'w') as write_file:
+    newfile = '%s.new' % haproxy_file
+    with open(haproxy_file, 'r') as read_file,open(newfile, 'w') as write_file:
         for line in read_file:
             if re.match('backend', line):
                 if backend_server_dict[line.split()[1]]:
@@ -149,10 +149,10 @@ def backend_server_add(backend_server_dict):
             else:
                 write_file.write(line)
                 add_flag = False
-    print('更新server成功！')
-    os.system('mv %s %s.bak' % (read_file, read_file))
-    os.system('mv %s %s' % (newfile, read_file))
-    time.sleep(2)
+        print('更新server成功！')
+        os.system('mv %s %s.bak' % (haproxy_file, haproxy_file))
+        os.system('mv %s %s' % (newfile, haproxy_file))
+        time.sleep(2)
 
 
 def check_repeat(backend_name, backend_server_dict, add_server_dict):
