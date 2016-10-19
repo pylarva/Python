@@ -55,11 +55,59 @@
 # s = [1,2,3]
 # print(isinstance(s, list))
 
-# 8、筛选函数
+# 8、筛选函数filter
+# 函数返回True，将元素添加到结果中
 # filter(函数， 可迭代对象)
-def f2(a):
-    if a>22:
-        return True
-li = [11, 22, 33]
-ret = filter(f2, li)
-print(list(ret))
+# 循环第二个参数，让每一个参数去执行函数，如果返回True，表示元素合法
+# def f2(a):
+#     if a > 22:
+#         return True
+# li = [11, 22, 33]
+# ret = filter(f2, li)
+# result = filter(lambda a: a > 22, li)
+# print(list(ret))
+# print(list(result))
+
+# lambda 会自动 return
+# f1 = lambda a: a > 30
+# ret = f1(90)
+# print(ret)
+
+# 8、筛选函数 map
+# 将函数返回值添加到结果中
+# 对可迭代对象内的元素做统一操作
+# li = [11, 22, 33, 44]
+# result = map(lambda a: a+100, li)
+# print(list(result))
+
+# 9、所有的全局变量、局部变量
+# NAME = 'AAA'
+# def show():
+#     a = 123
+#     b = 456
+#     print(locals())
+#     print(globals())
+# show()
+
+# 10、hash值
+# 将一个对象转换成他的hash值
+# s = 'hhh'
+# print(hash(s))
+
+# 11、len长度计算
+# python 3 里面按照字符查找，返回2
+# Python 2 里面按照字节查找，返回6
+# s = '李杰'
+# print(len(s))
+
+# 12、round
+# print(round(1.4))
+# print(round(1.8))
+
+# 13、zip 并行迭代
+# l1 = ["kobe", 11, 22, 33]
+# l2 = ["is", 11, 22]
+# l3 = ["boy", 11, 22, 33]
+# r = zip(l1, l2, l3)
+# tmp = list(r)[0]
+# print(" ".join(tmp))
