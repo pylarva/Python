@@ -17,11 +17,14 @@ def outer(func):
 #      1. 自动执行outer函数并将下面的函数名f1当作参数传递
 #      2. 将outer函数的返回值，重新赋值给f1
 @outer
-def f1(arg):
+def f1(arg1):
     print('F1')
-    return 'hahha'
+    return ('hahah')
 
 @outer
 def f2(arg1, arg2):
     print('F2')
     return 'heheh'
+
+ret = f1(1)
+print(ret)

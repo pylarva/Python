@@ -3,27 +3,32 @@
 # Author:lichengbing
 
 
+# def f1(a, b):
+#     return a + b
+
 # 1、定义的函数是否可以被调用执行
-#callable()
+# a = 100
+# b = 10
+# print(callable(f1))
 
 # 2、ACSII码转换数字
-#print(chr(65))
-#print(ord('A'))
+# print(chr(65))
+# print(ord('A'))
 
 # 3、生成随机验证码
-# import random
-# li = []
-# for i in range(6):
-#     r = random.randrange(0, 5)
-#     if r == 2 or r == 4:
-#         num = random.randrange(0, 9)
-#         li.append(str(num))
-#     else:
-#         temp = random.randrange(65, 91)
-#         c = chr(temp)
-#         li.append(c)
-# result = "".join(li)  # 使用join时元素必须是字符串
-# print(result)
+import random
+li = []
+for i in range(6):
+    r = random.randrange(0, 5)
+    if r == 2 or r == 4:
+        num = random.randrange(0, 9)
+        li.append(str(num))
+    else:
+        temp = random.randrange(65, 91)
+        c = chr(temp)
+        li.append(c)
+result = "".join(li)  # 使用join时元素必须是字符串
+print(result)
 
 # 4、Python先编译后执行
 # 编译， 单行single, 表达式eval, 和Python一样的格式exec
@@ -43,16 +48,16 @@
 # print(ret)
 
 # 5、查看对象提供的功能
-# print(dir(dict))
-# help(list) # 读模块源码
+#print(dir(dict))
+#help(list) # 读模块源码
 
-# 6、共97，每页显示10条，需要都少页
+# 6、共97，每页显示10条，需要最少页
 # r = divmod(97, 10)
 # n1, n2 = divmod(97, 10)
 # print(n1, n2)
 
 # 7、判断某一对象是否是某类的实例
-# s = [1,2,3]
+# s = [1, 2, 3]
 # print(isinstance(s, list))
 
 # 8、筛选函数filter
