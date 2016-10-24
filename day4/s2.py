@@ -27,6 +27,8 @@ li.append(a)
 li.append(b)
 s = ''.join(li)
 print(s)
+del li['2']
+print(li)
 
 
 

@@ -58,9 +58,15 @@ def user_info(user_db, USER_LEVEL, USER_NAME):
         for line in user_db:
             if USER_NAME == line.split('|')[0]:
                 print(line.replace('|', '  '))
+        quit = input('[Enter]退出...')
+        if quit:
+            return
     if USER_LEVEL == 2:
         for line in user_db:
             print(line.replace('|', '  '))
+        quit = input('[Enter]退出...')
+        if quit:
+            return
 
 
 @outer
@@ -149,12 +155,59 @@ def user_add(user_db, USER_LEVEL, USER_NAME):
             else:
                 print('用户名不能为空..')
 
-def user_del():
-    pass
+@outer
+def user_del(user_db, USER_LEVEL, USER_NAME):
+    if USER_LEVEL == 1:
+        print('只有管理员权限才能删除用户...')
+        time.sleep(1)
+    else:
+        del_name = input('请出入要删除的用户名： ')
+        user_exit = False
+        i = 0
+        for line in user_db:
+            if del_name == line.split('|')[0]:
+                user_exit = True
+                user_db.remove(line)
+                break
+            i = + 1
+        if user_exit:
+            with open('user_db', 'w+') as db:
+                for line in user_db:
+                    db.write(line)
+                    print('删除成功！')
+                    time.sleep(1)
+        else:
+            print('用户不存在')
+            time.sleep(1)
 
 
-def user_levelup():
-    pass
+@outer
+def user_levelup(user_db, USER_LEVEL, USER_NAME):
+    if USER_LEVEL == 1:
+        print('只有管理员权限才能给用户提权...')
+        time.sleep(1)
+    else:
+        name_level = input('请出入要提权的用户名： ')
+        user_exit = False
+        for line in user_db:
+            if name_level == line.split('|')[0]:
+                user_exit = True
+                break
+        if user_exit:
+            with open('user_db', 'w+') as db:
+                for line in user_db:
+                    if name_level == line.split('|')[0]:
+                        line = line.split('|')
+                        line[4] = '2'
+                        line = '|'.join(line)
+                        db.write(line)
+                    else:
+                        db.write(line)
+                print('提权成功！')
+                time.sleep(1)
+        else:
+            print('用户不存在')
+            time.sleep(1)
 
 
 def user_search():
@@ -175,9 +228,9 @@ def main():
         if user_select == '3':
             user_add(user_db, USER_LEVEL, USER_NAME)
         if user_select == '4':
-            user_del()
+            user_del(user_db, USER_LEVEL, USER_NAME)
         if user_select == '5':
-            user_levelup()
+            user_levelup(user_db, USER_LEVEL, USER_NAME)
         if user_select == '6':
             user_search()
         if user_select == '7':
