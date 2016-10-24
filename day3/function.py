@@ -96,8 +96,9 @@ print(li_01)
 NAME = "kobe"      # 全局变量(潜规则：全局变量都用大写)
 def f6():
     age = 18       # 局部变量
-    global NAME    # 修改全局变量
+    #global NAME    # 修改全局变量
 # 如果需要修改的变量是一个列表，则在函数里面可以读，可以append添加，但是不可以修改或者赋值
-    name = "jordan"
+    NAME = "jordan"
     print(NAME,age)
 f6()
+print(NAME)

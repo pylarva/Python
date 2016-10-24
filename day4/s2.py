@@ -20,10 +20,13 @@
 #     print('F2')
 
 
-li = ['1|2|3', '4|5|6']
-for line in li:
-    if '1' in line.split('|'):
-        print('yes')
+li = []
+a = '1'
+b = '2'
+li.append(a)
+li.append(b)
+s = ''.join(li)
+print(s)
 
 
 
