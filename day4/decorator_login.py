@@ -27,6 +27,7 @@ def login(user_db):
 
 def outer(func):
     def inner(user_db, USER_LEVEL, user_name):
+        print(LOGIN_USER)
         if LOGIN_USER['is_login']:
             r = func(user_db, USER_LEVEL, user_name)
             return r
