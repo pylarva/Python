@@ -31,30 +31,55 @@
 # ret = func()
 
 
-def func():
-    print('123')
-    yield 1
-    yield 2
-    yield 3
-
-ret = func()
+# def func():
+#     print('123')
+#     yield 1
+#     yield 2
+#     yield 3
+#
+# ret = func()
 # for i in ret:
 #     print(i)
 
-r1 = ret.__next__()  # 进入函数找到yield，获取yield后面的数据
-print(r1)
-r2 = ret.__next__()
-print(r2)
-r3 = ret.__next__()
-print(r3)
+# r1 = ret.__next__()  # 进入函数找到yield，获取yield后面的数据
+# print(r1)
+# r2 = ret.__next__()
+# print(r2)
+# r3 = ret.__next__()
+# print(r3)
 
 
-def myrange(arg):
-    start = 0
-    while True:
-        if start > arg:
-            return
-        yield start
-        start += 1
+# def myrange(arg):
+#     start = 0
+#     while True:
+#         if start > arg:
+#             return
+#         yield start
+#         start += 1
+#
+# ret = myrange(10)
 
-ret = myrange(10)
+
+#  递归
+# def func(n):
+#     n += 1
+#     if n >= 4:
+#         return 'end'
+#     return func(n)
+#
+# r = func(1)
+# print(r)
+
+
+# 模块
+import lib.commons, sys
+
+lib.commons.f1()
+sys.path.append('E:\\')  # 添加系统路径
+for item in sys.path:  # python系统路径
+    print(item)
+
+# from s1 import * # 适合导入嵌套在文件夹下的模块
+
+# 第三方模块
+# requests pip3 源码
