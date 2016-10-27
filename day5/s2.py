@@ -72,14 +72,23 @@
 
 
 # 模块
-import lib.commons, sys
+import lib.commons, sys, json
 
-lib.commons.f1()
-sys.path.append('E:\\')  # 添加系统路径
-for item in sys.path:  # python系统路径
-    print(item)
+# lib.commons.f1()
+# sys.path.append('E:\\')  # 添加系统路径
+# for item in sys.path:  # python系统路径
+#     print(item)
 
 # from s1 import * # 适合导入嵌套在文件夹下的模块
 
 # 第三方模块
 # requests pip3 源码
+# 1、系列化相关
+# import json
+# import
+dic = {'k1': 'v1'}
+result = json.dumps(dic)  # 序列化 将python的基础数据类型转化成字符串形式
+print(result, type(result))
+s1 = '{"k1": 123}'
+dic1 = json.loads(s1)  # 反序列化 将字符串类型转换成python数据类型
+print(s1, type(dic1))
