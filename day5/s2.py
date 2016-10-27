@@ -2,7 +2,15 @@
 # -*- coding:utf-8 -*-
 # Author:lichengbing
 
-# s = '%(name)-10s %(age)-10d %(p).2f' % {'name': 'kobe', 'age': 30, 'p': 1.1234}
+# 常见格式化
+
+# s = "numbers: {0:b},{0:o},{0:d},{0:x},{0:X}, {0:%}".format(15)
+# print(s)
+
+# s = " I am %s 百分号: %% " % 'kobe'
+# print(s)
+
+# s = '%(name)-10s %(age) 10d %(p).2f' % {'name': 'kobe', 'age': 30, 'p': 1.1234}
 # print(s)
 #
 # s1 = 'sdfsdf{0}23s{0}df{1}'.format(123, 'cool')
@@ -11,10 +19,10 @@
 # s2 = "----{name:s}_____{age:d}======{name:s}".format(name='cool', age=123)
 # print(s2)
 #
-# s3 = "---{:a^20s}===={:+d}====={:#b}".format('cool', 123, 15)
+# s3 = "---{:#^20s}===={:+d}====={:#b}".format('cool', 123, 15)
 # print(s3)
 #
-# s4 = "sdfsdfsdf {:.2%}".format(0.234567)
+# s4 = "abc {:.2%}".format(0.234567)
 # print(s4)
 
 # li = [11, 22, 33, 44]
@@ -38,6 +46,11 @@
 #     yield 3
 #
 # ret = func()
+# print(ret.__next__())
+# print(ret.__next__())
+# print(ret.__next__())
+
+
 # for i in ret:
 #     print(i)
 
@@ -58,6 +71,7 @@
 #         start += 1
 #
 # ret = myrange(10)
+# print(list(ret))
 
 
 #  递归
@@ -65,6 +79,7 @@
 #     n += 1
 #     if n >= 4:
 #         return 'end'
+#     print(n)
 #     return func(n)
 #
 # r = func(1)
@@ -72,10 +87,10 @@
 
 
 # 模块
-import lib.commons, sys, json
-
-# lib.commons.f1()
-# sys.path.append('E:\\')  # 添加系统路径
+# import sys
+#
+# # lib.commons.f1()
+# # sys.path.append('E:\\')  # 添加系统路径
 # for item in sys.path:  # python系统路径
 #     print(item)
 
@@ -84,11 +99,16 @@ import lib.commons, sys, json
 # 第三方模块
 # requests pip3 源码
 # 1、系列化相关
-# import json
-# import
+import json
 dic = {'k1': 'v1'}
-result = json.dumps(dic)  # 序列化 将python的基础数据类型转化成字符串形式
+# result = json.dumps(dic)  # 序列化 将python的基础数据类型转化成字符串形式
+# print(result, type(result))
+# s1 = '{"k1": 123}'
+# dic1 = json.loads(s1)  # 反序列化 将字符串类型转换成python数据类型
+# print(s1, type(dic1))
+
+json.dump(dic, open('test', 'w'))
+result = json.load(open('test', 'r'))
 print(result, type(result))
-s1 = '{"k1": 123}'
-dic1 = json.loads(s1)  # 反序列化 将字符串类型转换成python数据类型
-print(s1, type(dic1))
+
+
