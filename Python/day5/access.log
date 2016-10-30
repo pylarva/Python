@@ -1,0 +1,24 @@
+2016-10-28 12:46:56,353 - WARNING - warn message
+2016-10-28 12:46:56,353 - ERROR - error message
+2016-10-28 12:46:56,353 - CRITICAL - critical message
+2016-10-28 12:53:37,428 - WARNING - warn message
+2016-10-28 12:53:37,428 - ERROR - error message
+2016-10-28 12:53:37,429 - CRITICAL - critical message
+2016-10-28 12:54:58,911 - WARNING - warn message
+2016-10-28 12:54:58,911 - ERROR - error message
+2016-10-28 12:54:58,911 - CRITICAL - critical message
+2016-10-28 12:55:09,234 - WARNING - warn message
+2016-10-28 12:55:09,234 - ERROR - error message
+2016-10-28 12:55:09,234 - CRITICAL - critical message
+2016-10-28 12:57:16,461 - log.py - WARNING - warn message
+2016-10-28 12:57:16,462 - log.py - ERROR - error message
+2016-10-28 12:57:16,462 - log.py - CRITICAL - critical message
+2016-10-28 13:10:07,025 - log.py - WARNING - warn message
+2016-10-28 13:10:07,025 - log.py - ERROR - error message
+2016-10-28 13:10:07,026 - log.py - CRITICAL - critical message
+2016-10-28 13:11:04,566 - log.py - WARNING - warn message
+2016-10-28 13:11:04,566 - log.py - ERROR - error message
+2016-10-28 13:11:04,569 - log.py - CRITICAL - critical message
+2016-10-28 13:20:13,656 - log.py - WARNING - warn message
+2016-10-28 13:20:13,656 - log.py - ERROR - error message
+2016-10-28 13:20:13,657 - log.py - CRITICAL - critical message
