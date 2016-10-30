@@ -12,8 +12,8 @@ from datetime import datetime
 USER_INFO = []
 # 存放登陆成功的用户名
 LOGIN_USER = ""
-# 存放登陆用户的权限，初始值为'admin'
-LOGIN_USER_ROLE = "admin"
+# 存放登陆用户的权限，初始值为'admin_info'
+LOGIN_USER_ROLE = "admin_info"
 # 允许输入错误的最大次数
 LOGIN_MAX_ERR_COUNT = 3
 # 存放用户信息的文件
@@ -138,11 +138,11 @@ def user_add():
         while len(password) == 0:
             password = raw_input("password: ").strip()
         # 选择用户角色
-        role = raw_input("user role number[1:admin / 2:user(default)]: ")
+        role = raw_input("user role number[1:admin_info / 2:user(default)]: ")
         if len(role) == 0 or role == "2":
             user_role = "user"
         if role == "1":
-            user_role = "admin"
+            user_role = "admin_info"
         # 组合数据为字典
         user_info_dic = {"createtime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "password": password, "name": name,
                          "userrole": user_role, "islocked": "0"}
@@ -286,7 +286,7 @@ if __name__ == "__main__":
 
     if user_login():
         # 根据用户角色加载菜单
-        if LOGIN_USER_ROLE == "admin":
+        if LOGIN_USER_ROLE == "admin_info":
             menu_list = get_admin_menus()
         if LOGIN_USER_ROLE == "user":
             menu_list = get_user_menus()
