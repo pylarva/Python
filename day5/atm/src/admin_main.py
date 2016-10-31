@@ -80,33 +80,49 @@ def user_create():
 def user_del():
     while True:
         card_num = input('输入要删除的卡号： ')
-        if os.path.exists(os.path.join(setting.USER_DIR, card_num)):
-            shutil.rmtree(os.path.join(setting.USER_DIR, card_num))
-            print('删除卡号 %s 成功!' % card_num)
-            time.sleep(2)
-            break
+        if card_num:
+            if os.path.exists(os.path.join(setting.USER_DIR, card_num)):
+                shutil.rmtree(os.path.join(setting.USER_DIR, card_num))
+                print('删除卡号 %s 成功!' % card_num)
+                time.sleep(2)
+                break
+            else:
+                print('卡号不存在')
+                break
         else:
-            print('卡号不存在')
-            break
+            continue
 
 
 def user_freeze():
     card_num = input('要冻结的卡号： ')
-    print(os.path.exists(os.path.join(setting.USER_DIR, card_num)))
+
     if os.path.exists(os.path.join(setting.USER_DIR, card_num)):
-        user_dic = json.loads(os.path.join(setting.USER_DIR, card_num, 'text'))
-        print(user_dic)
-        # print(type(os.path.join(setting.USER_DIR, card_num, 'user_base.json')))
-        # user_dic = json.loads(os.path.join(setting.USER_DIR, card_num, 'user_base.json'))
-        # print(user_dic)
+        user_dic = json.load(open(os.path.join(setting.USER_DIR, card_num, 'user_base.json')))
+        user_dic['status'] = "1"
+        json.dump(user_dic, open(os.path.join(setting.USER_DIR, card_num, 'user_base.json'), 'w'))
+        print('卡号 \033[31;0m%s\033[0m 冻结成功！' % card_num)
+        time.sleep(2)
+    else:
+        print('卡号不存在...')
 
 
 def user_unfreeze():
-    pass
+    card_num = input('要解冻的卡号： ')
+
+    if os.path.exists(os.path.join(setting.USER_DIR, card_num)):
+        user_dic = json.load(open(os.path.join(setting.USER_DIR, card_num, 'user_base.json')))
+        user_dic['status'] = "0"
+        json.dump(user_dic, open(os.path.join(setting.USER_DIR, card_num, 'user_base.json'), 'w'))
+        print('卡号 \033[31;0m%s\033[0m 解冻成功！' % card_num)
+        time.sleep(2)
+    else:
+        print('卡号不存在...')
 
 
 def user_exit():
-    pass
+    print('退出成功！')
+    time.sleep(1)
+    sys.exit()
 
 
 def show():
