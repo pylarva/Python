@@ -20,7 +20,7 @@ logger.setLevel(logging.DEBUG)  # 设置全局日志级别
 ch = logging.StreamHandler()  # 在屏幕上打印
 ch.setLevel(logging.DEBUG)  # 设置在屏幕上打印日志的级别
 
-# 创建Handler 文件文件
+# 创建Handler 发给文件
 fh = logging.FileHandler("access.log")
 fh.setLevel(logging.WARNING)
 fh_err = logging.FileHandler("error.log")

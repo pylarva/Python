@@ -6,6 +6,7 @@ import os
 import re
 import time
 import json
+from src import log
 from conf import setting
 
 
@@ -40,12 +41,30 @@ def login():
 
 def account_show():
     print('  %s  '.center(40, '-') % CURRENT_USER_INFO['username'])
-    if CURRENT_USER_INFO['status'] == '0':
+    if CURRENT_USER_INFO['status'] == 0:
         print('卡号：%(card_num)s\n当前状态：\033[32;0m正常\033[0m\n最高额度：%(card_limit)d\n当月剩余额度：%(balance)d\n'
               '储蓄余额： %(save)s ' % CURRENT_USER_INFO)
-    if CURRENT_USER_INFO['status'] == '1':
+    if CURRENT_USER_INFO['status'] == 1:
         print('卡号：%(card_num)s\n当前状态：\033[31;0m冻结\033[0m\n最高额度：%(card_limit)d\n当月剩余额度：%(balance)d\n'
               '储蓄余额： %(save)s ' % CURRENT_USER_INFO)
+
+
+def write_log(message):
+    struct_time = time.localtime()
+    log_obj = log.get_logger(CURRENT_USER_INFO['card_num'], struct_time)
+    log_obj.info(message)
+
+
+def dump_current_user_info():
+    json.dump(CURRENT_USER_INFO, open(os.path.join(setting.USER_DIR, CURRENT_USER_INFO['card_num'], 'user_base.json'), 'w'))
+
+
+def write_repay(repay_num):
+    write_log('repay ￥+%d save: %d balance: %d' % (
+        repay_num, CURRENT_USER_INFO['save'], CURRENT_USER_INFO['balance']))
+    dump_current_user_info()
+    print('还款 \033[31;0m%d\033[0m 成功！' % repay_num)
+    time.sleep(2)
 
 
 def account_info():
@@ -54,25 +73,94 @@ def account_info():
 
 
 def account_repay():
+    pass
     account_show()
     while True:
         repay_num = input('输入还款金额： ')
         if re.match('^[0-9.]+$', repay_num):
             repay_num = float(repay_num)
             if CURRENT_USER_INFO['balance'] < CURRENT_USER_INFO['card_limit']:
+                tmp = CURRENT_USER_INFO['card_limit'] - CURRENT_USER_INFO['balance']
+                if repay_num <= tmp:
+                    CURRENT_USER_INFO['balance'] += repay_num
 
+                    write_repay(repay_num)
+                    break
+                else:
+                    CURRENT_USER_INFO['balance'] = CURRENT_USER_INFO['card_limit']
+                    CURRENT_USER_INFO['save'] = (repay_num - tmp)
 
+                    write_repay(repay_num)
+                    break
+            else:
+                CURRENT_USER_INFO['save'] += repay_num
+                write_repay(repay_num)
+                break
         else:
             print('输入错误...')
             continue
 
 
+def withdraw_count(amount):
+    if re.match('^[0-9.]+$', amount):
+        amount = int(amount)
+        if amount <= CURRENT_USER_INFO['save']:
+            CURRENT_USER_INFO['save'] -= amount
+
+            write_log('withdraw -￥%d save: %d balance: %d' % (
+                amount, CURRENT_USER_INFO['save'], CURRENT_USER_INFO['balance']))
+            dump_current_user_info()
+            return True, amount
+        else:
+            tmp = amount - CURRENT_USER_INFO['save']
+            if CURRENT_USER_INFO['balance'] >= (tmp + tmp * 0.05):
+                CURRENT_USER_INFO['save'] = 0
+                CURRENT_USER_INFO['balance'] -= tmp
+                CURRENT_USER_INFO['balance'] -= tmp * 0.05
+
+                write_log('withdraw -￥%d save: %d balance: %d' % (
+                    amount, CURRENT_USER_INFO['save'], CURRENT_USER_INFO['balance']))
+                dump_current_user_info()
+                return True, amount
+            else:
+                print('余额不足 操作失败！')
+    else:
+        print('输入有误...')
+
+
 def account_withdraw():
-    pass
+        account_show()
+        amount = input('输入取款金额： ')
+        ret, amount = withdraw_count(amount)
+        if ret:
+            print('取款 \033[031;0m%d\033[0m 成功！' % amount)
+            time.sleep(2)
 
 
 def account_transfer():
-    pass
+    while True:
+        tans_card = input('转入账号： ')
+        if not os.path.exists(os.path.join(setting.USER_DIR, tans_card)):
+            print('账号不存在')
+        else:
+            tans_card_dic = json.load(open(os.path.join(setting.USER_DIR, tans_card, 'user_base.json'), 'r'))
+            print('要转入的账号用户名为：\033[031;0m%s\033[0m' % tans_card_dic['username'])
+            user_commit = input('确认？ y|n')
+
+            if user_commit == 'y':
+                account_show()
+                tans_num = input('输入转账金额： ')
+                ret, tans_num = withdraw_count(tans_num)
+                if ret:
+                    tans_card_dic['save'] += tans_num
+                    json.dump(tans_card_dic,
+                              open(os.path.join(setting.USER_DIR, tans_card_dic['card_num'], 'user_base.json'),
+                                   'w'))
+                    print('转账 \033[031;0m%s\033[0m 成功！ ' % tans_num)
+                    time.sleep(2)
+                    break
+            else:
+                break
 
 
 def account_bill():
@@ -80,7 +168,10 @@ def account_bill():
 
 
 def logout():
-    pass
+    print('%s 安全退出成功...' % CURRENT_USER_INFO['username'])
+    time.sleep(2)
+    os.system("cls")
+    run()
 
 
 def main():

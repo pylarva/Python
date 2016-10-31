@@ -1,1 +1,1 @@
-{"balance": 15000, "password": "123", "card_num": "888", "status": "1", "username": "lichengbing", "card_limit": 15000, "save": 0}
+{"save": 0, "balance": 13655.016250000002, "is_authenticated": true, "status": 0, "password": "123", "current_user": "lichengbing", "card_limit": 15000, "username": "lichengbing", "card_num": "888"}
