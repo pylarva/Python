@@ -77,6 +77,7 @@ def user_create():
             break
 
 
+@outer
 def user_del():
     while True:
         card_num = input('输入要删除的卡号： ')
@@ -93,6 +94,7 @@ def user_del():
             continue
 
 
+@outer
 def user_freeze():
     card_num = input('要冻结的卡号： ')
 
@@ -106,6 +108,7 @@ def user_freeze():
         print('卡号不存在...')
 
 
+@outer
 def user_unfreeze():
     card_num = input('要解冻的卡号： ')
 
@@ -134,7 +137,6 @@ def show():
     4.  信用卡解冻
     5.  退出
     \033[0m'''
-    print(show_menu)
     show_dic = {
         '1': user_create,
         '2': user_del,
@@ -143,6 +145,7 @@ def show():
         '5': user_exit
     }
     while True:
+        print(show_menu)
         user_select = input('输入编号>>: ')
         if user_select in show_dic:
             show_dic[user_select]()
