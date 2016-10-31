@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5acdf1c9-380c-471b-8bf4-d90a9c01c96c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/day5/atm/bin/atm.py" afterPath="$PROJECT_DIR$/day5/atm/bin/atm.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/day5/atm/db/user/888/user_base.json" afterPath="$PROJECT_DIR$/day5/atm/db/user/888/user_base.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/day5/atm/src/admin_main.py" afterPath="$PROJECT_DIR$/day5/atm/src/admin_main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/day5/atm/src/atm_main.py" afterPath="$PROJECT_DIR$/day5/atm/src/atm_main.py" />
@@ -38,8 +37,8 @@
       <file leaf-file-name="admin_main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/day5/atm/src/admin_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="118" column="37" selection-start-line="118" selection-start-column="18" selection-end-line="118" selection-end-column="37" />
+            <state relative-caret-position="216">
+              <caret line="62" column="26" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
               <folding>
                 <element signature="e#68#102#0" expanded="true" />
               </folding>
@@ -51,10 +50,20 @@
         <entry file="file://$PROJECT_DIR$/day5/atm/src/atm_main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="264">
-              <caret line="33" column="29" selection-start-line="33" selection-start-column="29" selection-end-line="33" selection-end-column="29" />
+              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
               <folding>
                 <element signature="e#68#77#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="menu.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/day1/menu/menu.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1896">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -89,16 +98,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="admin" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/day5/atm/db/admin/admin">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="24" selection-start-line="0" selection-start-column="24" selection-end-line="0" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="atm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/day5/atm/bin/atm.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -109,21 +108,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="user_base.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/day5/atm/db/user/888/user_base.json">
+      <file leaf-file-name="shopping_chart.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/day2/shopping_cart/shopping_chart.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="38" selection-start-line="0" selection-start-column="38" selection-end-line="0" selection-end-column="38" />
+            <state relative-caret-position="-144">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="s3.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/day5/s3.py">
+      <file leaf-file-name="user_base.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/day5/atm/db/user/888/user_base.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="10" column="33" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
+            <state relative-caret-position="0">
+              <caret line="0" column="69" selection-start-line="0" selection-start-column="69" selection-end-line="0" selection-end-column="69" />
               <folding />
             </state>
           </provider>
@@ -157,16 +156,16 @@
         <option value="$PROJECT_DIR$/day5/atm/lib/encryption.py" />
         <option value="$PROJECT_DIR$/day5/atm/db/user/622202110208868/text" />
         <option value="$PROJECT_DIR$/day5/atm/db/user/test" />
-        <option value="$PROJECT_DIR$/day5/atm/db/user/888/user_base.json" />
-        <option value="$PROJECT_DIR$/day5/atm/src/admin_main.py" />
         <option value="$PROJECT_DIR$/day5/atm/bin/atm.py" />
+        <option value="$PROJECT_DIR$/day5/atm/src/admin_main.py" />
+        <option value="$PROJECT_DIR$/day5/atm/db/user/888/user_base.json" />
         <option value="$PROJECT_DIR$/day5/atm/src/atm_main.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
-    <option name="y" value="5" />
+    <option name="x" value="-233" />
+    <option name="y" value="20" />
     <option name="width" value="1378" />
     <option name="height" value="744" />
   </component>
@@ -435,6 +434,38 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="day2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="day2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shopping_cart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -685,7 +716,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="5" width="1378" height="744" extended-state="0" />
+    <frame x="-233" y="20" width="1378" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14552239" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -693,7 +724,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28360656" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28360656" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -723,14 +754,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/day5/atm/lib/encryption.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/day4/decorator_login.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -947,14 +970,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/day2/shopping_cart/shopping_chart.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/day5/atm/db/user/6222021108868/user_base.json" />
     <entry file="file://$PROJECT_DIR$/day5/s2.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1004,22 +1019,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/day5/atm/db/user/888/user_base.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="38" selection-start-line="0" selection-start-column="38" selection-end-line="0" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/day5/atm/db/user/999/user_base.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/day5/atm/db/admin/admin">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1062,18 +1061,50 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/day5/atm/src/admin_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="118" column="37" selection-start-line="118" selection-start-column="18" selection-end-line="118" selection-end-column="37" />
+        <state relative-caret-position="216">
+          <caret line="62" column="26" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
           <folding>
             <element signature="e#68#102#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/day5/atm/db/user/999/user_base.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/day5/atm/db/user/888/user_base.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="69" selection-start-line="0" selection-start-column="69" selection-end-line="0" selection-end-column="69" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/day1/menu/menu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1896">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/day2/shopping_cart/shopping_chart.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-144">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/day5/atm/src/atm_main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
-          <caret line="33" column="29" selection-start-line="33" selection-start-column="29" selection-end-line="33" selection-end-column="29" />
+          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
           <folding>
             <element signature="e#68#77#0" expanded="true" />
           </folding>

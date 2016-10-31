@@ -60,6 +60,7 @@ def user_create():
                 'card_num': card_num,
                 'card_limit': card_limit,
                 'balance': card_limit,
+                'save': 0,
                 'status': 0,
                 'debt': []
             }
