@@ -79,6 +79,3 @@ def main():
                             }
                             SHOPPING_CAR.append(add_car)
                             print(SHOPPING_CAR)
-
-if __name__ == '__main__':
-    main()
