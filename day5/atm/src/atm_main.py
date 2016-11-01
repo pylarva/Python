@@ -28,13 +28,18 @@ def login():
         else:
             user_dict = json.load(open(os.path.join(setting.USER_DIR, card_num, 'user_base.json'), 'r'))
             if card_num == user_dict['card_num'] and password == user_dict['password']:
-                user_base = json.load(open(os.path.join(setting.USER_DIR, card_num, "user_base.json")))
-                CURRENT_USER_INFO['is_authenticated'] = True
-                CURRENT_USER_INFO['current_user'] = user_base['username']
-                CURRENT_USER_INFO.update(user_base)
-                print('欢迎 \033[31;0m%s\033[0m ,登陆成功...' % user_base['username'])
-                time.sleep(1)
-                return True
+                if user_dict['status'] == 1:
+                    print('\033[31;0m\033[0m该信用卡被冻结！')
+                    time.sleep(2)
+                    continue
+                else:
+                    user_base = json.load(open(os.path.join(setting.USER_DIR, card_num, "user_base.json")))
+                    CURRENT_USER_INFO['is_authenticated'] = True
+                    CURRENT_USER_INFO['current_user'] = user_base['username']
+                    CURRENT_USER_INFO.update(user_base)
+                    print('欢迎 \033[31;0m%s\033[0m ,登陆成功...' % user_base['username'])
+                    time.sleep(1)
+                    return True
             else:
                 print('用户名或者密码错误...')
 
@@ -142,6 +147,8 @@ def account_transfer():
         tans_card = input('转入账号： ')
         if not os.path.exists(os.path.join(setting.USER_DIR, tans_card)):
             print('账号不存在')
+            time.sleep(1)
+            break
         else:
             tans_card_dic = json.load(open(os.path.join(setting.USER_DIR, tans_card, 'user_base.json'), 'r'))
             print('要转入的账号用户名为：\033[031;0m%s\033[0m' % tans_card_dic['username'])

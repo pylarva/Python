@@ -1,1 +1,1 @@
-{"save": 0, "balance": 13655.016250000002, "is_authenticated": true, "status": 0, "password": "123", "current_user": "lichengbing", "card_limit": 15000, "username": "lichengbing", "card_num": "888"}
+{"card_limit": 15000, "status": 0, "current_user": "lichengbing", "save": 1, "is_authenticated": true, "card_num": "888", "debt": [{"date": "2016-11-11", "left_debt": 1517.2329374999972, "total_debt": 1517.2329374999972}], "password": "123", "balance": 15000, "username": "lichengbing"}

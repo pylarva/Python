@@ -20,3 +20,6 @@
 2016-10-31 23:11:57,220 - withdraw -￥100 save: 0 balance: 13660
 2016-10-31 23:12:03,264 - repay ￥+100 save: 0 balance: 13760
 2016-10-31 23:12:18,705 - withdraw -￥100 save: 0 balance: 13655
+2016-11-01 09:31:37,372 - repay ￥+3000 save: 1655 balance: 15000
+2016-11-01 09:32:02,790 - withdraw -￥3000 save: 0 balance: 13587
+2016-11-01 09:32:50,665 - withdraw -￥100 save: 0 balance: 13482
