@@ -2,7 +2,8 @@
 # -*- coding:utf-8 -*-
 # Author:lichengbing
 
-import sys,time
+import sys, time
+
 
 def shopping_home(user_name,salary):
     FLAGE_A = True
@@ -62,12 +63,14 @@ def shopping_home(user_name,salary):
             print('输入错误,请重新输入...')
             time.sleep(1)
 
+
 def show_shoppingcar(shopping_car):
     print('您购物车里已购商品如下： ')
     print('商品 数量 价格 总价')
     for m, n in enumerate(shopping_car):
         print('%d.%s %s * %s 【%d】' % (m, n[0], n[1], n[2], (n[1] * n[2])))
     print('_'.center(50, '_'))
+
 
 def recharge(salary):
     exit_flag = False
@@ -81,10 +84,6 @@ def recharge(salary):
         else:
             print('输入错误,请重新输入...')
             continue
-
-
-
-
 
 
 user_file = open('C:/software/github/Python/day2/shopping_cart/user.txt','r+')

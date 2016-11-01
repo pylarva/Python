@@ -152,9 +152,9 @@ def account_transfer():
         else:
             tans_card_dic = json.load(open(os.path.join(setting.USER_DIR, tans_card, 'user_base.json'), 'r'))
             print('要转入的账号用户名为：\033[031;0m%s\033[0m' % tans_card_dic['username'])
-            user_commit = input('确认？ y|n')
+            user_commit = input('确认？ Y|N')
 
-            if user_commit == 'y':
+            if user_commit.upper() == 'Y':
                 account_show()
                 tans_num = input('输入转账金额： ')
                 ret, tans_num = withdraw_count(tans_num)
@@ -213,3 +213,18 @@ def run():
     ret = login()
     if ret:
         main()
+
+
+def shopping_withdraw(SHOPPING_CAR, sum_pay):
+    ret = login()
+    if ret:
+        account_show()
+        user_commit = input('确认支付? Y|N ')
+        if user_commit.upper == 'Y':
+            ret, amount = withdraw_count(sum_pay)
+            if ret:
+                print('支付 \033[031;0m%d\033[0m 成功！' % amount)
+                write_log('购物消费：%d ' % sum_pay)
+                for item in SHOPPING_CAR:
+                    write_log('商品：%(name)s 数量：%(nums)d 合计：%(sum)d' % item)
+                time.sleep(2)

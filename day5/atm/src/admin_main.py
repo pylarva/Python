@@ -52,8 +52,8 @@ def user_create():
             break
         card_limit = int(card_limit)
         print('用户名：%s\n密码：%s\n卡号：%s\n额度：%d' % (username, password, card_num, card_limit))
-        user_commit = input('是否创建？ y|n')
-        if all([username, password, card_limit, card_num]) and user_commit == 'y':
+        user_commit = input('是否创建？ Y|N')
+        if all([username, password, card_limit, card_num]) and user_commit.upper() == 'Y':
             user_info = {
                 'username': username,
                 'password': password,
