@@ -4,7 +4,9 @@
 
 import hashlib
 
-
+"""
+信用卡管理员密码加密
+"""
 def md5(arg):
     """
     md5加密

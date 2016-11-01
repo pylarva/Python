@@ -1,1 +1,1 @@
-{"debt": [], "balance": 15000, "password": "123", "is_authenticated": true, "status": 1, "username": "lichengtao", "card_num": "999", "save": 100.0, "current_user": "lichengtao", "card_limit": 15000}
+{"save": 101.0, "username": "lichengtao", "is_authenticated": true, "card_limit": 15000, "card_num": "999", "password": "123", "status": "0", "balance": 15000, "debt": [], "current_user": "lichengtao"}

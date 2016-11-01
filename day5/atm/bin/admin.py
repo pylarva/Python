@@ -8,5 +8,8 @@ sys.path.append(base_dir)
 
 from src import admin_main
 
+"""
+信用卡后台管理入口
+"""
 if __name__ == '__main__':
     admin_main.show()

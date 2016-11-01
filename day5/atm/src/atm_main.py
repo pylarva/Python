@@ -6,16 +6,17 @@ import os
 import re
 import time
 import json
+import sys
 from src import log
 from conf import setting
 
-
+# 全局变量判断用户是否登陆正常
 CURRENT_USER_INFO = {'is_authenticated': False, 'current_user': None}
 
 
 def login():
     """
-    用户登陆
+    用户登陆：不允许冻结用户登陆
     :return:
     """
     while True:
@@ -45,6 +46,10 @@ def login():
 
 
 def account_show():
+    """
+    打印当前信用卡状态及余额信息
+    :return:
+    """
     print('  %s  '.center(40, '-') % CURRENT_USER_INFO['username'])
     if CURRENT_USER_INFO['status'] == 0:
         print('卡号：%(card_num)s\n当前状态：\033[32;0m正常\033[0m\n最高额度：%(card_limit)d\n当月剩余额度：%(balance)d\n'
@@ -55,16 +60,30 @@ def account_show():
 
 
 def write_log(message):
+    """
+    调用 logging 日志模块生成文件记录
+    :param message:
+    :return:
+    """
     struct_time = time.localtime()
     log_obj = log.get_logger(CURRENT_USER_INFO['card_num'], struct_time)
     log_obj.info(message)
 
 
 def dump_current_user_info():
+    """
+    更新用户数据库信息
+    :return:
+    """
     json.dump(CURRENT_USER_INFO, open(os.path.join(setting.USER_DIR, CURRENT_USER_INFO['card_num'], 'user_base.json'), 'w'))
 
 
 def write_repay(repay_num):
+    """
+    还款成功 则记录日志并更新用户数据文件
+    :param repay_num:
+    :return:
+    """
     write_log('repay ￥+%d save: %d balance: %d' % (
         repay_num, CURRENT_USER_INFO['save'], CURRENT_USER_INFO['balance']))
     dump_current_user_info()
@@ -73,12 +92,19 @@ def write_repay(repay_num):
 
 
 def account_info():
+    """
+    信用卡信息查询
+    :return:
+    """
     account_show()
     qiut = input('[Enter] 返回...')
 
 
 def account_repay():
-    pass
+    """
+    还款 先偿还欠款记录 多余存入save储蓄
+    :return:
+    """
     account_show()
     while True:
         repay_num = input('输入还款金额： ')
@@ -107,6 +133,11 @@ def account_repay():
 
 
 def withdraw_count(amount):
+    """
+    取款判断：储蓄账户取出不收取手续费 信用卡取出收取 5% 手续费
+    :param amount:
+    :return:
+    """
     if re.match('^[0-9.]+$', amount):
         amount = int(amount)
         if amount <= CURRENT_USER_INFO['save']:
@@ -134,15 +165,23 @@ def withdraw_count(amount):
 
 
 def account_withdraw():
-        account_show()
-        amount = input('输入取款金额： ')
-        ret, amount = withdraw_count(amount)
-        if ret:
-            print('取款 \033[031;0m%d\033[0m 成功！' % amount)
-            time.sleep(2)
+    """
+    取款入口
+    :return:
+    """
+    account_show()
+    amount = input('输入取款金额： ')
+    ret, amount = withdraw_count(amount)
+    if ret:
+        print('取款 \033[031;0m%d\033[0m 成功！' % amount)
+        time.sleep(2)
 
 
 def account_transfer():
+    """
+    转账：确认转入用户账号后 转入对方储蓄账户
+    :return:
+    """
     while True:
         tans_card = input('转入账号： ')
         if not os.path.exists(os.path.join(setting.USER_DIR, tans_card)):
@@ -171,10 +210,28 @@ def account_transfer():
 
 
 def account_bill():
-    pass
+    """
+    账单打印
+    :return:
+    """
+    struct_time = time.localtime()
+    if struct_time.tm_mday < 23:
+        file_name = 'Record-%s-%s-%d' % (struct_time.tm_year, struct_time.tm_mon, 22)
+    else:
+        file_name = 'Record-%s-%s-%d' % (struct_time.tm_year, struct_time.tm_mon+1, 22)
+    # 一个 r' 转义问题折腾我5个小时...
+    file_name = os.path.join("r'", setting.USER_DIR, CURRENT_USER_INFO['card_num'], 'record', file_name)
+    with open(file_name, 'r', encoding='utf-8') as f:
+        for line in f:
+            print(line)
+    pause = input('[Enter]继续...')
 
 
 def logout():
+    """
+    退出
+    :return:
+    """
     print('%s 安全退出成功...' % CURRENT_USER_INFO['username'])
     time.sleep(2)
     os.system("cls")
@@ -182,6 +239,10 @@ def logout():
 
 
 def main():
+    """
+    功能菜单打印
+    :return:
+    """
     show_menu = '''
     ----------- 信用卡中心 -----------
     \033[32;0m1.  信用卡查询
@@ -216,15 +277,25 @@ def run():
 
 
 def shopping_withdraw(SHOPPING_CAR, sum_pay):
+    """
+    购物商城支付接口
+    :param SHOPPING_CAR:
+    :param sum_pay:
+    :return:
+    """
     ret = login()
     if ret:
         account_show()
         user_commit = input('确认支付? Y|N ')
-        if user_commit.upper == 'Y':
-            ret, amount = withdraw_count(sum_pay)
-            if ret:
-                print('支付 \033[031;0m%d\033[0m 成功！' % amount)
+        if user_commit.upper() == 'Y':
+            if sum_pay > CURRENT_USER_INFO['balance']:
+                print('余额不足 支付失败!')
+                time.sleep(2)
+            else:
+                CURRENT_USER_INFO['balance'] -= sum_pay
+                dump_current_user_info()
                 write_log('购物消费：%d ' % sum_pay)
                 for item in SHOPPING_CAR:
                     write_log('商品：%(name)s 数量：%(nums)d 合计：%(sum)d' % item)
+                print('支付 \033[031;0m%d\033[0m 成功！' % sum_pay)
                 time.sleep(2)

@@ -9,6 +9,11 @@ SHOPPING_CAR = []
 
 
 def car(SHOPPING_CAR):
+    """
+    购物车 和信用卡支付对接
+    :param SHOPPING_CAR:
+    :return:
+    """
     if SHOPPING_CAR:
         print('  购物车  '.center(40, '-'))
         print('商品       数量       总价')
@@ -25,6 +30,10 @@ def car(SHOPPING_CAR):
 
 
 def main():
+    """
+    购物商城主程序：没有加用户登陆 主要去实现购物车支付功能
+    :return:
+    """
     exit_flag = False
 
     # 第一层循环打印菜单
@@ -69,13 +78,13 @@ def main():
                     if select_two.isdigit():
                         select_two = int(select_two)
                         if select_two in product_second:
-                            print(product_second)
-                            num = input('数量：')
+                            num = input('购买数量：')
                             num = int(num)
                             add_car = {
                                 'name': product_second[select_two],
                                 'nums': num,
                                 'sum': num * product_dict[select_name][product_second[select_two]]
                             }
+                            print('加入购物车成功...')
                             SHOPPING_CAR.append(add_car)
-                            print(SHOPPING_CAR)
+                            # print(SHOPPING_CAR)

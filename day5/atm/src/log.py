@@ -8,6 +8,12 @@ from conf import setting
 
 
 def get_logger(card_num, struct_time):
+    """
+    日志模块 当月23号之前的记录存入上月日志文件 23后存入当月
+    :param card_num:
+    :param struct_time:
+    :return:
+    """
     if struct_time.tm_mday < 23:
         log_name = 'Record-%s-%s-%d' % (struct_time.tm_year, struct_time.tm_mon, 22)
     else:

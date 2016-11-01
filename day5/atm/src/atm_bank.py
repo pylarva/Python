@@ -11,6 +11,12 @@ from src import log
 
 
 def main():
+    """
+    如果当天是11号 且 信用卡可用额度小于最高额度 则生成欠款记录
+    如果上月有欠费记录 且有 未还款 则 每天计息 扣可用额度
+    账单生成 于 各用户文件夹 record下
+    :return:
+    """
     struct_time = time.localtime()
     user_list = os.listdir(setting.USER_DIR)
 
@@ -37,4 +43,3 @@ def main():
             user_dic['debt'].append(dic)
             user_dic['balance'] = user_dic['card_limit']
             json.dump(user_dic, open(os.path.join(setting.USER_DIR, user, 'user_base.json'), 'w'))
-            print('ok')

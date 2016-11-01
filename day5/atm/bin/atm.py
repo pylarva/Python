@@ -8,6 +8,9 @@ sys.path.append(base_dir)
 
 from src import atm_main
 
+"""
+信用卡中心入口：还款 取款 转账等
+"""
 if __name__ == '__main__':
     atm_main.run()
 

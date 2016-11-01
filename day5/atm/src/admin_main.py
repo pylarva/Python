@@ -6,10 +6,16 @@ import time, sys, os, json, shutil
 from conf import setting
 from lib import encryption
 
+# 设置全局变量 判断用户是否登陆正常
 CURRENT_USER_INFO = {'is_authenticated': False, 'current_user': None}
 
 
 def outer(func):
+    """
+    登陆装饰器 用来给要求登录操作的函数添加登陆功能
+    :param func:
+    :return:
+    """
     def inner():
         if not CURRENT_USER_INFO['is_authenticated']:
             print('请先登陆...')
@@ -42,6 +48,10 @@ def login():
 
 @outer
 def user_create():
+    """
+    信用卡开户 不允许创建相同的卡号
+    :return:
+    """
     while True:
         username = input('请输入新卡用户名： ')
         password = input('请输入新卡密码： ')
@@ -80,6 +90,10 @@ def user_create():
 
 @outer
 def user_del():
+    """
+    删除信用卡 shutil删除非空的文件夹
+    :return:
+    """
     while True:
         card_num = input('输入要删除的卡号： ')
         if card_num:
@@ -97,6 +111,10 @@ def user_del():
 
 @outer
 def user_freeze():
+    """
+    信用卡冻结 status = 1 则不允许登陆
+    :return:
+    """
     card_num = input('要冻结的卡号： ')
 
     if os.path.exists(os.path.join(setting.USER_DIR, card_num)):
@@ -111,6 +129,10 @@ def user_freeze():
 
 @outer
 def user_unfreeze():
+    """
+    信用卡解冻
+    :return:
+    """
     card_num = input('要解冻的卡号： ')
 
     if os.path.exists(os.path.join(setting.USER_DIR, card_num)):
@@ -124,12 +146,19 @@ def user_unfreeze():
 
 
 def user_exit():
+    """
+    退出系统
+    :return:
+    """
     print('退出成功！')
     time.sleep(1)
     sys.exit()
 
 
 def show():
+    """
+    打印功能菜单
+    """
     show_menu = '''
     ----------- 信用卡管理 -----------
     \033[32;0m1.  信用卡开户
