@@ -65,6 +65,26 @@ import re
 # 单词
 # print(re.findall(r'I\b', 'I&am Ikobe'))
 
+# 分组
+# 去已经匹配到的数据中再提取数据
+# origin = 'has sdfsdfsdfwer432'
+# r = re.match("h\w+", origin)
+# r = re.match("h(\w+)", origin)
+# r = re.match("h(?P<name>\w+)", origin)
+# print(r.group())
+# print(r.groups())
+# print(r.groupdict())
+
+# findall 分组
+# origin = "hasaabc halaaabc"
+# r = re.findall("h(\w+)a(ab)c", origin)  # 首先整体匹配 再将分组放入结果
+# print(r)
+
+# spilt 分组
+# origin = "hello alex abc alex age"
+# r = re.split("a(le)x", origin, 1)  # 忽略了alex 直接匹配le
+# print(r)
+
 
 # match
 # print(re.match('com', 'comwww.runcombb').group())  # match 匹配起始位置
