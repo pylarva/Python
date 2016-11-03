@@ -81,9 +81,9 @@ import re
 # print(r)
 
 # spilt 分组
-# origin = "hello alex abc alex age"
-# r = re.split("a(le)x", origin, 1)  # 忽略了alex 直接匹配le
-# print(r)
+origin = "hello alex abc alex age"
+r = re.split("a(le)x", origin, 1)  # 忽略了alex 直接匹配le
+print(r)
 
 
 # match
