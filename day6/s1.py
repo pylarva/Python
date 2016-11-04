@@ -45,12 +45,12 @@ import time
 
 # hashlib
 
-# import hashlib
-#
-# obj = hashlib.md5(bytes('sdfsdfsadf', encoding='utf-8'))  # 加bytes任意字符防止被撞库破译
-# obj.update(bytes('123', encoding='utf-8'))
-# r = obj.hexdigest()
-# print(r)
+import hashlib
+
+obj = hashlib.md5(bytes('sdfsdfsadf', encoding='utf-8'))  # 加bytes任意字符防止被撞库破译
+obj.update(bytes('123', encoding='utf-8'))
+r = obj.hexdigest()
+print(r)
 
 
 # 正则表达式
@@ -81,9 +81,9 @@ import re
 # print(r)
 
 # spilt 分组
-origin = "hello alex abc alex age"
-r = re.split("a(le)x", origin, 1)  # 忽略了alex 直接匹配le
-print(r)
+# origin = "hello alex abc alex age"
+# r = re.split("a(le)x", origin, 1)  # 忽略了alex 直接匹配le
+# print(r)
 
 
 # match
@@ -98,9 +98,9 @@ print(r)
 # print(re.split('\d+', 'one1two2three3four4'))  # 有空格
 
 # compile 封装一个固定匹配规则供多次调用
-# s = "JGood is a boy,so cool..."
-# r = re.compile(r'\w*oo\w*')   # 查找所有包含oo的单词
-# print(r.findall(s))
+s = "JGood is a boy,so cool..."
+r = re.compile(r'\w*oo\w*')   # 查找所有包含oo的单词
+print(r.findall(s))
 
 
 
