@@ -3,43 +3,88 @@
 # -*- coding:utf-8 -*-
 # Author:lichengbing
 import re
+a = 'hello'
 
-# s = '2*(-8)-9'
-#
-# # 取第一个括号内容
-# s1 = re.search('\(([0-9 *+-/]+)\)', s).groups()
-# print(s1)
-#
-# # 处理乘除
-# s1 = s1[0]
-# # if s1
-#
-# s_before = re.split('\(-*\d+[*/]\d+\)', s, 1)[0]
-# s_back = re.split('\(-*\d+[*/]\d+\)', s, 1)[1]
-# print(s_before, s_back)
-#
-#
-# f = re.search('-*\d+[*/]\d+', s1).group()  # 乘表达式
-# print(f)
-# t1 = re.split('[*]', f)[0]
-# t2 = re.split('[*]', f)[1]
-# print(t1, t2)
-# t = int(t1) * int(t2)  # 乘的结果
-# print(t)
-# t = str(t)
-# if int(t) < 0:
-#     s = s_before + '(' + t + ')' + s_back
-# else:
-#     s = s_before + t + s_back
-# print(s)
+b = 'world'
 
-# 处理加减
-# s1 = s1[0]
-# f = re.search('-*\d+[+-]\d+', s1).group()  # 加减表达式
-# print(f)
+# c = a + b
+# c = '%s %s'% (a,b)
+# dic = {'name': 'hello', 'name_2': 'world'}
+# c = '{name:s} {name_2:s}'.format(name='hello', name_2='world')
 
-# s = '-2-4'
-# t = re.split('-*\d+[-]\d+', s)
-# if re.match('-', s):
-#     t = eval(s)
-# print(t)
+# print(c)
+
+# dic = {'name': 'kobe'}
+# print(dic['name'])
+
+
+# a =  lambda  x,y : x +y
+
+# def sum(x, y):
+#     return x + y
+
+# def change(**kwargs):
+#     if kwargs['sex'] == 'F':
+#         print(kwargs['count'])
+#     elif kwargs['sex'] == 'M':
+#         print(kwargs['count'], kwargs['name'])
+#
+# innp = change(sex='M', count=23, name='hah')
+
+# def outer_2():
+#
+#
+# def outer(func):
+#     def inner(user, num):
+#         if 1 == 1:
+#             func(user, num)
+#         else:
+#             print('permission deny')
+#             return
+#     return inner
+#
+#
+# @outer
+# def func1(user, num):
+#     print(" welcome")
+#
+# func1('kobe', 2)
+
+# def out2(kaiguan):
+#     def outer(func):
+#         def inner(*args):
+#             if kaiguan == 1:
+#                 return func(*args)
+#             else:
+#                 print('permission deny')
+#         return inner
+#     return outer
+#
+#
+# @out2(2)
+# def func1():
+#     print(" welcome")
+#
+# func1()
+
+# def man():
+#     print(" man is strong")
+#
+#
+# def woman():
+#     print("woman is beautiful")
+#
+#
+# def cat():
+#     print("cat miao miao ")
+#
+# dic = {'name': 'kobe', 'age': 18}
+# print(dic.get('age'))
+#
+# name = 'kobe' if 1 == 1 else 'jordan'
+# print(name)
+#
+# f = lambda a1, a2: a1 + a2
+# r = f(1, 2)
+# print(r)
+

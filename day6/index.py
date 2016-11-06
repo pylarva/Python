@@ -24,6 +24,7 @@ def run():
     # hasattr 检查模块中成员是否存在
     # delattr
     # setattr
+
     m, f = inp.split('/')
     obj = __import__('lib.' + m, fromlist=True)  # __import__在导入模块的时候路径拼接只能到第一个参数lib
 

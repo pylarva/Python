@@ -1,0 +1,10 @@
+[section1]
+k1 = 123
+k2 = v2
+
+[section2]
+k1 = 456
+k2 = v2
+k3 = v3
+
+

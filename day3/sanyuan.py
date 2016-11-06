@@ -10,6 +10,7 @@ else:
     name = "jordan"
 
 name = "kobe" if 1 == 1 else "jordan"
+print(name)
 
 
 # lambda表达式
