@@ -50,22 +50,22 @@ b = 'world'
 #
 # func1('kobe', 2)
 
-# def out2(kaiguan):
-#     def outer(func):
-#         def inner(*args):
-#             if kaiguan == 1:
-#                 return func(*args)
-#             else:
-#                 print('permission deny')
-#         return inner
-#     return outer
-#
-#
-# @out2(2)
-# def func1():
-#     print(" welcome")
-#
-# func1()
+def out2(kaiguan):
+    def outer(func):
+        def inner(*args):
+            if kaiguan == 1:
+                return func(*args)
+            else:
+                print('permission deny')
+        return inner
+    return outer
+
+
+@out2(2)
+def func1():
+    print(" welcome")
+
+func1()
 
 # def man():
 #     print(" man is strong")
