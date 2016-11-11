@@ -3,6 +3,8 @@
 # Author:lichengbing
 
 import configparser
+import os
+import sys
 from src import elective
 import pickle
 from config import setting
@@ -34,9 +36,9 @@ def login(num):
             stu_pwd = input('输入密码： ')
             stu_list = pickle.load(open(setting.STUDENT_DB, 'rb'))
 
-            for item in stu_list:
+            for i, item in enumerate(stu_list):
                 if item.name == stu_name and item.pwd == stu_pwd:
-                    return True
+                    return i, item
             print('用户名或密码错误!')
 
 
@@ -73,6 +75,41 @@ def create_course():
     print('创建课程成功！')
 
 
+def select_course(num, obj):
+    print('-----------  课程列表  -----------')
+    course_list = pickle.load(open(setting.COURSE_DB, 'rb'))
+    for k, v in enumerate(course_list):
+        print(k + 1, v.name, v.time, v.teacher)
+
+    while True:
+        select = input('输入编号: ')
+        if select.isdigit() and int(select) <= k+1:
+            stu_list = pickle.load(open(setting.STUDENT_DB, 'rb'))
+            stu_list.remove(stu_list[num])
+            obj.list.append(course_list[int(select) - 1])
+            stu_list.append(obj)
+            pickle.dump(stu_list, open(setting.STUDENT_DB, 'wb'))
+            print('添加课程成功!')
+            break
+        else:
+            print('输入错误...')
+
+
+def show_course(student_obj):
+    print('-----------  课程列表  -------------')
+    print('序号 课程    上课时间  上课老师')
+    for k, v in enumerate(student_obj.list):
+        print(k+1, v.name, v.time, v.teacher)
+    return k, v
+
+
+def go_class(student_obj):
+    pass
+    # show_course(student_obj)
+    # innp = input('输入上课编号： ')
+    # elective.Course.go_class('self', v)
+
+
 def admin():
     ret = login(1)
     if ret:
@@ -87,26 +124,44 @@ def admin():
             innp = input('请输入编号： ')
             if innp == '1':
                 create_teacher()
-                pass
             elif innp == '2':
                 create_course()
-            elif innp == 'q':
-                pass
+            elif innp == '3':
+                sys.exit()
 
 
 def student():
-    ret = login(2)
-    if ret:
-        print('-----------  课程列表  -----------')
-        course_list = pickle.load(open(setting.COURSE_DB, 'rb'))
-        for k, v in enumerate(course_list):
-            print(k, v.name, v.time, v.teacher)
+    num, student_obj = login(2)
+    if student_obj:
+        print('登陆成功!')
+        show_menu = '''
+        \033[35;0m-------------- 选课系统 ---------------\033[0m
+        \033[32;0m1、选课
+        2、上课
+        3、查看课程
+        3、上课记录
+        4、退出系统
+        \033[0m'''
+
+        while True:
+            print(show_menu)
+            innp = input('请输入编号： ')
+            if innp == '1':
+                select_course(num, student_obj)
+            if innp == '2':
+                go_class(student_obj)
+            elif innp == '3':
+                show_course(student_obj)
+                innp = input('[enter 返回]...')
+            elif innp == 'q':
+                pass
 
 
 def register():
     print('-----------  学生注册  -----------')
 
     while True:
+
         student_list = pickle.load(open(setting.STUDENT_DB, 'rb'))
         # student_list = []
         student_name = input('输入新用户名： ')

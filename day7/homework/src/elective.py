@@ -2,6 +2,9 @@
 # -*- coding:utf-8 -*-
 # Author:lichengbing
 
+import pickle
+from config import setting
+
 
 class Teacher:
 
@@ -26,6 +29,10 @@ class Course:
         self.time = time
         self.teacher = teacher_obj.name
 
+    # def go_class(self):
+
+
+
 
 class Student:
 
@@ -37,7 +44,7 @@ class Student:
         self.list = []
         self.record = []
 
-    # def select_course(self):
+
 
 
 
