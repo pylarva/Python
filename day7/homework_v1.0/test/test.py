@@ -23,7 +23,5 @@
 # # r[0].list = [1, 2, 3]
 # # pickle.dump(r, open('a', 'wb'))
 # print(r[0].list)
-
-li = [1, 2, 3]
-li.remove(li[0])
-print(li)
+a = 'hahah '
+print(3 * ('今天我们来学 \033[31;0m%s\033[0m\n' % a))

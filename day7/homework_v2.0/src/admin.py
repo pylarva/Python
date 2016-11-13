@@ -8,8 +8,6 @@ import sys
 from conf import setting
 from lib import modules
 
-USER_NAME = ''
-
 
 def login():
     """
@@ -133,7 +131,7 @@ def create_crouse():
             if teacher_index == 'q':
                 break
             if teacher_index.isdigit():
-                if int(teacher_index) - 1 < index:
+                if int(teacher_index) - 1 <= index:
                     # 读取老师数据库第 index 的老师对象
                     teacher_data, teacher_list = teacher_db_read()
                     course_teacher = teacher_data[int(teacher_index) - 1]
