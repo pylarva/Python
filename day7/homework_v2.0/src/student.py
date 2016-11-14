@@ -146,17 +146,17 @@ def show_student_classes(student_obj):
         return index
 
 
-def catch_student_obj():
+def catch_student_obj(student_data):
     """
     用登陆用户找出学生数据库中该学生对象
     :return:
     """
-    student_data, student_dic = student_db_read()
+    # student_data, student_dic = student_db_read()
     # 找到数据库中登陆用户的 学生类对象
     for index, student in enumerate(student_data):
         if USER_NAME == student.name:
             student_obj = student
-    return student_obj
+    return student_obj, student_data
 
 
 @outer
@@ -170,7 +170,8 @@ def choose_class():
     # 读取课程数据库
     course_date, course_list = admin.course_db_read()
     # 找到数据库中登陆用户的 学生类对象
-    student_obj = catch_student_obj()
+    student_obj, student_data = catch_student_obj(student_data)
+    print(student_obj.name)
     # 得到学生已选课程列表
     student_have_class_list = student_have_class(student_obj)
 
@@ -204,8 +205,9 @@ def choose_class():
 
 @outer
 def attend_class():
+    student_data, student_dic = student_db_read()
     # 找到数据库中登陆用户的 学生类对象
-    student_obj = catch_student_obj()
+    student_obj, student_data = catch_student_obj(student_data)
     # 展示该学生当前已选的课程
     index = show_student_classes(student_obj)
 
@@ -222,17 +224,49 @@ def attend_class():
             course_obj = course_data[course_index]
             # 执行上课方法
             course_obj.attend_class()
-
             break
 
 
-
-
+@outer
 def teacher_evaluate():
-    pass
+    """
+    评价老师 如果给差评 老师会被扣钱
+    :return:
+    """
+    student_data, student_dic = student_db_read()
+    # 找到数据库中登陆用户的 学生类对象
+    student_obj, student_data = catch_student_obj(student_data)
+    # 展示该学生当前已选的课程
+    index = show_student_classes(student_obj)
+
+    while True:
+        innp = input('输入上课课程编号[q退出]>> ')
+        if innp == 'q':
+            break
+        if innp.isdigit() and int(innp) <= index + 1:
+            # 课程名
+            course_name = student_obj.class_list[int(innp) - 1].name
+            # 由课程名找到课程对象在数据库中的存储索引 再由索引找到课程对象
+            course_data, course_list = admin.course_db_read()
+            course_index = course_list.index(course_name)
+            course_obj = course_data[course_index]
+
+            while True:
+                student_evaluate = input('[1]点赞 [2]差评...')
+                if student_evaluate == '1':
+                    print('给老师5 \033[31;0m%s\033[0m 点攒成功! ' % course_obj.teacher.name)
+                    time.sleep(1)
+                    break
+                elif student_evaluate == '2':
+                    # 执行上课方法
+                    course_obj.teacher_evaluate()
+                    break
+        break
+
 
 def class_record():
     pass
+
 
 def logout():
     pass

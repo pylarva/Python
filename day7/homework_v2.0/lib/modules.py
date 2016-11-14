@@ -18,6 +18,10 @@ class TEACHER:
         self.asset += int(value)
         print('%s 老师加钱成功!' % self.asset)
 
+    def fine(self, value):
+        self.asset -= int(value)
+        print('扣钱扣钱T T ...只剩 %s 块钱! ' % self.asset)
+
 
 class COURSE:
 
@@ -38,12 +42,36 @@ class COURSE:
         print('OK...下课下课!!!')
 
         teacher_data, teacher_list = admin.teacher_db_read()
+        teacher_name = self.teacher.name
+        # 由老师的名字去数据库中找到索引
+        for k, v in enumerate(teacher_list):
+            if teacher_name == v:
+                index = k
+        teacher_obj = teacher_data[index]
         # 老师加钱
-        self.teacher.gain(self.award)
+        teacher_obj.gain(self.award)
         time.sleep(1)
         # 保存老师数据
         admin.teacher_db_save(teacher_data)
 
+    def teacher_evaluate(self):
+        """
+        学生评价老师 差评扣钱
+        :return:
+        """
+        print('老师上课 Low 爆了...')
+        teacher_data, teacher_list = admin.teacher_db_read()
+        teacher_name = self.teacher.name
+        # 由老师的名字去数据库中找到索引
+        for k, v in enumerate(teacher_list):
+            if teacher_name == v:
+                index = k
+        teacher_obj = teacher_data[index]
+        # 老师扣钱
+        teacher_obj.fine(1)
+        time.sleep(1)
+        # 保存老师数据
+        admin.teacher_db_save(teacher_data)
 
 
 class STUDENT:
