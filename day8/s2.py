@@ -43,4 +43,34 @@ p.all_pager = 100
 del p.all_pager
 
 
+# 属性的第二种写法
+
+class Pager:
+
+    def __init__(self, all_count):
+        self.all_count = all_count
+
+    def f1(self):
+        return 123
+
+    def f2(self, value):
+        pass
+
+    def f3(self):
+        print('111')
+
+    # 自动去执行上面的函数
+    foo = property(fget=f1, fset=f2, fdel=f3)
+
+p = Pager(101)
+
+# 取
+ret = p.foo
+print(ret)
+
+# 设置
+p.foo = 'alex'
+
+# 删除
+del p.foo
 
