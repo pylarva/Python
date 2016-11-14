@@ -11,7 +11,7 @@ sys.path.append(base_dir)
 from src import student
 
 """
-管理员登陆入口： 测试账号:admin 密码:admin
+学生登陆入口 测试账号 li / 123
 """
 if __name__ == '__main__':
     student.main()

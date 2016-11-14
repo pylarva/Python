@@ -4,6 +4,7 @@
 
 import pickle
 import time
+import sys
 from lib import modules
 from conf import setting
 from src import admin
@@ -258,18 +259,60 @@ def teacher_evaluate():
                     time.sleep(1)
                     break
                 elif student_evaluate == '2':
-                    # 执行上课方法
+                    # 执行扣钱方法
                     course_obj.teacher_evaluate()
                     break
         break
 
 
+def student_class_record(course_name):
+    """
+    上课记录
+    :param course_name:
+    :return:
+    """
+    student_data, student_dic = student_db_read()
+    student_obj, student_data = catch_student_obj(student_data)
+
+    record = '{0} 上了一节 {1} 课...'.format(time.strftime('%Y-%m-%d %H:%m'), course_name)
+    student_obj.class_record.append(record)
+    student_db_save(student_data)
+
+
+@outer
 def class_record():
-    pass
+    """
+    读取上课记录
+    :return:
+    """
+    student_data, student_dic = student_db_read()
+    student_obj, student_data = catch_student_obj(student_data)
+
+    for item in student_obj.class_record:
+        print(item)
 
 
 def logout():
-    pass
+    """
+    注销
+    :return:
+    """
+    global USER_NAME
+    if not USER_NAME:
+        print('还未登陆...')
+        time.sleep(1)
+    else:
+        USER_NAME = ''
+        print('注销成功...')
+        time.sleep(1)
+
+
+def quit_sys():
+    """
+    退出系统
+    :return:
+    """
+    sys.exit()
 
 
 def main():
@@ -284,7 +327,8 @@ def main():
         4、学生上课
         5、评价老师
         6、上课记录
-        7、退出
+        7、注销
+        8、退出
         \033[0m'''
     show_dic = {
         '1': login,
@@ -293,7 +337,8 @@ def main():
         '4': attend_class,
         '5': teacher_evaluate,
         '6': class_record,
-        '7': logout
+        '7': logout,
+        '8': quit_sys
     }
 
     while True:

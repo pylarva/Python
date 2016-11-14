@@ -14,5 +14,5 @@ from src import admin
 管理员登陆入口： 测试账号:admin 密码:admin
 """
 if __name__ == '__main__':
-    # admin.login()
+    admin.login()
     admin.main()

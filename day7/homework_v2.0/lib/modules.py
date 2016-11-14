@@ -4,6 +4,7 @@
 
 import time
 from src import admin
+from src import student
 
 
 class TEACHER:
@@ -50,6 +51,8 @@ class COURSE:
         teacher_obj = teacher_data[index]
         # 老师加钱
         teacher_obj.gain(self.award)
+        # 上课记录
+        student.student_class_record(self.name)
         time.sleep(1)
         # 保存老师数据
         admin.teacher_db_save(teacher_data)
@@ -82,4 +85,4 @@ class STUDENT:
         self.age = age
         self.gender = gender
         self.class_list = []
-        self.class_record = {}
+        self.class_record = []
