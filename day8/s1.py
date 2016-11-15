@@ -36,16 +36,16 @@ class Foo:
 
 T1 = Foo('alex')
 # 普通字段只能通过对象访问
-print(T1.name)
+# print(T1.name)
 # 一般情况下访问静态字段 只能通过类来访问
-print(Foo.CC)
+# print(Foo.CC)
 # 也可以用对象来访问
-print(T1.CC)
+# print(T1.CC)
 
 # 直接用类调用函数
-Foo.f1()
+# Foo.f1()
 Foo.f2()
 
 obj = Foo('alex')
 ret = obj.f3()
-print(ret)
+# print(ret)

@@ -43,6 +43,7 @@ class Foo:
 # # 两个括号
 # Foo()()
 
+# 取值会去执行 __str__ 方法
 obj1 = Foo(name='alex', age=18)
 obj2 = Foo(name='wusir', age=18)
 # print(obj1)
@@ -62,7 +63,9 @@ ret = obj1.__dict__
 # 中括号语法自动执行 getitem 方法
 obj = Foo('alex', 100)
 # obj['ab']
+# 中括号并且赋值执行 setitem 方法
 # obj['k1'] = 111
 # del obj['k1']
+# 切片也是去执行 setitem 方法
 ret1 = obj[1:6:2]
 print(ret1)
