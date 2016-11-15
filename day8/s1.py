@@ -9,7 +9,7 @@
 
 class Foo:
     # 字段（静态字段 保存在类里面）
-    CC = 123
+    CC = "中国"
 
     def __init__(self, name):
         # 字段(普通的字段 保存在对象里面)
@@ -34,7 +34,7 @@ class Foo:
         return self.name[1]
 
 
-T1 = Foo('alex')
+T1 = Foo('上海')
 # 普通字段只能通过对象访问
 # print(T1.name)
 # 一般情况下访问静态字段 只能通过类来访问
