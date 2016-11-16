@@ -3,13 +3,28 @@
 # Author:lichengbing
 
 
-# 面向对象编程
-class Foo:  # 创建类
+class Foo:
 
-    def __init__(self, name, age):  # Foo接收到两个参数后会封装在自己类内部
-        self.name = name
-        self.age = age
+    def f1(self):
+        return 100
 
+    def f2(self, value):
+        print(value)
 
-obj = Foo('kobe', 18)  # 创建一个对象 传两个参数
-print(obj.name, obj.age)  # 外面调用封装好的参数
+    def f3(self):
+        print('300')
+
+    # 类属性定义
+    Foo = property(fget=f1, fset=f2, fdel=f3)
+
+obj = Foo()
+
+# 取值
+ret = obj.Foo
+print(ret)
+
+# 赋值
+obj.Foo = 200
+
+# 删除
+del obj.Foo

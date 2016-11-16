@@ -21,17 +21,17 @@ class Foo:
     def f1(self):
         print(self.__name)
 
-    # @staticmethod
-    def f3(self):
+    @staticmethod
+    def f3():
         print(Foo.__cc)
 
 
-obj = Foo('alex')
-# print(obj.__name)
-obj.f1()
+obj = Foo('kobe')
+# print(obj.__name)  # 通过对象外部访问内部普通字段不成功
+# obj.f1()
 
-# print(Foo.__cc)
+# print(Foo.__cc)  # 通过外部访问内部静态字段也不成功
 obj.f3()
 
 # 特殊访问方法
-print(obj._Foo__name)
+# print(obj._Foo__name)

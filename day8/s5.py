@@ -26,7 +26,7 @@ ret = isinstance(obj, Foo)
 # 也可以查看是否是 父类 的实例
 # ret = isinstance(obj, Bar)
 print(ret)
-# 查看 Bar 是否为 Foo 的子类
+# 查看 Foo 是否为 Bar 的子类
 ret1 = issubclass(Foo, Bar)
 print(ret1)
 
