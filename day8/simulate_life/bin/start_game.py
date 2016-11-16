@@ -11,5 +11,8 @@ sys.path.append(base_dir)
 
 from src import game
 
+"""
+游戏入口
+"""
 if __name__ == '__main__':
     game.main()
