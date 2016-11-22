@@ -57,7 +57,7 @@ class Character:
         session = config.get(session_num, key_num)
         session = session.format(self.name, self.skill)
         for s in session:
-            sys.stdout.write('\033[%d;1m%s\033[5m' % (self.color_num, s))
+            sys.stdout.write('\033[%d;1m%s\033[0m' % (self.color_num, s))
             sys.stdout.flush()
             time.sleep(0.1)
         print('\n')
