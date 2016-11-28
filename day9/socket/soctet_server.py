@@ -4,6 +4,8 @@
 # bolg:www.lichengbing.com
 
 import socket
+import subprocess
+
 ip_port = ('127.0.0.1', 9999)
 
 # 买手机
@@ -26,8 +28,22 @@ while True:
             if str(recv_data, encoding='utf-8') == 'exit':
                 break
             # 发消息
-            send_data = recv_data.upper()
-            conn.send(send_data)
+            p = subprocess.Popen(str(recv_data, encoding='utf-8'), shell=True, stdout=subprocess.PIPE)
+            ret = p.stdout.read()
+
+            if len(ret) == 0:
+                send_data = 'cmd error...'
+                ret = bytes(send_data, encoding='utf-8')
+                conn.send(ret)
+            else:
+                ret = str(ret, encoding='gbk')
+                ret = bytes(ret, encoding='utf8')
+                read_tag = 'ready|%s' % len(ret)
+                conn.send(bytes(read_tag, encoding='utf8'))
+                freedback = conn.recv(1024)
+                if str(freedback, encoding='utf8') == 'start':
+                    conn.send(ret)
+
         except Exception:
             break
 
