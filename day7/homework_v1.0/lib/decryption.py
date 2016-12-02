@@ -4,6 +4,7 @@
 
 import hashlib
 
+
 def decryption_pwd(pwd):
     obj = hashlib.md5(bytes('sdfhiwe676sdf', encoding='utf-8'))
     obj.update(bytes(pwd, encoding='utf-8'))
