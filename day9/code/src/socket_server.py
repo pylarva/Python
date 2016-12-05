@@ -10,6 +10,7 @@ import subprocess
 import configparser
 import socketserver
 from conf import setting
+from lib.check_md5 import file_md5
 from lib.decryption import decryption_pwd
 
 
@@ -51,14 +52,28 @@ class MyServer(socketserver.BaseRequestHandler):
         else:
             return False, False
 
+    def breakpoint(self, file_name):
+        file = os.path.join(self.CURRENT_PATH, file_name)
+        if os.path.exists(file):
+            read_size = os.stat(file).st_size
+        else:
+            read_size = 0
+        return read_size
+
     def task_put(self, *args, **kwargs):
         print('---put', args, kwargs)
         file_name = args[0].get('file_name')
         file_size = args[0].get('file_size')
-        server_response = {'status': 200}
+
+        read_size = self.breakpoint(file_name)
+        if read_size != 0 :
+            recv_size = read_size
+        else:
+            recv_size = 0
+
+        server_response = {'status': 200, 'read_size': read_size}
         self.request.send(bytes(json.dumps(server_response), encoding='utf-8'))
-        f = open(os.path.join(self.CURRENT_PATH, file_name), 'wb')
-        recv_size = 0
+        f = open(os.path.join(self.CURRENT_PATH, file_name), 'ab+')
 
         while recv_size < file_size:
             data = self.request.recv(4096)
@@ -66,6 +81,9 @@ class MyServer(socketserver.BaseRequestHandler):
             recv_size += len(data)
         print('File recv success!')
         f.close()
+
+        md5_hash = file_md5(os.path.join(self.CURRENT_PATH, file_name))
+        self.request.send(bytes(md5_hash, encoding='utf-8'))
 
     def task_pull(self, *args):
 
@@ -83,12 +101,23 @@ class MyServer(socketserver.BaseRequestHandler):
             server_confirm_msg = self.request.recv(1024)
             confirm_data = json.loads(server_confirm_msg.decode())
 
+            read_size = confirm_data['read_size']
+            if read_size != 0:
+                recv_size = read_size
+            else:
+                recv_size = 0
+
             if confirm_data['status'] == 200:
                 print('Start sending file \033[31;0m{}\033[0m!'.format(msg_data['file_name']))
                 f = open(file, 'rb')
+                f.seek(recv_size, 0)
                 for line in f:
                     self.request.send(line)
                 print('Send file done!')
+
+                md5_hash = file_md5(file)
+                self.request.send(bytes(md5_hash, encoding='utf-8'))
+
         else:
             print('\033[31;0m{}\033[0m文件不存在...'.format(file_name))
 

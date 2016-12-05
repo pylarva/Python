@@ -25,4 +25,4 @@ if __name__ == '__main__':
         # progressbar(size*10/file_size, 10)
         progressbar(size, file_size)
         size += 1024
-        # time.sleep(0.1)
+        time.sleep(0.1)
