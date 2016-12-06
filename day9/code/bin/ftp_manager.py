@@ -11,5 +11,8 @@ sys.path.append(base_dir)
 
 from src import ftp_manager
 
+"""
+FTP用户管理后台入口
+"""
 if __name__ == '__main__':
     ftp_manager.main()

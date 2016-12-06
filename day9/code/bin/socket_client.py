@@ -14,11 +14,15 @@ import math
 import socket
 import hashlib
 
+# 客户端程序运行的本地目录
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 def connect_server():
-
+    """
+    客户端连接服务端：IP + PORT
+    :return:
+    """
     while True:
         ip_port = input('请输入服务端地址： ')
         if not re.match('^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}:\d+$', ip_port):
@@ -30,7 +34,11 @@ def connect_server():
 
 
 def login(s):
-
+    """
+    FTP登陆 如果登陆不成功即不允许与服务端会话
+    :param s:
+    :return:
+    """
     while True:
         send_data = input('>>: ').strip()
         if len(send_data) == 0: continue
@@ -43,6 +51,12 @@ def login(s):
 
 
 def progressbar(cur, total):
+    """
+    上传文件或者下载文件过程中的进度条显示
+    :param cur:
+    :param total:
+    :return:
+    """
     percent = '{:.2%}'.format(cur / total)
     sys.stdout.write('\r')
     sys.stdout.write('[%-50s] %s' % ('=' * int(math.floor(cur * 50 / total)), percent))
@@ -52,6 +66,11 @@ def progressbar(cur, total):
 
 
 def file_md5(file_path):
+    """
+    文件的MD5校验
+    :param file_path:
+    :return:
+    """
     f = open(file_path, 'rb')
     md5obj = hashlib.md5()
     md5obj.update(f.read())
@@ -61,12 +80,19 @@ def file_md5(file_path):
 
 
 def task_put(s, cmd_list):
-
+    """
+    执行上传文件put方法
+    :param s:
+    :param cmd_list:
+    :return:
+    """
     abs_filepath = cmd_list[1]
     if os.path.isfile(abs_filepath):
         file_size = os.stat(abs_filepath).st_size
         file_name = abs_filepath.split('\\')[-1]
         print('file:{} size:{}'.format(file_name, file_size))
+
+        # 给服务端发送一个包含文件名 文件大小等信息的json文件
         msg_data = {"action": "put",
                     "file_name": file_name,
                     "file_size": file_size,
@@ -74,10 +100,13 @@ def task_put(s, cmd_list):
 
         s.sendall(bytes(json.dumps(msg_data), encoding='utf-8'))
 
+        # 接收服务端的确认信息
         server_confirm_msg = s.recv(1024)
         confirm_data = json.loads(server_confirm_msg.decode())
 
         if confirm_data['status'] == 200:
+
+            # 如果服务端已有文件 得到文件大小 进行断点续传
             read_size = confirm_data['read_size']
             if read_size != 0:
                 send_size = read_size
@@ -86,18 +115,18 @@ def task_put(s, cmd_list):
             else:
                 send_size = 0
             print('Start sending file \033[31;0m{}\033[0m!'.format(msg_data['file_name']))
+
+            # 打开文件 进行指针偏移 开始发送数据
             f = open(msg_data['file_path'], 'rb+')
-            # i = 0
-            # num, last_size = divmod(file_size, 1024)
             f.seek(read_size, 0)
             for line in f:
                 s.send(line)
-                # send_size += len(bytes(line, encoding='utf-8'))
                 send_size += len(line)
                 progressbar(send_size, file_size)
             f.close()
             print('上传文件 \033[31;0m{}\033[0m 成功!'.format(file_name))
 
+            # 上传成功后进行MD5校验
             print('正在校验 MD5 值...')
             md5_hash = file_md5(abs_filepath)
             ret = s.recv(1024)
@@ -111,18 +140,28 @@ def task_put(s, cmd_list):
 
 
 def task_pull(s, cmd_list):
+    """
+    下载文件pull方法
+    :param s:
+    :param cmd_list:
+    :return:
+    """
     file_name = cmd_list[-1]
 
     file = os.path.join(base_dir, file_name)
+
+    # 判断本地路径下是否有相同文件 得到该文件大小 方便断点续传
     if os.path.exists(file):
         recv_size = os.stat(file).st_size
         print('本地检测到相同文件 已经启动断点续传...')
     else:
         recv_size = 0
 
+    # 发送请求给服务端
     msg_data = {"action": "pull", "file_name": file_name}
     s.send(bytes(json.dumps(msg_data), encoding='utf-8'))
 
+    # 服务端收到下载请求 等待确认开始传输
     data = s.recv(1024)
     data = json.loads(data.decode())
     file_name = data.get('file_name')
@@ -131,6 +170,7 @@ def task_pull(s, cmd_list):
     s.send(bytes(json.dumps(server_response), encoding='utf-8'))
     f = open(os.path.join(base_dir, file_name), 'ab+')
 
+    # 收到总的文件大小 开始循环接收
     while recv_size < file_size:
         data = s.recv(4096)
         f.write(data)
@@ -139,6 +179,7 @@ def task_pull(s, cmd_list):
     print('下载文件 \033[31;0m{}\033[0m 成功!\n本地路径：\033[31;0m{}\033[0m'.format(file_name, file))
     f.close()
 
+    # 接受完成MD5校验
     print('正在校验 MD5 值...')
     md5_hash = file_md5(file)
     ret = s.recv(1024)
@@ -149,7 +190,12 @@ def task_pull(s, cmd_list):
 
 
 def task_types(s, cmd_list):
-
+    """
+    对客户端命令进行有效性判断
+    :param s:
+    :param cmd_list:
+    :return:
+    """
     if len(cmd_list) == 1:
         if cmd_list[0] == 'mkdir':
             print('ERROR: mkdir + 文件夹名...')
@@ -172,18 +218,28 @@ def task_types(s, cmd_list):
 
 
 def msg_send(s, msg_data):
+    """
+    向服务端发送一条消息并接收一条消息并打印
+    :param s:
+    :param msg_data:
+    :return:
+    """
     s.send(bytes(json.dumps(msg_data), encoding='utf-8'))
     recv_data = s.recv(1024)
     print(recv_data.decode())
 
 
 def main():
-
+    """
+    客户端主程序函数：线路连接 + 循环会话
+    :return:
+    """
     print('  \033[32;0mFTP客户端程序\033[0m  '.center(50, '-'))
 
     while True:
-        # ip_port = connect_server()
-        ip_port = ('10.0.0.150', 8000)
+        # 连接服务端
+        ip_port = connect_server()
+        # ip_port = ('10.0.0.150', 8000)
         s = socket.socket()
         s.settimeout(2)
         ret = s.connect_ex(ip_port)
@@ -196,15 +252,28 @@ def main():
         print(welcome_msg.decode())
         login(s)
 
+        # 开始循环会话
         while True:
             task_list = ['ls', 'put', 'pull', 'mkdir', 'rm', 'cd']
             send_data = input('>>: ').strip()
             if len(send_data) == 0: continue
 
             cmd_list = send_data.split()
+            if cmd_list[0].upper() == 'HELP':
+                print('''\033[32;0m
+                --------- Help 帮助信息 ----------
+                1. ls    浏览目录
+                2. cd    切换目录
+                3. rm    删除文件
+                4. mkdir 新建文件夹
+                5. put   上传文件
+                6. pull  下载文件
+                \033[0m''')
+                continue
             if cmd_list[0] not in task_list:
                 print('不支持的命令！[Help]查看帮助...')
                 continue
+
             task_types(s, cmd_list)
 
 

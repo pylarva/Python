@@ -12,71 +12,12 @@ import socketserver
 from conf import setting
 from lib.decryption import decryption_pwd
 
-'''
-class MyServer(socketserver.BaseRequestHandler):
-
-    def handle(self):
-        self.menu_show()
-
-    def menu_show(self):
-
-        while True:
-            self.request.sendall(bytes('连接服务器成功...\n1、用户登陆\n2、用户注册\n', encoding='utf-8'))
-            user_select = self.request.recv(1024)
-            if len(user_select) == 0: break
-            user_select = str(user_select, encoding='utf-8')
-            if user_select == '1':
-                self.login()
-            elif user_select == '2':
-                self.regisit()
-            else:
-                self.request.sendall(bytes('输入有误...', encoding='utf-8'))
-
-    def login(self):
-        self.request.sendall(bytes('请输入用户名：', encoding='utf-8'))
-        user_name = self.request.recv(1024).decode()
-        self.request.sendall(bytes('请输入密码： ', encoding='utf-8'))
-        user_pwd = self.request.recv(1024).decode()
-
-        config = configparser.ConfigParser()
-        config.read(setting.USER_DB, encoding='utf-8')
-
-        if config.has_section(user_name):
-            user_pwd = decryption_pwd(user_pwd)
-            if config.get(user_name, 'password') == user_pwd:
-                self.request.sendall(bytes('登陆成功！', encoding='utf-8'))
-                pass
-            else:
-                self.request.sendall(bytes('密码错误...', encoding='utf-8'))
-        else:
-            self.request.sendall(bytes('用户名不存在...', encoding='utf-8'))
-
-    def regisit(self):
-
-        while True:
-            self.request.sendall(bytes('请输入新用户名：', encoding='utf-8'))
-            user_name = self.request.recv(1024).decode()
-
-            config = configparser.ConfigParser()
-            config.read(setting.USER_DB, encoding='utf-8')
-
-            if config.has_section(user_name):
-                print('用户名已经存在...')
-                continue
-            else:
-                config.add_section(user_name)
-                self.request.sendall(bytes('设置用户密码：', encoding='utf-8'))
-                user_pwd = self.request.recv(1024).decode()
-                user_pwd = decryption_pwd(user_pwd)
-                config.set(user_name, 'password', user_pwd)
-                config.write(open(setting.USER_DB, 'w'))
-                self.request.sendall(bytes('注册成功！', encoding='utf-8'))
-                break
-'''
-
 
 def login():
-
+    """
+    FTP后台管理员登录
+    :return:
+    """
     while True:
         user_name = input('请输入管理员账号：')
         user_pwd = input('管理员密码：')
@@ -92,7 +33,10 @@ def login():
 
 
 def user_add():
-
+    """
+    添加用户
+    :return:
+    """
     while True:
         user_name = input('输入新用户名：')
 
@@ -124,7 +68,10 @@ def user_add():
 
 
 def user_del():
-
+    """
+    删除用户
+    :return:
+    """
     while True:
         user_name = input('输入用户名：')
 
@@ -145,6 +92,10 @@ def user_del():
 
 
 def user_show():
+    """
+    展示所有用户
+    :return:
+    """
     config = configparser.ConfigParser()
     config.read(setting.USER_DB, encoding='utf-8')
     user_list = config.sections()
@@ -156,6 +107,10 @@ def user_show():
 
 
 def main():
+    """
+    后台管理主函数
+    :return:
+    """
     print('  \033[32;0mFTP用户管理\033[0m  '.center(50, '-'))
     login()
     menu = '''\033[32;0m

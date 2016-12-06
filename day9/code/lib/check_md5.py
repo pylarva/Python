@@ -7,6 +7,11 @@ import hashlib
 
 
 def file_md5(file_path):
+    """
+    文件MD5校验
+    :param file_path:
+    :return:
+    """
     f = open(file_path, 'rb')
     md5obj = hashlib.md5()
     md5obj.update(f.read())
