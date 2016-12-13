@@ -13,10 +13,14 @@ import json
 import math
 import socket
 import hashlib
+import threading
+import configparser
+from conf import setting
 
 # 客户端程序运行的本地目录
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
+GROUP_DIC = {}
 
 def connect_server():
     """
@@ -24,9 +28,9 @@ def connect_server():
     :return:
     """
     while True:
-        ip_port = input('请输入服务端地址： ')
+        ip_port = input('请输入主机地址[ip:port]： ')
         if not re.match('^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}:\d+$', ip_port):
-            print('地址有误...')
+            print('地址有误[ip:port]...')
             continue
         else:
             ip_port = (ip_port.split(':')[0], int(ip_port.split(':')[1]))
@@ -229,7 +233,7 @@ def msg_send(s, msg_data):
     print(recv_data.decode())
 
 
-def main():
+def main1():
     """
     客户端主程序函数：线路连接 + 循环会话
     :return:
@@ -275,6 +279,150 @@ def main():
                 continue
 
             task_types(s, cmd_list)
+
+
+def host_show():
+    print('%-8s%-7s%-13s%-10s' % ('序号', '主机名', 'IP地址', '主机组'))
+    config = configparser.ConfigParser()
+    config.read(setting.HOST_LIST, encoding='utf-8')
+    host_list = config.sections()
+    host_num = 1
+    host_add = []
+    for host in host_list:
+        print('%-10s%-10s%-15s%-10s' % (host_num, host, config.get(host, 'ip'), config.get(host, 'group')))
+        host_num += 1
+        host_tuple = (host, config.get(host, 'ip'))
+        host_add.append(host_tuple)
+        global GROUP_DIC
+        ret = GROUP_DIC.get(config.get(host, 'group'))
+        if not ret:
+            GROUP_DIC[config.get(host, 'group')] = [host]
+        else:
+            GROUP_DIC[config.get(host, 'group')].append(host)
+    return host_num, host_add
+
+
+def link_test(*args):
+    i = args[0]
+    host_name = args[1][i][0]
+    host_ip = args[1][i][1]
+    ip_port = (host_ip, 8000)
+    s = socket.socket()
+    s.settimeout(2)
+    ret = s.connect_ex(ip_port)
+    if ret != 0:
+        print('{} {} [\033[31;0m失败\033[0m]'.format(host_name, host_ip))
+    else:
+        print('{} {} [\033[32;0m成功\033[0m]'.format(host_name, host_ip))
+
+
+def host_manager():
+
+    while True:
+        # 连接服务端
+        ip_port = connect_server()
+        # ip_port = ('10.0.0.104', 8000)
+        s = socket.socket()
+        s.settimeout(2)
+        ret = s.connect_ex(ip_port)
+        if ret != 0:
+            print('服务器：\033[31;0m{}\033[0m 端口：\033[31;0m{}\033[0m 连接失败...'.format(ip_port[0], ip_port[1]))
+            print('请检查IP和端口并重试!\n')
+            continue
+
+        host_msg = s.recv(1024)
+        if host_msg.decode() == 'deny':
+            print('\033[31;0m{}\033[0m 拒绝访问...'.format(ip_port[0]))
+            continue
+        else:
+            host_name = host_msg.decode().split('\n')[0]
+            config = configparser.ConfigParser()
+            config.read(setting.HOST_LIST, encoding='utf-8')
+            if not config.has_section(host_name):
+                config.add_section(host_name)
+                config.set(host_name, 'IP', ip_port[0])
+                config.set(host_name, 'GROUP', 'None')
+                config.write(open(setting.HOST_LIST, 'w'))
+                print('主机\033[31;0m %s \033[0m添加成功..' % host_name)
+                break
+            else:
+                print('主机 \033[31;0m %s \033[0m已经存在..' % host_name)
+
+
+def main():
+
+    while True:
+        print('  \033[32;0mFabric主机管理\033[0m  '.center(50, '-'))
+        host_num, host_list = host_show()
+        group_show()
+        print('''\033[32;0m\nj. 添加主机\nd. 删除主机\ng. 创建组\nc. 连接\nq. 退出
+        \033[0m''')
+        user_select = input('>>>:')
+
+        if user_select == 'j':
+            host_manager()
+
+        if user_select == 'g':
+            group_manager()
+
+        if user_select == 'c':
+            for i in range(host_num - 1):
+                t = threading.Thread(target=link_test, args=(i, host_list, ))
+                t.start()
+                t.join()
+
+        if user_select == 'd':
+            # host_del = input('输入要删除的主机名：')
+            pass
+
+        if user_select == 'q':
+            break
+
+
+def group_show():
+    # print(GROUP_DIC)
+    # print('-- 主机组 --')
+    for key in GROUP_DIC:
+        if key == 'None':
+            continue
+        else:
+            print('[\033[32;0m{}组\033[0m]'.format(key))
+            for item in GROUP_DIC[key]:
+                print(item)
+
+
+def group_manager():
+    config = configparser.ConfigParser()
+    config.read(setting.HOST_LIST, encoding='utf-8')
+
+    group_name = input('输入组名：')
+    if group_name:
+        host_num, host_list = host_show()
+        while True:
+            user_select = input('选择主机[b返回]:')
+            if user_select == 'b':
+                break
+            try:
+                user_select = int(user_select)
+                host_name = host_list[user_select - 1][0]
+                config.set(host_name, 'group', group_name)
+                config.write(open(setting.HOST_LIST, 'w'))
+                print('\033[31;0m{}\033[0m添加成功!'.format(host_name))
+            except Exception:
+                print('输入错误!')
+                continue
+
+
+def main2():
+    print('  \033[32;0mFabric主机管理\033[0m  '.center(50, '-'))
+    print('1. 主机管理\n2. 主机组管理\n3.退出')
+    user_inp = input('>>>')
+    if user_inp == '1':
+        host_manager()
+    if user_inp == '2':
+        group_manager()
+    if user_inp == 'q':
+        sys.exit()
 
 
 if __name__ == '__main__':

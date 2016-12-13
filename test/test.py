@@ -8,21 +8,6 @@ import math
 import sys
 import time
 
+dic = {'1':[1,2,3]}
 
-def progressbar(cur, total):
-    percent = '{:.2%}'.format(cur / total)
-    sys.stdout.write('\r')
-    sys.stdout.write('[%-50s] %s' % ( '=' * int(math.floor(cur * 50 / total)), percent))
-    sys.stdout.flush()
-    if cur == total:
-        sys.stdout.write('\n')
-
-if __name__ == '__main__':
-
-    file_size = 102400
-    size = 0
-    while file_size >= size:
-        # progressbar(size*10/file_size, 10)
-        progressbar(size, file_size)
-        size += 1024
-        time.sleep(0.1)
+print(dic.v)
