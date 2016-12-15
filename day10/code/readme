@@ -1,0 +1,8 @@
+SELECT版FTP:
+使用SELECT或SELECTORS模块实现并发简单版FTP
+允许多用户并发上传下载文件
+
+测试文件： 放于程序同级目录
+
+上传文件： put test.rar     上传目录： \put
+下载文件： pull test.rar    下载目录： \pull

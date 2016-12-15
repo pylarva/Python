@@ -1,0 +1,82 @@
+类 Fabric 主机管理程序开发：
+
+功能：
+1. 主机批量管理 添加主机 删除主机
+2. 主机组管理 创建主机组 添加主机组成员
+3. 所有列表主机连接测试(多线程)
+4. 单主机远程命令执行 文件上传 下载(单线程)
+5. 主机组批量远程命令执行 文件上传 下载(多线程)
+
+使用说明：
+
+Fabric_client 客户端 安装在各Linux节点主机 默认端口8000
+Fabric_server 服务端 安装在windows pycharm 管理节点
+
+节点主机maser_server配置修改：
+服务端主机地址
+conf/setting → master_address = '10.0.0.1'
+
+界面预览
+----------------------------------------------------------------
+
+------------  Fabric主机管理  -------------
+序号      主机名    IP地址         主机组
+1         web01     10.0.0.104     web
+2         db01      10.0.0.106     db
+3         web02     10.0.0.105     web
+[db组 计数：1]
+db01
+[web组 计数：2]
+web01
+web02
+
+j. 添加主机
+d. 删除主机
+g. 主机组
+c. 测试
+q. 退出
+
+帮助信息：
+    1. 操作主机：     salt  主机名    cmd.命令 (如：salt web01 cmd.ls)
+    2. 操作主机组：   salts 主机组名  cmd.命令  (如：salts web cmd.ls)
+    3. 上传\下载命令：put.文件绝对路径 pull.文件绝对路径 (如： salt web01 cmd.put F:\one.txt)
+---------------------------------------------------------------------------------------------
+
+命令师范：
+
+1. 远程命令执行
+
+[b返回]>>>:salt web01 cmd.ls
+-- web01 10.0.0.104--
+socket_client.py
+
+2. 批量执行
+
+[b返回]>>>:salts web cmd.ls
+-- web01 10.0.0.104--
+socket_client.py
+
+-- web02 10.0.0.105--
+socket_client.py
+
+3. 远程上传(默认上传目录 /tmp/)
+
+[b返回]>>>:salt web01 cmd.put F:\File_share\VC6.0_Win7_XP85.rar
+file:VC6.0_Win7_XP85.rar size:31808829
+Start sending file VC6.0_Win7_XP85.rar!
+上传文件 VC6.0_Win7_XP85.rar 成功!
+正在校验 MD5 值...
+MD5值 3552443B373AB41D3CEF26E66FD41923 校验成功!
+
+4. 远程下载
+
+[b返回]>>>:salt web01 cmd.pull /tmp/VC6.0_Win7_XP85.rar
+C:\GitHub\Python\day11\code\Fabric_server\src
+[==================================================] 100.00%
+下载文件 VC6.0_Win7_XP85.rar 成功!
+本地路径：C:\GitHub\Python\day11\code\Fabric_server\src\VC6.0_Win7_XP85.rar
+正在校验 MD5 值...
+MD5值 3552443B373AB41D3CEF26E66FD41923 校验成功!
+
+知识点：
+相比ftp 主要还是应用多线程操作

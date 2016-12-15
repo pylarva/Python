@@ -28,15 +28,7 @@ class MyServer(socketserver.BaseRequestHandler):
         :return:
         """
         conn = self.request
-        if self.client_address[0] == setting.master_address:
-            cmd = subprocess.Popen('hostname'.format(self.CURRENT_PATH), shell=True, stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
-            cmd_res = cmd.stdout.read()
-            print(cmd_res.decode())
-            conn.send(cmd_res)
-            self.session()
-        else:
-            conn.send(bytes('deny', encoding='utf-8'))
+        conn.sendall(bytes('连接成功!请登陆...\n输入用户名', encoding='utf-8'))
 
         while True:
             user_name = conn.recv(1024)

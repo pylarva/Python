@@ -9,4 +9,7 @@ import sys
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(base_dir)
 
-HOST_LIST = os.path.join(base_dir, 'db', 'host_list')
+from src import Fabric_server
+
+if __name__ == '__main__':
+    Fabric_server.main()

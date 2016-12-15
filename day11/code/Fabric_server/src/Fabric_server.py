@@ -16,11 +16,15 @@ import hashlib
 import threading
 import configparser
 from conf import setting
+from lib.decryption import file_md5
 
 # 客户端程序运行的本地目录
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
 GROUP_DIC = {}
+HOST_NUM = 0
+HOST_LIST = []
+
 
 def connect_server():
     """
@@ -35,23 +39,6 @@ def connect_server():
         else:
             ip_port = (ip_port.split(':')[0], int(ip_port.split(':')[1]))
             return ip_port
-
-
-def login(s):
-    """
-    FTP登陆 如果登陆不成功即不允许与服务端会话
-    :param s:
-    :return:
-    """
-    while True:
-        send_data = input('>>: ').strip()
-        if len(send_data) == 0: continue
-        s.send(bytes(send_data, encoding='utf-8'))
-        recv_data = s.recv(1024)
-        print(recv_data.decode())
-
-        if re.match('欢迎', recv_data.decode()):
-            break
 
 
 def progressbar(cur, total):
@@ -69,20 +56,6 @@ def progressbar(cur, total):
         sys.stdout.write('\n')
 
 
-def file_md5(file_path):
-    """
-    文件的MD5校验
-    :param file_path:
-    :return:
-    """
-    f = open(file_path, 'rb')
-    md5obj = hashlib.md5()
-    md5obj.update(f.read())
-    md5_hash = md5obj.hexdigest()
-    f.close()
-    return str(md5_hash).upper()
-
-
 def task_put(s, cmd_list):
     """
     执行上传文件put方法
@@ -90,7 +63,7 @@ def task_put(s, cmd_list):
     :param cmd_list:
     :return:
     """
-    abs_filepath = cmd_list[1]
+    abs_filepath = cmd_list.split()[-1]
     if os.path.isfile(abs_filepath):
         file_size = os.stat(abs_filepath).st_size
         file_name = abs_filepath.split('\\')[-1]
@@ -150,9 +123,10 @@ def task_pull(s, cmd_list):
     :param cmd_list:
     :return:
     """
-    file_name = cmd_list[-1]
+    file_name = os.path.basename(cmd_list.split()[-1])
 
-    file = os.path.join(base_dir, file_name)
+    # file = os.path.join(base_dir, file_name)
+    file = cmd_list.split()[-1]
 
     # 判断本地路径下是否有相同文件 得到该文件大小 方便断点续传
     if os.path.exists(file):
@@ -172,7 +146,10 @@ def task_pull(s, cmd_list):
     file_size = data.get('file_size')
     server_response = {'status': 200, "read_size": recv_size}
     s.send(bytes(json.dumps(server_response), encoding='utf-8'))
-    f = open(os.path.join(base_dir, file_name), 'ab+')
+    print(base_dir)
+    pull_path = os.path.join(base_dir, file_name)
+    # f = open(os.path.join(base_dir, file_name), 'ab+')
+    f = open(pull_path, 'ab+')
 
     # 收到总的文件大小 开始循环接收
     while recv_size < file_size:
@@ -180,12 +157,12 @@ def task_pull(s, cmd_list):
         f.write(data)
         recv_size += len(data)
         progressbar(recv_size, file_size)
-    print('下载文件 \033[31;0m{}\033[0m 成功!\n本地路径：\033[31;0m{}\033[0m'.format(file_name, file))
+    print('下载文件 \033[31;0m{}\033[0m 成功!\n本地路径：\033[31;0m{}\033[0m'.format(file_name, pull_path))
     f.close()
 
     # 接受完成MD5校验
     print('正在校验 MD5 值...')
-    md5_hash = file_md5(file)
+    md5_hash = file_md5(pull_path)
     ret = s.recv(1024)
     if md5_hash == ret.decode():
         print('MD5值 \033[31;0m{}\033[0m 校验成功!'.format(md5_hash))
@@ -193,116 +170,55 @@ def task_pull(s, cmd_list):
         print('MD5值 \033[31;0m{}\033[0m 校验失败!'.format(md5_hash))
 
 
-def task_types(s, cmd_list):
-    """
-    对客户端命令进行有效性判断
-    :param s:
-    :param cmd_list:
-    :return:
-    """
-    if len(cmd_list) == 1:
-        if cmd_list[0] == 'mkdir':
-            print('ERROR: mkdir + 文件夹名...')
-        if cmd_list[0] == 'rm':
-            print('ERROR: rm + 文件夹名...')
-        else:
-            msg_data = {"action":  cmd_list[0],
-                        "file_name": None}
-            msg_send(s, msg_data)
-
-    if len(cmd_list) == 2:
-        task_type = cmd_list[0]
-        if task_type == 'put':
-            task_put(s, cmd_list)
-        if task_type == 'pull':
-            task_pull(s, cmd_list)
-        if task_type in ['cd', 'ls', 'mkdir', 'rm']:
-            msg_data = {"action": cmd_list[0], "file_name": cmd_list[-1]}
-            msg_send(s, msg_data)
-
-
-def msg_send(s, msg_data):
-    """
-    向服务端发送一条消息并接收一条消息并打印
-    :param s:
-    :param msg_data:
-    :return:
-    """
-    s.send(bytes(json.dumps(msg_data), encoding='utf-8'))
-    recv_data = s.recv(1024)
-    print(recv_data.decode())
-
-
-def main1():
-    """
-    客户端主程序函数：线路连接 + 循环会话
-    :return:
-    """
-    print('  \033[32;0mFTP客户端程序\033[0m  '.center(50, '-'))
-
-    while True:
-        # 连接服务端
-        ip_port = connect_server()
-        # ip_port = ('10.0.0.150', 8000)
-        s = socket.socket()
-        s.settimeout(2)
-        ret = s.connect_ex(ip_port)
-        if ret != 0:
-            print('服务器：\033[31;0m{}\033[0m 端口：\033[31;0m{}\033[0m 连接失败...'.format(ip_port[0], ip_port[1]))
-            print('请检查IP和端口并重试!\n')
-            continue
-
-        welcome_msg = s.recv(1024)
-        print(welcome_msg.decode())
-        login(s)
-
-        # 开始循环会话
-        while True:
-            task_list = ['ls', 'put', 'pull', 'mkdir', 'rm', 'cd']
-            send_data = input('>>: ').strip()
-            if len(send_data) == 0: continue
-
-            cmd_list = send_data.split()
-            if cmd_list[0].upper() == 'HELP':
-                print('''\033[32;0m
-                --------- Help 帮助信息 ----------
-                1. ls    浏览目录
-                2. cd    切换目录
-                3. rm    删除文件
-                4. mkdir 新建文件夹
-                5. put   上传文件
-                6. pull  下载文件
-                \033[0m''')
-                continue
-            if cmd_list[0] not in task_list:
-                print('不支持的命令！[Help]查看帮助...')
-                continue
-
-            task_types(s, cmd_list)
-
-
 def host_show():
+    """
+    程序一运行读取主机列表文件并展示
+    :return:
+    """
     print('%-8s%-7s%-13s%-10s' % ('序号', '主机名', 'IP地址', '主机组'))
     config = configparser.ConfigParser()
     config.read(setting.HOST_LIST, encoding='utf-8')
     host_list = config.sections()
     host_num = 1
     host_add = []
+    global GROUP_DIC
+    GROUP_DIC = {}
     for host in host_list:
         print('%-10s%-10s%-15s%-10s' % (host_num, host, config.get(host, 'ip'), config.get(host, 'group')))
         host_num += 1
         host_tuple = (host, config.get(host, 'ip'))
         host_add.append(host_tuple)
-        global GROUP_DIC
         ret = GROUP_DIC.get(config.get(host, 'group'))
         if not ret:
             GROUP_DIC[config.get(host, 'group')] = [host]
         else:
             GROUP_DIC[config.get(host, 'group')].append(host)
+    global HOST_NUM
+    global HOST_LIST
+    HOST_NUM = host_num
+    HOST_LIST = host_add
     return host_num, host_add
 
 
+def host_test():
+    """
+    创建多线程去连接主机
+    :return:
+    """
+    for i in range(HOST_NUM - 1):
+        t = threading.Thread(target=link_test, args=(i, HOST_LIST,))
+        t.start()
+        t.join()
+    user_inp = input('[b返回]>>')
+    if user_inp: pass
+
+
 def link_test(*args):
+    """
+    连接主机 如果超时2秒就判断为离线
+    :param args:
+    :return:
+    """
     i = args[0]
     host_name = args[1][i][0]
     host_ip = args[1][i][1]
@@ -311,12 +227,16 @@ def link_test(*args):
     s.settimeout(2)
     ret = s.connect_ex(ip_port)
     if ret != 0:
-        print('{} {} [\033[31;0m失败\033[0m]'.format(host_name, host_ip))
+        print('{} {} [\033[31;0m离线\033[0m]'.format(host_name, host_ip))
     else:
-        print('{} {} [\033[32;0m成功\033[0m]'.format(host_name, host_ip))
+        print('{} {} [\033[32;0m正常\033[0m]'.format(host_name, host_ip))
 
 
 def host_manager():
+    """
+    添加节点主机 如果远程主机连接成功返回其主机名 deny表示master_address地址不对 拒绝访问
+    :return:
+    """
 
     while True:
         # 连接服务端
@@ -344,54 +264,119 @@ def host_manager():
                 config.set(host_name, 'GROUP', 'None')
                 config.write(open(setting.HOST_LIST, 'w'))
                 print('主机\033[31;0m %s \033[0m添加成功..' % host_name)
+                time.sleep(1)
                 break
             else:
                 print('主机 \033[31;0m %s \033[0m已经存在..' % host_name)
+                time.sleep(1)
 
 
 def main():
-
+    """
+    服务端主函数
+    :return:
+    """
     while True:
         print('  \033[32;0mFabric主机管理\033[0m  '.center(50, '-'))
-        host_num, host_list = host_show()
+        host_show()
         group_show()
-        print('''\033[32;0m\nj. 添加主机\nd. 删除主机\ng. 创建组\nc. 连接\nq. 退出
+        print('''\033[32;0m\nj. 添加主机\nd. 删除主机\ng. 主机组\nc. 测试\nq. 退出
         \033[0m''')
-        user_select = input('>>>:')
+        print('''帮助信息：
+    1. 操作主机：     salt  主机名    cmd.命令 (如：salt web01 cmd.ls)
+    2. 操作主机组：   salts 主机组名  cmd.命令  (如：salts web cmd.ls)
+    3. 上传\下载命令：put.文件绝对路径 pull.文件绝对路径 (如： salt web01 cmd.put F:\one.txt)
+        ''')
+        user_mode = {
+            'c': host_test,
+            'q': system_exit,
+            'd': host_remove,
+            'j': host_manager,
+            'g': group_manager,
+        }
 
-        if user_select == 'j':
-            host_manager()
+        while True:
+            user_inp = input('[b返回]>>>:')
+            user_cmd = user_inp.split()[0]
 
-        if user_select == 'g':
-            group_manager()
+            if user_cmd == 'salt':
+                salt_moder(user_inp)
+            if user_cmd == 'salts':
+                salts_moder(user_inp)
+            if user_inp in user_mode:
+                user_mode[user_inp]()
+                break
+            if user_cmd == 'b':
+                break
 
-        if user_select == 'c':
-            for i in range(host_num - 1):
-                t = threading.Thread(target=link_test, args=(i, host_list, ))
-                t.start()
-                t.join()
 
-        if user_select == 'd':
-            # host_del = input('输入要删除的主机名：')
-            pass
+def salt_moder(cmd):
+        """
+        单线程连接主机并远程执行命令
+        :param cmd:
+        :return:
+        """
+        try:
+            config = configparser.ConfigParser()
+            config.read(setting.HOST_LIST, encoding='utf-8')
+            host_name = cmd.split()[1]
+            host_ip = config.get(host_name, 'ip')
+            ip_port = (host_ip, 8000)
+            s = socket.socket()
+            s.connect(ip_port)
+            s.recv(1024)
+        except Exception:
+            print('输入有误...')
+            return
 
-        if user_select == 'q':
-            break
+        user_cmd = cmd.split('cmd.')[-1]
+
+        if user_cmd.split()[0] == 'put':
+            task_put(s, user_cmd)
+        elif user_cmd.split()[0] == 'pull':
+            task_pull(s, user_cmd)
+        else:
+            s.send(bytes(user_cmd, encoding='utf-8'))
+            ret = s.recv(1024)
+            print('\033[32;0m-- {} {}--\033[0m'.format(host_name, host_ip))
+            print(ret.decode())
+
+
+def salts_moder(cmd):
+    """
+    批量远程执行命令时启用多线程
+    :param cmd:
+    :return:
+    """
+    host_list = GROUP_DIC.get(cmd.split()[1])
+    host_len = len(host_list)
+
+    for i in range(host_len):
+        new_cmd = re.sub(cmd.split()[1], host_list[i], cmd, 1)
+        t = threading.Thread(target=salt_moder, args=(new_cmd, ))
+        t.start()
+        t.join()
 
 
 def group_show():
-    # print(GROUP_DIC)
-    # print('-- 主机组 --')
+    """
+    统计主机组函数
+    :return:
+    """
     for key in GROUP_DIC:
         if key == 'None':
             continue
         else:
-            print('[\033[32;0m{}组\033[0m]'.format(key))
+            print('[\033[32;0m{}组 计数：{}\033[0m]'.format(key, len(GROUP_DIC[key])))
             for item in GROUP_DIC[key]:
                 print(item)
 
 
 def group_manager():
+    """
+    创建主机组或者添加新组成员
+    :return:
+    """
     config = configparser.ConfigParser()
     config.read(setting.HOST_LIST, encoding='utf-8')
 
@@ -413,16 +398,27 @@ def group_manager():
                 continue
 
 
-def main2():
-    print('  \033[32;0mFabric主机管理\033[0m  '.center(50, '-'))
-    print('1. 主机管理\n2. 主机组管理\n3.退出')
-    user_inp = input('>>>')
-    if user_inp == '1':
-        host_manager()
-    if user_inp == '2':
-        group_manager()
-    if user_inp == 'q':
-        sys.exit()
+def host_remove():
+    """
+    主机节点移除
+    :return:
+    """
+    config = configparser.ConfigParser()
+    config.read(setting.HOST_LIST, encoding='utf-8')
+
+    inp = input('输入要删除的主机：')
+    if config.has_section(inp):
+        config.remove_section(inp)
+        config.write(open(setting.HOST_LIST, 'w'))
+        print('删除主机\033[31;0m{}\033[0m成功!'.format(inp))
+        time.sleep(1)
+    else:
+        print('主机不存在...')
+        time.sleep(1)
+
+
+def system_exit():
+    sys.exit()
 
 
 if __name__ == '__main__':

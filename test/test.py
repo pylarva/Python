@@ -7,7 +7,12 @@ from __future__ import division
 import math
 import sys
 import time
+import re
+import random
+import time
 
-dic = {'1':[1,2,3]}
+y = 'abc'
+s = time.strftime('%Y-%m-%d %H:%M')
 
-print(dic.v)
+z = '{}_{}'.format(y, s)
+print(z)

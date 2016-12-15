@@ -9,4 +9,5 @@ import sys
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(base_dir)
 
-HOST_LIST = os.path.join(base_dir, 'db', 'host_list')
+USER_DB = os.path.join(base_dir, 'db', 'user_db')
+USER_HOME = os.path.join(base_dir, 'home')

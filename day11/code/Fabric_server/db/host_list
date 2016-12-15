@@ -1,12 +1,12 @@
-[DEFAULT]
-ip = 10.0.0.105
-group = None
-
 [web01]
 ip = 10.0.0.104
 group = web
 
+[db01]
+ip = 10.0.0.106
+group = db
+
 [web02]
 ip = 10.0.0.105
-group = None
+group = web
 
