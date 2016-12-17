@@ -58,16 +58,39 @@ def file_put(sk, inp):
                 file_data = f.read(buffer_size)
                 send_size += buffer_size
             sk.send(file_data)
-            print(len(file_data))
         f.close()
         print(send_size)
-        sk.send(bytes('end', encoding='utf-8'))
         print('上传文件 \033[31;0m{}\033[0m 成功!'.format(file_name))
+
+
+def file_pull(sk, inp):
+    file_name = inp.split()[-1]
+
+    msg_data = {
+        'action': 'pull',
+        'file_name': file_name,
+    }
+
+    sk.sendall(bytes(json.dumps(msg_data), encoding='utf-8'))
+
+    ret = sk.recv(1024)
+    ret = json.loads(ret.decode())
+
+    file_size = ret['file_size']
+
+    recv_size = 0
+    f = open(os.path.join(base_dir, 'pull', file_name), 'ab+')
+    while recv_size < file_size:
+        data = sk.recv(1024)
+        f.write(data)
+        recv_size += len(data)
+    f.close()
+    print('下载完成....')
 
 
 def main():
     sk = socket.socket()
-    sk.connect(('127.0.0.1', 9999))
+    sk.connect(('127.0.0.1', 8000))
 
     recv_bytes = sk.recv(1024)
     recv_str = str(recv_bytes, encoding='utf-8')
@@ -82,6 +105,8 @@ def main():
         if len(inp) == 0: continue
         if inp.split()[0] == 'put':
             file_put(sk, inp)
+        if inp.split()[0] == 'pull':
+            file_pull(sk, inp)
         if inp == 'q':
             break
 

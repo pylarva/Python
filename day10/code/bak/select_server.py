@@ -7,6 +7,7 @@
 
 import os
 import json
+import queue
 import socket
 import select
 
@@ -14,7 +15,7 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 
 # 创建一个socket对象并绑定IP端口
 sk = socket.socket()
-sk.bind(('127.0.0.1', 9999,))
+sk.bind(('127.0.0.1', 8000,))
 sk.listen(5)
 
 # 创建一个新客户端列表 有消息状态改变的客户端列表和一个存储具体消息的字典
@@ -38,7 +39,8 @@ while True:
             # conn是什么? 其实是socket对象 连接成功后添加进客户端列表rlist
             inputs.append(conn)
             # 以该客户端为键添加字典元素
-            message[conn] = []
+            # message[conn] = []
+            message[conn] = queue.Queue()
             size[conn] = {'size': 0, 'flag': False}
         else:
             # 有人给我发了消息
@@ -51,7 +53,8 @@ while True:
                     # 如果是已经建立连接的客户端发来消息 添加进消息客户端列表wlist
                     outputs.append(r)
                     # 具体消息写入字典
-                    message[r].append(ret)
+                    # message[r].append(ret)
+                    message[r].put(ret)
                     # print(message)
             except Exception as e:
                 # 如果客户端异常断开 清理列表
@@ -62,37 +65,58 @@ while True:
     for w in wlist:
         # 读取字典的最后消息
         # msg = message[w].pop()
-        msg = message[w][-1]
+        # msg = message[w][-1]
+        try:
+            msg = message[w].get_nowait()
+        except queue.Empty:
+            print("client [%s]" % w.getpeername()[0], "queue is empty..")
+            outputs.remove(w)
+
         try:
             msg = json.loads(msg.decode())
-            if msg == 'end':
-                print('end')
-            # print(msg)
-            # print(size)
-            print(11111111111111)
+
             if size[w]['flag'] is False and msg['action'] == 'put':
                 size[w]['file_name'] = msg['file_name']
                 size[w]['file_size'] = msg['file_size']
-                print(111111)
 
                 server_response = {'status': 200}
                 w.send(bytes(json.dumps(server_response), encoding='utf-8'))
                 size[w]['flag'] = True
 
-                print(size)
                 outputs.remove(w)
+
+            if msg['action'] == 'pull':
+                file = os.path.join(base_dir, msg['file_name'])
+                file_size = os.stat(file).st_size
+                server_response = {'file_size': file_size}
+                w.sendall(bytes(json.dumps(server_response), encoding='utf-8'))
+
+                f = open(file, 'rb+')
+                send_size = 0
+                buffer_size = 1024
+                while send_size < file_size:
+                    if file_size - send_size < buffer_size:
+                        file_data = f.read(file_size - send_size)
+                        send_size = file_size
+                    else:
+                        file_data = f.read(buffer_size)
+                        send_size += buffer_size
+                    w.send(file_data)
+                f.close()
+                print('传输完成...')
+
         except Exception:
             if size[w]['flag'] is True:
-                f = open(os.path.join(base_dir, 'put', size[w]['file_name']), 'wb')
+
+                f = open(os.path.join(base_dir, 'put', size[w]['file_name']), 'ab+')
                 f.write(msg)
                 f.close()
                 size[w]['size'] += len(msg)
                 outputs.remove(w)
-                print(len(msg))
+
                 if size[w]['size'] == size[w]['file_size']:
                     size[w]['flag'] = False
                     print('传输完成...')
-                print(size[w]['size'])
 
 
 
