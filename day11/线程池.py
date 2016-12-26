@@ -83,6 +83,8 @@ class ThreadPool(object):
                     pass
 
             # 将线程标记为空闲
+            # 等待着...
+            # 来活儿了，当前状态变为不空闲
             with self.worker_state(self.free_list, current_thread):
                 if self.terminal:
                     event = StopEvent
