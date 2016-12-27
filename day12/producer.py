@@ -4,13 +4,13 @@
 # bolg:www.lichengbing.com
 
 import pika
-
+# connection 一个TCP的连接、
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 
-# 声明一个管道
+#  channel 是建立在TCP连接中的一个虚拟连接
 channel = connection.channel()
 
-# 声明queue
+# 创建一个queue
 channel.queue_declare(queue='hello')
 
 # n RabbitMQ a message can never be sent directly to the queue, it always needs to go through an exchange.

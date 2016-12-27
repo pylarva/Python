@@ -25,7 +25,7 @@ def callback(ch, method, properties, body):
 # 开始消费消息
 channel.basic_consume(callback,
                       queue='hello',
-                      no_ack=True  # 确认消息
+                      no_ack=True  # 不确认消息
                       )
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
