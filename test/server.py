@@ -3,60 +3,28 @@
 # Author:pylarva
 # bolg:www.lichengbing.com
 
-import math
-import sys
-import time
 import re
-import random
-import time
-import queue
-import socket
-import select
 
-ip_port = ('127.0.0.1', 8001)
-sk = socket.socket()
-sk.bind(ip_port)
-sk.listen(5)
+s = 'run \"1\" --hosts 10.0.0.1 10.0.0.2'
+#
+# if not re.match('run \".*\" --hosts (25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}', s):
+# # if not re.match('run \".*\" --hosts .*', s):
+#     print('cmd error...')
+# else:
+#     print(s)
 
-inputs = [sk, ]
-outputs = []
-message = {}
+# s = "-"
+# if not re.match('-', s):
+#     print('no')
+# else:
+#     print('yes')
+#
+# li = re.compile(' (25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}')
+# print(li.findall(s))
 
-while True:
-    r_list, w_list, e_list, = select.select(inputs, outputs, [])
+print(s.split(' ')[3:], len(s.split(' ')))
+print()
 
-    for r in r_list:
-        if r == sk:
-            conn, addr = r.accept()
-            conn.sendall(bytes('hello...', encoding='utf-8'))
-            inputs.append(conn)
-            message[conn] = queue.Queue()
-        else:
-            try:
-                ret = r.recv(1024)
-                if not ret:
-                    raise Exception('断开连接...')
-                else:
-                    outputs.append(r)
-                    message[r].put(ret)
-            except Exception as e:
-                inputs.remove(r)
-                del message[r]
-
-    for w in w_list:
-        try:
-            msg = message[w].get_nowait()
-        except queue.Empty:
-            print('The queue is empty...')
-            inputs.remove(w)
-        else:
-            print(msg.decode())
-            while True:
-                inp = input('>>>:')
-                if not inp: continue
-                w.send(bytes(inp, encoding='utf-8'))
-                break
-            outputs.remove(w)
 
 
 

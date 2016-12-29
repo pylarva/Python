@@ -19,3 +19,24 @@ channel.basic_publish(exchange='',
                       body='Hello World!')
 print(" [x] Sent 'Hello World!'")
 connection.close()
+
+connection = pika.BlockingConnection(pika.ConnectionParameters('10.0.0.111'))
+channel = connection.channel()
+channel.queue_declare(queue='hello_1')
+
+
+def callback(ch, method, properties, body):
+    print("---->", ch, method, properties)
+    print(" [x] Received %r" % body)
+    connection.close()
+
+channel.queue_declare(queue='hello_1')
+
+# 开始消费消息
+channel.basic_consume(callback,
+                      queue='hello_1',
+                      no_ack=True  # 不确认消息
+                      )
+
+channel.start_consuming()
+

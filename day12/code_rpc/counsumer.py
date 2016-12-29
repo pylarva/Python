@@ -19,14 +19,28 @@ channel.queue_declare(queue='hello')
 # ch 管道内存地址
 # 回调函数
 def callback(ch, method, properties, body):
-    # print("---->", ch, method, properties)
+    print("---->", ch, method, properties)
     print(" [x] Received %r" % body)
+
+    channel.queue_declare(queue='hello_1')
+
+    channel.basic_publish(exchange='',
+                          routing_key='hello_1',
+                          body='hello_1!')
+    print(" [x] Sent 'hello_1'")
 
 # 开始消费消息
 channel.basic_consume(callback,
                       queue='hello',
                       no_ack=True  # 不确认消息
                       )
-
 print(' [*] Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()
+
+
+channel.queue_declare(queue='hello_1')
+
+channel.basic_publish(exchange='',
+                      routing_key='hello_1',
+                      body='hello_1!')
+print(" [x] Sent 'hello_1'")
