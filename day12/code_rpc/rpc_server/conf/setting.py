@@ -3,14 +3,5 @@
 # Author:pylarva
 # bolg:www.lichengbing.com
 
-import random
-
-dit = {'123': ['1']}
-
-print(dit.get('123'))
-
-
-
-
-
-
+# 设置 RabbitQM 服务端地址
+rabbit_host_ip = '10.0.0.111'
