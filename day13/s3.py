@@ -7,17 +7,13 @@
 
 from sqlalchemy import create_engine,and_,or_,func,Table
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String,ForeignKey,UniqueConstraint,DateTime
+from sqlalchemy import Column, Integer, String,ForeignKey
 from sqlalchemy.orm import sessionmaker,relationship
 
 engine = create_engine("mysql+pymysql://root:123@10.0.0.111:3306/s13", max_overflow=5)
 
 Base = declarative_base()
 
-
-# HostToHostUser = Table('host_to_host_user', Base.metadata,
-#                        Column('host_id', ForeignKey('host.nid'), primary_key=True),
-#                        Column('host_user_id', ForeignKey('host_user.nid'), primary_key=True),)
 
 class HostToHostUser(Base):
     __tablename__ = 'host_to_host_user'
@@ -45,5 +41,7 @@ class HostUser(Base):
 Session = sessionmaker(bind=engine)
 session = Session()
 
-host_obj = session.query(Host).filter(Host.hostname == 'c1').first()
+host_obj = session.query(Host).filter(Host.hostname == 'c2').first()
 print(host_obj.host_user)
+for item in host_obj.host_user:
+    print(item.username)

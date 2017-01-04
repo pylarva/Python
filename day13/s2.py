@@ -48,25 +48,30 @@ def init_db():
 def drop_db():
     Base.metadata.drop_all(engine)
 
+# 创建表
 # init_db()
+
+# 插入数据
 Session = sessionmaker(bind=engine)
 session = Session()
-
+#
 # session.add_all([
 #     Host(hostname='c1', port='22', ip='1.1.1.1'),
-#     Host(hostname='c1', port='22', ip='1.1.1.2'),
-#     Host(hostname='c1', port='22', ip='1.1.1.3'),
-#     Host(hostname='c1', port='22', ip='1.1.1.4'),
-#     Host(hostname='c1', port='22', ip='1.1.1.5'),
+#     Host(hostname='c2', port='22', ip='1.1.1.2'),
 # ])
 # session.commit()
-
+#
+# session.add_all([
+#     HostUser(username='root'),
+#     HostUser(username='sa'),
+#     HostUser(username='db'),
+# ])
+# session.commit()
+#
 # session.add_all([
 #     HostToHostUser(host_id=1, host_user_id=1),
 #     HostToHostUser(host_id=1, host_user_id=2),
-#     HostToHostUser(host_id=1, host_user_id=3),
-#     HostToHostUser(host_id=2, host_user_id=2),
-#     HostToHostUser(host_id=2, host_user_id=4),
+#     HostToHostUser(host_id=2, host_user_id=1),
 #     HostToHostUser(host_id=2, host_user_id=3),
 # ])
 # session.commit()
@@ -88,7 +93,7 @@ session = Session()
 # users = session.query(HostUser.username).filter(HostUser.nid.in_(list(r)[0])).all()
 # print(users)
 
-# 多对多
+# relationship 多对多查询
 host_obj = session.query(Host).filter(Host.hostname == 'c1').first()
 for item in host_obj.h:
     print(item.host_user.username)
