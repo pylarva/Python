@@ -14,8 +14,6 @@ from sqlalchemy_utils import ChoiceType,PasswordType
 Base = declarative_base() #生成一个SqlORM 基类
 
 
-
-
 BindHost2Group = Table('bindhost_2_group',Base.metadata,
     Column('bindhost_id',ForeignKey('bind_host.id'),primary_key=True),
     Column('group_id',ForeignKey('group.id'),primary_key=True),
@@ -44,6 +42,7 @@ class UserProfile(Base):
     def __repr__(self):
         return "<UserProfile(id='%s',username='%s')>" % (self.id,self.username)
 
+
 class RemoteUser(Base):
     __tablename__ = 'remote_user'
     AuthTypes = [
@@ -70,6 +69,7 @@ class Host(Base):
     bind_hosts = relationship("BindHost")
     def __repr__(self):
         return "<Host(id='%s',hostname='%s')>" % (self.id,self.hostname)
+
 
 class Group(Base):
     __tablename__ = 'group'
@@ -107,6 +107,7 @@ class BindHost(Base):
                                                            self.host.hostname,
                                                            self.remoteuser.username
                                                                       )
+
 
 class AuditLog(Base):
     __tablename__ = 'audit_log'

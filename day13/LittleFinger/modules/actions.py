@@ -16,6 +16,7 @@ def help_msg():
     for key in action_registers.actions:
         print(key)
 
+
 def excute_from_command_line(argvs):
     if len(argvs) < 2:
         help_msg()

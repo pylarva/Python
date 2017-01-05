@@ -27,7 +27,7 @@ class Group(Base):
     caption = Column(String(32))
 
     def __repr__(self):
-        temp = '%s  %s' %(self.nid, self.caption)
+        temp = '%s  %s' % (self.nid, self.caption)
         return temp
 
 
