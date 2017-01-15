@@ -1,0 +1,35 @@
+1:
+    host: web01
+    user_name: root
+    pwd: 111
+    group: SA
+
+2:
+    host: web01
+    user_name: nginx
+    pwd: 123
+    group: SA
+
+3:
+    host: web02
+    user_name: root
+    pwd: 111
+    group: SA
+
+4:
+    host: web02
+    user_name: nginx
+    pwd: 123
+    group: SA
+
+5:
+    host: db01
+    user_name: root
+    pwd: 111
+    group: DB
+
+6:
+    host: db01
+    user_name: mysql
+    pwd: 456
+    group: DB

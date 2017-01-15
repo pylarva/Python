@@ -167,7 +167,7 @@ def create_hosts(argvs):
     :return:
     '''
     if '-f' in argvs:
-        hosts_file  = argvs[argvs.index("-f") +1 ]
+        hosts_file  = argvs[argvs.index("-f") + 1]
     else:
         print_err("invalid usage, should be:\ncreate_hosts -f <the new hosts file>",quit=True)
     source = yaml_parser(hosts_file)
