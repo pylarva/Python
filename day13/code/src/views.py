@@ -61,7 +61,44 @@ def create_host_user():
         db_conn.session.commit()
 
 
+def create_fort_user():
+    hosts_file = os.path.join(base_dir, 'db', 'new_fort_user.yml')
+    f = open(hosts_file)
+    source = yaml.load(f)
+    if source:
+        for key, val in source.items():
+            print(key, val)
+
+            host_list = val.get('host')
+            print(host_list)
+
+            # 如果主机列表不为空 循环添加堡垒机用户权限 如 user01 → web01 + db01
+            if host_list:
+                for item in host_list:
+                    print(item)
+                    host_ret = db_conn.session.query(db_conn.Host).filter_by(hostname=item).all()
+                    host_obj = host_ret[0]
+                    obj = db_conn.FortUser(user_name=key, pwd=val.get('pwd'), host_user_id=host_obj.id)
+                    db_conn.session.add(obj)
+
+            # 如果主机列表为空 则说明该用户属于某个 用户组
+            else:
+                group = val.get('group')
+                if not group:
+                    print('主机或者主机组不能同时为空...')
+                    sys.exit()
+                else:
+                    group_ret = db_conn.session.query(db_conn.Group).filter_by(group_name=group).all()
+                    group_obj = group_ret[0]
+                    obj = db_conn.FortUser(user_name=key, pwd=val.get('pwd'),
+                                           group_id=group_obj.id)
+                    db_conn.session.add(obj)
+
+        db_conn.session.commit()
+
+
 if __name__ == '__main__':
     # create_host()
     # create_group()
-    create_host_user()
+    # create_host_user()
+    create_fort_user()

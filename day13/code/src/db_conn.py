@@ -59,6 +59,12 @@ class FortUser(Base):
     host_user_id = Column(Integer, ForeignKey(HostUser.id))
     group_id = Column(Integer, ForeignKey(Group.id))
 
+    host_user = relationship(HostUser, backref='u')
+
+    def __repr__(self):
+        temp = '%s %s %s %s %s' % (self.id, self.user_name, self.pwd, self.host_user_id, self.group_id)
+        return temp
+
 
 def init_db():
     Base.metadata.create_all(engine)

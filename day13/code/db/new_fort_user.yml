@@ -1,11 +1,12 @@
-web01:
-    ip: 10.0.0.111
-    port: 22
+user01:
+    pwd: 123
+    host:
+        - web01: root
+        - web01: nginx
+        - web02: root
+    group:
 
-web02:
-    ip: 10.0.0.112
-    port: 22
-
-db01:
-    ip: 10.0.0.113
-    port: 23
+user02:
+    pwd: 456
+    host:
+    group: DB

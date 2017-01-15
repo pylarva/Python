@@ -5,9 +5,9 @@
 
 import random
 
-dit = {'123': ['1']}
+li = [1, 3]
 
-print(dit.get('123'))
+print(len(li))
 
 
 

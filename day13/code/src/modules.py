@@ -9,8 +9,10 @@ import select
 import getpass
 import paramiko
 import threading
+import db_conn
 
 from paramiko.py3compat import u
+
 
 try:
     import termios
@@ -121,18 +123,24 @@ def windows_shell(chan):
 def run():
     print('\033[32;0m----------  堡垒机  -----------\033[0m')
 
-    while True:
-        host = input('输入主机地址：')
-        if not host: continue
-        username = input('输入用户名：')
-        if not username: continue
-        break
+    # while True:
+    #     host = input('输入主机地址：')
+    #     if not host: continue
+    #     username = input('输入用户名：')
+    #     if not username: continue
+    #     break
+    # user_name = getpass.getuser()
+    # print(user_name)
+    user_name = 'user01'
+    ret = db_conn.session.query(db_conn.FortUser).filter_by(user_name=user_name).all()
+    for obj in ret:
+        print(obj.user_name, obj.host_user.host_id)
 
+    inp = input('选择主机： ')
     tran = paramiko.Transport((host, 22))
     tran.start_client()
 
     while True:
-        print('222')
         pwd = getpass.getpass('输入主机[%s] 用户[%s] 密码: ' % (username, host))
         if len(pwd) == 0:
             print('密码不能为空...')
