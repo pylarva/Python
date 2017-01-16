@@ -3,11 +3,11 @@
 # Author:pylarva
 # bolg:www.lichengbing.com
 
-import random
+import time
 
-dic = {'k1': 'v1'}
+print(time.strftime('%Y-%m-%d %H:%M'))
 
-print(list(dic.values())[0])
+
 
 
 

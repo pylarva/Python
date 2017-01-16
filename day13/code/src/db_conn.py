@@ -10,9 +10,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint, In
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy import create_engine
 
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(base_dir)
-
 from conf import setting
 
 Base = declarative_base()
@@ -70,6 +67,19 @@ class FortUser(Base):
 
     def __repr__(self):
         temp = '%s %s %s %s %s' % (self.id, self.user_name, self.pwd, self.host_user_id, self.group_id)
+        return temp
+
+
+class HistoryLog(Base):
+    __tablename__ = 'history_log'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    time = Column(String(128))
+    user_name = Column(String(64))
+    host = Column(String(64))
+    cmd = Column(String(128))
+
+    def __repr__(self):
+        temp = '%s %s %s %s %s' % (self.id, self.time, self.user_name, self.host, self.cmd)
         return temp
 
 

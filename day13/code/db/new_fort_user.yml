@@ -1,3 +1,4 @@
+# 堡垒机用户
 user01:
     pwd: 123
     host:
@@ -10,3 +11,8 @@ user02:
     pwd: 456
     host:
     group: SA
+
+user03:
+    pwd: 789
+    host:
+    group: DB

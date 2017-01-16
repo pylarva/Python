@@ -3,16 +3,20 @@
 # Author:pylarva
 # bolg:www.lichengbing.com
 
+import os
 import sys
+import time
+import yaml
 import socket
 import select
 import getpass
 import paramiko
 import threading
-import db_conn
+from src import db_conn
 
 from paramiko.py3compat import u
 
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 try:
     import termios
@@ -22,32 +26,24 @@ except ImportError:
     has_termios = False
 
 
-def interactive_shell(chan):
+def interactive_shell(chan, user_name, host):
     if has_termios:
-        posix_shell(chan)
+        posix_shell(chan, user_name, host)
     else:
-        windows_shell(chan)
+        windows_shell(chan, user_name, host)
 
 
-def posix_shell(chan):
+def posix_shell(chan, user_name, host):
 
     sys.stdout.write("终端启动成功...\r\n\r\n")
 
     # 获取原tty属性
     old_tty = termios.tcgetattr(sys.stdin)
     try:
-        # 为tty设置新属性
-        # 默认当前tty设备属性：
-        # 输入一行回车，执行
-        # CTRL+C 进程退出，遇到特殊字符，特殊处理。
-
-        # 这是为原始模式，不认识所有特殊符号
-        # 放置特殊字符应用在当前终端，如此设置，将所有的用户输入均发送到远程服务器
         tty.setraw(sys.stdin.fileno())
         tty.setcbreak(sys.stdin.fileno())
         chan.settimeout(0.0)
 
-        log = open('handle.log', 'a+', encoding='utf-8')
         flag = False
         temp_list = []
 
@@ -84,8 +80,11 @@ def posix_shell(chan):
 
                 # 如果用户敲回车，则将操作记录写入文件
                 if x == '\r':
-                    log.write(''.join(temp_list))
-                    log.flush()
+                    # 开始写入日志
+                    times = time.strftime('%Y-%m-%d %H:%M')
+                    obj = db_conn.HistoryLog(time=times, user_name=user_name, host=host, cmd=''.join(temp_list))
+                    db_conn.session.add(obj)
+                    db_conn.session.commit()
                     temp_list.clear()
                 chan.send(x)
 
@@ -94,7 +93,7 @@ def posix_shell(chan):
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_tty)
 
 
-def windows_shell(chan):
+def windows_shell(chan, user_name, host):
     sys.stdout.write("终端启动成功...\r\n\r\n")
 
     def write_all(sock):
@@ -120,19 +119,58 @@ def windows_shell(chan):
         pass
 
 
-def run():
-    print('\033[32;0m----------  堡垒机  -----------\033[0m')
+def login():
 
-    # while True:
-    #     host = input('输入主机地址：')
-    #     if not host: continue
-    #     username = input('输入用户名：')
-    #     if not username: continue
-    #     break
-    # user_name = getpass.getuser()
-    # print(user_name)
-    user_name = 'user01'
-    pwd = '123'
+    while True:
+        fort_username = input('输入用户名 >>:')
+        if not fort_username: continue
+        ret = db_conn.session.query(db_conn.FortUser).filter_by(user_name=fort_username).all()
+        if not ret:
+            print('用户不存在...')
+            continue
+
+        # 读取用户组
+        hosts_file = os.path.join(base_dir, 'db', 'new_fort_user.yml')
+        f = open(hosts_file)
+        source = yaml.load(f)
+        if source:
+
+            for key, val in source.items():
+                if key == fort_username:
+                    group_name = val.get('group')
+                    if not group_name:
+                        group_name = None
+
+        obj = ret[0]
+        pwd = obj.pwd
+        # inp_pwd = getpass.getpass('输入密码 >>:')
+        inp_pwd = input('输入密码 >>:')
+        if not pwd: continue
+        if pwd == inp_pwd:
+            return fort_username, group_name
+        else:
+            print('密码错误...')
+
+
+def run():
+    print('''\033[32;0m
+    #########################################################
+                        欢迎使用堡垒机
+
+      * 使用说明：
+            1. 直接登陆您的堡垒机账户
+            2. 选择已经授权主机远程登陆
+            3. 修改授权请联系管理员
+
+      * 注意：  您的所有操作将被记录
+    ##########################################################
+
+    \033[0m''')
+
+    user_name, group_name = login()
+    print('\033[32;0m欢迎[\033[31;0m%s\033[0m]\033[32;0m!!! \n当前所属用户组\033[0m[\033[31;0m%s\033[0m]...\033[0m' %
+          (user_name, group_name))
+
     ret = db_conn.session.query(db_conn.FortUser).filter_by(user_name=user_name).all()
     host_list = []
     for obj in ret:
@@ -140,9 +178,8 @@ def run():
 
         # 单独主机
         if obj.host_user_id:
-            # host_ret = db_conn.session.query(db_conn.Host).filter_by()
-            # print(obj.host_user.host.hostname, obj.host_user.host.ip, obj.host_user.user_name, obj.host_user.pwd)
-            host_list.append([obj.host_user.host.hostname, obj.host_user.host.ip, obj.host_user.user_name, obj.host_user.pwd])
+            host_list.append([obj.host_user.host.hostname, obj.host_user.host.ip, obj.host_user.user_name,
+                              obj.host_user.pwd, obj.host_user.host.port])
 
         # 用户组主机
         else:
@@ -154,38 +191,45 @@ def run():
                 host_id = item.id
                 host_user_ret = db_conn.session.query(db_conn.HostUser).filter_by(id=host_id).all()
                 for obj in host_user_ret:
-                    # print(obj.host.hostname, obj.host.ip, obj.user_name, obj.pwd)
-                    host_list.append([obj.host.hostname, obj.host.ip, obj.user_name, obj.pwd])
+                    host_list.append([obj.host.hostname, obj.host.ip, obj.user_name, obj.pwd, obj.host.port])
 
     # print(host_list)
+    print('%-8s %-7s %-13s %-10s' % ('序号', '主机名', 'IP地址', '用户名'))
     for i, j in enumerate(host_list):
-        print(i + 1, j)
-
-
-    inp = input('选择主机： ')
-    tran = paramiko.Transport((host, 22))
-    tran.start_client()
+        print('%-10s %-10s %-15s %-10s' % (i + 1, j[0], j[1], j[2]))
 
     while True:
-        pwd = getpass.getpass('输入主机[%s] 用户[%s] 密码: ' % (username, host))
-        if len(pwd) == 0:
-            print('密码不能为空...')
-            continue
-        else:
-            tran.auth_password(username, pwd)
-            break
 
-    # 打开一个通道
+        inp = input('选择主机编号 >>:')
+        if not inp: continue
+        try:
+            inp = int(inp)
+            route_user = host_list[inp-1][-3]
+            host = host_list[inp-1][1]
+            host_port = host_list[inp-1][-1]
+            pwd = host_list[inp-1][-2]
+        except Exception:
+            print('输入错误...')
+            continue
+
+        try:
+            tran = paramiko.Transport((host, host_port))
+            tran.start_client()
+            tran.auth_password(route_user, pwd)
+            break
+        except Exception:
+            print('连接失败, 请检查用户名或者密码是否正确...')
+            continue
+
     chan = tran.open_session()
-    # 获取一个终端
     chan.get_pty()
-    # 激活器
     chan.invoke_shell()
 
-    interactive_shell(chan)
+    interactive_shell(chan, user_name, host)
 
     chan.close()
     tran.close()
+    sys.exit()
 
 if __name__ == '__main__':
     run()

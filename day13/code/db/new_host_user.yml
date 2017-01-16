@@ -1,7 +1,8 @@
+# 主机用户
 1:
     host: web01
     user_name: root
-    pwd: 111
+    pwd: 123456
     group: SA
 
 2:
