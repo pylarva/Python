@@ -5,9 +5,9 @@
 
 import random
 
-li = [1, 3]
+dic = {'k1': 'v1'}
 
-print(len(li))
+print(list(dic.values())[0])
 
 
 

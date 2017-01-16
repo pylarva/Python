@@ -132,9 +132,35 @@ def run():
     # user_name = getpass.getuser()
     # print(user_name)
     user_name = 'user01'
+    pwd = '123'
     ret = db_conn.session.query(db_conn.FortUser).filter_by(user_name=user_name).all()
+    host_list = []
     for obj in ret:
-        print(obj.user_name, obj.host_user.host_id)
+        # print(obj)
+
+        # 单独主机
+        if obj.host_user_id:
+            # host_ret = db_conn.session.query(db_conn.Host).filter_by()
+            # print(obj.host_user.host.hostname, obj.host_user.host.ip, obj.host_user.user_name, obj.host_user.pwd)
+            host_list.append([obj.host_user.host.hostname, obj.host_user.host.ip, obj.host_user.user_name, obj.host_user.pwd])
+
+        # 用户组主机
+        else:
+            # 由主机组反向查找主机用户组里面所有属于该组的机器 并添加进列表
+            group_ret = db_conn.session.query(db_conn.Group).filter_by(id=obj.group_id).all()
+            group_name = group_ret[0].group_name
+            group_obj = db_conn.session.query(db_conn.Group).filter(db_conn.Group.group_name == group_name).first()
+            for item in group_obj.g:
+                host_id = item.id
+                host_user_ret = db_conn.session.query(db_conn.HostUser).filter_by(id=host_id).all()
+                for obj in host_user_ret:
+                    # print(obj.host.hostname, obj.host.ip, obj.user_name, obj.pwd)
+                    host_list.append([obj.host.hostname, obj.host.ip, obj.user_name, obj.pwd])
+
+    # print(host_list)
+    for i, j in enumerate(host_list):
+        print(i + 1, j)
+
 
     inp = input('选择主机： ')
     tran = paramiko.Transport((host, 22))

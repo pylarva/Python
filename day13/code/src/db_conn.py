@@ -50,6 +50,13 @@ class HostUser(Base):
     pwd = Column(String(128))
     group_id = Column(Integer, ForeignKey(Group.id))
 
+    host = relationship(Host, backref='h')
+    group = relationship(Group, backref='g')
+
+    def __repr__(self):
+        temp = '%s %s %s %s %s' % (self.id, self.host_id, self.user_name, self.pwd, self.group_id)
+        return temp
+
 
 class FortUser(Base):
     __tablename__ = 'fort_user'

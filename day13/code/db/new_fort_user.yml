@@ -4,9 +4,9 @@ user01:
         - web01: root
         - web01: nginx
         - web02: root
-    group:
+    group: DB
 
 user02:
     pwd: 456
     host:
-    group: DB
+    group: SA

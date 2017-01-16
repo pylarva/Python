@@ -75,30 +75,42 @@ def create_fort_user():
             # 如果主机列表不为空 循环添加堡垒机用户权限 如 user01 → web01 + db01
             if host_list:
                 for item in host_list:
+
+                    # 获取 yaml 文件中的权限 主机 + 用户列表
                     print(item)
-                    host_ret = db_conn.session.query(db_conn.Host).filter_by(hostname=item).all()
+                    host = list(item.keys())[0]
+                    user = item.get(host)
+                    print(host, user)
+
+                    # 查主机编号
+                    host_ret = db_conn.session.query(db_conn.Host).filter_by(hostname=host).all()
                     host_obj = host_ret[0]
-                    obj = db_conn.FortUser(user_name=key, pwd=val.get('pwd'), host_user_id=host_obj.id)
+                    print(host_obj.id)
+
+                    # 在HostUser中查 主机编号+用户名 对应的HostUeser对应的编号
+                    host_user_ret = db_conn.session.query(db_conn.HostUser).filter_by(host_id=host_obj.id, user_name=user).all()
+                    host_user_obj = host_user_ret[0]
+                    print(host_user_obj.id)
+
+                    # 在堡垒机用户表中添加主机用户对应ID
+                    obj = db_conn.FortUser(user_name=key, pwd=val.get('pwd'), host_user_id=host_user_obj.id)
                     db_conn.session.add(obj)
 
             # 如果主机列表为空 则说明该用户属于某个 用户组
-            else:
-                group = val.get('group')
-                if not group:
-                    print('主机或者主机组不能同时为空...')
-                    sys.exit()
-                else:
-                    group_ret = db_conn.session.query(db_conn.Group).filter_by(group_name=group).all()
-                    group_obj = group_ret[0]
-                    obj = db_conn.FortUser(user_name=key, pwd=val.get('pwd'),
-                                           group_id=group_obj.id)
-                    db_conn.session.add(obj)
+
+            group = val.get('group')
+            if group:
+                group_ret = db_conn.session.query(db_conn.Group).filter_by(group_name=group).all()
+                group_obj = group_ret[0]
+                obj = db_conn.FortUser(user_name=key, pwd=val.get('pwd'),
+                                       group_id=group_obj.id)
+                db_conn.session.add(obj)
 
         db_conn.session.commit()
 
 
 if __name__ == '__main__':
-    # create_host()
-    # create_group()
-    # create_host_user()
+    create_host()
+    create_group()
+    create_host_user()
     create_fort_user()
