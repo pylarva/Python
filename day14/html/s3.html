@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="https://www.sogou.com/web" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" />
+        <input type="text" name="pwd" />
+        男<input type="radio" name="gender" value="1" />
+        女<input type="radio" name="gender" value="0" />
+
+        <p>爱好：
+            篮球<input name="favor" type="checkbox" value="1"/>
+            足球<input name="favor" type="checkbox" value="2"/>
+            羽毛球<input name="favor" type="checkbox" value="3"/>
+        </p>
+
+        <input type="file" name="f" />
+
+        <p>
+            <select name="city">
+                <option value="1">上海</option>
+                <option value="2">北京</option>
+                <option value="3">广州</option>
+            </select>
+        </p>
+
+        <p>
+            备注:<textarea name="extra"></textarea>
+        </p>
+
+        <input type="submit" value="提交" />
+    </form>
+    <hr />
+
+</body>
+</html>
