@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .hide{
+            display: none;
+        }
+        .modal{
+            width: 400px;
+            height: 300px;
+            background-color: #dddddd;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-left: -200px;
+            margin-top: -150px;
+            z-index: 10;
+        }
+
+        .shadow{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0.4;
+            <!--background-color: rgba(0,0,0,.6);-->
+            z-index: 9;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" value="添加" />
+    <div class="shadow"></div>
+    <div class="modal">
+        <input type="text"/>
+        <input type="text"/>
+        <input type="text"/>
+        <input type="text"/>
+    </div>
+
+    <div style="height: 2000px;"></div>
+</body>
+</html>
