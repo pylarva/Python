@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <style>
+        	body{
+        		margin: 0;
+        	}
+			.pg-head{
+				height: 20px;
+				background-color: #f7f7f7;
+				line-height: 20px;
+			}
+			.pg-body{
+				height: 2000px;
+				/*background-color: #ffcc99;*/
+			}
+			.pg-footer{
+				height: 50px;
+				background-color: #99ff99;		
+			}
+			.w{
+				/*border: 1px solid black;*/
+				float: left;
+				width: 79%;
+				/*margin-left: 6%;*/
+				/*height: 20px;*/
+				/*width: 700px;*/
+				/*margin: 0 auto;*/
+				/*background-color: #ff9999;*/
+			}
+			.pg-head span{
+				float: left;
+				/*border: 1px solid black;*/
+				display: block;
+				width: 20%;
+				/*margin-left: 6%;*/
+				/*margin: 0 0 0 100px;*/
+				font-size: 5px;
+				/*line-height: 20px;*/
+				cursor: pointer;
+			}
+			.w ul{
+				margin: 0;
+				list-style-type: none;
+			}
+			.w ul li{
+				margin: 0 5px 0 5px;
+				font-size: 5px;
+				float: right;
+				padding: 0 6px 0 6px;
+				color: black; 
+				cursor: pointer;
+			}
+			.w ul li:hover{
+				background-color: #9999ff;
+			}
+			.b{
+				height: 100px;
+				margin: 0;
+				/*border: 1px solid red;*/
+				position: relative;
+			}
+			#b0{
+				height:98%; width:88%; 
+				/*border: 1px solid black;*/
+				margin-left: 6%;
+			}
+			.b1{
+				display:inline;
+				height: 120px;
+				width: 400px;
+				top: 0;
+				/*border: 1px solid black;*/
+				position: absolute; left: 550px;
+			}
+			.b1 div{
+				position: relative;
+			}
+			.b1 input{
+				outline: none;
+				height:25px; width:380px; margin:40px 0 0 0;
+				/*border: 2px solid red;*/
+			}
+			.b1 p{
+				font-size: 5px; margin: 3px 0 0 0; color: #9e9898;
+			}
+			.b1 div div{
+				position: absolute; top: 40px; right: 18px;
+				width:60px; height:30px;
+				background-color: red;
+			}
+			.b2{
+				/*margin: 0;*/
+				height: 30px; width: 150px;
+				/*border: 1.5px solid #dddddd;*/
+				position: absolute; right: 200px; top:40px;
+				cursor: pointer;
+			}
+			#t{
+				height:98%; width:88%;
+				/*border: 1px solid black;*/
+				margin-left: 6%;
+			}
+			#c0{
+				width:30px; height:30px;
+			}
+			#c1{
+				height: 20px; width:20px; margin: 5px 0 0 20px; float: left;
+			}
+			#c2{
+				height: 20px; width:60px;float:left;margin: 4px 0 0 15px;
+			}
+			#c3{
+				height:20px; width:20px;float:left;margin:0 0 0 5px;
+			}
+/*			#c4{
+				height: 300px; width:150px;
+				border: 1px solid red;
+				margin: 30px 0 0 0;
+			}*/
+
+			#t1{
+				height: 100%;
+				width: 20%;
+				/*height: 97px;*/
+				/*width: 121px;*/
+				/*border: 1px solid black;*/
+				float: left;
+				overflow: hidden;
+				position: relative;
+			}
+			#t2{
+				height: 100%;
+				width: 20%;
+				/*border: 1px solid red;*/
+				float: left;
+				overflow: hidden;
+				position: relative;
+			}
+			#t3{
+				height: 100%;
+				width: 40%;
+				/*border: 1px solid black;*/
+				float: left;
+				position: relative;
+			}
+			#t3-1{
+				outline: none;
+				height:25%; width:80%;
+				position: absolute;
+				top: 34%;
+				left: 10%;
+				border: 2px solid red;
+			}
+			#t3 p{
+				font-size: 5px; 
+				position: absolute;
+				top: 55%;
+				left: 10%; color: #9e9898;
+			}
+			#t3 div{
+				width:11%;
+				height:30%;
+				background-color: red;
+				float: left;
+				position: absolute;left:80%;top:34%;
+			}
+			#t3 div img{
+				/*width: 60%;*/
+				/*height: 100%;*/
+				width:30px;
+				height:30px;
+				position: absolute;
+				left:15%;
+			}
+			#t4{
+				height: 100%;
+				width: 19%;
+				/*border:1px solid green;*/
+				float: left;
+				position: relative;
+				cursor: pointer;
+				/*top:-100%;	*/
+			}
+			#t4-1{
+				width: 70%;
+				height: 32%;
+				border: 1px solid #dddddd;
+				position: absolute;
+				left:0%;
+				top:32%;
+				position: relative;
+			}
+			#t4-1-1{
+				height: 50%;
+				width: 10%;
+				/*border: 1px solid red;*/
+				top: 18%;
+    			left: 15%;
+    			display: inline;
+    			float: left;
+    			margin-top: 3%;
+    			margin-left: 10%;
+    			/*position: absolute;*/
+			}
+			#t4-1-2{
+				height: 80%;
+				width: 40%;
+				/*position: absolute;*/
+				/*border: 1px solid red;*/
+				left: 38%;
+				top: 18%;
+				display: inline;
+				float: left;
+    			margin-top: 3%;
+    			margin-left: 10%;
+				
+			}
+			#t4-1-3{
+				height: 35%;
+				width: 10%;
+				/*position: absolute;*/
+				/*border:1px solid red;*/
+				/*left: 78%;*/
+ 				/*top: 17%;*/
+ 				float: left;
+    			margin-top: 3%;
+				margin-left: 2%;
+			}
+			#d{
+				height: 40px;
+				background-color: #e01222;
+				/*line-height: 20px;*/
+			}
+			#da{
+				height:98%; width:88%; 
+				/*border: 1px solid black; */
+				margin-left: 6%;
+			}
+			#d1{
+				width: 20%;
+				height: 100%;
+				/*border: 1px solid green;*/
+				float: left;
+				background-color: #b7111e;
+			}
+			#d2{
+				height: 100%;
+				width: 60%;
+				/*border:1px solid black;*/
+				float:left;
+			}
+			#d3{
+				height: 100%;
+				width: 19%;
+				/*border:1px solid green;*/
+				float: left;
+			}
+			#d1:hover{
+				background-color: #d60b11;
+			}
+			#d2 ul{
+				margin:0;
+				list-style-type: none;
+			}
+			#d2 ul li{
+				color: white;
+				font-weight:bold;
+				font-size: 15px;
+				float: left;
+				padding: 10px 12px 12px 10px;
+    			margin: 0px 10px 3px 8px;
+    			cursor: pointer;
+			}
+			#d2 ul li:hover{
+				height:20%;
+				width:10%;
+				background-color: #b70b10;
+			}
+			#d3 ul{
+				margin:0;
+				list-style-type: none;
+			}
+			#d3 ul li{
+				color: white;
+				font-weight:bold;
+				font-size: 15px;
+				float: left;
+				padding: 10px 0px 10px 0px;
+    			margin: 0px 13px 0px 7px;
+    			cursor: pointer;
+			}
+			#e{
+				height:1000px;
+				border: 1px solid black;
+			}
+			#ea{
+				height: 100%;
+				width: 88%;
+				margin-left: 6%;
+				border: 1px solid black;
+			}
+			#e0{
+				height: 40%;
+				width: 19.5%;
+				/*border: 1px solid red;*/
+				float: left;
+			}
+			#e0-1{
+				height: 75%;
+				width: 100%;
+				border: 1px solid #7e7677;
+				float: left;
+			}
+			#e0-2{
+				height: 15%;
+				width: 100%;
+				border:1px solid #7e7677;
+				float: left;
+				margin-top: 10%;
+			}
+			#e1{
+				height: 75%;
+				width: 80%;
+				border: 1px solid red;
+				float: left;
+			}
+			#e1-1{
+				height: 25%;
+				width: 97%;
+				border-style: solid; 
+				border-width: thick thin thin thin;
+				border-color: #e01222  #7e7677 #7e7677 #7e7677;
+				margin-left: 20px;
+				margin-top: -1%;
+			}
+			.l-line{
+				width: 97%;
+				/*border:0px dashed #7e7677;*/
+				border-style: dashed none none none;
+				border-width: thin;
+				border-color: #7e7677;
+				margin-left: 10px;
+			}
+			#e1-2{
+			    height: 3%;
+			    width: 15%;
+			    /*border: 1px solid #7e7677;*/
+			    margin-left: 38%;
+			    margin-top: -1px;
+			    background-color: white;
+			    border-style: none solid solid solid;
+    			border-width: thin;
+    			border-color: gray;
+			}
+			#e1-3{
+				height: 5%;
+				width: 97%;
+				border: 1px solid gray;
+				margin-left: 20px;
+    			margin-top:10px;
+				
+			}
+        </style>
+    </head>
+
+    <body>
+    	<div class="pg-head">
+    		<div id="b0">
+	    		<span>*收藏本站</span>
+	    		<div class="w">
+	    			<ul>
+	    				<li>手机版</li>
+	    				<li>关注</li>
+	    				<li>客户服务</li>
+	    				<li>我的收藏</li>
+	    				<li>VIP会员俱乐部</li>
+	    				<li>我的订单</li>
+	    				<li>注册</li>
+	    				<li>登陆</li>
+	    			</ul>
+	    		</div>
+	    	</div>
+    	</div>
+    	<div class="pg-body">
+    		<div class="b">
+    			<div id="t">
+    				<div id="t1">
+    					<!-- <img src="image/1.png" style="max-width:120px;_width:expression(this.width > 120 ? "120px" : this.width);"> -->
+    					<!-- <div style="het"> -->
+    					<img src="image/1.png" style="position: absolute; left:30%">
+    					<!-- </div> -->
+    				</div>
+    				<div id="t2">
+    					<img src="image/2.png" style="position: absolute; right:20%;top:30%;">
+    				</div>
+    				<div id="t3">
+	    					<input type="text" id="t3-1"/>
+	    					<p>热门搜索：抢亿元红包 199减100</p>
+	    					<div>
+	    						<img src="image/3.png">
+	    					</div>
+    				</div>
+    				<div id="t4">
+    					<div id="t4-1">
+    						<div id="t4-1-1">
+    							<img src="image/4.png" style="height:20px; width:20px;">
+    						</div>
+    						<div id="t4-1-2">
+    							<p style="font-size: 1px;color:red;display:inline">我的购物车</p>
+    						</div>
+    						<div id="t4-1-3">
+    							<p style="font-size: 2px;color:red;display:inline;margin:0;position:absolute"><b>2</b></p>
+    						</div>
+    					</div>
+    				</div>
+	    			<!-- <img src="image/1.png" style="position: relative; left: 90px"> -->
+	    			<!-- <img src="image/2.png" style="position: relative; left: 150px; bottom: 20px"> -->
+	    			<!-- <div class="b1"> -->
+	    				<!-- <div>
+	    					<input type="text" />
+	    					<p>热门搜索：抢亿元红包 199减100</p>
+	    					<div>
+	    						<img src="image/3.png" alt="3" id="c0">
+	    					</div>
+	    				</div> -->
+	    			<!-- </div> -->
+	    			<!-- <div class="b2">
+	    				<img src="image/4.png" id="c1">
+	    				<div id="c2">
+	    					<h style="font-size: 5px; color: red;">我的购物车</h>
+	    				</div>
+	    				<div id="c3">
+	    					<h6 style="font-size: 0.1;color: red; margin:2px">2</h6>
+	    				</div>
+	    			</div> -->
+	    		</div>
+    		</div>
+    		<div id="d">
+    			<div id="da">
+    				<div id="d1">
+    					<p style="font-size: 15px;color: white;display:inline;float:left;margin-left:27%;margin-top:4.5%"><b>全部商品分类</b></p>
+    				</div>
+    				<div id="d2">
+    					<ul>
+    						<li>首页</li>
+    						<li>家用电器</li>
+    						<li>电脑办公</li>
+    						<li>男装女装</li>
+    						<li>个人化妆</li>
+    						<li>母婴玩具</li>
+    					</ul>
+    				</div>
+    				<div id="d3">
+    					<ul>
+	    					<li>京东购</li>
+	    					<li>京东购</li>
+	    					<li>公告</li>
+    					</ul>
+    				</div>
+    			</div>
+    		</div>
+    		<div id="e">
+    			<div id="ea">
+	    			<div id="e0">
+    					<div id="e0-1">
+	    					<p style="font-size: 15px"><b>数码产品</b></p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<hr />
+	    					<p style="font-size: 15px"><b>数码产品</b></p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<hr />
+	    					<p style="font-size: 15px"><b>数码产品</b></p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<hr />
+	    					<p style="font-size: 15px"><b>数码产品</b></p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<p style="display:inline; font-size: 5px">数码产品</p>
+	    					<hr />
+						</div> 
+    					<div id="e0-2">
+    						<p style="font-size: 5px;display:inline">热销排行榜</p>
+    						<hr />
+    						<p style="font-size: 5px;display:inline">内容...</p>
+    					</div>
+	    			</div>   				
+
+    				<div id="e1">
+    					<p style="font-size: 10px; margin-left: 20px">数码 &gt; 笔记本 &gt; 苹果</p>
+    					<div id="e1-1">
+    						<p style="font-size: 14px;margin-left: 10px">您已选择： MacBook Pro</p>
+    						<div class="l-line"></div>
+    						<p style="font-size: 14px;margin-left: 38px;">材质： MacBook Pro MacBook Pro MacBook Pro</p>
+    						<div class="l-line"></div>
+    						<p style="font-size: 14px;margin-left: 38px;">品牌： MacBook Pro MacBook Pro MacBook Pro</p>
+    						<div class="l-line"></div>
+    						<p style="font-size: 14px;margin-left: 38px;">风格： MacBook Pro MacBook Pro MacBook Pro</p>
+    					</div>
+    					<div id="e1-2">
+    						<p style="font-size: 5px;display:inline;margin-left: 30%;cursor:pointer;color:gray">更多选项 ！</p>
+    					</div>
+    					<div id="e1-3">
+    						
+    					</div>
+    				</div>
+
+					<div id="e3">
+    					
+    				</div>
+    				<!-- <div></div> -->
+    			</div>
+    		</div>
+    	</div>
+    	<div class="pg-footer"></div>
+    </body>
+</html>
