@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.css" />
+        <style>
+			.c1:hover{
+				background-color: red;
+			}
+			.c1:before{
+				content: "666";
+			}
+			.c1:after{
+				content: "777";
+			}
+			.left{
+				float: left;
+			}
+			.clearfix{
+				background-color: red;
+			}
+			.clearfix:after{
+				content: ".";
+				clear: both;
+				display: block;
+				visibility: hidden;
+				height: 0;
+			}
+			#i1{
+				display: inline-block;
+				border-top: 15px solid red;
+				border-right: 15px solid transparent;
+				border-bottom: 15px solid transparent;
+				border-left: 15px solid transparent;
+			}
+        </style>
+    </head>
+    <body>
+    	<i class="fa fa-user-circle-o" aria-hidden="true"; style="color: red"></i>
+    	<div class="c1">ddd</div>
+
+    	<!-- float后不能显示背景色 -->
+    	<div style="background-color: red" class="clearfix">
+    		<div class="left">1</div>
+    		<div class="left">2</div>
+    		<!-- <div style="clear: both"></div> -->
+    	</div>
+
+    	<div id="i1"></div>
+    </body>
+</html>

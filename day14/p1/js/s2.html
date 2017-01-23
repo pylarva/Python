@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    	<script>
+            function Foo (name,age) {
+                this.Name = name;
+                this.Age = age;
+            }
+            Foo.prototype = {
+                GetInfo: function(){
+                    return this.Name + this.Age
+                },
+                Func : function(arg){
+                    return this.Name + arg;
+                }
+            }
+              
+            var obj = new Foo('alex', 18);
+            var ret = obj.Func("sb");
+            console.log(ret);
+        </script>
+    </body>
+</html>

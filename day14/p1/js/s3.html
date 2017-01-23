@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    	<input  id="i1" type="text" value="请输入内容" onfocus="Focus();" onblur="Blur();"/>
+
+    	<script type="text/javascript">
+    		function Focus(){
+    			// 获取标签清空
+    			var tag = document.getElementById('i1');
+    			if(tag.value == "请输入内容"){
+    				tag.value = ""
+    			}
+    		}
+    		function Blur(){
+    			var tag = document.getElementById('i1');
+    			var val = tag.value;
+    			if(val.trim().length == 0){
+    				tag.value = "请输入内容"
+    			}
+    		}
+    	</script>
+    </body>
+</html>
