@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!-- 表单验证 用户名或者密码不能为空 -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <style>
+			.item{
+				height: 50px;
+				width: 200px;
+				position: relative;
+			}
+			.item span{
+				font-size: 10px;
+				width: 203px;
+				color: white;
+				background-color: red;
+				position: absolute;
+				/*display: inline-block;*/
+			}
+			.item input{
+				width: 200px;
+			}
+        </style>
+    </head>
+    <body>
+    	<div>
+	    	<form>
+		    	<div class="item">
+		    		<input class="c1" type="text" name="username" label="用户名" />
+		    		<!-- <span>用户名不能为空</span> -->
+		    	</div>
+		    	<div class="item">
+		    		<input class="c1" type="password" name="pwd" label="密码" />
+		    		<!-- <span>密码不能为空</span> -->
+		    	</div>
+		    	<!-- <input type="submit" value="提交" onclick="return CheckValid();" /> -->
+		    	<input type="submit" value="提交" onclick="return CheckValid();" />
+	    	</form>
+    	</div>
+
+    	<script src="jquery-1.12.4.js"></script>
+    	<script>
+    		function CheckValid(){
+	    		//  找到表单form下的所有需要验证的标签
+	    		// $('form.c1')
+	    		// $('form input[type="text"], form input[type="password"]')
+	    		// 循环所有需要验证的标签 获取内容
+	    		// console.log(111)
+	    		var flag = true;
+
+	    		$('form .c1').each(function(){
+	    			// 每一个元素执行一次匿名函数
+	    			// console.log(this,$(this));
+	    			var val = $(this).val();
+	    			if(val.length<=0){
+	    				var label = $(this).attr('label');
+	    				var tag = document.createElement('span');
+	    				tag.innerText = label + "不能为空";
+	    				$(this).after(tag);
+	    				flag = false;
+	    			}
+	    		});
+	    		return flag;
+    		}
+    	</script>
+    </body>
+</html>
