@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <input type="button" onclick="Add();" />
+    <ul>
+        <li>123</li>
+        <li>456</li>
+        <li>789</li>
+    </ul>
+    <script src="jquery-1.12.4.js"></script>
+    <script>
+        $(function(){
+            /*
+            $('li').click(function () {
+                alert($(this).text());
+            });
+            */
+            // 延迟绑定
+            $("ul").delegate("li","click",function(){
+                alert($(this).text());
+            });
+        });
+
+        function Add(){
+            var tag = document.createElement('li');
+            tag.innerText = '666';
+            $('ul').append(tag);
+        }
+    </script>
+</body>
+</html>

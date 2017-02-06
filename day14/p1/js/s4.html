@@ -49,6 +49,12 @@
     			t1.classList.add('hide');
     			t2.classList.add('hide');
     		}
+            // event 事件绑定: 按Esc退出
+            window.onkeydown = function(event){
+                if(event.keyCode == 27){
+                    HideModal();
+                }
+            }
     	</script>
     </body>
 </html>
