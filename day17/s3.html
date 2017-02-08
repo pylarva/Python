@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+    <style>
+		.item{
+			height: 50px;
+			width: 200px;
+			position: relative;
+		}
+		.item span{
+			font-size: 10px;
+			width: 203px;
+			color: white;
+			background-color: red;
+			position: absolute;
+			/*display: inline-block;*/
+		}
+		.item input{
+			width: 200px;
+		}
+    </style>
+</head>
+<body>
+	    <div>
+	    	<form id="form1">
+		    	<div class="item">
+		    		<input class="c1" type="text" name="username" label="用户名" require="ture" min-len="6" />
+		    	</div>
+		    	<div class="item">
+		    		<input class="c1" type="password" name="pwd" label="密码" />
+		    	</div>
+		    	<div class="item">
+		    		<input class="c1" type="text" label="手机号" phone="ture" require="ture" />
+		    	</div>
+		    	<input type="submit" value="提交" />
+	    	</form>
+
+	    	<script src="jquery-1.12.4.js"></script>
+	    	<script src="commons.js"></script>
+	    	<script type="text/javascript">
+	    		$(function(){
+	    			$.valid('#form1');
+	    		});
+	    	</script>
+    	</div>
+</body>
+</html>

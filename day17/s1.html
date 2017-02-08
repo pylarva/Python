@@ -33,19 +33,45 @@
 		    		<input class="c1" type="password" name="pwd" label="密码" />
 		    		<!-- <span>密码不能为空</span> -->
 		    	</div>
+		    	<!-- Dom版本绑定 -->
 		    	<!-- <input type="submit" value="提交" onclick="return CheckValid();" /> -->
-		    	<input type="submit" value="提交" onclick="return CheckValid();" />
+		    	<!-- jQuary版本绑定 -->
+		    	<input type="submit" value="提交" />
 	    	</form>
     	</div>
 
     	<script src="jquery-1.12.4.js"></script>
     	<script>
+    		$(function(){
+    			// 当前页面加载完成后 自动执行
+    			BindCheckValid();
+    		});
+    		
+    		function BindCheckValid(){
+    			$('form :submit').click(function(){
+    				var flag = true;
+    				$('form .item span').remove();
+    				$('form .c1').each(function(){
+    					var val = $(this).val();
+		    			if(val.length<=0){
+		    				var label = $(this).attr('label');
+		    				var tag = document.createElement('span');
+		    				tag.innerText = label + "不能为空";
+		    				$(this).after(tag);
+		    				flag = false;
+		    				return false;
+		    			}
+    				});
+    				return flag;
+    			});
+    		}
     		function CheckValid(){
 	    		//  找到表单form下的所有需要验证的标签
 	    		// $('form.c1')
 	    		// $('form input[type="text"], form input[type="password"]')
 	    		// 循环所有需要验证的标签 获取内容
 	    		// console.log(111)
+	    		$('form .item span').remove();
 	    		var flag = true;
 
 	    		$('form .c1').each(function(){
@@ -58,6 +84,7 @@
 	    				tag.innerText = label + "不能为空";
 	    				$(this).after(tag);
 	    				flag = false;
+	    				return false;
 	    			}
 	    		});
 	    		return flag;
