@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>Bootstrap 101 Template</title>
+    <link href="bootstrap.css" rel="stylesheet">
+    <style>
+    	div{
+    		height: 200px;
+    		width: 500px;
+    		/*border: 1px solid red;*/
+    		top:50px;
+    		left: 100px;
+    		position: relative;
+    	}
+    </style>
+  </head>
+  <body>
+  	<div>
+	    <button type="button" class="btn btn-primary" onclick="CheckAll()">全选</button>
+	    <button type="button" class="btn btn-success" onclick="CancleAll()">取消</button>
+	    <button type="button" class="btn btn-info" onclick="ReverseAll()">反选</button>
+	    <button type="button" class="btn btn-danger" style="float: right;">进入编辑模式</button>
+	    <p></p>
+	    <table class="table table-bordered">
+			<thead>
+		      <tr>
+		        <th>#</th>
+		        <th>选择</th>
+		        <th>主机</th>
+		        <th>端口</th>
+		        <th>业务</th>
+		        <th>状态</th>
+		      </tr>
+	    	</thead>
+	    	<tbody id="tb">
+		      <tr>
+		        <td>1</td>
+		        <td>
+					<input type="checkbox" style="margin-left: 15px"></input>
+		        </td>
+		        <td>linux-01</td>
+		        <td>8000</td>
+		        <td>web负载均衡</td>
+		        <td>在线</td>
+		      </tr>
+		      <tr>
+		        <td>2</td>
+		        <td>
+					<input type="checkbox" style="margin-left: 15px"></input>
+		        </td>
+		        <td>linux-02</td>
+		        <td>8000</td>
+		        <td>db数据库</td>
+		        <td>在线</td>
+		      </tr>
+		      <tr>
+		        <td>3</td>
+		        <td>
+					<input type="checkbox" style="margin-left: 15px"></input>
+		        </td>
+		        <td>linux-03</td>
+		        <td>8000</td>
+		        <td>zabbix监控</td>
+		        <td>在线</td>
+		      </tr>
+	    	</tbody>
+		</table>
+	</div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script> -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="jquery-1.12.4.js"></script>
+    <script src="bootstrap.js"></script>
+    <script src="edit_row.js"></script>
+  </body>
+</html>
