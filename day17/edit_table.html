@@ -2,13 +2,12 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Bootstrap 101 Template</title>
+    <title>EditTable_Template</title>
     <link href="bootstrap.css" rel="stylesheet">
     <style>
     	div{
     		height: 200px;
     		width: 500px;
-    		/*border: 1px solid red;*/
     		top:50px;
     		left: 100px;
     		position: relative;
@@ -17,10 +16,10 @@
   </head>
   <body>
   	<div>
-	    <button type="button" class="btn btn-primary" onclick="CheckAll()">全选</button>
-	    <button type="button" class="btn btn-success" onclick="CancleAll()">取消</button>
-	    <button type="button" class="btn btn-info" onclick="ReverseAll()">反选</button>
-	    <button type="button" class="btn btn-danger" style="float: right;">进入编辑模式</button>
+	    <button type="button" class="btn btn-primary" onclick="CheckAll('#edit_mode', '#tb')">全选</button>
+	    <button type="button" class="btn btn-success" onclick="CancleAll('#edit_mode', '#tb')">取消</button>
+	    <button type="button" class="btn btn-info" onclick="ReverseAll('#edit_mode', '#tb')">反选</button>
+	    <button type="button" class="btn btn-danger" id="edit_mode" onclick="edit_mode(this, '#tb')" style="float: right;">进入编辑模式</button>
 	    <p></p>
 	    <table class="table table-bordered">
 			<thead>
@@ -39,30 +38,30 @@
 		        <td>
 					<input type="checkbox" style="margin-left: 15px"></input>
 		        </td>
-		        <td>linux-01</td>
-		        <td>8000</td>
-		        <td>web负载均衡</td>
-		        <td>在线</td>
+		        <td edit="true">linux-01</td>
+		        <td edit="true">8000</td>
+		        <td edit="true" edit-type="select" global-key="SERVER" sel-val="1">db数据库</td>
+		        <td edit="true" edit-type="select" global-key="STATUS" sel-val="1">在线</td>
 		      </tr>
 		      <tr>
 		        <td>2</td>
 		        <td>
 					<input type="checkbox" style="margin-left: 15px"></input>
 		        </td>
-		        <td>linux-02</td>
-		        <td>8000</td>
-		        <td>db数据库</td>
-		        <td>在线</td>
+		        <td edit="true">linux-02</td>
+		        <td edit="true">8000</td>
+		        <td edit="true" edit-type="select" global-key="SERVER" sel-val="2">zabbix监控</td>
+		        <td edit="true" edit-type="select" global-key="STATUS" sel-val="1">在线</td>
 		      </tr>
 		      <tr>
 		        <td>3</td>
 		        <td>
 					<input type="checkbox" style="margin-left: 15px"></input>
 		        </td>
-		        <td>linux-03</td>
-		        <td>8000</td>
-		        <td>zabbix监控</td>
-		        <td>在线</td>
+		        <td edit="true">linux-03</td>
+		        <td edit="true">8000</td>
+		        <td edit="true" edit-type="select" global-key="SERVER" sel-val="3">web负载均衡</td>
+		        <td edit="true" edit-type="select" global-key="STATUS" sel-val="2">在线</td>
 		      </tr>
 	    	</tbody>
 		</table>
