@@ -9,6 +9,7 @@ USER_INPUT = [
 ]
 
 
+# 处理用户请求
 def index(request):
     # return HttpResponse('123')
     if(request.method == "POST"):
