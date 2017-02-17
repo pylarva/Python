@@ -6,7 +6,7 @@
 		<title>登录</title>
 		<link rel="stylesheet" href="/static/css/common.css" />
 		<script type="text/javascript" src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
-		<script type="text/javascript" src="/static/login.js"></script>
+		<script type="text/javascript" src="/static/js/login.js"></script>
 		<style>
 			*,
 			a,
@@ -239,7 +239,7 @@
 				font-size: 14px;
 				overflow: hidden;
 				padding-left: 10px;
-				margin-bottom: 20px;
+				margin-bottom: 0px;
 			}
 			
 			.login_check {
@@ -298,6 +298,16 @@
 				color: #C81623;
 				font-weight: bold;
 			}
+            .clearfix .inp-tips {
+                color: #ffffff;
+                width: 308px;
+                height:16px;
+{#                border: 1px solid gray;#}
+                display: inline-block;
+            }
+            .error_color {
+                background: #E4393C;
+            }
 		</style>
 	</head>
 
@@ -329,17 +339,19 @@
 								</ul>
 							</div>
 							<div class="login_form_user form_box">
-								<div class="login_form_info clearfix"><span class="login_form_info_ico"></span>公共场所不建议登录，以防账号丢失</div>
-								<form>
+                                <div class="login_form_info clearfix"><span class="login_form_info_ico"></span>公共场所不建议登录，以防账号丢失</div>
+
+                                <form id="form1" method="POST">
 									<div class="clearfix">
 										<label class="login_icon_userpng fl"></label>
-										<input type="text" name="user" placeholder="邮箱/用户名/已验证手机" class="login_inp_user login_inp fl" />
-									</div>
+										<input id="i1" type="text" name="user_name" placeholder="邮箱/用户名/已验证手机" class="login_inp_user login_inp fl" />
+									    <div id="t1" class="inp-tips"></div>
+                                    </div>
 									<div class="clearfix">
 										<label class="login_icon_pwpng fl"></label>
-										<input type=" password " name="password" placeholder="密码" class="login_inp_pw login_inp" />
+										<input id="i2" type="password" name="user_pwd" placeholder="密码" class="login_inp_pw login_inp" />
+                                        <div id="t2" class="inp-tips"></div>
 									</div>
-								</form>
 								<div class="clearfix">
 									<div class="login_check ">
 										<input type="checkbox" />
@@ -348,8 +360,10 @@
 									<a href="# " class="fr forget">忘记密码</a>
 								</div>
 								<div>
-									<button class="login_btn">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+									<button class="login_btn" type="submit">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
 								</div>
+                                </form>
+
 								<div style="margin-bottom:20px;" class="clearfix">
 									<ul class="login_thr">
 										<li>京东钱包</li>
@@ -357,7 +371,7 @@
 										<li><span>|</span>微信</li>
 									</ul>
 									<div class="register">
-										<a href="#" target="_blank">
+										<a href="http://127.0.0.1:8001/register/" target="_blank">
 											<i></i>立即注册
 										</a>
 									</div>
@@ -380,7 +394,9 @@
 					$(".form_box").eq(num).show()
 						.siblings(".form_box").hide();
 				}).eq(1).trigger("click");
+                $.valid('#form1');
 			})
+
 		</script>
 	</body>
 
