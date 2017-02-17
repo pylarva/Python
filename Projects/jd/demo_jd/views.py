@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
+from demo_jd import models
 
 # Create your views here.
 
@@ -26,3 +27,18 @@ def index(request):
 
 def login(request):
     return render(request, 'login.html',)
+
+
+def register(request):
+
+    if(request.method == "POST"):
+        u = request.POST.get('user_name', None)
+        p = request.POST.get('user_pwd', None)
+        h = request.POST.get('user_phone', None)
+        e = request.POST.get('user_email', None)
+
+        models.UserDatabase.objects.create(user=u, pwd=p, phone=h, email=e)
+
+    data_list = models.UserDatabase.objects.all()
+    print(data_list)
+    return render(request, 'register.html', {'data': data_list})

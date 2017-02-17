@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>个人注册</title>
+	<style>
+		body{
+			margin: 0;
+			/*border:1px solid red;*/
+			/*height: 2000px;*/
+		}
+		.line {
+			height: 5px;
+			background-color: rgba(128, 128, 128, 0.2);
+		}
+		.pg-header{
+			height: 80px;
+			position: relative;
+			/*background-color: grey;*/
+		}
+		.header-inner{
+			width: 1200px;
+			height: 80px;
+			background-color: weight;
+			/*border: 1px solid green;*/
+			margin:10px auto;
+		}
+		.header-inner a{
+			text-decoration: none;
+			color: #333;
+			float: right;
+			display: inline-block;
+			margin-top: 44px;
+			font-size: 15px;
+		}
+		.header-inner h2{
+			position: absolute;
+			margin-left: 200px;
+			margin-top: 30px;
+		}
+		.header-inner img{
+			position: absolute;
+			top:10px;
+		}
+		.pg-body{
+			width: 1200px;
+			height: 1000px;
+			/*border: 1px solid red;*/
+			margin:0 auto;
+			position: relative;
+		}
+		.pg-body .body-inner{
+			height: 1000px;
+			width: 600px;
+			/*border: 1px solid green;*/
+			display: inline-block;
+		}
+		.pg-body img{
+			/*display: inline;*/
+			/*float: right;*/
+			/*display: inline-block;*/
+			position: absolute;
+			margin-top: 55px;
+		}
+		.pg-body .body-inner .inp{
+			height: 52px;
+			width: 320px;
+			border: 1px solid grey;
+		    margin-top: 5px;
+    		margin-left: 200px;
+		}
+		.pg-body .body-inner .inp label{
+		    float: left;
+		    width: 90px;
+		    height: 52px;
+		    line-height: 52px;
+		    padding-left: 20px;
+		}
+		.pg-body .body-inner .inp .check_image{
+			margin-top: 16px;
+			margin-left: 188px;
+		}
+		.pg-body .body-inner .inp .display_no{
+			display: none;
+		}
+		.pg-body .body-inner input{
+			position: absolute;
+			margin-top: 15px;
+			margin-left: 10px;
+		}
+		.error-color{
+			color: weight !important;
+			background: #E22;
+			font-size: 15px !important;
+		}
+		.pg-body .body-inner .inp-tips{
+			height: 20px;
+			width: 322px;
+			/*border: 1px solid yellow;*/
+			margin-left: 200px;
+			color: #dddddd;
+			font-size: 10px;
+		}
+		.pg-body .body-inner p{
+			display: inline-block;
+			position: absolute;
+			margin-left: 220px;
+			margin-top: 14px;
+			font-size: 10px;
+		}
+		.pg-body .body-inner a{
+			text-decoration: none;
+			display: inline-block;
+			position: absolute;
+			margin-left: 288px;
+			margin-top: 15px;
+			font-size: 10px;
+		}
+		.commit{
+			position: absolute;
+			margin-top: 80px;
+			color: #fff;
+			background: #E22;
+			font-size: 20px;
+
+		}
+
+	</style>
+</head>
+<body>
+	<div class="pg-header">
+		<div class="header-inner">
+			<img src="/static/images/reg_logo.png">
+			<h2>欢迎注册</h2>
+			<a href="#">已有账号？请登陆</a>
+		</div>
+	</div>
+	<div class="line"></div>
+	<div class="pg-body">
+		<div class="body-inner">
+			<form id="form1" action="register.html" method="POST">
+				<div class="inp" style="margin-top: 70px; position: relative;">
+					<label style="letter-spacing:5px">用 户 名</label>
+					<input id="i1" type="text" name="user_name" onfocus="Focus_1('#i1');" onblur="Blur_1('#i1');" />
+					<img class="check_image display_no" src="/static/images/reg_check.png">
+				</div>
+				<div id='t1' class="inp-tips"></div>
+				<div class="inp">
+					<label>设 置 密 码</label>
+					<input id="i2" type="password" name="user_pwd" onfocus="Focus_2('#i2');" onblur="Blur_2('#i2');" />
+					<img class="check_image display_no" src="/static/images/reg_check.png">
+				</div>
+				<div id='t2' class="inp-tips"></div>
+				<div class="inp">
+					<label>确 认 密 码</label>
+					<input id="i3" type="password" name="confirm_pwd" onfocus="Focus_3('#i3');" onblur="Blur_3('#i3');"/>
+					<img class="check_image display_no" src="/static/images/reg_check.png">
+				</div>
+				<div id="t3" class="inp-tips"></div>
+				<div class="inp">
+					<label>手 机 号 码</label>
+					<input id="i4" type="text" name="user_phone" onfocus="Focus_4('#i4');" onblur="Blur_4('#i4');"/>
+					<img class="check_image display_no" src="/static/images/reg_check.png">
+				</div>
+				<div id="t4" class="inp-tips"></div>
+				<div class="inp">
+					<label>密 保 邮 箱</label>
+					<input type="text" name="user_email"/>
+				</div>
+				<div class="inp-tips"></div>
+				<input type="checkbox" style="position: absolute; margin-left: 200px;"/>
+				<p>阅读并同意</p>
+				<a href="#">《京东用户注册协议》 《隐私政策》</a>
+				<!-- <button class="commit inp" type="submit" style="margin-top: 44px;">立即注册</button> -->
+				<input class="commit inp" type="submit" value="立即注册" style="margin-top: 44px;" />
+			</form>
+		</div>
+		<img src="/static/images/reg_phone.png">
+	</div>
+    <table border="1">
+        {% for item in data %}
+            <tr>
+                <td>{{ item.user }}</td>
+                <td>{{ item.pwd }}</td>
+                <td>{{ item.phone }}</td>
+                <td>{{ item.email }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+	<div class="pg-footer"></div>
+	<script src="/static/js/jquery-1.12.4.js"></script>
+	<script src="/static/js/reg_commons.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$.valid('#form1');
+		});
+	</script>
+</body>
+</html>
