@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Shopping car</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		body{
+			margin:0;
+		}
+		.pg-header{
+			width: 1000px;
+			height: 80px;
+			/*border: 1px solid red;*/
+			margin: 0 auto;
+			position: relative;
+		}
+		.pg-header img{
+			display: inline-block;
+			position: absolute;
+			bottom: 0px;
+		}
+		.pg-header h2 {
+			position: absolute;
+			left:190px;
+			top:25px;
+		}
+		.pg-header .search{
+			width: 300px;
+			height: 29.5px;
+			background: #E22;
+			float: right;
+			position: relative;
+			top:40px;
+			right: 25px;
+		}
+		.pg-header .search input{
+			width: 240px;
+			height: 20px;
+			position: absolute;
+			top: 1.5px;
+			left: 2.5px;
+		}
+		.pg-header .search a{
+			position: absolute;
+			text-decoration: none;
+			float: right;
+			top:7px;
+			right: 12px;
+			font-size: 15px;
+			color: #ffffff;
+		}
+		.pg-body {
+			width: 1000px;
+			height: 1000px;
+			border: 1px solid green;
+			margin: 0 auto;
+		}
+		.pg-body .body-topic{
+			height: 26px;
+			width: 1000px;
+			/*border: 1px solid grey;*/
+			margin-top: 20px;
+		}
+		.pg-body .body-topic .topic-top div{
+			width: 80px;
+			height: 20px;
+			/*border: 1px solid red;*/
+			/*border-style: */
+			border-width: 0 0 3px 0;
+			border-style: solid solid solid solid;
+			border-color: #E22;
+			display: inline-block;
+			font-size: 15px;
+			color: #E22;
+			font-weight: bold;
+		}
+		.pg-body .body-topic .topic-top h3{
+			display: inline;
+		}
+		.pg-body .body-topic .topic-top .ppp{
+			display: inline;
+			float: right;
+			margin-top:10px;
+			font-size: 13px;
+
+		}
+		.pg-body .body-topic .topic-top select{
+			float: right;
+			display: inline;
+			margin-right: 25px; 
+			margin-top:6px;
+		}
+		.pg-body .body-topic .topic-inner{
+			width: 1000px;
+			height: 50px;
+			border:1px solid grey;
+			background: #f3f3f3;
+			position: relative;
+			/*float: left;*/
+			top: -12px;
+		}
+		.pg-body .body-topic .topic-inner input{
+			position: absolute;
+			top:16px;
+		}
+		.pg-body .body-topic .topic-inner .pp{
+			display: inline;
+			font-size: 10px;
+			line-height: 50px;
+
+		}
+		.pg-body .body-topic .topic-bottom{
+			width: 200px;
+			height: 30px;
+			/*border:1px solid red;*/
+			margin:-12px 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="pg-header">
+		<img src="images/reg_logo.png">
+		<h2>购物车</h2>
+		<div class="search">
+			<input type="text" placeholder="自营" />
+			<a href="#">搜索</a>
+		</div>
+	</div>
+	<div class="pg-body">
+		<div class="body-topic">
+			<div class="topic-top">
+				<div>全部商品 0</div>
+				<h3>京东大药房</h3>
+				<select>
+					<option>上海市浦东新区</option>
+					<option>北京朝阳区</option>
+					<option>广州深圳市</option>
+				</select>
+				<p class="ppp">配送至：</p>
+			</div>
+			<!-- <br clear="all"/> -->
+			<div style="clear: both"></div>
+			<div class="topic-inner">
+				<input type="checkbox" />
+				<p class="pp" style="margin-left: 25px;">全选</p>
+				<p class="pp" style="margin-left: 100px;">商品</p>
+				<p class="pp" style="margin-left: 350px;">单价</p>
+				<p class="pp" style="margin-left: 50px;">数量</p>
+				<p class="pp" style="margin-left: 50px;">小计</p>
+				<p class="pp" style="margin-left:50px;">操作</p>
+			</div>
+			<div class="topic-bottom">
+				<input type="checkbox" />
+				<img src="images/car_1.png" style="margin-top: 0px;">
+			</div>
+		</div>
+		<div class="body-content"></div>
+		<div class="body-pay"></div>
+	</div>
+	<div class="footer"></div>
+</body>
+</html>
