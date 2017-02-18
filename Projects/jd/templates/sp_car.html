@@ -3,9 +3,13 @@
 <head>
 	<title>Shopping car</title>
 	<meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/sp_car.css">
 	<style type="text/css">
 		body{
 			margin:0;
+		}
+		.hide{
+			display: none;
 		}
 		.pg-header{
 			width: 1000px;
@@ -52,7 +56,7 @@
 		.pg-body {
 			width: 1000px;
 			height: 1000px;
-			border: 1px solid green;
+			/*border: 1px solid green;*/
 			margin: 0 auto;
 		}
 		.pg-body .body-topic{
@@ -93,7 +97,7 @@
 		.pg-body .body-topic .topic-inner{
 			width: 1000px;
 			height: 50px;
-			border:1px solid grey;
+			/*border:1px solid grey;*/
 			background: #f3f3f3;
 			position: relative;
 			/*float: left;*/
@@ -110,24 +114,229 @@
 
 		}
 		.pg-body .body-topic .topic-bottom{
-			width: 200px;
+			width: 1000px;
 			height: 30px;
 			/*border:1px solid red;*/
 			margin:-12px 0;
+			float: left;
+		}
+		.template {
+			width: 1000px;
+			height: 120px;
+			border: 1px solid grey;
+			float: left;
+			margin-top: 20px;
+			border-width: 3px 1px 1px 1px;
+		}
+		.template #d1{
+			width: 20px;
+			height: 120px;
+			/*border:1px solid grey;*/
+			float: left;
+		}
+		.template #d2{
+			width: 120px;
+			height: 120px;
+			/*border:1px solid grey;*/
+			float: left;
+			position: relative;
+		}
+		.template #d1 input{
+			display: block;
+			position: absolute;
+			margin-top: 31px;
+			margin-left: 2px;
+		}
+		.template #d3{
+			width: 350px;
+			height: 120px;
+			/*border:1px solid grey;*/
+			float: left;
+			font-size: 15px;
+			margin-top:18px;
+
+		}
+		#d3 a{
+			/*line-height: 100px;*/
+			font-size: 15px;
+			display: inline-block;
+		}
+		.template #d4{
+			width: 100px;
+			height: 120px;
+			/*border:1px solid grey;*/
+			float: left;
+			font-size: 15px;
+			line-height: 70px;
+			text-align:center;
+		}
+		.template #d5{
+			width: 200px;
+			height: 120px;
+			/*border:1px solid grey;*/
+			float: left;
+			/*line-height: 70px;*/
+			/*text-align:center;*/
+		}
+		.template #d5-1{
+			width: 100px;
+			height: 21px;
+			border:1px solid grey;
+			margin-top: 20px;
+			margin-left: 50px;
+		}
+		.template #d5-1 a{
+			/*border: 1px solid grey;*/
+		}
+		.template #d5-1 input{
+			width: 60px;
+			text-align: right;
+			height: 19px;
+			border-width: 0 1px 0 1px; 
+		}
+		.template #d6{
+			width: 80px;
+			height: 120px;
+			/*border:1px solid grey;*/
+			float: left;
+			font-size: 15px;
+			line-height: 70px;
+		}
+		.template #d7{
+			width: 110px;
+			height: 120px;
+			/*border:1px solid grey;*/
+			float: left;
+			font-size: 10px;
+		}
+		.template #d7 ul{
+			list-style-type: none;
+		}
+		.template #d7 li{
+			margin-top: 0;
+			margin-left: -20px;
+			cursor: pointer;
+		}
+		.template #d7 li:hover{
+			color:red;
+		}
+		.body-pay {
+			width: 1000px;
+			height: 50px;
+			border: 1px solid grey;
+			float: left;
+			margin-top:20px;
+		}
+		.body-pay #d1{
+			width: 20px;
+			height: 60px;
+			/*border:1px solid grey;*/
+			float: left;
+		}
+		.body-pay #d1 input{
+			display: block;
+			position: absolute;
+			margin-top: 12px;
+			margin-left: 2px;
+		}
+		.body-pay #d2{
+			width: 500px;
+			height: 60px;
+			/*border:1px solid grey;*/
+			float: left;
+			font-size: 10px;
+		}
+		.body-pay #d2 ul{
+			list-style-type: none;
+			margin-left: -20px;
+		}
+		.body-pay #d2 ul li{
+			float:left;
+			margin-right:10px;
+		}
+		#d2 ul li:hover{
+			color: red;
+			cursor: pointer;
+		}
+		.body-pay #d3{
+			width: 150px;
+			height: 60px;
+			/*border:1px solid grey;*/
+			float: left;
+			font-size: 10px;
+			text-align: center;
+		}
+		.body-pay #s4{
+			width: 200px;
+			height: 60px;
+			/*border:1px solid grey;*/
+			float: left;
+			font-size: 10px;
+		}
+		.body-pay #d5 input{
+			width: 120px;
+			height: 50px;
+			border:1px solid #E22;
+			background: #E22;
+			float: right;
+			font-size: 20px;
+			color: #fff;
+		}
+		.goods-add {
+			width: 248px;
+			height: 300px;
+			border:1px dotted grey;
+			float: left;
+			/*margin-top: 35px;*/
+		}
+		#p-1{
+			display: block;
+			float: left;
+			font-size: 10px;
+			margin-right:800px;
+		}
+		.go{
+			width: 50px;
+			font-size: 15px;
+			font-weight: bold;
+			color: #fff;
+			height: 20px;
+			border:1px solid red;
+			width: 150px;
+			float: left;
+			text-align: center;
+			background: #E22;
+			cursor: pointer;
+			margin-left: 35px;
+			margin-top: 15px;
+		}
+		.goods-add img{
+			margin-left: 25px;
+		}
+		.goods-add p{
+			font-size: 13px;
+		}
+		.goods-add a{
+			color: red;
+			font-size: 15px;
+			width: 210px;
+			float: left;
+			text-align: center;
 		}
 	</style>
 </head>
 <body>
-	<div class="pg-header">
-		<img src="images/reg_logo.png">
+	<div id="pg-header" class="pg-header">
+		<img src="/static/images/reg_logo.png">
 		<h2>购物车</h2>
 		<div class="search">
 			<input type="text" placeholder="自营" />
 			<a href="#">搜索</a>
 		</div>
 	</div>
+	<form>
 	<div class="pg-body">
-		<div class="body-topic">
+		<div id="body-topic" class="body-topic">
 			<div class="topic-top">
 				<div>全部商品 0</div>
 				<h3>京东大药房</h3>
@@ -141,7 +350,7 @@
 			<!-- <br clear="all"/> -->
 			<div style="clear: both"></div>
 			<div class="topic-inner">
-				<input type="checkbox" />
+				<input id="c1" type="checkbox" onclick="Check_all(this);"/>
 				<p class="pp" style="margin-left: 25px;">全选</p>
 				<p class="pp" style="margin-left: 100px;">商品</p>
 				<p class="pp" style="margin-left: 350px;">单价</p>
@@ -150,13 +359,104 @@
 				<p class="pp" style="margin-left:50px;">操作</p>
 			</div>
 			<div class="topic-bottom">
-				<input type="checkbox" />
-				<img src="images/car_1.png" style="margin-top: 0px;">
+				<input id="c2" type="checkbox" onclick="Check_all(this);" />
+				<img src="/static/images/car_1.png">
 			</div>
 		</div>
-		<div class="body-content"></div>
-		<div class="body-pay"></div>
+		<div id="body-content" class="body-content">
+			<div id="template" class="template hide">
+				<div id="d1">
+					<input type="checkbox" onclick="check_sum(this);"/>
+				</div>
+				<div id="d2">
+					<img src="/static/images/car_2.jpg">
+				</div>
+				<div id="d3">
+					<a>小米（MI）L48M3-AF 48英寸 小米电视3S 智能电视尺码：48英寸 全高清 智能</a>
+				</div>
+				<div id="d4">
+					¥2699.5
+				</div>
+				<div id="d5">
+					<div id="d5-1">
+						<a onclick="Reduce_num(this);">-</a>
+						<input type="text" value="1" onblur="Blur(this)">
+						<a onclick="Add_num(this);">+</a>
+					</div>
+				</div>
+				<div id="d6" class="sum">
+					2699.5
+				</div>
+				<div id="d7">
+					<ul>
+						<li onclick="delete_unit(this);">删除</li>
+						<br>
+						<li>到货通知</li>
+						<br>
+						<li>移到我的关注</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="body-pay">
+			<div id="d1">
+				<input id="c3" type="checkbox" onclick="Check_all(this);"/>
+			</div>
+			<div id="d2">
+				<ul>
+					<li>全选</li>
+					<li>删除选中的商品</li>
+					<li>移动到我的关注</li>
+					<li>清除下架商品</li>
+				</ul>
+			</div>
+			<div id="d3">
+				<p>已选择 1 件商品</p>
+			</div>
+			<div id="s4">
+				<p id="s4-2">总价：¥0.00 </p>
+			</div>
+			<div id="d5">
+				<input type="submit" value="去结算" />
+			</div>
+		</div>
+		<div id="p-1">
+			<p>&hearts;&hearts;&hearts;猜你喜欢</p>
+		</div>
+		<br/>
+		<div id="goods-1" class="goods-add" picture="/static/images/car_3_1.jpg">
+			<!-- <a onclick="Goods_add('#goods-add')">加入购物车</a> -->
+			<img src="/static/images/car_3.jpg">
+			<p>【京东超市】益达（Extra）木糖醇无糖口香糖蜜桃芒果混合味70粒98g单瓶装</p>
+			<a>¥13.5</a>
+			<div class="go" onclick="Goods_add('#goods-1')">加入购物车</div>
+		</div>
+		<div id="goods-2" class="goods-add" picture="/static/images/car_4_1.jpg">
+			<img src="/static/images/car_4.jpg">
+			<p>【京东超市】德芙Dove丝滑牛奶巧克力 糖果巧克力 43g 排块装</p>
+			<a>¥7.20</a>
+			<div class="go" onclick="Goods_add('#goods-2')" >加入购物车</div>
+		</div>
+		<div id="goods-3" class="goods-add" picture="/static/images/car_5_1.jpg">
+			<img src="/static/images/car_5.jpg">
+			<p>【京东超市】绿箭（DOUBLEMINT）无糖薄荷糖原味薄荷味35粒23.8g单盒金</p>
+			<a>¥7.90</a>
+			<div class="go" onclick="Goods_add('#goods-3')" >加入购物车</div>
+		</div>
+		<div id="goods-4" class="goods-add" picture="/static/images/car_6_1.jpg">
+			<img src="/static/images/car_6.jpg" >
+			<p>【京东超市】好时之吻Kisses牛奶巧克力82g（加量装与正常装随机发售）</p>
+			<a>¥16.20</a>
+			<div class="go" onclick="Goods_add('#goods-4')" >加入购物车</div>
+		</div>
 	</div>
-	<div class="footer"></div>
+	</form>
+	<div class="footer">
+	</div>
+	<script type="text/javascript" src="/static/js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="/static/js/sp_car.js"></script>
+	<script type="text/javascript">
+		
+	</script>
 </body>
 </html>

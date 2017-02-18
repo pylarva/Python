@@ -65,3 +65,7 @@ def register(request):
     #     print(item)
     # print(data_list)
     return render(request, 'register.html', {'data': data_list})
+
+
+def car(request):
+    return render(request, 'sp_car.html',)
