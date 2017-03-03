@@ -45,7 +45,7 @@ def login(request):
 
 def register(request):
 
-    if(request.method == "POST"):
+    if request.method == "POST":
         u = request.POST.get('user_name', None)
         p = request.POST.get('user_pwd', None)
         h = request.POST.get('user_phone', None)
