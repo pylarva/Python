@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <title>CMDB</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<script type="text/javascript" src="/static/js/jquery-1.9.0.min.js"></script>
-<script type="text/javascript" src="/static/images/login.js"></script>
+<script type="text/javascript" src="/static/js/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="/static/js/login.js"></script>
 <link href="/static/css/login2.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -45,7 +45,7 @@
                 </div>
                 </div>
                
-                <div style="padding-left:50px;margin-top:20px;"><input type="button" value="登 录" style="width:150px;" class="button_blue" onclick="submit_form1()"/></div>
+                <div style="padding-left:50px;margin-top:20px;"><input type="button" id="logi" value="登 录" style="width:150px;" class="button_blue" /></div>
               </form>
            </div>
            
@@ -98,7 +98,7 @@
                 
                 <li>
                     <div class="inputArea">
-                        <input type="button" id="reg"  style="margin-top:10px;margin-left:85px;" class="button_blue" value="同意协议并注册"/> <a href="#" class="zcxy" target="_blank">注册协议</a>
+                        <input type="button" id="reg" style="margin-top:10px;margin-left:85px;" class="button_blue" value="同意协议并注册"/> <a href="#" class="zcxy" target="_blank">注册协议</a>
                     </div>
                     
                 </li><div class="cl"></div>
@@ -112,22 +112,4 @@
     <!--注册end-->
 </div>
 <div class="jianyi">*推荐使用ie8或以上版本ie浏览器或Chrome内核浏览器访问本站</div>
-<script>
-    function submit_form1() {
-        $.ajax({
-            url: '/login/',
-            type: 'POST',
-            data: {'username1': $('#u').val(), 'pwd1': $('#p').val()},
-            dataType: 'JSON',
-            success: function (data_dict) {
-{#                data_dict = JSON.parse(data_dict);#}
-                if(data_dict.status){
-                    location.href = 'http://www.baidu.com';
-                }else{
-                    alert(data_dict.message)
-                }
-            }
-        })
-    }
-</script>
 </body></html>

@@ -54,10 +54,31 @@ function getParam(pname) {
 }  
 
 
-var reMethod = "GET",
+var reMethod = "POST",
 	pwdmin = 6;
 
 $(document).ready(function() {
+
+	$('#logi').click(function () {
+		$.ajax({
+			url: '/login/',
+            type: 'POST',
+            data: {'username1': $('#u').val(), 'pwd1': $('#p').val()},
+            dataType: 'JSON',
+            success: function (data_dict) {
+                if(data_dict.status){
+                    // location.href = 'http://www.baidu.com';
+					$('#u').focus().css({
+						border: "1px solid red",
+						boxShadow: "0 0 2px red"
+					});$("#p").val(data_dict);
+                }else{
+                    alert(data_dict.message);
+                }
+            }
+		})
+
+    });
 
 
 	$('#reg').click(function() {
@@ -83,28 +104,6 @@ $(document).ready(function() {
 			return false;
 
 		}
-		$.ajax({
-			type: reMethod,
-			url: "/member/ajaxyz.php",
-			data: "uid=" + $("#user").val() + '&temp=' + new Date(),
-			dataType: 'html',
-			success: function(result) {
-
-				if (result.length > 2) {
-					$('#user').focus().css({
-						border: "1px solid red",
-						boxShadow: "0 0 2px red"
-					});$("#userCue").html(result);
-					return false;
-				} else {
-					$('#user').css({
-						border: "1px solid #D7D7D7",
-						boxShadow: "none"
-					});
-				}
-
-			}
-		});
 
 
 		if ($('#passwd').val().length < pwdmin) {
@@ -133,7 +132,32 @@ $(document).ready(function() {
 			
 		}
 
-		$('#regUser').submit();
+		$.ajax({
+			type: reMethod,
+			url: "/login/",
+			// data: "uid=" + $("#user").val() + '&temp=' + new Date(),
+			// data: {'username2': $('#username2').val(), 'pwd2': $('#pwd2').val()},
+			data: {'username2': $('#user').val(), 'pwd2': $('#passwd').val()},
+			dataType: 'JSON',
+			success: function(result) {
+				if (result.status) {
+					$('#qq').focus().css({
+						border: "1px solid red",
+						boxShadow: "0 0 2px red"
+					});$('#userCue').html("<font color='red'><b>×用户名或者密码错误...</b></font>");
+					return false;
+				} else {
+					$('#user').css({
+						border: "1px solid #D7D7D7",
+						boxShadow: "none"
+					});
+					// return false;
+				}
+
+			}
+		});
+
+		// $('#regUser').submit();
 	});
 	
 
