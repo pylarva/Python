@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PyManager</title>
+</head>
+<body>
+    {% extends 'home.html' %}
+    {% block body %}
+            <p>主机管理&nbsp;&gt;&gt;</p>
+
+            <button type="button" class="btn btn-primary" onclick="CheckAll('#edit_mode', '#tb')">全选</button>
+	        <button type="button" class="btn btn-success" onclick="CancleAll('#edit_mode', '#tb')">取消</button>
+	        <button type="button" class="btn btn-info" onclick="ReverseAll('#edit_mode', '#tb')">反选</button>
+	        <button type="button" class="btn btn-info" style="background-color: #d58512; border-color: #d58512">添加主机</button>
+{#	        <button type="button" class="btn btn-danger" id="edit_mode" onclick="edit_mode(this, '#tb')" style="float: right;">删除</button>#}
+            <table class="table table-bordered" id="tb">
+                <tr>
+                    <td>编号</td>
+                    <td>选择</td>
+                    <td>主机</td>
+                    <td>IP</td>
+                    <td>业务</td>
+                    <td>状态</td>
+                    <td>备注</td>
+                </tr>
+
+        {% for item in data %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>
+                        <input type="checkbox" style="margin-left: 15px">
+                    </td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.ip }}</td>
+                    <td>{{ item.business }}</td>
+                    <td>{{ item.status }}</td>
+                    <td><a href="/details/{{ item.id }}/">详细信息</a> | <a href="#">删除</a></td>
+                </tr>
+        {% endfor %}
+            </table>
+
+    {% endblock %}
+    {% block js %}
+        <script src="/static/js/edit_row.js"></script>
+    {% endblock %}
+</body>
+</html>

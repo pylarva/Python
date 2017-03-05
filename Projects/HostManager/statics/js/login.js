@@ -66,14 +66,16 @@ $(document).ready(function() {
             data: {'username1': $('#u').val(), 'pwd1': $('#p').val()},
             dataType: 'JSON',
             success: function (data_dict) {
-                if(data_dict.status){
-                    // location.href = 'http://www.baidu.com';
-					$('#u').focus().css({
-						border: "1px solid red",
-						boxShadow: "0 0 2px red"
-					});$("#p").val(data_dict);
-                }else{
-                    alert(data_dict.message);
+                if (data_dict.status) {
+                    location.href = 'http://www.baidu.com';
+                } else {
+                    $('#u').focus().css({
+                        border: "1px solid red",
+                        boxShadow: "0 0 2px red"
+                    });
+                    $('#err').html("<font color='red'><b>×用户米或密码错误</b></font>");
+                    // alert('用户名或者密码错误...');
+                    return false;
                 }
             }
 		})

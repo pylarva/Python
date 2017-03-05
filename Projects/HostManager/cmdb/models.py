@@ -6,3 +6,14 @@ from django.db import models
 class UserInfo(models.Model):
     username = models.CharField(max_length=32)
     pwd = models.CharField(max_length=32)
+
+
+class HostDatabase(models.Model):
+    name = models.CharField(max_length=32)
+    ip = models.CharField(max_length=32)
+    business = models.CharField(max_length=32)
+    status = models.CharField(max_length=10)
+    idc_name = models.CharField(max_length=32)
+    idc_cabinet = models.CharField(max_length=32)
+    person = models.CharField(max_length=32)
+    ctime = models.DateTimeField(auto_now_add=True)

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PyManager</title>
+    <style>
+        .body{
+            margin: 0;
+        }
+        .pg-header{
+            height: 60px;
+            background-color: rgb(30, 39, 47);
+            position: relative;
+        }
+        .pg-header img{
+            width:50px;
+            height:50px;
+        }
+        .pg-header p{
+            display: inline-block;
+            top:20px;
+            margin-top:20px;
+        }
+        .pg-header .H1{
+            position: absolute;
+            display: inline-block;
+            width: 30px;
+            height:30px;
+            font-size:20px;
+            color: #ffffff;
+            top:-7px;
+            left:69px;
+        }
+        .pg-body .body-menu{
+            position: absolute;
+            width: 200px;
+            background-color: rgb(48, 61, 82);
+            top: 60px;
+            left: 0;
+            bottom: 0;
+        }
+        .pg-body .body-content{
+            position: absolute;
+            background-color: rgb(235, 236, 245);
+            top:60px;
+            left: 200px;
+            bottom: 0;
+            right: 0;
+            overflow: auto;
+        }
+        .nav-pills li a {
+            border-radius: 0px !important;
+
+        }
+    </style>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+</head>
+<body class="body">
+    <div class="pg-header">
+        <img src="/static/images/logo.png" />
+        <div class="H1">
+            <p>PyManager</p>
+        </div>
+    </div>
+    <div class="pg-body">
+        <form>
+        <div class="body-menu">
+            <ul id="menu" class="nav nav-pills nav-stacked">
+                <li id="l1" role="presentation" class="active" ><a href="/hosts/">主机管理</a></li>
+                <li id="l2" role="presentation" ><a href="/users/" >用户管理</a></li>
+                <li id="l3" role="presentation" ><a href="#">日志查询</a></li>
+            </ul>
+        </div>
+        </form>
+        <div class="body-content">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+    <script src="/static/js/jquery-1.12.4.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    {% block js %}{% endblock %}
+    <script>
+        $(function () {
+            var path = window.location.pathname;
+            if(path == '/hosts/'){
+                $('li').each(function () {
+                    var hasActive = $(this).hasClass('active');
+                    if(hasActive){
+                        $(this).removeClass('active');
+                    }
+                });
+                $('#l1').addClass('active');
+            };
+            if(path == '/users/'){
+                    $('li').each(function () {
+                    var hasActive = $(this).hasClass('active');
+                    if(hasActive){
+                        $(this).removeClass('active');
+                    }
+                });
+                $('#l2').addClass('active');
+            };
+        });
+    </script>
+</body>
+</html>

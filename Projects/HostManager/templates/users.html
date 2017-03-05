@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PyManager</title>
+</head>
+<body>
+    {% extends 'home.html' %}
+    {% block body %}
+        user1 user2
+    {% endblock %}
+    <script>
+        function select_active(ths){
+            console.log(ths);
+            $(ths).addClass('active');
+        }
+    </script>
+</body>
+</html>
