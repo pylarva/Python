@@ -9,12 +9,14 @@
     {% block body %}
         <ul>
             <li>{{ data.id }}</li>
-            <li>{{ data.host }}</li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
+            <li>{{ data.name }}</li>
+            <li>{{ data.ip }}</li>
+            <li>{{ data.business }}</li>
+            <li>{{ data.status }}</li>
+            <li>{{ data.idc_name }}</li>
+            <li>{{ data.idc_cabinet }}</li>
+            <li>{{ data.person }}</li>
+            <li>{{ data.ctime|date:"Y-m-d H:i:s" }}</li>
         </ul>
     {% endblock %}
 </body>

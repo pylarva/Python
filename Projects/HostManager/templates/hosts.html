@@ -12,8 +12,60 @@
             <button type="button" class="btn btn-primary" onclick="CheckAll('#edit_mode', '#tb')">全选</button>
 	        <button type="button" class="btn btn-success" onclick="CancleAll('#edit_mode', '#tb')">取消</button>
 	        <button type="button" class="btn btn-info" onclick="ReverseAll('#edit_mode', '#tb')">反选</button>
-	        <button type="button" class="btn btn-info" style="background-color: #d58512; border-color: #d58512">添加主机</button>
-{#	        <button type="button" class="btn btn-danger" id="edit_mode" onclick="edit_mode(this, '#tb')" style="float: right;">删除</button>#}
+{#	        <button type="button" class="btn btn-info" style="background-color: #d58512; border-color: #d58512">添加主机</button>#}
+
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">添加主机</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">新建主机</h4>
+                  </div>
+                  <form id="form1">
+                  <div class="modal-body">
+                      <div class="form-group">
+                        <label for="recipient-name" class="control-label">1.主机名</label>
+                        <input type="text" class="form-control" id="recipient-name1">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="control-label">2.IP</label>
+                        <input type="text" class="form-control" id="recipient-name2">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="control-label">3.业务</label>
+                        <input type="text" class="form-control" id="recipient-name3">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="control-label">4.状态</label>
+                        <input type="text" class="form-control" id="recipient-name4">
+                      </div>
+                                              <div class="form-group">
+                        <label for="recipient-name" class="control-label">5.idc机房</label>
+                        <input type="text" class="form-control" id="recipient-name5">
+                      </div>
+                                              <div class="form-group">
+                        <label for="recipient-name" class="control-label">6.机柜</label>
+                        <input type="text" class="form-control" id="recipient-name6">
+                      </div>
+                                              <div class="form-group">
+                        <label for="recipient-name" class="control-label">7.负责人</label>
+                        <input type="text" class="form-control" id="recipient-name7">
+                      </div>
+                                              <div class="form-group">
+                        <label for="recipient-name" class="control-label">8.上线时间</label>
+                        <input type="text" class="form-control" id="recipient-name8">
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button id="save" type="button" class="btn btn-primary">保存</button>
+                  </div>
+                </form>
+                </div>
+              </div>
+            </div>
+
             <table class="table table-bordered" id="tb">
                 <tr>
                     <td>编号</td>
@@ -35,7 +87,10 @@
                     <td>{{ item.ip }}</td>
                     <td>{{ item.business }}</td>
                     <td>{{ item.status }}</td>
-                    <td><a href="/details/{{ item.id }}/">详细信息</a> | <a href="#">删除</a></td>
+                    <td><a href="#">编辑</a> |
+                        <a href="/delete_host/?nid={{ item.id }}">删除</a>  |
+                        <a href="/details/?nid={{ item.id }}">详细信息</a>
+                    </td>
                 </tr>
         {% endfor %}
             </table>
@@ -43,6 +98,26 @@
     {% endblock %}
     {% block js %}
         <script src="/static/js/edit_row.js"></script>
+        <script>
+            $(function () {
+                $('#save').click(function () {
+                    $.ajax({
+                        url: '/hosts/',
+                        type: 'POST',
+                        data: {'name': $('#recipient-name1').val(), 'ip': $('#recipient-name2').val(),
+                            'business': $('#recipient-name3').val(), 'status': $('#recipient-name4').val(),
+                            'idc_name': $('#recipient-name5').val(), 'idc_cabinet': $('#recipient-name6').val(),
+                            'person': $('#recipient-name7').val(), 'ctime': $('#recipient-name8').val(),},
+                        dataType: 'JSON',
+                        success: function (data_dict) {
+                            if(data_dict){
+                                location.href = '/hosts/';
+                            }
+                        }
+                    })
+                })
+            })
+        </script>
     {% endblock %}
 </body>
 </html>

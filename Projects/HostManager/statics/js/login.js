@@ -37,7 +37,7 @@ function logintab(){
 
 //根据参数名获得该参数 pname等于想要的参数名 
 function getParam(pname) { 
-    var params = location.search.substr(1); // 获取参数 平且去掉？ 
+    var params = location.search.substr(1); // 获取参数
     var ArrParam = params.split('&'); 
     if (ArrParam.length == 1) { 
         //只有一个参数的情况 
@@ -47,7 +47,7 @@ function getParam(pname) {
          //多个参数参数的情况 
         for (var i = 0; i < ArrParam.length; i++) { 
             if (ArrParam[i].split('=')[0] == pname) { 
-                return ArrParam[i].split('=')[1]; 
+			return ArrParam[i].split('=')[1];
             } 
         } 
     } 
