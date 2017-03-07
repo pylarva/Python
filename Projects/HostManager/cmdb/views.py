@@ -114,4 +114,25 @@ def delete_host(request):
     return redirect('/hosts/')
 
 
+def updata(request):
 
+    data_dict = {'status': False, 'message': ""}
+
+    if request.method == 'POST':
+        nid = request.POST.get('nid')
+        name = request.POST.get('name')
+        ip = request.POST.get('ip')
+        business_id = request.POST.get('business')
+        status_id = request.POST.get('status')
+        idc_name = request.POST.get('idc_name')
+        idc_cabinet = request.POST.get('idc_cabinet')
+        person = request.POST.get('person')
+        print(nid, name, ip, business_id, status_id, idc_name, idc_cabinet, person)
+
+        models.HostDatabase.objects.filter(id=nid).update(name=name, ip=ip, business_id=business_id,
+                                                          status_id=status_id, idc_name=idc_name,
+                                                          idc_cabinet=idc_cabinet, person=person)
+
+        data_dict['status'] = True
+        data_dict['message'] = 'ok'
+        return HttpResponse(json.dumps(data_dict))

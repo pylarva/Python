@@ -12,8 +12,6 @@
             <button type="button" class="btn btn-primary" onclick="CheckAll('#edit_mode', '#tb')">全选</button>
 	        <button type="button" class="btn btn-success" onclick="CancleAll('#edit_mode', '#tb')">取消</button>
 	        <button type="button" class="btn btn-info" onclick="ReverseAll('#edit_mode', '#tb')">反选</button>
-{#	        <button type="button" class="btn btn-info" style="background-color: #d58512; border-color: #d58512">添加主机</button>#}
-
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">添加主机</button>
 
             <!--添加主机模态对话框-->
@@ -37,7 +35,6 @@
                       <div class="form-group">
                         <label for="recipient-name" class="control-label">3.业务</label>
                         <br>
-{#                        <input type="text" class="form-control" id="recipient-name3">#}
                           <select class="selectpicker">
                               {% for item in business_list %}
                               <option id="recipient-name3" value={{ item.id }}>{{ item.name }}</option>
@@ -47,7 +44,6 @@
                       <div class="form-group">
                         <label for="recipient-name" class="control-label">4.状态</label>
                           <br>
-{#                        <input type="text" class="form-control" id="recipient-name4">#}
                             <select class="selectpicker">
                               {% for item in status_list %}
                               <option id="recipient-name4" value={{ item.id }}>{{ item.status }}</option>
@@ -90,6 +86,10 @@
                   </div>
                   <form id="form1">
                   <div class="modal-body">
+                      <div class="form-group" style="display: none;">
+                        <label for="recipient-name" class="control-label">编号</label>
+                        <input type="text" class="form-control" id="recipient-name10">
+                      </div>
                       <div class="form-group">
                         <label for="recipient-name" class="control-label">1.主机名</label>
                         <input type="text" class="form-control" id="recipient-name11">
@@ -101,8 +101,7 @@
                       <div class="form-group">
                         <label for="recipient-name" class="control-label">3.业务</label>
                         <br>
-{#                        <input type="text" class="form-control" id="recipient-name3">#}
-                          <select class="selectpicker">
+                          <select id="recipient-name13" class="selectpicker">
                               {% for item in business_list %}
                               <option id="recipient-name3" value={{ item.id }}>{{ item.name }}</option>
                               {% endfor %}
@@ -111,7 +110,6 @@
                       <div class="form-group">
                         <label for="recipient-name" class="control-label">4.状态</label>
                           <br>
-{#                        <input type="text" class="form-control" id="recipient-name4">#}
                             <select id="recipient-name14" class="selectpicker">
                               {% for item in status_list %}
                               <option value={{ item.id }}>{{ item.status }}</option>
@@ -137,7 +135,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button id="save" type="button" class="btn btn-primary">保存</button>
+                    <button id="updata" type="button" class="btn btn-primary">更新</button>
                   </div>
                 </form>
                 </div>
@@ -166,7 +164,7 @@
                     <td>{{ item.ip }}</td>
                     <td>{{ item.business.name }}</td>
                     <td>{{ item.status.status }}</td>
-                    <td><a id="edit" href="#">编辑</a> |
+                    <td><a id="edit" href="#" onclick="edit_click({{ item.id }});">编辑</a> |
                         <a href="/delete_host/?nid={{ item.id }}">删除</a>  |
                         <a href="/details-{{ item.id }}.html/">详细信息</a>
                     </td>
@@ -177,17 +175,10 @@
     {% endblock %}
     {% block js %}
         <script src="/static/js/edit_row.js"></script>
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
-
-        <!-- (Optional) Latest compiled and minified JavaScript translation files -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-*.min.js"></script>
-
+        <script src="/static/js/bootstrap-select.js"></script>
         <script>
             $(function () {
+                <!-- 创建主机模态对话框ajax请求 -->
                 $('#save').click(function () {
                     $.ajax({
                         url: '/hosts/',
@@ -204,52 +195,70 @@
                                 location.href = '/hosts/';
                             }
                         }
-                    })
+                    });
                 });
-                $('#edit').click(function () {
-{#                    alert(window.location.href);#}
-                    var data_show = {};
+
+                <!--  编辑数据后ajax提交到后台 -->
+                $('#updata').click(function () {
                     $.ajax({
-                        url: '/details-6.html/',
+                        url: '/updata/',
                         type: 'POST',
-                        data: {'name': '1'},
+                        data: {
+                            'nid': $('#recipient-name10').val(),
+                            'name': $('#recipient-name11').val(), 'ip': $('#recipient-name12').val(),
+                            'business': $('#recipient-name13').val(), 'status': $('#recipient-name14').val(),
+                            'idc_name': $('#recipient-name15').val(), 'idc_cabinet': $('#recipient-name16').val(),
+                            'person': $('#recipient-name17').val(), 'ctime': $('#recipient-name18').val(),
+                        },
                         dataType: 'JSON',
                         success: function (data_dict) {
-                            if(data_dict.name){
-{#                                location.href = '/details-6.html/';#}
-                                data_show.name = data_dict.name;
-                                data_show.ip = data_dict.ip;
-                                data_show.business = data_dict.business_id;
-                                data_show.status = data_dict.status_id;
-                                data_show.idc_name = data_dict.idc_name;
-                                data_show.idc_cabinet = data_dict.idc_cabinet;
-                                data_show.person = data_dict.person;
-{#                                data_show.ctime = data_dict.ctime;#}
-                                $("#exampleModal_02").modal();
-                                $('#recipient-name11').val(data_show.name);
-                                $('#recipient-name12').val(data_show.ip);
-                                $('#recipient-name13').val(data_show.business);
-{#                                $('#recipient-name14').val(data_show.status);#}
-                                $('#recipient-name14').children().each(function () {
-                                    var v = $(this).attr('value');
-                                    alert(v);
-                                    if(v==data_show.status){
-                                        alert(999);
-{#                                        $(this).attr('selected', 'selected');#}
-                                        $('#recipient-name14').selectpicker('val', data_show.status);
-                                    }
-                                })
-                                $('#recipient-name15').val(data_show.idc_name);
-                                $('#recipient-name16').val(data_show.idc_cabinet);
-                                $('#recipient-name17').val(data_show.person);
-{#                                $('#recipient-name18').val(data_show.ctime);#}
+                            if (data_dict) {
+                                location.href = '/hosts/';
                             }
-                            else{alert(222)}
                         }
-                    });
+                    })
+                });
+            });
 
-                })
-            })
+            <!-- 点编辑按钮弹出模态对话框并在输入框中自动填入数据 -->
+            function edit_click(nid) {
+                var u = "/details-" + nid + ".html/";
+                var data_show = {};
+                $.ajax({
+                    url: u,
+                    type: 'POST',
+                    data: {'name': '1'},
+                    dataType: 'JSON',
+                    success: function (data_dict) {
+                        if(data_dict.name){
+                            data_show.name = data_dict.name;
+                            data_show.ip = data_dict.ip;
+                            data_show.business = data_dict.business_id;
+                            data_show.status = data_dict.status_id;
+                            data_show.idc_name = data_dict.idc_name;
+                            data_show.idc_cabinet = data_dict.idc_cabinet;
+                            data_show.person = data_dict.person;
+                            $("#exampleModal_02").modal();
+                            $('#recipient-name10').val(nid);
+                            $('#recipient-name11').val(data_show.name);
+                            $('#recipient-name12').val(data_show.ip);
+                            $('#recipient-name13').val(data_show.business);
+
+                            <!-- select标签默认选项勾选 -->
+                            $('#recipient-name14').children().each(function () {
+                                var v = $(this).attr('value');
+                                if(v==data_show.status){
+                                    $('#recipient-name14').selectpicker('val', data_show.status);
+                                }
+                            })
+                            $('#recipient-name15').val(data_show.idc_name);
+                            $('#recipient-name16').val(data_show.idc_cabinet);
+                            $('#recipient-name17').val(data_show.person);
+                        }
+                        else{alert('请求发送失败...')}
+                    }
+                });
+            }
         </script>
     {% endblock %}
 </body>
