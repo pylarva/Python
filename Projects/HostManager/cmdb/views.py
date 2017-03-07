@@ -62,7 +62,7 @@ def hosts(request):
         ctime = request.POST.get('ctime')
         print(name, ip, business, status, idc_name, idc_cabinet, person, ctime)
 
-        models.HostDatabase.objects.create(name=name, ip=ip, business=business, status=status, idc_name=idc_name,
+        models.HostDatabase.objects.create(name=name, ip=ip, business_id=business, status_id=status, idc_name=idc_name,
                                            idc_cabinet=idc_cabinet, person=person, ctime=ctime)
 
         data_dict['status'] = True
@@ -70,21 +70,41 @@ def hosts(request):
         return HttpResponse(json.dumps(data_dict))
 
     data_list = models.HostDatabase.objects.all()
+    business_list = models.BusinessLine.objects.all()
+    status_list = models.HostStatus.objects.all()
     print(data_list)
-    return render(request, 'hosts.html', {'data': data_list})
+    return render(request, 'hosts.html', {'data': data_list, 'business_list': business_list, 'status_list': status_list})
 
 
 def users(request):
     return render(request, 'users.html')
 
 
-def details(request):
-    nid = request.GET.get('nid')
+def details(request, nid):
+
+    data_dict = {}
+
+    if request.method == "POST":
+        nid = int(nid)
+        data_list = models.HostDatabase.objects.filter(id=nid).first()
+        data_dict['id'] = data_list.id
+        data_dict['name'] = data_list.name
+        data_dict['ip'] = data_list.ip
+        data_dict['business_id'] = data_list.business_id
+        data_dict['idc_name'] = data_list.idc_name
+        data_dict['idc_cabinet'] = data_list.idc_cabinet
+        data_dict['person'] = data_list.person
+        # data_dict['ctime'] = data_list.ctime
+        data_dict['status_id'] = data_list.status_id
+        print(data_list.name)
+        return HttpResponse(json.dumps(data_dict))
+
+    # nid = request.GET.get('nid')
     print(request, nid)
     nid = int(nid)
-    data_list = models.HostDatabase.objects.filter(id=nid)
-    print(data_list[0].id)
-    return render(request, 'details.html', {'data': data_list[0]})
+    data_list = models.HostDatabase.objects.filter(id=nid).first()
+    print(data_list.name)
+    return render(request, 'details.html', {'data': data_list})
 
 
 def delete_host(request):

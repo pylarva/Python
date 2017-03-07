@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^home/', views.home),
     url(r'^hosts/', views.hosts),
     url(r'^users/', views.users),
-    url(r'^details/', views.details),
+    url(r'^details-(\d+).html/', views.details),
     url(r'^delete_host/', views.delete_host),
 ]
