@@ -35,7 +35,7 @@
                       <div class="form-group">
                         <label for="recipient-name" class="control-label">3.业务</label>
                         <br>
-                          <select class="selectpicker">
+                          <select class="selectpicker" id="recipient-name3">
                               {% for item in business_list %}
                               <option id="recipient-name3" value={{ item.id }}>{{ item.name }}</option>
                               {% endfor %}
@@ -44,7 +44,7 @@
                       <div class="form-group">
                         <label for="recipient-name" class="control-label">4.状态</label>
                           <br>
-                            <select class="selectpicker">
+                            <select class="selectpicker" id="recipient-name4">
                               {% for item in status_list %}
                               <option id="recipient-name4" value={{ item.id }}>{{ item.status }}</option>
                               {% endfor %}

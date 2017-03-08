@@ -1,0 +1,84 @@
+{% extends 'home.html' %}
+{% block body %}
+
+    <p>应用管理 >></p>
+
+    <!-- 添加应用 模态对话框 -->
+    <button id="add_app" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal03">添加应用</button>
+
+    <div class="modal fade" id="exampleModal03" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="exampleModalLabel">新建应用</h4>
+          </div>
+          <form id="form1">
+          <div class="modal-body">
+              <div class="form-group">
+                <label for="recipient-name" class="control-label">应用名</label>
+                <input type="text" class="form-control" id="recipient-name1">
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="control-label">选择主机</label>
+                <br>
+{#                  <select class="selectpicker" id="recipient-name23">#}
+                  <select class="selectpicker" multiple>
+                      {% for item in host_list %}
+                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <span id="error_message" style="color: red;"></span>
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button id="save" type="button" class="btn btn-primary">保存</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+
+
+    <table class="table table-bordered" border="1">
+        <tr>
+            <td>序号</td>
+            <td>编号</td>
+            <td>应用</td>
+            <td>主机</td>
+        </tr>
+    {% for obj in obj_list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ obj.id }}</td>
+            <td>{{ obj.name }}</td>
+            <td>
+                {% for host in obj.r.all %}
+                    <span style="display: inline-block; padding: 5px; background-color: #398439 ">{{ host.name }}</span>
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/bootstrap-select.js"></script>
+    <script>
+        $(function () {
+            $('#add_app').click(function () {
+{#                $.ajax({#}
+{#                    url: '/hosts/',#}
+{#                    type: 'GET',#}
+{#                    dataType: 'JSON',#}
+{#                    data: {},#}
+{#                    success: function (data_list) {#}
+{#                        alert(111);#}
+{#                    }#}
+{#                })#}
+            })
+        })
+    </script>
+{% endblock %}

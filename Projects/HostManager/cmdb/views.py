@@ -145,3 +145,11 @@ def updata(request):
         data_dict['status'] = True
         data_dict['message'] = 'ok'
         return HttpResponse(json.dumps(data_dict))
+
+
+def app(request):
+    obj = models.AppDatabase.objects.all()  # app列表
+    host_list = models.HostDatabase.objects.all()  # 主机列表
+    print(obj)
+    print(host_list[0].name)
+    return render(request, 'app.html', {'obj_list': obj, 'host_list': host_list})

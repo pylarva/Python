@@ -67,9 +67,10 @@
         <form>
         <div class="body-menu">
             <ul id="menu" class="nav nav-pills nav-stacked">
-                <li id="l1" role="presentation" class="active" ><a href="/hosts/">主机管理</a></li>
-                <li id="l2" role="presentation" ><a href="/users/" >用户管理</a></li>
-                <li id="l3" role="presentation" ><a href="#">日志查询</a></li>
+                <li id="l1" role="presentation" class="active"><a href="/hosts/">主机管理</a></li>
+                <li id="l2" role="presentation" ><a href="/app/" >应用管理</a></li>
+                <li id="l3" role="presentation" ><a href="/users/" >用户管理</a></li>
+                <li id="l4" role="presentation" ><a href="#">日志查询</a></li>
             </ul>
         </div>
         </form>
@@ -92,7 +93,7 @@
                 });
                 $('#l1').addClass('active');
             }
-            if(path == '/users/'){
+            if(path == '/app/'){
                     $('li').each(function () {
                     var hasActive = $(this).hasClass('active');
                     if(hasActive){
@@ -101,7 +102,15 @@
                 });
                 $('#l2').addClass('active');
             }
-
+            if(path == '/users/'){
+                    $('li').each(function () {
+                    var hasActive = $(this).hasClass('active');
+                    if(hasActive){
+                        $(this).removeClass('active');
+                    }
+                });
+                $('#l3').addClass('active');
+            }
         });
     </script>
 </body>
