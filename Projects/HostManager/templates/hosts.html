@@ -68,8 +68,9 @@
                       </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button id="save" type="button" class="btn btn-primary">保存</button>
+                      <span id="error_message" style="color: red;"></span>
+                      <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                      <button id="save" type="button" class="btn btn-primary">保存</button>
                   </div>
                 </form>
                 </div>
@@ -103,7 +104,7 @@
                         <br>
                           <select id="recipient-name13" class="selectpicker">
                               {% for item in business_list %}
-                              <option id="recipient-name3" value={{ item.id }}>{{ item.name }}</option>
+                              <option value={{ item.id }}>{{ item.name }}</option>
                               {% endfor %}
                           </select>
                       </div>
@@ -143,9 +144,29 @@
             </div>
 
 
+            <!-- 删除确定模态对话框 -->
+            <div id="del_host" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title">警告</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>您将删除该条数据并且不可恢复</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button id="del_confirm" type="button" class="btn btn-primary">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <table class="table table-bordered" id="tb">
                 <tr>
-                    <td>编号</td>
+                    <td>序号</td>
                     <td>选择</td>
                     <td>主机</td>
                     <td>IP</td>
@@ -156,7 +177,7 @@
 
         {% for item in data %}
                 <tr>
-                    <td>{{ item.id }}</td>
+                    <td>{{ forloop.counter }}</td>
                     <td>
                         <input type="checkbox" style="margin-left: 15px">
                     </td>
@@ -165,7 +186,8 @@
                     <td>{{ item.business.name }}</td>
                     <td>{{ item.status.status }}</td>
                     <td><a id="edit" href="#" onclick="edit_click({{ item.id }});">编辑</a> |
-                        <a href="/delete_host/?nid={{ item.id }}">删除</a>  |
+{#                        <a href="/delete_host/?nid={{ item.id }}">删除</a>  |#}
+                        <a id="del_host" href="#" onclick="del_host({{ item.id }})">删除</a>  |
                         <a href="/details-{{ item.id }}.html/">详细信息</a>
                     </td>
                 </tr>
@@ -191,8 +213,10 @@
                         },
                         dataType: 'JSON',
                         success: function (data_dict) {
-                            if (data_dict) {
+                            if (data_dict.status) {
                                 location.href = '/hosts/';
+                            }else {
+                                $('#error_message').text(data_dict.message)
                             }
                         }
                     });
@@ -238,19 +262,27 @@
                             data_show.idc_name = data_dict.idc_name;
                             data_show.idc_cabinet = data_dict.idc_cabinet;
                             data_show.person = data_dict.person;
+
+                            <!-- 弹出模态对话框 输入框中加载值 -->
                             $("#exampleModal_02").modal();
                             $('#recipient-name10').val(nid);
                             $('#recipient-name11').val(data_show.name);
                             $('#recipient-name12').val(data_show.ip);
-                            $('#recipient-name13').val(data_show.business);
 
                             <!-- select标签默认选项勾选 -->
+                            $('#recipient-name13').children().each(function () {
+                                var v = $(this).attr('value');
+                                if(v==data_show.business){
+                                    $('#recipient-name13').selectpicker('val', data_show.business);
+                                }
+                            });
+
                             $('#recipient-name14').children().each(function () {
                                 var v = $(this).attr('value');
                                 if(v==data_show.status){
                                     $('#recipient-name14').selectpicker('val', data_show.status);
                                 }
-                            })
+                            });
                             $('#recipient-name15').val(data_show.idc_name);
                             $('#recipient-name16').val(data_show.idc_cabinet);
                             $('#recipient-name17').val(data_show.person);
@@ -258,6 +290,26 @@
                         else{alert('请求发送失败...')}
                     }
                 });
+            }
+
+            <!-- 删除主机确认 -->
+            function del_host(nid) {
+                $('#del_host').modal();
+
+                $('#del_confirm').click(function () {
+                    u = "/delete_host-" + nid + ".html/";
+                    $.ajax({
+                        url: u,
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {'name': "1"},
+                        success: function (data_dict) {
+                            if(data_dict.status){
+                                location.href = '/hosts/'
+                            }
+                        }
+                    })
+                })
             }
         </script>
     {% endblock %}

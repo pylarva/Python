@@ -6,6 +6,8 @@ from django.shortcuts import redirect
 
 # Create your views here.
 
+data_dict = {'status': False, 'message': ""}
+
 
 def login(request):
 
@@ -60,14 +62,18 @@ def hosts(request):
         idc_cabinet = request.POST.get('idc_cabinet')
         person = request.POST.get('person')
         ctime = request.POST.get('ctime')
-        print(name, ip, business, status, idc_name, idc_cabinet, person, ctime)
 
-        models.HostDatabase.objects.create(name=name, ip=ip, business_id=business, status_id=status, idc_name=idc_name,
-                                           idc_cabinet=idc_cabinet, person=person, ctime=ctime)
-
-        data_dict['status'] = True
-        data_dict['message'] = 'ok'
-        return HttpResponse(json.dumps(data_dict))
+        if not name or not ip:
+            data_dict['status'] = False
+            data_dict['message'] = "输入不能为空"
+            return HttpResponse(json.dumps(data_dict))
+        else:
+            print(name, ip, business, status, idc_name, idc_cabinet, person, ctime)
+            models.HostDatabase.objects.create(name=name, ip=ip, business_id=business, status_id=status, idc_name=idc_name,
+                                               idc_cabinet=idc_cabinet, person=person, ctime=ctime)
+            data_dict['status'] = True
+            data_dict['message'] = 'ok'
+            return HttpResponse(json.dumps(data_dict))
 
     data_list = models.HostDatabase.objects.all()
     business_list = models.BusinessLine.objects.all()
@@ -99,7 +105,6 @@ def details(request, nid):
         print(data_list.name)
         return HttpResponse(json.dumps(data_dict))
 
-    # nid = request.GET.get('nid')
     print(request, nid)
     nid = int(nid)
     data_list = models.HostDatabase.objects.filter(id=nid).first()
@@ -107,16 +112,20 @@ def details(request, nid):
     return render(request, 'details.html', {'data': data_list})
 
 
-def delete_host(request):
-    nid = request.GET.get('nid')
-    print(nid)
-    models.HostDatabase.objects.filter(id=nid).delete()
-    return redirect('/hosts/')
+def delete_host(request, nid):
+
+    if request.method == "POST":
+        nid = int(nid)
+        print(nid)
+        # 删除主机为nid数据
+        models.HostDatabase.objects.filter(id=nid).delete()
+
+        data_dict['status'] = True
+        data_dict['message'] = 'ok'
+        return HttpResponse(json.dumps(data_dict))
 
 
 def updata(request):
-
-    data_dict = {'status': False, 'message': ""}
 
     if request.method == 'POST':
         nid = request.POST.get('nid')
