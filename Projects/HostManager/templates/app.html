@@ -17,13 +17,12 @@
           <div class="modal-body">
               <div class="form-group">
                 <label for="recipient-name" class="control-label">应用名</label>
-                <input type="text" class="form-control" id="recipient-name1">
+                <input type="text" class="form-control" id="app_name">
               </div>
               <div class="form-group">
                 <label for="recipient-name" class="control-label">选择主机</label>
                 <br>
-{#                  <select class="selectpicker" id="recipient-name23">#}
-                  <select class="selectpicker" multiple>
+                  <select id="select_host" class="selectpicker" multiple>
                       {% for item in host_list %}
                       <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
                       {% endfor %}
@@ -31,9 +30,43 @@
               </div>
           </div>
           <div class="modal-footer">
-              <span id="error_message" style="color: red;"></span>
+              <span id="add_error" style="color: red;"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-              <button id="save" type="button" class="btn btn-primary">保存</button>
+              <button id="save_app" type="button" class="btn btn-primary">保存</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 编辑应用 模态对话框 -->
+    <div class="modal fade" id="edit_example" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="exampleModalLabel">编辑应用</h4>
+          </div>
+          <form id="form1">
+          <div class="modal-body">
+              <div class="form-group">
+                <label for="recipient-name" class="control-label">应用名</label>
+                <input type="text" class="form-control" id="ap_name">
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="control-label">选择主机</label>
+                <br>
+                  <select id="select_hosts" class="selectpicker" multiple>
+                      {% for item in host_list %}
+                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <span id="add_error_02" style="color: red;"></span>
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button id="save_edit" type="button" class="btn btn-primary">保存</button>
           </div>
         </form>
         </div>
@@ -41,22 +74,45 @@
     </div>
 
 
+    <!-- 删除确定模态对话框 -->
+    <div id="del_app" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">警告</h4>
+                </div>
+                <div class="modal-body">
+                    <p>您将删除该条数据并且不可恢复</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button id="del_confirm" type="button" class="btn btn-primary">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <table class="table table-bordered" border="1">
         <tr>
             <td>序号</td>
-            <td>编号</td>
             <td>应用</td>
             <td>主机</td>
+            <td>操作</td>
         </tr>
     {% for obj in obj_list %}
         <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ obj.id }}</td>
             <td>{{ obj.name }}</td>
             <td>
                 {% for host in obj.r.all %}
-                    <span style="display: inline-block; padding: 5px; background-color: #398439 ">{{ host.name }}</span>
+                    <span style="display: inline-block; padding: 5px; background-color: #398439 " hid="{{ host.id }}">{{ host.name }}</span>
                 {% endfor %}
+            </td>
+            <td>
+                <a href="#" onclick="edit_app(this, {{ obj.id }})">编辑</a> |
+                <a href="#" onclick="del_app({{ obj.id }})">删除</a>
             </td>
         </tr>
     {% endfor %}
@@ -68,17 +124,83 @@
     <script src="/static/js/bootstrap-select.js"></script>
     <script>
         $(function () {
-            $('#add_app').click(function () {
-{#                $.ajax({#}
-{#                    url: '/hosts/',#}
-{#                    type: 'GET',#}
-{#                    dataType: 'JSON',#}
-{#                    data: {},#}
-{#                    success: function (data_list) {#}
-{#                        alert(111);#}
-{#                    }#}
-{#                })#}
+            $('#save_app').click(function () {
+                $.ajax({
+                    url: '/app/',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    traditional: true,
+                    data: {'app_name': $('#app_name').val(), 'host_list': $('#select_host').selectpicker('val')},
+                    success: function (data_list) {
+                        if(data_list.status){
+                            location.href = '/app/'
+                        }else {
+                            $('#add_error').text(data_list.message)
+                        }
+                    }
+                })
             })
-        })
+        });
+        function del_app(nid) {
+            $('#del_app').modal();
+
+            $('#del_confirm').click(function () {
+                u = '/delete_app-' + nid + '.html/';
+                $.ajax({
+                    url: u,
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {'name': '1'},
+                    success: function (data_dict) {
+                        if(data_dict.status){
+                            location.href = '/app/';
+                        }
+                    }
+                })
+            })
+
+        }
+        function edit_app(ths, nid) {
+            $('#edit_example').modal();
+
+            <!-- 获取原应用列表中的主机 -->
+            var host_list = [];
+            $(ths).parent().prev().children().each(function () {
+                var v = $(this).attr('hid');
+                host_list.push(v)
+            });
+
+{#            $('#app_name').text($(ths).parent().prev().prev().val());#}
+            $('#select_hosts').selectpicker('val', host_list);
+            u = '/details_app-' + nid + '.html/';
+            $.ajax({
+                url: u,
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'name': '1'},
+                success: function (data_dict) {
+                    if(data_dict){
+                        $('#ap_name').val(data_dict.name)
+                    }
+                }
+            });
+
+            $('#save_edit').click(function () {
+                $.ajax({
+                    url : '/updata_app/',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    traditional: true,
+                    data: {'name': $('#ap_name').val(), 'nid': nid, 'host_list': $('#select_hosts').selectpicker('val')},
+                    success: function (data_dict) {
+                        if(data_dict.status){
+                            location.href = '/app/';
+                        }else {
+                            $('#add_error_02').text(data_dict.message)
+                        }
+                    }
+                })
+            })
+        }
     </script>
 {% endblock %}

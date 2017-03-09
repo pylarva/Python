@@ -148,8 +148,75 @@ def updata(request):
 
 
 def app(request):
+
+    if request.method == "POST":
+        app_name = request.POST.get('app_name')
+        host_list = request.POST.getlist('host_list')
+        print(app_name, host_list)
+
+        if not app_name or host_list == ['']:
+            data_dict['status'] = False
+            data_dict['message'] = '输入不能为空'
+            return HttpResponse(json.dumps(data_dict))
+
+        models.AppDatabase.objects.create(name=app_name)
+        obj = models.AppDatabase.objects.get(name=app_name)
+        obj.r.add(*host_list)
+
+        data_dict['status'] = True
+        data_dict['message'] = 'ok'
+        return HttpResponse(json.dumps(data_dict))
+
     obj = models.AppDatabase.objects.all()  # app列表
     host_list = models.HostDatabase.objects.all()  # 主机列表
     print(obj)
     print(host_list[0].name)
     return render(request, 'app.html', {'obj_list': obj, 'host_list': host_list})
+
+
+def delete_app(request, nid):
+
+    if request.method == "POST":
+        nid = int(nid)
+        print(nid)
+        models.AppDatabase.objects.filter(id=nid).delete()
+
+        data_dict['status'] = True
+        data_dict['message'] = 'ok'
+        return HttpResponse(json.dumps(data_dict))
+
+
+def details_app(request, nid):
+
+    if request.method == "POST":
+        nid = int(nid)
+        obj = models.AppDatabase.objects.filter(id=nid).first()
+        # print(obj.name)
+
+        data_dict['name'] = obj.name
+        data_dict['message'] = 'ok'
+        return HttpResponse(json.dumps(data_dict))
+
+
+def updata_app(request):
+
+    if request.method == "POST":
+        nid = request.POST.get('nid')
+        name = request.POST.get('name')
+        host_list = request.POST.getlist('host_list')
+        print(nid, name, host_list)
+
+        if not name or host_list == ['']:
+            print(11111111)
+            data_dict['status'] = False
+            data_dict['message'] = '输入不能为空'
+            return HttpResponse(json.dumps(data_dict))
+
+        obj = models.AppDatabase.objects.filter(id=nid).first()
+        obj.name = name
+        obj.r.set(host_list)
+        obj.save()
+
+        data_dict['status'] = True
+        data_dict['message'] = 'ok'
+        return HttpResponse(json.dumps(data_dict))
