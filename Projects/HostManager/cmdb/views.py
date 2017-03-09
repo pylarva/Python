@@ -3,6 +3,8 @@ from cmdb import models
 import json
 from django.shortcuts import HttpResponse
 from django.shortcuts import redirect
+from utils import pagination
+
 
 # Create your views here.
 
@@ -75,11 +77,24 @@ def hosts(request):
             data_dict['message'] = 'ok'
             return HttpResponse(json.dumps(data_dict))
 
+    data_total = models.HostDatabase.objects.all().count()
     data_list = models.HostDatabase.objects.all()
     business_list = models.BusinessLine.objects.all()
     status_list = models.HostStatus.objects.all()
-    print(data_list)
-    return render(request, 'hosts.html', {'data': data_list, 'business_list': business_list, 'status_list': status_list})
+    print(data_total)
+
+    # for p in range(109):
+    #     p = str(p)
+    #     models.HostDatabase.objects.create(name="salt"+p, ip="172.16.2."+p, business_id=1, status_id=1)
+
+    # 分页切片显示主机数据
+    current_page = request.GET.get('p', 1)
+    current_page = int(current_page)
+    page_obj = pagination.Page(current_page, data_total)
+    data = data_list[page_obj.start:page_obj.end]
+    page_str = page_obj.page_str('/hosts/')
+
+    return render(request, 'hosts.html', {'data': data, 'business_list': business_list, 'status_list': status_list, 'page_str': page_str})
 
 
 def users(request):
@@ -169,9 +184,17 @@ def app(request):
 
     obj = models.AppDatabase.objects.all()  # app列表
     host_list = models.HostDatabase.objects.all()  # 主机列表
+    data_total = models.AppDatabase.objects.all().count()
     print(obj)
     print(host_list[0].name)
-    return render(request, 'app.html', {'obj_list': obj, 'host_list': host_list})
+
+    current_page = request.GET.get('p', 1)
+    current_page = int(current_page)
+    page_obj = pagination.Page(current_page, data_total)
+    data = obj[page_obj.start:page_obj.end]
+    page_str = page_obj.page_str('/app/')
+
+    return render(request, 'app.html', {'obj_list': obj, 'host_list': host_list, 'data': data, 'page_str': page_str})
 
 
 def delete_app(request, nid):
@@ -207,7 +230,6 @@ def updata_app(request):
         print(nid, name, host_list)
 
         if not name or host_list == ['']:
-            print(11111111)
             data_dict['status'] = False
             data_dict['message'] = '输入不能为空'
             return HttpResponse(json.dumps(data_dict))
@@ -220,3 +242,19 @@ def updata_app(request):
         data_dict['status'] = True
         data_dict['message'] = 'ok'
         return HttpResponse(json.dumps(data_dict))
+
+
+u_list = []
+for i in range(109):
+    u_list.append(i)
+
+
+def user_list(request):
+    current_page = request.GET.get('p', 1)
+
+    current_page = int(current_page)
+    page_obj = pagination.Page(current_page, len(u_list))
+    data = u_list[page_obj.start:page_obj.end]
+    page_str = page_obj.page_str('/user_list/')
+
+    return render(request, 'user_list.html', {'user_list': data, 'page_str': page_str})

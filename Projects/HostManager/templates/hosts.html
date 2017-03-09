@@ -1,317 +1,317 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>PyManager</title>
-</head>
-<body>
-    {% extends 'home.html' %}
-    {% block body %}
-            <p>主机管理&nbsp;&gt;&gt;</p>
+{% extends 'home.html' %}
+{% block body %}
+        <p>主机管理&nbsp;&gt;&gt;</p>
 
-            <button type="button" class="btn btn-primary" onclick="CheckAll('#edit_mode', '#tb')">全选</button>
-	        <button type="button" class="btn btn-success" onclick="CancleAll('#edit_mode', '#tb')">取消</button>
-	        <button type="button" class="btn btn-info" onclick="ReverseAll('#edit_mode', '#tb')">反选</button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">添加主机</button>
+        <button type="button" class="btn btn-primary" onclick="CheckAll('#edit_mode', '#tb')">全选</button>
+        <button type="button" class="btn btn-success" onclick="CancleAll('#edit_mode', '#tb')">取消</button>
+        <button type="button" class="btn btn-info" onclick="ReverseAll('#edit_mode', '#tb')">反选</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">添加主机</button>
 
-            <!--添加主机模态对话框-->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">新建主机</h4>
-                  </div>
-                  <form id="form1">
-                  <div class="modal-body">
-                      <div class="form-group">
-                        <label for="recipient-name" class="control-label">1.主机名</label>
-                        <input type="text" class="form-control" id="recipient-name1">
-                      </div>
-                      <div class="form-group">
-                        <label for="recipient-name" class="control-label">2.IP</label>
-                        <input type="text" class="form-control" id="recipient-name2">
-                      </div>
-                      <div class="form-group">
-                        <label for="recipient-name" class="control-label">3.业务</label>
-                        <br>
-                          <select class="selectpicker" id="recipient-name3">
-                              {% for item in business_list %}
-                              <option id="recipient-name3" value={{ item.id }}>{{ item.name }}</option>
-                              {% endfor %}
-                          </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="recipient-name" class="control-label">4.状态</label>
-                          <br>
-                            <select class="selectpicker" id="recipient-name4">
-                              {% for item in status_list %}
-                              <option id="recipient-name4" value={{ item.id }}>{{ item.status }}</option>
-                              {% endfor %}
-                            </select>
-                      </div>
-                                              <div class="form-group">
-                        <label for="recipient-name" class="control-label">5.idc机房</label>
-                        <input type="text" class="form-control" id="recipient-name5">
-                      </div>
-                                              <div class="form-group">
-                        <label for="recipient-name" class="control-label">6.机柜</label>
-                        <input type="text" class="form-control" id="recipient-name6">
-                      </div>
-                                              <div class="form-group">
-                        <label for="recipient-name" class="control-label">7.负责人</label>
-                        <input type="text" class="form-control" id="recipient-name7">
-                      </div>
-                                              <div class="form-group">
-                        <label for="recipient-name" class="control-label">8.上线时间</label>
-                        <input type="text" class="form-control" id="recipient-name8">
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                      <span id="error_message" style="color: red;"></span>
-                      <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                      <button id="save" type="button" class="btn btn-primary">保存</button>
-                  </div>
-                </form>
-                </div>
+        <!--添加主机模态对话框-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">新建主机</h4>
               </div>
-            </div>
-
-            <!--编辑主机模态对话框-->
-            <div class="modal fade" id="exampleModal_02" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel_02">编辑主机</h4>
+              <form id="form1">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">1.主机名</label>
+                    <input type="text" class="form-control" id="recipient-name1">
                   </div>
-                  <form id="form1">
-                  <div class="modal-body">
-                      <div class="form-group" style="display: none;">
-                        <label for="recipient-name" class="control-label">编号</label>
-                        <input type="text" class="form-control" id="recipient-name10">
-                      </div>
-                      <div class="form-group">
-                        <label for="recipient-name" class="control-label">1.主机名</label>
-                        <input type="text" class="form-control" id="recipient-name11">
-                      </div>
-                      <div class="form-group">
-                        <label for="recipient-name" class="control-label">2.IP</label>
-                        <input type="text" class="form-control" id="recipient-name12">
-                      </div>
-                      <div class="form-group">
-                        <label for="recipient-name" class="control-label">3.业务</label>
-                        <br>
-                          <select id="recipient-name13" class="selectpicker">
-                              {% for item in business_list %}
-                              <option value={{ item.id }}>{{ item.name }}</option>
-                              {% endfor %}
-                          </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="recipient-name" class="control-label">4.状态</label>
-                          <br>
-                            <select id="recipient-name14" class="selectpicker">
-                              {% for item in status_list %}
-                              <option value={{ item.id }}>{{ item.status }}</option>
-                              {% endfor %}
-                            </select>
-                      </div>
-                                              <div class="form-group">
-                        <label for="recipient-name" class="control-label">5.idc机房</label>
-                        <input type="text" class="form-control" id="recipient-name15">
-                      </div>
-                                              <div class="form-group">
-                        <label for="recipient-name" class="control-label">6.机柜</label>
-                        <input type="text" class="form-control" id="recipient-name16">
-                      </div>
-                                              <div class="form-group">
-                        <label for="recipient-name" class="control-label">7.负责人</label>
-                        <input type="text" class="form-control" id="recipient-name17">
-                      </div>
-                                              <div class="form-group">
-                        <label for="recipient-name" class="control-label">8.上线时间</label>
-                        <input type="text" class="form-control" id="recipient-name18">
-                      </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">2.IP</label>
+                    <input type="text" class="form-control" id="recipient-name2">
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button id="updata" type="button" class="btn btn-primary">更新</button>
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">3.业务</label>
+                    <br>
+                      <select class="selectpicker" id="recipient-name3">
+                          {% for item in business_list %}
+                          <option id="recipient-name3" value={{ item.id }}>{{ item.name }}</option>
+                          {% endfor %}
+                      </select>
                   </div>
-                </form>
-                </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">4.状态</label>
+                      <br>
+                        <select class="selectpicker" id="recipient-name4">
+                          {% for item in status_list %}
+                          <option id="recipient-name4" value={{ item.id }}>{{ item.status }}</option>
+                          {% endfor %}
+                        </select>
+                  </div>
+                                          <div class="form-group">
+                    <label for="recipient-name" class="control-label">5.idc机房</label>
+                    <input type="text" class="form-control" id="recipient-name5">
+                  </div>
+                                          <div class="form-group">
+                    <label for="recipient-name" class="control-label">6.机柜</label>
+                    <input type="text" class="form-control" id="recipient-name6">
+                  </div>
+                                          <div class="form-group">
+                    <label for="recipient-name" class="control-label">7.负责人</label>
+                    <input type="text" class="form-control" id="recipient-name7">
+                  </div>
+                                          <div class="form-group">
+                    <label for="recipient-name" class="control-label">8.上线时间</label>
+                    <input type="text" class="form-control" id="recipient-name8">
+                  </div>
               </div>
+              <div class="modal-footer">
+                  <span id="error_message" style="color: red;"></span>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button id="save" type="button" class="btn btn-primary">保存</button>
+              </div>
+            </form>
             </div>
+          </div>
+        </div>
+
+        <!--编辑主机模态对话框-->
+        <div class="modal fade" id="exampleModal_02" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel_02">编辑主机</h4>
+              </div>
+              <form id="form1">
+              <div class="modal-body">
+                  <div class="form-group" style="display: none;">
+                    <label for="recipient-name" class="control-label">编号</label>
+                    <input type="text" class="form-control" id="recipient-name10">
+                  </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">1.主机名</label>
+                    <input type="text" class="form-control" id="recipient-name11">
+                  </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">2.IP</label>
+                    <input type="text" class="form-control" id="recipient-name12">
+                  </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">3.业务</label>
+                    <br>
+                      <select id="recipient-name13" class="selectpicker">
+                          {% for item in business_list %}
+                          <option value={{ item.id }}>{{ item.name }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">4.状态</label>
+                      <br>
+                        <select id="recipient-name14" class="selectpicker">
+                          {% for item in status_list %}
+                          <option value={{ item.id }}>{{ item.status }}</option>
+                          {% endfor %}
+                        </select>
+                  </div>
+                                          <div class="form-group">
+                    <label for="recipient-name" class="control-label">5.idc机房</label>
+                    <input type="text" class="form-control" id="recipient-name15">
+                  </div>
+                                          <div class="form-group">
+                    <label for="recipient-name" class="control-label">6.机柜</label>
+                    <input type="text" class="form-control" id="recipient-name16">
+                  </div>
+                                          <div class="form-group">
+                    <label for="recipient-name" class="control-label">7.负责人</label>
+                    <input type="text" class="form-control" id="recipient-name17">
+                  </div>
+                                          <div class="form-group">
+                    <label for="recipient-name" class="control-label">8.上线时间</label>
+                    <input type="text" class="form-control" id="recipient-name18">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="updata" type="button" class="btn btn-primary">更新</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
 
 
-            <!-- 删除确定模态对话框 -->
-            <div id="del_host" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            <h4 class="modal-title">警告</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>您将删除该条数据并且不可恢复</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                            <button id="del_confirm" type="button" class="btn btn-primary">确定</button>
-                        </div>
+        <!-- 删除确定模态对话框 -->
+        <div id="del_host" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">警告</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>您将删除该条数据并且不可恢复</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button id="del_confirm" type="button" class="btn btn-primary">确定</button>
                     </div>
                 </div>
             </div>
+        </div>
 
 
-            <table class="table table-bordered" id="tb">
-                <tr>
-                    <td>序号</td>
-                    <td>选择</td>
-                    <td>主机</td>
-                    <td>IP</td>
-                    <td>业务</td>
-                    <td>状态</td>
-                    <td>备注</td>
-                </tr>
+        <table class="table table-bordered" id="tb">
+            <tr>
+                <td>序号</td>
+                <td>选择</td>
+                <td>主机</td>
+                <td>IP</td>
+                <td>业务</td>
+                <td>状态</td>
+                <td>备注</td>
+            </tr>
 
-        {% for item in data %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>
-                        <input type="checkbox" style="margin-left: 15px">
-                    </td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.ip }}</td>
-                    <td>{{ item.business.name }}</td>
-                    <td>{{ item.status.status }}</td>
-                    <td><a id="edit" href="#" onclick="edit_click({{ item.id }});">编辑</a> |
-{#                        <a href="/delete_host/?nid={{ item.id }}">删除</a>  |#}
-                        <a id="del_host" href="#" onclick="del_host({{ item.id }})">删除</a>  |
-                        <a href="/details-{{ item.id }}.html/">详细信息</a>
-                    </td>
-                </tr>
-        {% endfor %}
-            </table>
+    {% for item in data %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>
+                    <input type="checkbox" style="margin-left: 15px">
+                </td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.ip }}</td>
+                <td>{{ item.business.name }}</td>
+                <td>{{ item.status.status }}</td>
+                <td><a id="edit" href="#" onclick="edit_click({{ item.id }});">编辑</a> |
+                    <a id="del_host" href="#" onclick="del_host({{ item.id }})">删除</a>  |
+                    <a href="/details-{{ item.id }}.html/">详细信息</a>
+                </td>
+            </tr>
+    {% endfor %}
+        </table>
 
-    {% endblock %}
-    {% block js %}
-        <script src="/static/js/edit_row.js"></script>
-        <script src="/static/js/bootstrap-select.js"></script>
-        <script>
-            $(function () {
-                <!-- 创建主机模态对话框ajax请求 -->
-                $('#save').click(function () {
-                    $.ajax({
-                        url: '/hosts/',
-                        type: 'POST',
-                        data: {
-                            'name': $('#recipient-name1').val(), 'ip': $('#recipient-name2').val(),
-                            'business': $('#recipient-name3').val(), 'status': $('#recipient-name4').val(),
-                            'idc_name': $('#recipient-name5').val(), 'idc_cabinet': $('#recipient-name6').val(),
-                            'person': $('#recipient-name7').val(), 'ctime': $('#recipient-name8').val(),
-                        },
-                        dataType: 'JSON',
-                        success: function (data_dict) {
-                            if (data_dict.status) {
-                                location.href = '/hosts/';
-                            }else {
-                                $('#error_message').text(data_dict.message)
-                            }
+    <!-- 分页 -->
+    <ul class="pagination pagination-sm">
+        {{ page_str|safe }}
+    </ul>
+
+{% endblock %}
+{% block js %}
+    <script src="/static/js/edit_row.js"></script>
+    <script src="/static/js/bootstrap-select.js"></script>
+    <script>
+        $(function () {
+            <!-- 创建主机模态对话框ajax请求 -->
+            $('#save').click(function () {
+                $.ajax({
+                    url: '/hosts/',
+                    type: 'POST',
+                    data: {
+                        'name': $('#recipient-name1').val(), 'ip': $('#recipient-name2').val(),
+                        'business': $('#recipient-name3').val(), 'status': $('#recipient-name4').val(),
+                        'idc_name': $('#recipient-name5').val(), 'idc_cabinet': $('#recipient-name6').val(),
+                        'person': $('#recipient-name7').val(), 'ctime': $('#recipient-name8').val(),
+                    },
+                    dataType: 'JSON',
+                    success: function (data_dict) {
+                        if (data_dict.status) {
+                            location.href = '/hosts/';
+                        }else {
+                            $('#error_message').text(data_dict.message)
                         }
-                    });
-                });
-
-                <!--  编辑数据后ajax提交到后台 -->
-                $('#updata').click(function () {
-                    $.ajax({
-                        url: '/updata/',
-                        type: 'POST',
-                        data: {
-                            'nid': $('#recipient-name10').val(),
-                            'name': $('#recipient-name11').val(), 'ip': $('#recipient-name12').val(),
-                            'business': $('#recipient-name13').val(), 'status': $('#recipient-name14').val(),
-                            'idc_name': $('#recipient-name15').val(), 'idc_cabinet': $('#recipient-name16').val(),
-                            'person': $('#recipient-name17').val(), 'ctime': $('#recipient-name18').val(),
-                        },
-                        dataType: 'JSON',
-                        success: function (data_dict) {
-                            if (data_dict) {
-                                location.href = '/hosts/';
-                            }
-                        }
-                    })
+                    }
                 });
             });
 
-            <!-- 点编辑按钮弹出模态对话框并在输入框中自动填入数据 -->
-            function edit_click(nid) {
-                var u = "/details-" + nid + ".html/";
-                var data_show = {};
+            <!-- 这里是为了解决bootstrap添加active类冲突问题 -->
+            $(function(){
+                $('.activ').addClass('active');
+            });
+
+            <!--  编辑数据后ajax提交到后台 -->
+            $('#updata').click(function () {
+                $.ajax({
+                    url: '/updata/',
+                    type: 'POST',
+                    data: {
+                        'nid': $('#recipient-name10').val(),
+                        'name': $('#recipient-name11').val(), 'ip': $('#recipient-name12').val(),
+                        'business': $('#recipient-name13').val(), 'status': $('#recipient-name14').val(),
+                        'idc_name': $('#recipient-name15').val(), 'idc_cabinet': $('#recipient-name16').val(),
+                        'person': $('#recipient-name17').val(), 'ctime': $('#recipient-name18').val(),
+                    },
+                    dataType: 'JSON',
+                    success: function (data_dict) {
+                        if (data_dict) {
+                            location.href = '/hosts/';
+                        }
+                    }
+                })
+            });
+        });
+
+        <!-- 点编辑按钮弹出模态对话框并在输入框中自动填入数据 -->
+        function edit_click(nid) {
+            var u = "/details-" + nid + ".html/";
+            var data_show = {};
+            $.ajax({
+                url: u,
+                type: 'POST',
+                data: {'name': '1'},
+                dataType: 'JSON',
+                success: function (data_dict) {
+                    if(data_dict.name){
+                        data_show.name = data_dict.name;
+                        data_show.ip = data_dict.ip;
+                        data_show.business = data_dict.business_id;
+                        data_show.status = data_dict.status_id;
+                        data_show.idc_name = data_dict.idc_name;
+                        data_show.idc_cabinet = data_dict.idc_cabinet;
+                        data_show.person = data_dict.person;
+
+                        <!-- 弹出模态对话框 输入框中加载值 -->
+                        $("#exampleModal_02").modal();
+                        $('#recipient-name10').val(nid);
+                        $('#recipient-name11').val(data_show.name);
+                        $('#recipient-name12').val(data_show.ip);
+
+                        <!-- select标签默认选项勾选 -->
+                        $('#recipient-name13').children().each(function () {
+                            var v = $(this).attr('value');
+                            if(v==data_show.business){
+                                $('#recipient-name13').selectpicker('val', data_show.business);
+                            }
+                        });
+
+                        $('#recipient-name14').children().each(function () {
+                            var v = $(this).attr('value');
+                            if(v==data_show.status){
+                                $('#recipient-name14').selectpicker('val', data_show.status);
+                            }
+                        });
+                        $('#recipient-name15').val(data_show.idc_name);
+                        $('#recipient-name16').val(data_show.idc_cabinet);
+                        $('#recipient-name17').val(data_show.person);
+                    }
+                    else{alert('请求发送失败...')}
+                }
+            });
+        }
+
+        <!-- 删除主机确认 -->
+        function del_host(nid) {
+            $('#del_host').modal();
+
+            $('#del_confirm').click(function () {
+                u = "/delete_host-" + nid + ".html/";
                 $.ajax({
                     url: u,
                     type: 'POST',
-                    data: {'name': '1'},
                     dataType: 'JSON',
+                    data: {'name': "1"},
                     success: function (data_dict) {
-                        if(data_dict.name){
-                            data_show.name = data_dict.name;
-                            data_show.ip = data_dict.ip;
-                            data_show.business = data_dict.business_id;
-                            data_show.status = data_dict.status_id;
-                            data_show.idc_name = data_dict.idc_name;
-                            data_show.idc_cabinet = data_dict.idc_cabinet;
-                            data_show.person = data_dict.person;
-
-                            <!-- 弹出模态对话框 输入框中加载值 -->
-                            $("#exampleModal_02").modal();
-                            $('#recipient-name10').val(nid);
-                            $('#recipient-name11').val(data_show.name);
-                            $('#recipient-name12').val(data_show.ip);
-
-                            <!-- select标签默认选项勾选 -->
-                            $('#recipient-name13').children().each(function () {
-                                var v = $(this).attr('value');
-                                if(v==data_show.business){
-                                    $('#recipient-name13').selectpicker('val', data_show.business);
-                                }
-                            });
-
-                            $('#recipient-name14').children().each(function () {
-                                var v = $(this).attr('value');
-                                if(v==data_show.status){
-                                    $('#recipient-name14').selectpicker('val', data_show.status);
-                                }
-                            });
-                            $('#recipient-name15').val(data_show.idc_name);
-                            $('#recipient-name16').val(data_show.idc_cabinet);
-                            $('#recipient-name17').val(data_show.person);
+                        if(data_dict.status){
+                            location.href = '/hosts/'
                         }
-                        else{alert('请求发送失败...')}
                     }
-                });
-            }
-
-            <!-- 删除主机确认 -->
-            function del_host(nid) {
-                $('#del_host').modal();
-
-                $('#del_confirm').click(function () {
-                    u = "/delete_host-" + nid + ".html/";
-                    $.ajax({
-                        url: u,
-                        type: 'POST',
-                        dataType: 'JSON',
-                        data: {'name': "1"},
-                        success: function (data_dict) {
-                            if(data_dict.status){
-                                location.href = '/hosts/'
-                            }
-                        }
-                    })
                 })
-            }
-        </script>
-    {% endblock %}
-</body>
-</html>
+            })
+        }
+    </script>
+{% endblock %}

@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'^updata_app/$', views.updata_app),
     url(r'^app/$', views.app),
     url(r'^delete_app-(\d+).html/', views.delete_app),
+    url(r'^user_list/', views.user_list),
 ]
