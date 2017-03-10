@@ -10,6 +10,19 @@ from utils import pagination
 
 data_dict = {'status': False, 'message': ""}
 
+USER_NAME = {}
+
+
+def auth(func):
+    def inner(request, *args, **kwargs):
+        v = request.COOKIES.get('user_cookie')
+        if not v:
+            return redirect('/login/')
+        global USER_NAME
+        USER_NAME['name'] = v
+        return func(request, *args, **kwargs)
+    return inner
+
 
 def login(request):
 
@@ -28,7 +41,10 @@ def login(request):
                 print(u1, p1, user_num)
                 data_dict['status'] = True
                 data_dict['message'] = 'ok'
-                return HttpResponse(json.dumps(data_dict))
+                res = HttpResponse(json.dumps(data_dict))
+                res.set_cookie('user_cookie', u1)
+                return res
+
             else:
                 data_dict['message'] = '用户名或者密码错误...'
                 return HttpResponse(json.dumps(data_dict))
@@ -48,12 +64,23 @@ def login(request):
     return render(request, 'login.html')
 
 
+@auth
 def home(request):
+
+    # 如果用户点击了注销 会往/home/ 发ajax请求 直接设置cookie超时时间为0 注销
+    if request.method == 'POST':
+        cookie_name = request.COOKIES.get('username')
+        data_dict['status'] = True
+        data_dict['message'] = 'ok'
+        res = HttpResponse(json.dumps(data_dict))
+        res.set_cookie('user_cookie', cookie_name, max_age=0)
+        return res
+
     return render(request, 'home.html')
 
 
+@auth
 def hosts(request):
-    data_dict = {'status': False, 'message': ""}
 
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -90,17 +117,28 @@ def hosts(request):
     # 分页切片显示主机数据
     current_page = request.GET.get('p', 1)
     current_page = int(current_page)
+
+    # 获取用户通过cookie传过来的自定义显示数
+    val = request.COOKIES.get('per_page_count')
+    page_init = {}
+    page_init['per_page_count'] = val
+    print(val)
+    # val = int(val)
+
     page_obj = pagination.Page(current_page, data_total)
     data = data_list[page_obj.start:page_obj.end]
     page_str = page_obj.page_str('/hosts/')
 
-    return render(request, 'hosts.html', {'data': data, 'business_list': business_list, 'status_list': status_list, 'page_str': page_str})
+    return render(request, 'hosts.html', {'data': data, 'business_list': business_list, 'status_list': status_list,
+                                          'page_str': page_str, 'user_name': USER_NAME, 'page_init': page_init})
 
 
+@auth
 def users(request):
     return render(request, 'users.html')
 
 
+@auth
 def details(request, nid):
 
     data_dict = {}
@@ -162,6 +200,7 @@ def updata(request):
         return HttpResponse(json.dumps(data_dict))
 
 
+@auth
 def app(request):
 
     if request.method == "POST":
@@ -194,7 +233,8 @@ def app(request):
     data = obj[page_obj.start:page_obj.end]
     page_str = page_obj.page_str('/app/')
 
-    return render(request, 'app.html', {'obj_list': obj, 'host_list': host_list, 'data': data, 'page_str': page_str})
+    return render(request, 'app.html', {'obj_list': obj, 'host_list': host_list, 'data': data,
+                                        'page_str': page_str, 'user_name': USER_NAME})
 
 
 def delete_app(request, nid):

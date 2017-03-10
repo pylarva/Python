@@ -67,14 +67,13 @@ $(document).ready(function() {
             dataType: 'JSON',
             success: function (data_dict) {
                 if (data_dict.status) {
-                    location.href = 'http://www.baidu.com';
+                    location.href = '/hosts/';
                 } else {
                     $('#u').focus().css({
                         border: "1px solid red",
                         boxShadow: "0 0 2px red"
                     });
-                    $('#err').html("<font color='red'><b>×用户米或密码错误</b></font>");
-                    // alert('用户名或者密码错误...');
+                    $('#err').html("<font color='red'><b>×用户名或密码错误</b></font>");
                     return false;
                 }
             }

@@ -12,7 +12,7 @@
             background-color: rgb(30, 39, 47);
             position: relative;
         }
-        .pg-header img{
+        .logo_css{
             width:50px;
             height:50px;
         }
@@ -52,16 +52,13 @@
             border-radius: 0px !important;
 
         }
-{#        .pagination .page{#}
-{#            display: inline-block;#}
-{#            padding: 5px;#}
-{#            background-color: cyan;#}
-{#            margin: 5px;#}
-{#        }#}
-{#        .pagination .page.active{#}
-{#            background-color: brown;#}
-{#            color: white;#}
-{#        }#}
+        .admin_css {
+            width: 40px;
+            height:40px;
+            float: right;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
 
     </style>
     <link rel="stylesheet" href="/static/css/bootstrap.css">
@@ -69,10 +66,24 @@
 </head>
 <body class="body">
     <div class="pg-header">
-        <img src="/static/images/logo.png" />
+        <img class="logo_css" src="/static/images/logo.png" />
         <div class="H1">
             <p>PyManager</p>
         </div>
+
+
+         <div class="dropdown" style="float:right;">
+          <button class="btn btn-default dropdown-toggle" style="padding: 0; margin-top: 20px;margin-right: 50px; background-color: #337ab7" type="button" id="dropdownMenu1" data-toggle="dropdown">
+              {% block head %}{% endblock %}
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="min-width: 0">
+            <li role="presentation"><a id="logout" role="menuitem" tabindex="-1" href="#">注销</a></li>
+          </ul>
+        </div>
+
+        <img class="admin_css" src="/static/images/admin_pic.png">
+
     </div>
     <div class="pg-body">
         <form>
@@ -90,6 +101,7 @@
         </div>
     </div>
     <script src="/static/js/jquery-1.12.4.js"></script>
+    <script src="/static/js/jquery.cookie.js"></script>
     <script src="/static/js/bootstrap.js"></script>
     {% block js %}{% endblock %}
     <script>
@@ -122,6 +134,21 @@
                 });
                 $('#l3').addClass('active');
             }
+
+            // 点击注销
+            $('#logout').click(function () {
+                $.ajax({
+                    url: '/home/',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {'name': '1'},
+                    success: function (data) {
+                        if(data){
+                            location.reload()
+                        }
+                    }
+                })
+            })
         });
     </script>
 </body>
