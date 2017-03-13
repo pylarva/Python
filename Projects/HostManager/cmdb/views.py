@@ -3,7 +3,7 @@ from cmdb import models
 import json
 from django.shortcuts import HttpResponse
 from django.shortcuts import redirect
-from utils import pagination
+from util import pagination
 
 
 # Create your views here.
@@ -119,13 +119,13 @@ def hosts(request):
     current_page = int(current_page)
 
     # 获取用户通过cookie传过来的自定义显示数
-    val = request.COOKIES.get('per_page_count')
+    val = request.COOKIES.get('per_page_count', 10)
     page_init = {}
     page_init['per_page_count'] = val
     print(val)
-    # val = int(val)
+    val = int(val)
 
-    page_obj = pagination.Page(current_page, data_total)
+    page_obj = pagination.Page(current_page, data_total, val)
     data = data_list[page_obj.start:page_obj.end]
     page_str = page_obj.page_str('/hosts/')
 

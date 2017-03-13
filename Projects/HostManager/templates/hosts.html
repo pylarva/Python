@@ -214,13 +214,7 @@
 
             <!-- 取cookie值 干嘛加路径 搞了我一晚上！！！！！！！ -->
             var v = $.cookie('per_page_count');
-            alert(v);
-            alert(v.length);
-            if(v.length < 5){
-                $('#ps').val(v);
-            }else {
-                $('#ps').val(10);
-            }
+            $('#ps').val(v);
 
             <!-- 创建主机模态对话框ajax请求 -->
             $('#save').click(function () {
@@ -344,7 +338,6 @@
             var v = $(ths).val();
             $.cookie('per_page_count',v, {'path': "/hosts/"});
             location.reload();
-            alert($.cookie('per_page_count'));
         }
     </script>
 {% endblock %}
