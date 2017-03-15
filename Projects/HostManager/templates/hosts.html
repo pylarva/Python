@@ -1,6 +1,6 @@
 {% extends 'home.html' %}
 {% block head %}
-      <a style="color:white; text-decoration: none;">{{ user_name.name }}</a>
+      <a style="color:white; text-decoration: none;">{{ request.session.username }}</a>
 {% endblock %}
 {% block body %}
         <p>主机管理&nbsp;&gt;&gt;</p>

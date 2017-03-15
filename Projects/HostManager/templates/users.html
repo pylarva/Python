@@ -1,19 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>PyManager</title>
-</head>
-<body>
-    {% extends 'home.html' %}
-    {% block body %}
-        user1 user2
-    {% endblock %}
-    <script>
-        function select_active(ths){
-            console.log(ths);
-            $(ths).addClass('active');
-        }
-    </script>
-</body>
-</html>
+{% extends 'home.html' %}
+{% block head %}
+      <a style="color:white; text-decoration: none;">{{ request.session.username }}</a>
+{% endblock %}
+{% block body %}
+<div style="width: 500px; margin-top:50px">
+    <form class="form-horizontal" action="/users/" method="POST">
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
+        <div class="col-sm-10">
+            {{ obj.user }}{{ obj.errors.user.0 }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+        <div class="col-sm-10">
+            {{ obj.pwd }}{{ obj.errors.pwd.0 }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">邮箱</label>
+        <div class="col-sm-10">
+            {{ obj.email }}{{ obj.errors.email.0 }}
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">城市</label>
+        <div class="col-sm-10">
+            {{ obj.city1 }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default">新增</button>
+        </div>
+      </div>
+    </form>
+</div>
+{#    <form action="/fm/" method="POST">#}
+{#    {% csrf_token %}#}
+{#    <p>{{ obj.user.label }}{{ obj.user }}{{ obj.errors.user.0 }}</p>#}
+{#    <p>{{ obj.pwd.label }}{{ obj.pwd }}{{ obj.errors.pwd.0 }}</p>#}
+{#    <p>{{ obj.email.label }}{{ obj.email }}{{ obj.errors.email.0 }}</p>#}
+{#    <p>{{ obj.city1.label }}{{ obj.city1 }}</p>#}
+{#        <input type="submit" value="提交"/>#}
+{#    </form>#}
+{% endblock %}
+<script>
+
+</script>

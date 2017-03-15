@@ -66,7 +66,7 @@ $(document).ready(function() {
             data: {'username1': $('#u').val(), 'pwd1': $('#p').val()},
             dataType: 'JSON',
             success: function (data_dict) {
-                if (data_dict.status) {
+                if (data_dict.status){
                     location.href = '/hosts/';
                 } else {
                     $('#u').focus().css({
@@ -145,7 +145,7 @@ $(document).ready(function() {
 					$('#qq').focus().css({
 						border: "1px solid red",
 						boxShadow: "0 0 2px red"
-					});$('#userCue').html("<font color='red'><b>×用户名或者密码错误...</b></font>");
+					});$('#userCue').html("<font color='red'><b>×暂未开放用户注册功能...</b></font>");
 					return false;
 				} else {
 					$('#user').css({

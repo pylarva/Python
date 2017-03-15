@@ -25,7 +25,7 @@ SECRET_KEY = '9yx=m^_c6(-a@nw&6rwb0k!=@zpi*zqh%d6ohd=7f5&w+qw-%7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'cmdb',
 ]
 
+from django.contrib.sessions.middleware import SessionMiddleware
 MIDDLEWARE = [
+    'Middle.middle_ip.IpFilter',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

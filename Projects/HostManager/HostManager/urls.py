@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^login/', views.login),
     url(r'^home/', views.home),
     url(r'^hosts/', views.hosts),
-    url(r'^users/', views.users),
+    url(r'^users/', views.fm),
     url(r'^details-(\d+).html/$', views.details),
     url(r'^details_app-(\d+).html/$', views.details_app),
     url(r'^delete_host-(\d+).html/$', views.delete_host),
@@ -30,5 +30,6 @@ urlpatterns = [
     url(r'^updata_app/$', views.updata_app),
     url(r'^app/$', views.app),
     url(r'^delete_app-(\d+).html/', views.delete_app),
-    url(r'^user_list/', views.user_list),
+    # url(r'^user_list/', views.user_list),
+    url(r'^logout/', views.logout),
 ]

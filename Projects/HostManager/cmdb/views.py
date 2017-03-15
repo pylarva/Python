@@ -15,7 +15,9 @@ USER_NAME = {}
 
 def auth(func):
     def inner(request, *args, **kwargs):
-        v = request.COOKIES.get('user_cookie')
+        # v = request.COOKIES.get('user_cookie')
+        v = request.session.get('is_login', None)
+        print(v)
         if not v:
             return redirect('/login/')
         global USER_NAME
@@ -41,9 +43,14 @@ def login(request):
                 print(u1, p1, user_num)
                 data_dict['status'] = True
                 data_dict['message'] = 'ok'
-                res = HttpResponse(json.dumps(data_dict))
-                res.set_cookie('user_cookie', u1)
-                return res
+                # res = HttpResponse(json.dumps(data_dict))
+                # res.set_cookie('user_cookie', u1)
+
+                # 设置session
+                request.session['username'] = u1
+                request.session['is_login'] = True
+
+                return HttpResponse(json.dumps(data_dict))
 
             else:
                 data_dict['message'] = '用户名或者密码错误...'
@@ -64,6 +71,12 @@ def login(request):
     return render(request, 'login.html')
 
 
+def logout(request):
+    # 注销
+    request.session.clear()
+    return redirect('/login/')
+
+
 @auth
 def home(request):
 
@@ -75,6 +88,9 @@ def home(request):
         res = HttpResponse(json.dumps(data_dict))
         res.set_cookie('user_cookie', cookie_name, max_age=0)
         return res
+
+    if request.method == 'GET':
+        pass
 
     return render(request, 'home.html')
 
@@ -283,18 +299,50 @@ def updata_app(request):
         data_dict['message'] = 'ok'
         return HttpResponse(json.dumps(data_dict))
 
+from django import forms
+from django.forms import widgets
+from django.forms import fields
 
-u_list = []
-for i in range(109):
-    u_list.append(i)
+
+class FM(forms.Form):
+    user = fields.CharField(
+        error_messages={'required': '用户名不能为空'},
+        widget=widgets.TextInput(attrs={'class': 'form-control', 'type': 'text'}),
+        label='用户名',
+    )
+
+    pwd = fields.CharField(
+        min_length=6,
+        error_messages={'required': '密码不能为空', 'min_length': '密码长度不能小于6'},
+        widget=widgets.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}),
+        label='密码',
+    )
+
+    email = fields.EmailField(
+        error_messages={'required': '邮箱不能为空', 'invalid': '邮箱格式错误'},
+        widget=widgets.EmailInput(attrs={'class': 'form-control', 'type': 'email'})
+    )
+
+    city1 = fields.ChoiceField(
+        # widget=widgets.ChoiceInput(attrs={'class': 'selectpicker'}),
+        choices=[(0, '上海'), (1, '北京'), (2, '广州')], label='城市',
+
+    )
 
 
-def user_list(request):
-    current_page = request.GET.get('p', 1)
+def fm(request):
+    if request.method == 'GET':
+        obj = FM()
+        return render(request, 'users.html', {'obj': obj})
 
-    current_page = int(current_page)
-    page_obj = pagination.Page(current_page, len(u_list))
-    data = u_list[page_obj.start:page_obj.end]
-    page_str = page_obj.page_str('/user_list/')
-
-    return render(request, 'user_list.html', {'user_list': data, 'page_str': page_str})
+    elif request.method == 'POST':
+        obj = FM(request.POST)
+        ret = obj.is_valid()
+        if ret:
+            u = request.POST.get('user')
+            p = request.POST.get('pwd')
+            user_obj = models.UserInfo(username=u, pwd=p)
+            user_obj.save()
+            return redirect('/users/')
+        else:
+            return render(request, 'users.html', {'obj': obj})
