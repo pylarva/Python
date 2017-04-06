@@ -5,6 +5,7 @@ from web.views import account
 from web.views import home
 from web.views import asset
 from web.views import user
+from web.views import PhysicalMachine
 
 urlpatterns = [
     url(r'^login.html$', account.LoginView.as_view()),
@@ -12,6 +13,7 @@ urlpatterns = [
     url(r'^index.html$', home.IndexView.as_view()),
     url(r'^cmdb.html$', home.CmdbView.as_view()),
     url(r'^task.html$', home.TaskView.as_view()),
+    url(r'^task_physical.html$', PhysicalMachine.PhysicalListView.as_view()),
     url(r'^asset.html$', asset.AssetListView.as_view()),
     url(r'^assets.html$', asset.AssetJsonView.as_view()),
     url(r'^asset-(?P<device_type_id>\d+)-(?P<asset_nid>\d+).html$', asset.AssetDetailView.as_view()),
