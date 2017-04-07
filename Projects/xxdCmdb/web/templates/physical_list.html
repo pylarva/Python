@@ -66,33 +66,27 @@
 {#        <button type="button" class="btn btn-primary" onclick="CheckAll('#edit_mode', '#tb')">全选</button>#}
 {#        <button type="button" class="btn btn-success" onclick="CancleAll('#edit_mode', '#tb')">取消</button>#}
 {#        <button type="button" class="btn btn-info" onclick="ReverseAll('#edit_mode', '#tb')">反选</button>#}
-        <div class="form-group" style="width: 200px; display: inline-block">
+        <div class="form-group" style="width: 150px; display: inline-block">
             <input type="email" class="form-control" placeholder="宿主机IP地址">
         </div>
 
         <button type="button" class="btn btn-success display: inline-block">宿主机连接</button>
-        <div class="form-group" style="width: 200px; display: inline-block">
-            <input type="email" class="form-control" placeholder="宿主机IP地址">
+        <div class="form-group" style="width: 150px; display: inline-block">
+            <input type="email" class="form-control" placeholder="主机名">
         </div>
-        <div class="form-group" style="width: 200px; display: inline-block">
-            <input type="email" class="form-control" placeholder="宿主机IP地址">
-        </div>
-
-        <div class="dropdown" style="display: inline-block">
-          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-            版本选择
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-            <li role="presentation" class="active"><a role="menuitem" tabindex="-1" href="#">2核 4G 300G</a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">4核 8G 300G</a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">4核 16G 600G</a></li>
-            <li role="presentation" class="divider"></li>
-            <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">版本选择</a></li>
-          </ul>
+        <div class="form-group" style="width: 150px; display: inline-block">
+            <input type="email" class="form-control" placeholder="IP地址">
         </div>
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">新装主机</button>
+        <div class="form-group" style="display: inline-block;">
+            <select class="selectpicker" id="recipient-name3">
+                      <option id="recipient-name3" value=1>2核 4G 300G</option>
+                      <option id="recipient-name3" value=1>4核 8G 600G</option>
+            </select>
+        </div>
+
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">新增虚机</button>
 
         <table class="table table-bordered" id="tb">
                 <tr>
@@ -124,6 +118,7 @@
     <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="/static/js/nb-list.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-select.js"></script>
 
     <script>
         $(function () {

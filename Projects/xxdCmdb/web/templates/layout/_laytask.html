@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.css"/>
     <link rel="stylesheet" href="/static/css/backend.css"/>
     <link rel="stylesheet" href="/static/css/commons.css"/>
+    <link rel="stylesheet" href="/static/css/bootstrap-select.css"/>
 
     {% block css %} {% endblock %}
 </head>
@@ -16,13 +17,13 @@
 </div>
 <div class="pg-body">
     <div class="menu">
-        <a id="menu_asset" class="menu-item" href="/task_physical.html">
+        <a id="menu_asset" class="menu-item" href="/task_virtual.html">
             <i class="fa fa-connectdevelop" aria-hidden="true"></i>
-            <span>物理机装机</span>
-        </a>
-        <a id="menu_user_profile" class="menu-item" href="#">
-            <i class="fa fa-cogs" aria-hidden="true"></i>
             <span>虚拟机装机</span>
+        </a>
+        <a id="menu_user_profile" class="menu-item" href="/task_physical.html">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>物理机装机</span>
         </a>
         <a class="menu-item" href="#">
             <i class="fa fa-desktop" aria-hidden="true"></i>

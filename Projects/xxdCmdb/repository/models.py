@@ -3,32 +3,49 @@
 from django.db import models
 
 
-class PhysicalMachine(models.Model):
+class HostMachines(models.Model):
+    host_machines_ip = models.CharField(max_length=32)
+
+    class Meta:
+        verbose_name_plural = "宿主机表"
+
+    def __str__(self):
+        return self.host_machines_ip
+
+
+class PhysicalMachines(models.Model):
     """
     物理机
     """
-    name = models.CharField(u'物理机', max_length=32)
-    num = models.IntegerField()
+    host_name = models.CharField(max_length=108)
+    host_ip = models.CharField(max_length=32)
+    item = models.CharField(max_length=32)
+    bussiness = models.CharField(max_length=32, default='kvm-test')
+    ctime = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = "物理机表"
 
     def __str__(self):
-        return self.user_info.name
+        return self.host_name
 
 
-class VirtualMachine(models.Model):
+class VirtualMachines(models.Model):
     """
     虚拟机
     """
-    name = models.CharField(u'虚拟机', max_length=32)
-    num = models.IntegerField()
+    mudroom_host = models.CharField(max_length=32,default='192.168.1.1')
+    host_name = models.CharField(max_length=108)
+    host_ip = models.CharField(max_length=32)
+    item = models.CharField(max_length=32)
+    bussiness = models.CharField(max_length=32)
+    ctime = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = "虚拟机表"
 
     def __str__(self):
-        return self.user_info.name
+        return self.host_name
 
 
 class UserProfile(models.Model):

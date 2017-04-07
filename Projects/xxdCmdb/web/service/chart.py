@@ -42,7 +42,7 @@ class Business(object):
             #     ret['series'][2]['data'].append(row.firewall_count)
             ret = {
                 'categories': ['物理机', '虚拟机'],
-                'series': [{'name': '服务器', 'data': [11, 120]}]
+                'series': [{'name': '服务器', 'data': [50, 120]}]
             }
             response.data = ret
         except Exception as e:
