@@ -13,6 +13,33 @@
 
     <div style="padding: 5px 8px;">
 
+        <!-- 添加主机确定模态对话框 -->
+        <div id="add_machine" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        宿主机：<a id="confirm_host"></a>
+                        </br>
+                        主机名：<a id="confirm_name"></a>
+                        </br>
+                        IP地址：<a id="confirm_ip"></a>
+                        </br>
+                        配置：<a id="confirm_type"></a>
+                        </br>
+                        <p>确认添加该虚拟机吗？</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button id="add_confirm" type="button" class="btn btn-primary">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--新增物理机模态对话框-->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
           <div class="modal-dialog" role="document">
@@ -61,13 +88,13 @@
           </div>
         </div>
 
-        <div class="alert alert-info" role="alert" style="margin-bottom: 15px;">
+        <div id="connect_info" class="alert alert-info" role="alert" style="margin-bottom: 15px;">
             <button class="close" type="button" data-dismiss="alert">&times;</button>
-            确认宿主机连接成功，才能进行虚拟机的安装！</div>
-        <div id="connect_success" class="alert alert-success alert-dismissable" role="alert">
-            <button class="close" type="button" data-dismiss="alert">&times;</button>
-            连接成功！
-        </div>
+            确认宿主机开启 镜像模版文件存放在/opt/mv/目录！</div>
+{#        <div id="connect_success" class="alert alert-success alert-dismissable" role="alert">#}
+{#            <button class="close" type="button" data-dismiss="alert">&times;</button>#}
+{#            连接成功！#}
+{#        </div>#}
         <div id="connect_failed" class="alert alert-danger alert-dismissable" role="alert">
             <button class="close" type="button" data-dismiss="alert">&times;</button>
             宿主机连接失败！请确认已在目标宿主机增加SSH_key公钥验证...
@@ -82,12 +109,12 @@
         <div class="form-group" style="display: inline-block;">
             <select class="selectpicker" id="recipient-name3">
                   {% for item in host_list %}
-                      <option id="recipient-name3" value={{ item.host_machines_ip }}>{{ item.host_machines_ip }}</option>
+                      <option value={{ item.host_machines_ip }}>{{ item.host_machines_ip }}</option>
                   {% endfor %}
             </select>
         </div>
 
-        <button id="connect_host" type="button" class="btn btn-success display: inline-block">宿主机测试</button>
+{#        <button id="connect_host" type="button" class="btn btn-success display: inline-block">宿主机测试</button>#}
         <div class="form-group" style="width: 150px; display: inline-block">
             <input id="host_name" type="email" class="form-control" placeholder="主机名">
         </div>
@@ -97,13 +124,15 @@
 
         <div class="form-group" style="display: inline-block;">
             <select class="selectpicker" id="recipient-name4">
-                      <option id="recipient-name4" value='4核 8G 300G'>4核 8G 300G</option>
-                      <option id="recipient-name4" value='8核 16G 600G'>8核 16G 600G</option>
+                      <option id="recipient-name4" value='1'>Centos_6.4_4C_8G_300G</option>
+                      <option id="recipient-name4" value='2'>Centos_6.4_8C_16G_600G</option>
+                      <option id="recipient-name4" value='3'>Centos_7.2_4C_8G_300G</option>
+                      <option id="recipient-name4" value='4'>Centos_7.2_8C_16G_600G</option>
             </select>
         </div>
 
 
-        <button id="virtual_add" type="button" class="btn btn-primary">新增虚机</button>
+        <button id="virtual_add" type="button" class="btn btn-primary" onclick="add_host()">新增虚机</button>
 
         <table class="table table-bordered" id="table">
                 <tr>
@@ -135,21 +164,21 @@
                 </tr>
             {% endfor %}
 
-                <tr id="new_tr">
-                    <td>*</td>
-                    <td id="new_machine"></td>
-                    <td id="new_name"></td>
-                    <td id="new_ip"></td>
-                    <td>4核 8G 300G</td>
-                    <td>kvm-test</td>
-                    <td>
-                        <div class="progress progress-striped" style="margin-bottom: 0px";>
-	                        <div id="progress_show" class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width:100%">100%</div>
-                        </div>
-                    </td>
-                    <td>详细...</td>
-                    <td></td>
-                </tr>
+{#                <tr id="new_tr">#}
+{#                    <td>*</td>#}
+{#                    <td id="new_machine"></td>#}
+{#                    <td id="new_name"></td>#}
+{#                    <td id="new_ip"></td>#}
+{#                    <td>4核 8G 300G</td>#}
+{#                    <td>kvm-test</td>#}
+{#                    <td>#}
+{#                        <div class="progress progress-striped" style="margin-bottom: 0px";>#}
+{#	                        <div id="progress_show" class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width:100%">100%</div>#}
+{#                        </div>#}
+{#                    </td>#}
+{#                    <td>详细...</td>#}
+{#                    <td></td>#}
+{#                </tr>#}
         </table>
 
     </div>
@@ -167,6 +196,31 @@
             $('#connect_success').hide();
             $('#connect_failed').hide();
             $('#new_tr').hide();
+            var v = $.cookie('mess');
+            if (v==200){
+                $('#connect_info').removeClass('alert-info');
+                $('#connect_info').addClass('alert-success');
+                $('#connect_info').addClass('alert-dismissable');
+                $('#connect_info').text('虚机部署任务发布成功！');
+
+                $("table tr:last td:eq(6)").children().children().attr('id', 'progress_show');
+                setTimeout(function () {
+                    var op = 0;
+                    var tag = document.getElementById('progress_show');
+                    tag.innerText='0';
+                    var interval = setInterval(function () {
+                        op += 1;
+                        var a = op + '%';
+                        tag.innerText = a;
+                        document.getElementById('progress_show').style.width = a;
+                        if(op>100){
+                            clearInterval(interval);
+                            tag.innerText = '100%';
+                        }
+                    }, 500);
+                }, 500);
+
+            }
 
             $.initMenu('#menu_asset');
             $.nbDataList('/assets.html');
@@ -192,16 +246,9 @@
                 });
             });
 
-            $('#virtual_add').click(function (){
-{#                $('#new_tr').show();#}
-{#                var t=$("table tr:last td:eq(6)").children().children().text();#}
-{#                alert(t);#}
+            $('#add_confirm').click(function (){
 
-                $("table tr:last td:eq(6)").children().children().attr('id', 'progress_show');
-
-
-{#                var table = document.getElementsByTagName('table')[0];#}
-{#                alert(table.children[0].innerHTML);#}
+{#                $("table tr:last td:eq(6)").children().children().attr('id', 'progress_show');#}
 
                 $.ajax({
                     url: 'task_virtual.html',
@@ -213,52 +260,64 @@
                     dataType: 'JSON',
                     success: function (data_dict) {
                         if (data_dict.status) {
-                            $('#connect_failed').hide();
                             $('#connect_success').show();
+                            $('#connect_failed').hide();
                             location.reload();
                         }else {
+                            $('#connect_info').hide();
                             $('#connect_failed').show();
-                            $('#connect_success').hide();
+                            $('#message_info').text(data_dict.message);
+
                         }
                     }
                 });
 
                 // 进度条定时器
-                setTimeout(function () {
-                    var op = 0;
-                    var tag = document.getElementById('progress_show');
-                    tag.innerText='0';
-                    var interval = setInterval(function () {
-                        op += 1;
-                        var a = op + '%';
-                        tag.innerText = a;
-                        document.getElementById('progress_show').style.width = a;
-                        if(op>100){
-                            clearInterval(interval);
-                            tag.innerText = '100%';
-                        }
-                    }, 500);
-                }, 5000);
-{#                var op = 0;#}
-{#                var tag = document.getElementById('progress_show');#}
-{#                tag.innerText='0';#}
-{#                var interval = setInterval(function () {#}
-{#                    op += 1;#}
-{#                    var a = op + '%';#}
-{#                    tag.innerText = a;#}
-{#                    document.getElementById('progress_show').style.width = a;#}
-{#                    if(op>100){#}
-{#                        clearInterval(interval);#}
-{#                        tag.innerText = '100%';#}
-{#                    }#}
-{#                }, 500);#}
+{#                setTimeout(function () {#}
+{#                    var op = 0;#}
+{#                    var tag = document.getElementById('progress_show');#}
+{#                    tag.innerText='0';#}
+{#                    var interval = setInterval(function () {#}
+{#                        op += 1;#}
+{#                        var a = op + '%';#}
+{#                        tag.innerText = a;#}
+{#                        document.getElementById('progress_show').style.width = a;#}
+{#                        if(op>100){#}
+{#                            clearInterval(interval);#}
+{#                            tag.innerText = '100%';#}
+{#                        }#}
+{#                    }, 500);#}
+{#                }, 5000);#}
 
             });
-
-
         });
 
 
+
+        function add_host() {
+            $('#confirm_host').text($('#recipient-name3').val());
+            $('#confirm_name').text($('#host_name').val());
+            $('#confirm_ip').text($('#host_ip').val());
+            if($('#recipient-name4').val()==1){
+                $('#confirm_type').text('CentOS_6.4_4C_8G_300G');
+            }
+
+            $('#add_machine').modal();
+            $('#add_confirm').click(function () {
+{#                u = "/delete_host-" + nid + ".html/";#}
+{#                $.ajax({#}
+{#                    url: u,#}
+{#                    type: 'POST',#}
+{#                    dataType: 'JSON',#}
+{#                    data: {'name': "1"},#}
+{#                    success: function (data_dict) {#}
+{#                        if(data_dict.status){#}
+{#                            location.href = '/hosts/'#}
+{#                        }#}
+{#                    }#}
+{#                })#}
+            })
+        }
 
     </script>
 {% endblock %}

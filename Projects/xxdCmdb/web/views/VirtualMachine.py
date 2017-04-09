@@ -8,17 +8,28 @@ from django.views import View
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse
+import signal
+import functools
 
 from web.service import asset
 
 data_dict = {'status': False, 'message': ""}
+CONNECT_SUCCESS = True
+
+
+def host_connect(v, key_str):
+    private_key = paramiko.RSAKey(file_obj=StringIO(key_str))
+    transport = paramiko.Transport((v, 22))
+    transport.connect(username='root', pkey=private_key)
+    ssh = paramiko.SSHClient()
+    ssh._transport = transport
 
 
 class VirtualListView(View):
     def get(self, request, *args, **kwargs):
         data = models.VirtualMachines.objects.all()
         host = models.HostMachines.objects.all()
-        print(data)
+        # print(data)
         return render(request, 'virtual_list.html', {'data': data, 'host_list': host})
 
     def post(self, request, *args, **kwargs):
@@ -57,24 +68,32 @@ class VirtualListView(View):
         -----END RSA PRIVATE KEY-----"""
 
         try:
-            private_key = paramiko.RSAKey(file_obj=StringIO(key_str))
-            transport = paramiko.Transport((v, 22))
-            transport.connect(username='root', pkey=private_key)
             ssh = paramiko.SSHClient()
-            ssh._transport = transport
-
-            models.VirtualMachines.objects.create(mudroom_host=v, host_name=new_name, host_ip=new_ip, item=machine_type)
-
-            data_dict['status'] = True
-            data_dict['message'] = "ok"
-            return HttpResponse(json.dumps(data_dict))
-
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect('192.168.162.2', port=22, username='root', key_filename='/Users/pylarva/.ssh/id_rsa', timeout=3)
+            stdin, stdout, stderr = ssh.exec_command('df')
+            result = stdout.read()
+            print(result)
+            ssh.close()
 
         except Exception:
 
             data_dict['status'] = False
-            data_dict['message'] = "no"
+            data_dict['message'] = "宿主机连接失败 请检查网络 ssh_key 公钥验证是否正常..."
+
             return HttpResponse(json.dumps(data_dict))
+
+        models.VirtualMachines.objects.create(mudroom_host=v, host_name=new_name, host_ip=new_ip, item=machine_type)
+
+        data_dict['status'] = True
+        data_dict['message'] = "ok"
+
+        ret = HttpResponse(json.dumps(data_dict))
+        print(new_ip, 9999)
+        info = "虚拟机[%s]添加成功!" % (new_ip,)
+        print(info)
+        ret.set_cookie('mess', '200', max_age=5)
+        return ret
 
 
 class AssetJsonView(View):
