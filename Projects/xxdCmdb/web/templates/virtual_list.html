@@ -19,7 +19,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">提示</h4>
+                        <h4 class="modal-title">新建虚机</h4>
                     </div>
                     <div class="modal-body">
                         宿主机：<a id="confirm_host"></a>
@@ -91,21 +91,12 @@
         <div id="connect_info" class="alert alert-info" role="alert" style="margin-bottom: 15px;">
             <button class="close" type="button" data-dismiss="alert">&times;</button>
             确认宿主机开启 镜像模版文件存放在/opt/mv/目录！</div>
-{#        <div id="connect_success" class="alert alert-success alert-dismissable" role="alert">#}
-{#            <button class="close" type="button" data-dismiss="alert">&times;</button>#}
-{#            连接成功！#}
-{#        </div>#}
+
         <div id="connect_failed" class="alert alert-danger alert-dismissable" role="alert">
             <button class="close" type="button" data-dismiss="alert">&times;</button>
             宿主机连接失败！请确认已在目标宿主机增加SSH_key公钥验证...
         </div>
 
-{#        <button type="button" class="btn btn-primary" onclick="CheckAll('#edit_mode', '#tb')">全选</button>#}
-{#        <button type="button" class="btn btn-success" onclick="CancleAll('#edit_mode', '#tb')">取消</button>#}
-{#        <button type="button" class="btn btn-info" onclick="ReverseAll('#edit_mode', '#tb')">反选</button>#}
-{#        <div class="form-group" style="width: 150px; display: inline-block">#}
-{#            <input id="host_machine" type="email" class="form-control" placeholder="宿主机IP地址">#}
-{#        </div>#}
         <div class="form-group" style="display: inline-block;">
             <select class="selectpicker" id="recipient-name3">
                   {% for item in host_list %}
@@ -124,10 +115,10 @@
 
         <div class="form-group" style="display: inline-block;">
             <select class="selectpicker" id="recipient-name4">
-                      <option id="recipient-name4" value='1'>Centos_6.4_4C_8G_300G</option>
-                      <option id="recipient-name4" value='2'>Centos_6.4_8C_16G_600G</option>
-                      <option id="recipient-name4" value='3'>Centos_7.2_4C_8G_300G</option>
-                      <option id="recipient-name4" value='4'>Centos_7.2_8C_16G_600G</option>
+{#                      <option id="recipient-name4" value='1'>Cent</option>#}
+                  {% for item in machine_type %}
+                      <option id="recipient-name4" value={{ item.id }}>{{ item.machine_type }}</option>
+                  {% endfor %}
             </select>
         </div>
 
@@ -149,36 +140,21 @@
             {% for item in data %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ item.host_name }}</td>
+                    <td>{{ item.mudroom_host }}</td>
                     <td>{{ item.host_name }}</td>
                     <td>{{ item.host_ip }}</td>
-                    <td>4核 8G 300G</td>
-                    <td>kvm-test</td>
+                    <td>{{ item.machine_type.machine_type }}</td>
+                    <td>{{ item.bussiness }}</td>
                     <td>
                         <div class="progress progress-striped" style="margin-bottom: 0px";>
 	                        <div class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width:100%">100%</div>
                         </div>
                     </td>
                     <td>详细...</td>
-                    <td>{{ item.ctime }}</td>
+                    <td>{{ item.ctime|date:"Y-m-d H:i:s" }}</td>
                 </tr>
             {% endfor %}
 
-{#                <tr id="new_tr">#}
-{#                    <td>*</td>#}
-{#                    <td id="new_machine"></td>#}
-{#                    <td id="new_name"></td>#}
-{#                    <td id="new_ip"></td>#}
-{#                    <td>4核 8G 300G</td>#}
-{#                    <td>kvm-test</td>#}
-{#                    <td>#}
-{#                        <div class="progress progress-striped" style="margin-bottom: 0px";>#}
-{#	                        <div id="progress_show" class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width:100%">100%</div>#}
-{#                        </div>#}
-{#                    </td>#}
-{#                    <td>详细...</td>#}
-{#                    <td></td>#}
-{#                </tr>#}
         </table>
 
     </div>
@@ -224,31 +200,8 @@
 
             $.initMenu('#menu_asset');
             $.nbDataList('/assets.html');
-            $('#connect_host').click(function () {
-                $('#connect_success').hide();
-                $('#connect_failed').hide();
-                $.ajax({
-                    url: 'task_virtual.html',
-                    type: 'post',
-                    data: {
-                        'host_name': $('#recipient-name3').val(),
-                    },
-                    dataType: 'JSON',
-                    success: function (data_dict) {
-                        if (data_dict.status) {
-                            $('#connect_success').show();
-{#                            $('#connect_success').removeAttr('style');#}
-                        }else {
-                            $('#connect_failed').show();
-{#                            $('#connect_failed').removeAttr('style');#}
-                        }
-                    }
-                });
-            });
 
             $('#add_confirm').click(function (){
-
-{#                $("table tr:last td:eq(6)").children().children().attr('id', 'progress_show');#}
 
                 $.ajax({
                     url: 'task_virtual.html',
@@ -271,35 +224,51 @@
                         }
                     }
                 });
-
-                // 进度条定时器
-{#                setTimeout(function () {#}
-{#                    var op = 0;#}
-{#                    var tag = document.getElementById('progress_show');#}
-{#                    tag.innerText='0';#}
-{#                    var interval = setInterval(function () {#}
-{#                        op += 1;#}
-{#                        var a = op + '%';#}
-{#                        tag.innerText = a;#}
-{#                        document.getElementById('progress_show').style.width = a;#}
-{#                        if(op>100){#}
-{#                            clearInterval(interval);#}
-{#                            tag.innerText = '100%';#}
-{#                        }#}
-{#                    }, 500);#}
-{#                }, 5000);#}
-
             });
         });
 
 
-
         function add_host() {
+            if($('#host_name').val().length<1){
+                $('#connect_info').removeClass('alert-info');
+                $('#connect_info').addClass('alert-danger');
+                $('#connect_info').addClass('alert-dismissable');
+                $('#connect_info').text('主机名不能为空！');
+                return false;
+            }
+
+            if($('#host_ip').val().length<1){
+                $('#connect_info').removeClass('alert-info');
+                $('#connect_info').addClass('alert-danger');
+                $('#connect_info').addClass('alert-dismissable');
+                $('#connect_info').text('虚拟机IP不能为空！');
+                return false;
+            }
+
+            var ip = $('#host_ip').val()
+            var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+            if(reg.test(ip)==false){
+                $('#connect_info').removeClass('alert-info');
+                $('#connect_info').addClass('alert-danger');
+                $('#connect_info').addClass('alert-dismissable');
+                $('#connect_info').text('IP地址格式错误！');
+                return false;
+            }
+
             $('#confirm_host').text($('#recipient-name3').val());
             $('#confirm_name').text($('#host_name').val());
             $('#confirm_ip').text($('#host_ip').val());
             if($('#recipient-name4').val()==1){
                 $('#confirm_type').text('CentOS_6.4_4C_8G_300G');
+            }
+            if($('#recipient-name4').val()==2){
+                $('#confirm_type').text('CentOS_6.4_8C_16G_600G');
+            }
+            if($('#recipient-name4').val()==3){
+                $('#confirm_type').text('CentOS_7.2_4C_8G_300G');
+            }
+            if($('#recipient-name4').val()==4){
+                $('#confirm_type').text('CentOS_7.2_8C_16G_600G');
             }
 
             $('#add_machine').modal();

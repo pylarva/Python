@@ -13,7 +13,7 @@ class HostStatus(models.Model):
 
 class UserInfo(models.Model):
     username = models.CharField(max_length=32)
-    pwd = models.CharField(max_length=32)
+    pwd = models.ChtarField(max_length=32)
 
 
 class HostDatabase(models.Model):

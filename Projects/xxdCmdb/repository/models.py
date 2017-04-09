@@ -3,6 +3,16 @@
 from django.db import models
 
 
+class MachineType(models.Model):
+    machine_type = models.CharField(max_length=32)
+
+    class Meta:
+        verbose_name_plural = "虚拟机配置类型表"
+
+    def __str__(self):
+        return self.machine_type
+
+
 class HostMachines(models.Model):
     host_machines_ip = models.CharField(max_length=32)
 
@@ -37,9 +47,10 @@ class VirtualMachines(models.Model):
     mudroom_host = models.CharField(max_length=32,default='192.168.1.1')
     host_name = models.CharField(max_length=108)
     host_ip = models.CharField(max_length=32)
-    item = models.CharField(max_length=32)
-    bussiness = models.CharField(max_length=32)
+    bussiness = models.CharField(max_length=32, default='kvm-test')
     ctime = models.DateTimeField(auto_now_add=True)
+    machine_type = models.ForeignKey('MachineType', to_field='id', default=1)
+
 
     class Meta:
         verbose_name_plural = "虚拟机表"
