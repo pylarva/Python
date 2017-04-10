@@ -50,7 +50,8 @@ class VirtualMachines(models.Model):
     bussiness = models.CharField(max_length=32, default='kvm-test')
     ctime = models.DateTimeField(auto_now_add=True)
     machine_type = models.ForeignKey('MachineType', to_field='id', default=1)
-
+    cpu_num = models.IntegerField(default=2)
+    memory_num = models.IntegerField(default=2)
 
     class Meta:
         verbose_name_plural = "虚拟机表"

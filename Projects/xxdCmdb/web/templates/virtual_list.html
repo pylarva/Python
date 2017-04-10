@@ -24,11 +24,13 @@
                     <div class="modal-body">
                         宿主机：<a id="confirm_host"></a>
                         </br>
-                        主机名：<a id="confirm_name"></a>
-                        </br>
                         IP地址：<a id="confirm_ip"></a>
                         </br>
-                        配置：<a id="confirm_type"></a>
+                        核心数：<a id="confirm_cpu_num"></a>
+                        </br>
+                        内存 ：<a id="confirm_memory_num"></a>
+                        </br>
+                        系统配置：<a id="confirm_type"></a>
                         </br>
                         <p>确认添加该虚拟机吗？</p>
                     </div>
@@ -97,7 +99,7 @@
             宿主机连接失败！请确认已在目标宿主机增加SSH_key公钥验证...
         </div>
 
-        <div class="form-group" style="display: inline-block;">
+        <div class="form-group" style="display: inline-block; width: 233px">
             <select class="selectpicker" id="recipient-name3">
                   {% for item in host_list %}
                       <option value={{ item.host_machines_ip }}>{{ item.host_machines_ip }}</option>
@@ -105,33 +107,44 @@
             </select>
         </div>
 
-{#        <button id="connect_host" type="button" class="btn btn-success display: inline-block">宿主机测试</button>#}
-        <div class="form-group" style="width: 150px; display: inline-block">
-            <input id="host_name" type="email" class="form-control" placeholder="主机名">
-        </div>
-        <div class="form-group" style="width: 150px; display: inline-block">
-            <input id="host_ip" type="email" class="form-control" placeholder="IP地址">
-        </div>
+{#        <div class="form-group" style="width: 150px; display: inline-block">#}
+{#            <input id="host_name" type="email" class="form-control" placeholder="主机名">#}
+{#        </div>#}
 
         <div class="form-group" style="display: inline-block;">
             <select class="selectpicker" id="recipient-name4">
-{#                      <option id="recipient-name4" value='1'>Cent</option>#}
                   {% for item in machine_type %}
                       <option id="recipient-name4" value={{ item.id }}>{{ item.machine_type }}</option>
                   {% endfor %}
             </select>
         </div>
 
+        </br>
+
+        <div class="form-group" style="width: 150px; display: inline-block">
+            <input id="host_ip" type="email" class="form-control" placeholder="IP地址">
+        </div>
+
+        <div class="form-group" style="width: 150px; display: inline-block">
+            <input id="host_cpu" type="email" class="form-control" placeholder="CPU核心数">
+        </div>
+
+        <div class="form-group" style="width: 150px; display: inline-block">
+            <input id="host_memory" type="email" class="form-control" placeholder="内存／G">
+        </div>
 
         <button id="virtual_add" type="button" class="btn btn-primary" onclick="add_host()">新增虚机</button>
+
 
         <table class="table table-bordered" id="table">
                 <tr>
                     <td>序号</td>
-                    <td>宿主机</td>
-                    <td>主机</td>
                     <td>IP</td>
+                    <td>主机名</td>
+                    <td>CPU核心</td>
+                    <td>内存</td>
                     <td>配置</td>
+                    <td>宿主机</td>
                     <td>业务</td>
                     <td>状态</td>
                     <td>备注</td>
@@ -140,10 +153,12 @@
             {% for item in data %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ item.mudroom_host }}</td>
-                    <td>{{ item.host_name }}</td>
                     <td>{{ item.host_ip }}</td>
+                    <td>{{ item.host_name }}</td>
+                    <td>{{ item.cpu_num }}核</td>
+                    <td>{{ item.memory_num }}G</td>
                     <td>{{ item.machine_type.machine_type }}</td>
+                    <td>{{ item.mudroom_host }}</td>
                     <td>{{ item.bussiness }}</td>
                     <td>
                         <div class="progress progress-striped" style="margin-bottom: 0px";>
@@ -179,7 +194,7 @@
                 $('#connect_info').addClass('alert-dismissable');
                 $('#connect_info').text('虚机部署任务发布成功！');
 
-                $("table tr:last td:eq(6)").children().children().attr('id', 'progress_show');
+                $("table tr:last td:eq(8)").children().children().attr('id', 'progress_show');
                 setTimeout(function () {
                     var op = 0;
                     var tag = document.getElementById('progress_show');
@@ -207,8 +222,9 @@
                     url: 'task_virtual.html',
                     type: 'POST',
                     data: {
-                        'host_machine': $('#recipient-name3').val(), 'new_host_name' : $('#host_name').val(),
-                        'new_host_ip': $('#host_ip').val(), 'machine_type': $('#recipient-name4').val()
+                        'host_machine': $('#recipient-name3').val(),
+                        'new_host_ip': $('#host_ip').val(), 'machine_type': $('#recipient-name4').val(),
+                        'cpu_num': $('#host_cpu').val(), 'memory_num': $('#host_memory').val()
                     },
                     dataType: 'JSON',
                     success: function (data_dict) {
@@ -229,14 +245,6 @@
 
 
         function add_host() {
-            if($('#host_name').val().length<1){
-                $('#connect_info').removeClass('alert-info');
-                $('#connect_info').addClass('alert-danger');
-                $('#connect_info').addClass('alert-dismissable');
-                $('#connect_info').text('主机名不能为空！');
-                return false;
-            }
-
             if($('#host_ip').val().length<1){
                 $('#connect_info').removeClass('alert-info');
                 $('#connect_info').addClass('alert-danger');
@@ -255,37 +263,69 @@
                 return false;
             }
 
+            if($('#host_cpu').val().length<1){
+                $('#connect_info').removeClass('alert-info');
+                $('#connect_info').addClass('alert-danger');
+                $('#connect_info').addClass('alert-dismissable');
+                $('#connect_info').text('核心数不能为空！');
+                return false;
+            }
+
+            var cpu = $('#host_cpu').val();
+            var cpu_reg = /^[0-9]*[1-9][0-9]*$/;
+            if(cpu_reg.test(cpu)==false){
+                $('#connect_info').removeClass('alert-info');
+                $('#connect_info').addClass('alert-danger');
+                $('#connect_info').addClass('alert-dismissable');
+                $('#connect_info').text('核心数只能为正整数！');
+                return false;
+            }else if(cpu>24){
+                $('#connect_info').removeClass('alert-info');
+                $('#connect_info').addClass('alert-danger');
+                $('#connect_info').addClass('alert-dismissable');
+                $('#connect_info').text('核心数不能大于24！');
+            }
+
+            var memory = $('#host_memory').val();
+            var memory_reg = /^[0-9]*[1-9][0-9]*$/;
+            if(memory_reg.test(memory)==false){
+                $('#connect_info').removeClass('alert-info');
+                $('#connect_info').addClass('alert-danger');
+                $('#connect_info').addClass('alert-dismissable');
+                $('#connect_info').text('内存数请填正整数！');
+                return false;
+            }else if(memory>128){
+                $('#connect_info').removeClass('alert-info');
+                $('#connect_info').addClass('alert-danger');
+                $('#connect_info').addClass('alert-dismissable');
+                $('#connect_info').text('内存容量不能大于128！');
+            }
+
+
             $('#confirm_host').text($('#recipient-name3').val());
-            $('#confirm_name').text($('#host_name').val());
+            $('#confirm_cpu_num').text($('#host_cpu').val());
             $('#confirm_ip').text($('#host_ip').val());
+            $('#confirm_memory_num').text($('#host_memory').val());
             if($('#recipient-name4').val()==1){
-                $('#confirm_type').text('CentOS_6.4_4C_8G_300G');
+                $('#confirm_type').text('CentOS_6.4_20G');
             }
             if($('#recipient-name4').val()==2){
-                $('#confirm_type').text('CentOS_6.4_8C_16G_600G');
+                $('#confirm_type').text('CentOS_6.4_100G');
             }
             if($('#recipient-name4').val()==3){
-                $('#confirm_type').text('CentOS_7.2_4C_8G_300G');
+                $('#confirm_type').text('CentOS_6.4_300G');
             }
             if($('#recipient-name4').val()==4){
-                $('#confirm_type').text('CentOS_7.2_8C_16G_600G');
+                $('#confirm_type').text('CentOS_7.2_20G');
+            }
+            if($('#recipient-name4').val()==5){
+                $('#confirm_type').text('CentOS_7.2_100G');
+            }
+            if($('#recipient-name4').val()==6){
+                $('#confirm_type').text('CentOS_7.2_300G');
             }
 
             $('#add_machine').modal();
-            $('#add_confirm').click(function () {
-{#                u = "/delete_host-" + nid + ".html/";#}
-{#                $.ajax({#}
-{#                    url: u,#}
-{#                    type: 'POST',#}
-{#                    dataType: 'JSON',#}
-{#                    data: {'name': "1"},#}
-{#                    success: function (data_dict) {#}
-{#                        if(data_dict.status){#}
-{#                            location.href = '/hosts/'#}
-{#                        }#}
-{#                    }#}
-{#                })#}
-            })
         }
 
     </script>
