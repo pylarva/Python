@@ -284,6 +284,7 @@
                 $('#connect_info').addClass('alert-danger');
                 $('#connect_info').addClass('alert-dismissable');
                 $('#connect_info').text('核心数不能大于24！');
+                return false;
             }
 
             var memory = $('#host_memory').val();
@@ -294,11 +295,13 @@
                 $('#connect_info').addClass('alert-dismissable');
                 $('#connect_info').text('内存数请填正整数！');
                 return false;
+
             }else if(memory>128){
                 $('#connect_info').removeClass('alert-info');
                 $('#connect_info').addClass('alert-danger');
                 $('#connect_info').addClass('alert-dismissable');
                 $('#connect_info').text('内存容量不能大于128！');
+                return false;
             }
 
 
