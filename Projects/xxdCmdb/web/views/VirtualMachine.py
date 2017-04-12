@@ -4,13 +4,9 @@ import os
 import json
 import time
 import paramiko
-import queue
-from multiprocessing import Pool
-from multiprocessing import Process
-from multiprocessing import queues
-import multiprocessing
 from repository import models
 from django.views import View
+from multiprocessing import Process
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse
@@ -30,6 +26,23 @@ class VirtualListView(View):
         return render(request, 'virtual_list.html', {'data': data, 'host_list': host, 'machine_type': machine_type})
 
     def post(self, request, *args, **kwargs):
+
+        host_del_id = request.POST.get('host_del_id', None)
+        if host_del_id:
+            try:
+                # 删除目标虚拟机
+                print(host_del_id)
+                self.host_del(host_del_id)
+
+            except Exception as e:
+                data_dict['status'] = False
+                data_dict['message'] = "虚拟机删除失败！"
+                return HttpResponse(json.dumps(data_dict))
+
+            data_dict['status'] = True
+            data_dict['message'] = "虚拟机删除成功！"
+            return HttpResponse(json.dumps(data_dict))
+
         host_machine = request.POST.get('host_machine')
         new_ip = request.POST.get('new_host_ip')
         machine_type = request.POST.get('machine_type')
@@ -91,7 +104,7 @@ class VirtualListView(View):
 
         # 2、新建并修改xml文件
         new_xml_path = self.change_cpu_memory(host_name, cpu_num, memory_num, new_mirror)
-        cmd = 'scp %s root@%s:%s' % (new_xml_path, host_machine, kvm_config.host_xml_path)
+        cmd = 'scp %s root@%s:%s' % (new_xml_path, host_machine, kvm_config.kvm_xml_dir)
         os.system(cmd)
         print(cmd)
 
@@ -127,29 +140,6 @@ class VirtualListView(View):
         cmd = 'virsh start %s' % host_name
         ssh.exec_command(cmd)
         print(cmd)
-
-        # virsh_cmd = 'virt-clone --connect=qemu:///system -o %s -n %s -f %s.qcow2' % (template_mirror, host_name,
-        #                                                                              new_mirror)
-
-        # print(virsh_cmd)
-        # stdin, stdout, stderr = ssh.exec_command(virsh_cmd)
-        # result = stdout.read()
-        # print('拷贝文件...', result)
-        # time.sleep(5)
-
-        # virsh_cmd = 'virsh start %s' % host_name
-        # print(virsh_cmd)
-        # stdin, stdout, stderr = ssh.exec_command(virsh_cmd)
-        # result = stdout.read()
-        # print('启动虚拟机...', result)
-        # time.sleep(30)
-
-        # data = os.system("ping -c 1 192.168.31.115 > /dev/null 2>&1")
-        # if data == 0:
-        #     self.chang_ip(new_ip)
-        #     print('启动成功...')
-        # else:
-        #     print('lost...')
 
         ssh.close()
 
@@ -201,6 +191,37 @@ class VirtualListView(View):
         tree.write(xml_path, encoding='utf-8')
 
         return xml_path
+
+    def host_del(self, host_del_id):
+
+        obj = models.VirtualMachines.objects.filter(id=host_del_id)
+        print(obj[0].host_name, obj[0].mudroom_host)
+        host_name = obj[0].host_name
+        host_machine = obj[0].mudroom_host
+
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(host_machine, port=22, username='root', key_filename=kvm_config.ssh_key_file,
+                    timeout=kvm_config.ssh_timeout)
+        stdin, stdout, stderr = ssh.exec_command('ls')
+        result = stdout.read()
+        print(result)
+
+        mirror_file = kvm_config.kvm_qcow_dir + host_name + '.qcow2'
+        print(mirror_file)
+
+        cmd = 'virsh destroy %s' % host_name
+        ssh.exec_command(cmd)
+        print(cmd)
+        cmd = 'virsh undefine %s' % host_name
+        ssh.exec_command(cmd)
+        print(cmd)
+        cmd = 'rm -f %s' % mirror_file
+        ssh.exec_command(cmd)
+        print(cmd)
+
+        models.VirtualMachines.objects.filter(id=host_del_id).delete()
+
 
 
 class AssetJsonView(View):

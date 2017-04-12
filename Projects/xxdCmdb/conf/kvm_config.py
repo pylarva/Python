@@ -31,9 +31,6 @@ kvm_template_xml_dir = '/Users/pylarva/github/Python/Projects/xxdCmdb/conf/xml/'
 # xml配置文件
 kvm_template_xml = '/Users/pylarva/github/Python/Projects/xxdCmdb/conf/xml/template.xml'
 
-# 宿主机xml配置文件放置目录
-host_xml_path = '/opt/xml/'
-
 # ssh-key文件
 ssh_key_file = '/Users/pylarva/.ssh/id_rsa'
 
