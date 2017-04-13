@@ -25,7 +25,7 @@ SECRET_KEY = '$(i)78vv)qw)hggq%t)sg0f_ysprbfg9o*g455rx$zd)aqvy70'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '172.16.18.17']
+ALLOWED_HOSTS = ['0.0.0.0', 'cmdb.xxd.com', '192.168.31.110']
 
 
 # Application definition
@@ -76,10 +76,21 @@ WSGI_APPLICATION = 'xxdCmdb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db02.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db02.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':'xxdcmdb',
+        'USER': 'cmdb',
+        'PASSWORD': 'cmdb',
+        'HOST': '192.168.31.110',
+        'PORT': '3306',
     }
 }
 

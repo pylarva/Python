@@ -27,6 +27,25 @@ class VirtualListView(View):
 
     def post(self, request, *args, **kwargs):
 
+        change_id = request.POST.get('change_id', None)
+
+        if change_id:
+            print(change_id)
+            change_data = models.VirtualMachines.objects.filter(id=change_id).first()
+            data_dict['id'] = change_id
+            data_dict['hostname'] = change_data.host_name
+            data_dict['status'] = True
+
+            return HttpResponse(json.dumps(data_dict))
+
+        change_hostname = request.POST.get('change_hostname', None)
+
+        if change_hostname:
+            change_id = request.POST.get('change_iid', None)
+            self.change_host_name(change_id, change_hostname)
+            data_dict['status'] = True
+            return HttpResponse(json.dumps(data_dict))
+
         host_del_id = request.POST.get('host_del_id', None)
         if host_del_id:
             try:
@@ -48,8 +67,16 @@ class VirtualListView(View):
         machine_type = request.POST.get('machine_type')
         memory_num = request.POST.get('memory_num')
         cpu_num = request.POST.get('cpu_num')
-        new_name = 'a0-kvm-vhost-%s-%s' % (new_ip.split('.')[-2], new_ip.split('.')[-1])
+        new_name = 'a0-kvm-vhost-%s-%s.yh' % (new_ip.split('.')[-2], new_ip.split('.')[-1])
         print(host_machine, new_ip, new_name, machine_type, memory_num, cpu_num)
+
+        ip_num = models.VirtualMachines.objects.filter(host_ip=new_ip).count()
+        print(ip_num)
+
+        if ip_num:
+            data_dict['status'] = False
+            data_dict['message'] = "IP地址已经存在 不允许重复装机！"
+            return HttpResponse(json.dumps(data_dict))
 
         try:
             ssh = paramiko.SSHClient()
@@ -70,7 +97,7 @@ class VirtualListView(View):
         except Exception:
 
             data_dict['status'] = False
-            data_dict['message'] = "Host machine connect failed..."
+            data_dict['message'] = "宿主机连接失败！请确认已在目标宿主机增加SSH_key公钥验证！"
 
             return HttpResponse(json.dumps(data_dict))
 
@@ -94,6 +121,8 @@ class VirtualListView(View):
         print(result)
 
         template_mirror = kvm_config.CentOS_6[machine_type]
+        system_version = template_mirror[20]
+        print(system_version)
         new_mirror = kvm_config.kvm_qcow_dir + host_name + '.qcow2'
 
         # 1、拷贝镜像文件
@@ -124,7 +153,13 @@ class VirtualListView(View):
         cmd = 'cp /opt/data/70-persistent-net.rules /opt/data/%s/' % host_name
         ssh.exec_command(cmd)
         print(cmd)
+        cmd = 'cp /opt/data/network /opt/data/%s/' % host_name
+        ssh.exec_command(cmd)
+        print(cmd)
         cmd = "sed -i 's#%s#%s#g' /opt/data/%s/ifcfg-eth0" % (kvm_config.kvm_template_ip, new_ip, host_name)
+        ssh.exec_command(cmd)
+        print(cmd)
+        cmd = "sed -i 's#%s#%s#g' /opt/data/%s/network" % (kvm_config.kvm_template_hostname, host_name, host_name)
         ssh.exec_command(cmd)
         print(cmd)
         cmd = "virt-copy-in -d %s /opt/data/%s/ifcfg-eth0 /etc/sysconfig/network-scripts/" % (host_name, host_name)
@@ -132,6 +167,10 @@ class VirtualListView(View):
         time.sleep(10)
         print(cmd)
         cmd = 'virt-copy-in -d %s /opt/data/%s/70-persistent-net.rules /etc/udev/rules.d/' % (host_name, host_name)
+        ssh.exec_command(cmd)
+        time.sleep(10)
+        print(cmd)
+        cmd = 'virt-copy-in -d %s /opt/data/%s/network /etc/sysconfig/' % (host_name, host_name)
         ssh.exec_command(cmd)
         time.sleep(10)
         print(cmd)
@@ -216,11 +255,17 @@ class VirtualListView(View):
         cmd = 'virsh undefine %s' % host_name
         ssh.exec_command(cmd)
         print(cmd)
-        cmd = 'rm -f %s' % mirror_file
-        ssh.exec_command(cmd)
-        print(cmd)
+
+        # 删除镜像
+        # cmd = 'rm -f %s' % mirror_file
+        # ssh.exec_command(cmd)
+        # print(cmd)
 
         models.VirtualMachines.objects.filter(id=host_del_id).delete()
+
+    def change_host_name(self, host_id, host_name):
+        models.VirtualMachines.objects.filter(id=host_id).update(host_name=host_name)
+        # 开始更新主机名
 
 
 

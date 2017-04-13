@@ -25,6 +25,9 @@ kvm_template_ip = '192.168.31.130'
 # IP配置文件
 kvm_template_ip_config = '/opt/ifcfig-eth0'
 
+# 初始主机名
+kvm_template_hostname = 'kvm-vhost'
+
 # xml文件目录
 kvm_template_xml_dir = '/Users/pylarva/github/Python/Projects/xxdCmdb/conf/xml/'
 

@@ -51,11 +51,33 @@
                         <h4 class="modal-title">删除虚拟机</h4>
                     </div>
                     <div class="modal-body">
-                        <p>虚拟机文件删除后不可恢复！</p>
+                        <p>虚拟机文件将会被删除！</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                         <button id="del_confirm" type="button" class="btn btn-primary">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 修改主机名 -->
+        <div id="change_name" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">修改主机名</h4>
+                    </div>
+                    <div class="form-group">
+                        <input id="change_iid" type="text" class="form-control" style="display: none">
+                    </div>
+                    <div class="form-group">
+                        <input id="change_hostname" type="text" class="form-control" style="width: 298px;margin-bottom: -15px;margin-top: -15px">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button id="change_confirm" type="button" class="btn btn-primary">确定</button>
                     </div>
                 </div>
             </div>
@@ -135,7 +157,7 @@
                     </td>
                     <td>
                         <div class="progress progress-striped" style="margin-bottom: 0px";>
-                            <div class="progress-bar progress-bar-warning"  role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width:100%; cursor: pointer;" onclick="host_manage()">配置</div>
+                            <div class="progress-bar progress-bar-warning"  role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width:100%; cursor: pointer;" onclick="host_manage({{ item.id }})">修改主机名</div>
                         </div>
                     </td>
                     <td>
@@ -210,9 +232,15 @@
                             $('#connect_failed').hide();
                             location.reload();
                         }else {
-                            $('#connect_info').hide();
-                            $('#connect_failed').show();
-                            $('#message_info').text(data_dict.message);
+                            $('#add_machine').modal('hide');
+{#                            $('#connect_info').hide();#}
+{#                            $('#connect_failed').show();#}
+{#                            $('#message_info').text(data_dict.message);#}
+
+                            $('#connect_info').removeClass('alert-info');
+                            $('#connect_info').addClass('alert-danger');
+                            $('#connect_info').addClass('alert-dismissable');
+                            $('#connect_info').text(data_dict.message);
 
                         }
                     }
@@ -310,7 +338,42 @@
 
         }
 
-            function host_manage() {
+            function host_manage(id) {
+                $('#change_name').modal();
+                    $.ajax({
+                        url: 'task_virtual.html',
+                        type: 'POST',
+                        data: {
+                            'change_id': id,
+                        },
+                        dataType: 'JSON',
+                        success: function (data_dict) {
+                            if (data_dict.status) {
+                                $('#change_iid').val(data_dict.id)
+                                $('#change_hostname').val(data_dict.hostname);
+                            }else {
+                            }
+                        }
+                    });
+
+                $('#change_hostname').click(function () {
+                    $.ajax({
+                        url: 'task_virtual.html',
+                        type: 'POST',
+                        data: {
+                            'change_iid': $('#change_iid').val(),
+                            'change_hostname': $('#change_hostname').val(),
+                        },
+                        dataType: 'JSON',
+                        success: function (data_dict) {
+                            if (data_dict.status) {
+                                alert('主机名更新成功！');
+                                location.reload();
+                            }else {
+                            }
+                        }
+                    });
+                })
 
             }
 
