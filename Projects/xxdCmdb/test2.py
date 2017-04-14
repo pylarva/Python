@@ -22,5 +22,9 @@ print(root[10][1][1].tag)
 root[10][1][1].attrib['file'] = '1111'
 print(root[10][1][1].attrib)
 
+print(root[10][8][0].tag)
+root[10][8][0].attrib['bridge'] = 'brrrr'
+print(root[10][8][0].attrib)
+
 tree = ET.ElementTree(root)
 tree.write('new_xo.xml', encoding='utf-8')

@@ -50,7 +50,7 @@ class VirtualListView(View):
         if host_del_id:
             try:
                 # 删除目标虚拟机
-                print(host_del_id)
+                print('del_id', host_del_id)
                 self.host_del(host_del_id)
 
             except Exception as e:
@@ -71,7 +71,6 @@ class VirtualListView(View):
         print(host_machine, new_ip, new_name, machine_type, memory_num, cpu_num)
 
         ip_num = models.VirtualMachines.objects.filter(host_ip=new_ip).count()
-        print(ip_num)
 
         if ip_num:
             data_dict['status'] = False
@@ -82,13 +81,13 @@ class VirtualListView(View):
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(host_machine, port=22, username='root', key_filename=kvm_config.ssh_key_file, timeout=kvm_config.ssh_timeout)
-            stdin, stdout, stderr = ssh.exec_command('df')
-            result = stdout.read()
-            print(result)
+            stdin, stdout, stderr = ssh.exec_command('ip addr | grep %s' % host_machine)
+            br_name = stdout.read()
+            br_name = str(br_name, encoding='utf-8').split(' ')[-1].split('\n')[0]
             ssh.close()
 
             # 创建进程去执行任务
-            p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num))
+            p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num, br_name))
             p.start()
             # pool.apply(func=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num))
             # pool.close()
@@ -101,8 +100,8 @@ class VirtualListView(View):
 
             return HttpResponse(json.dumps(data_dict))
 
-        models.VirtualMachines.objects.create(mudroom_host=host_machine, host_name=new_name, host_ip=new_ip,
-                                              machine_type_id=machine_type, cpu_num=cpu_num, memory_num=memory_num)
+        # models.VirtualMachines.objects.create(mudroom_host=host_machine, host_name=new_name, host_ip=new_ip,
+        #                                       machine_type_id=machine_type, cpu_num=cpu_num, memory_num=memory_num)
 
         data_dict['status'] = True
         data_dict['message'] = "ok"
@@ -112,7 +111,7 @@ class VirtualListView(View):
         ret.set_cookie('mess', '200', max_age=5)
         return ret
 
-    def exec_task(self, host_machine, host_name, new_ip, machine_type, cpu_num, memory_num):
+    def exec_task(self, host_machine, host_name, new_ip, machine_type, cpu_num, memory_num, br_name):
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(host_machine, port=22, username='root', key_filename=kvm_config.ssh_key_file, timeout=kvm_config.ssh_timeout)
@@ -132,7 +131,7 @@ class VirtualListView(View):
         print(cmd)
 
         # 2、新建并修改xml文件
-        new_xml_path = self.change_cpu_memory(host_name, cpu_num, memory_num, new_mirror)
+        new_xml_path = self.change_cpu_memory(host_name, cpu_num, memory_num, new_mirror, br_name)
         cmd = 'scp %s root@%s:%s' % (new_xml_path, host_machine, kvm_config.kvm_xml_dir)
         os.system(cmd)
         print(cmd)
@@ -199,7 +198,7 @@ class VirtualListView(View):
         print('虚机部署完成...', result)
         transport.close()
 
-    def change_cpu_memory(self, host_name, new_cpu, new_memory,  new_mirror):
+    def change_cpu_memory(self, host_name, new_cpu, new_memory,  new_mirror, br_name):
         template_xml_file = kvm_config.kvm_template_xml
 
         tree = ET.parse(template_xml_file)
@@ -224,6 +223,7 @@ class VirtualListView(View):
             node.text = str(new_memory)
 
         root[10][1][1].attrib['file'] = new_mirror
+        root[10][8][0].attrib['bridge'] = br_name
 
         tree = ET.ElementTree(root)
         xml_path = kvm_config.kvm_template_xml_dir + host_name + '.xml'
@@ -265,8 +265,16 @@ class VirtualListView(View):
 
     def change_host_name(self, host_id, host_name):
         models.VirtualMachines.objects.filter(id=host_id).update(host_name=host_name)
-        # 开始更新主机名
+        obj = models.VirtualMachines.objects.filter(id=host_id)
+        host_ip = obj[0].host_ip
 
+        # 开始更新主机名
+        str_host = host_ip + '    ' + host_name
+        cmd = 'ssh root@%s "hostname %s && echo %s > /etc/hostname && \
+            echo %s > /etc/hosts && \
+            sed -i s/HOSTNAME=.*/HOSTNAME=%s/g /etc/sysconfig/network" ' % (host_ip,host_name,host_name,str_host,host_name)
+        os.system(cmd)
+        print(cmd)
 
 
 class AssetJsonView(View):
