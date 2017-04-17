@@ -172,6 +172,22 @@
 
         </table>
 
+    <!-- cookie 自定义每页显示多少条数据 -->
+{#    <div>#}
+{#        <select id="ps" onchange="changePageSize(this);">#}
+{#            <option value="10">10</option>#}
+{#            <option value="30">30</option>#}
+{#            <option value="50">50</option>#}
+{#            <option value="100">100</option>#}
+{#        </select>#}
+{#    </div>#}
+{#    <a id="pss">{{ page_init.per_page_count }}</a>#}
+
+    <!-- 分页 -->
+    <ul class="pagination pagination-sm" style="float: right">
+        {{ page_str|safe }}
+    </ul>
+
     </div>
 {% endblock %}
 
@@ -184,6 +200,8 @@
     <script>
 
         $(function () {
+            $('.activ').addClass('active');
+
             $('#connect_success').hide();
             $('#connect_failed').hide();
             $('#new_tr').hide();

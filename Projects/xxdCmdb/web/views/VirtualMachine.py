@@ -11,6 +11,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse
 from xml.etree import ElementTree as ET
+from utils import pagination
 
 from conf import kvm_config
 from web.service import asset
@@ -23,12 +24,30 @@ class VirtualListView(View):
         data = models.VirtualMachines.objects.all()
         host = models.HostMachines.objects.all()
         machine_type = models.MachineType.objects.all()
-        return render(request, 'virtual_list.html', {'data': data, 'host_list': host, 'machine_type': machine_type})
+
+        data_total = models.VirtualMachines.objects.all().count()
+        current_page = request.GET.get('p', 1)
+        current_page = int(current_page)
+        print(current_page)
+
+        val = request.COOKIES.get('per_page_count', 10)
+        page_init = {}
+        page_init['per_page_count'] = val
+        print(val)
+        val = int(val)
+
+        page_obj = pagination.Page(current_page, data_total, val)
+        data = data[page_obj.start:page_obj.end]
+        page_str = page_obj.page_str('virtual_list.html')
+
+        return render(request, 'virtual_list.html', {'data': data, 'host_list': host, 'machine_type': machine_type,
+                                                     'page_str': page_str, 'page_init': page_init})
 
     def post(self, request, *args, **kwargs):
 
         change_id = request.POST.get('change_id', None)
 
+        # ajax请求对应主机名
         if change_id:
             print(change_id)
             change_data = models.VirtualMachines.objects.filter(id=change_id).first()
@@ -68,7 +87,9 @@ class VirtualListView(View):
         memory_num = request.POST.get('memory_num')
         cpu_num = request.POST.get('cpu_num')
         new_name = 'a0-kvm-vhost-%s-%s.yh' % (new_ip.split('.')[-2], new_ip.split('.')[-1])
-        print(host_machine, new_ip, new_name, machine_type, memory_num, cpu_num)
+        new_gateway = new_ip.split('.')
+        new_gateway = new_gateway[0] + '.' + new_gateway[1] + '.' + new_gateway[2] + '.' + '253'
+        print(host_machine, new_ip, new_name, machine_type, memory_num, cpu_num, new_gateway)
 
         ip_num = models.VirtualMachines.objects.filter(host_ip=new_ip).count()
 
@@ -87,11 +108,8 @@ class VirtualListView(View):
             ssh.close()
 
             # 创建进程去执行任务
-            p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num, br_name))
+            p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num, br_name, new_gateway))
             p.start()
-            # pool.apply(func=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num))
-            # pool.close()
-            # pool.join()
 
         except Exception:
 
@@ -100,8 +118,8 @@ class VirtualListView(View):
 
             return HttpResponse(json.dumps(data_dict))
 
-        # models.VirtualMachines.objects.create(mudroom_host=host_machine, host_name=new_name, host_ip=new_ip,
-        #                                       machine_type_id=machine_type, cpu_num=cpu_num, memory_num=memory_num)
+        models.VirtualMachines.objects.create(mudroom_host=host_machine, host_name=new_name, host_ip=new_ip,
+                                              machine_type_id=machine_type, cpu_num=cpu_num, memory_num=memory_num)
 
         data_dict['status'] = True
         data_dict['message'] = "ok"
@@ -111,7 +129,7 @@ class VirtualListView(View):
         ret.set_cookie('mess', '200', max_age=5)
         return ret
 
-    def exec_task(self, host_machine, host_name, new_ip, machine_type, cpu_num, memory_num, br_name):
+    def exec_task(self, host_machine, host_name, new_ip, machine_type, cpu_num, memory_num, br_name, new_gateway):
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(host_machine, port=22, username='root', key_filename=kvm_config.ssh_key_file, timeout=kvm_config.ssh_timeout)
@@ -156,6 +174,9 @@ class VirtualListView(View):
         ssh.exec_command(cmd)
         print(cmd)
         cmd = "sed -i 's#%s#%s#g' /opt/data/%s/ifcfg-eth0" % (kvm_config.kvm_template_ip, new_ip, host_name)
+        ssh.exec_command(cmd)
+        print(cmd)
+        cmd = "sed -i 's#%s#%s#g' /opt/data/%s/ifcfg-eth0" % ('192.168.31.253', new_gateway, host_name)
         ssh.exec_command(cmd)
         print(cmd)
         cmd = "sed -i 's#%s#%s#g' /opt/data/%s/network" % (kvm_config.kvm_template_hostname, host_name, host_name)
@@ -256,7 +277,7 @@ class VirtualListView(View):
         ssh.exec_command(cmd)
         print(cmd)
 
-        # 删除镜像
+        # 是否删除镜像
         # cmd = 'rm -f %s' % mirror_file
         # ssh.exec_command(cmd)
         # print(cmd)
@@ -268,13 +289,18 @@ class VirtualListView(View):
         obj = models.VirtualMachines.objects.filter(id=host_id)
         host_ip = obj[0].host_ip
 
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(host_ip, port=22, username='root', password='xinxindai318', timeout=kvm_config.ssh_timeout)
+
         # 开始更新主机名
         str_host = host_ip + '    ' + host_name
-        cmd = 'ssh root@%s "hostname %s && echo %s > /etc/hostname && \
-            echo %s > /etc/hosts && \
-            sed -i s/HOSTNAME=.*/HOSTNAME=%s/g /etc/sysconfig/network" ' % (host_ip,host_name,host_name,str_host,host_name)
-        os.system(cmd)
-        print(cmd)
+        cmd = "hostname %s && echo %s > /etc/hostname && \
+                    echo %s >> /etc/hosts && \
+                    sed -i s/HOSTNAME=.*/HOSTNAME=%s/g /etc/sysconfig/network && \
+                    service zabbix_agentd restart && \
+                    service rsyslog restart &" % (host_name, host_name, str_host, host_name)
+        ssh.exec_command(cmd)
 
 
 class AssetJsonView(View):

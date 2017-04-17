@@ -1,10 +1,10 @@
 <domain type="kvm">
-  <name>kvm-test03</name>
+  <name>a0-kvm-vhost-33-11.yh</name>
   <memory unit="KiB">2388608</memory>
   <currentMemory unit="KiB">2388608</currentMemory>
   <vcpu placement="static">2</vcpu>
   <os>
-    <type arch="x86_64" machine="rhel6.6.0">hvm</type>
+    <type arch="x86_64">hvm</type>
     <boot dev="hd" />
   </os>
   <features>
@@ -20,7 +20,7 @@
     <emulator>/usr/libexec/qemu-kvm</emulator>
     <disk device="disk" type="file">
       <driver cache="none" name="qemu" type="qcow2" />
-      <source file="1111" />
+      <source file="/opt/mv/a0-kvm-vhost-33-11.yh.qcow2" />
       <target bus="virtio" dev="vda" />
       <address bus="0x00" domain="0x0000" function="0x0" slot="0x05" type="pci" />
     </disk>
@@ -49,7 +49,7 @@
       <address bus="0x00" domain="0x0000" function="0x1" slot="0x01" type="pci" />
     </controller>
     <interface type="bridge">
-      <source bridge="brrrr" />
+      <source bridge="br1" />
       <address bus="0x00" domain="0x0000" function="0x0" slot="0x03" type="pci" />
     </interface>
     <serial type="pty">
@@ -59,9 +59,6 @@
       <target port="0" type="serial" />
     </console>
     <input bus="ps2" type="mouse" />
-    <graphics autoport="no" listen="0.0.0.0" port="5924" type="vnc">
-      <listen address="0.0.0.0" type="address" />
-    </graphics>
     <video>
       <model heads="1" type="cirrus" vram="9216" />
       <address bus="0x00" domain="0x0000" function="0x0" slot="0x02" type="pci" />
