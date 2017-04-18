@@ -108,8 +108,8 @@ class VirtualListView(View):
             ssh.close()
 
             # 创建进程去执行任务
-            p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num, br_name, new_gateway))
-            p.start()
+            # p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num, br_name, new_gateway))
+            # p.start()
 
         except Exception:
 

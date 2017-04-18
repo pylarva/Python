@@ -4,6 +4,9 @@ from django.db import models
 
 
 class MachineType(models.Model):
+    """
+    虚拟机配置类型表
+    """
     machine_type = models.CharField(max_length=32)
 
     class Meta:
@@ -58,6 +61,44 @@ class VirtualMachines(models.Model):
 
     def __str__(self):
         return self.host_name
+
+
+class Asset(models.Model):
+    """
+    资产信息总表
+    """
+    device_type_choices = (
+        (1, '物理服务器'),
+        (2, '虚拟机'),
+        (3, '网络设备'),
+    )
+    device_status_choices = (
+        (1, '在线'),
+        (2, '离线'),
+    )
+
+    host_ip = models.CharField(max_length=32, null=True, blank=True)
+    host_name = models.CharField(max_length=128, null=True, blank=True)
+    status =
+    device_type_id = models.IntegerField(choices=device_type_choices, default=1)
+    device_status_id = models.IntegerField(choices=device_status_choices, default=1)
+
+    cabinet_num = models.CharField('机柜号', max_length=30, null=True, blank=True)
+    cabinet_order = models.CharField('机柜中序号', max_length=30, null=True, blank=True)
+
+    idc = models.ForeignKey('IDC', verbose_name='IDC机房', null=True, blank=True)
+    business_unit = models.ForeignKey('BusinessUnit', verbose_name='属于的业务线', null=True, blank=True)
+
+    tag = models.ManyToManyField('Tag')
+
+    latest_date = models.DateField(null=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "资产总表"
+
+    def __str__(self):
+        return "%s-%s-%s" % (self.idc.name, self.cabinet_num, self.cabinet_order)
 
 
 class UserProfile(models.Model):
@@ -147,7 +188,7 @@ class Tag(models.Model):
         return self.name
 
 
-class Asset(models.Model):
+class Assets(models.Model):
     """
     资产信息表，所有资产公共信息（交换机，服务器，防火墙等）
     """

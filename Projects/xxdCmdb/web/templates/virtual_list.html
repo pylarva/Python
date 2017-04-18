@@ -184,7 +184,7 @@
 {#    <a id="pss">{{ page_init.per_page_count }}</a>#}
 
     <!-- 分页 -->
-    <ul class="pagination pagination-sm" style="float: right">
+    <ul id="page_count" class="pagination pagination-sm" style="float: right">
         {{ page_str|safe }}
     </ul>
 
@@ -235,7 +235,7 @@
             $.nbDataList('/assets.html');
 
             $('#add_confirm').click(function (){
-
+                var v = $('#page_count').children(":last").prev().prev().prev().prev().children(":first").text();
                 $.ajax({
                     url: 'task_virtual.html',
                     type: 'POST',
@@ -249,7 +249,8 @@
                         if (data_dict.status) {
                             $('#connect_success').show();
                             $('#connect_failed').hide();
-                            location.reload();
+                            var url = 'virtual_list.html?p=' + v;
+                            location.href=url
                         }else {
                             $('#add_machine').modal('hide');
 {#                            $('#connect_info').hide();#}
