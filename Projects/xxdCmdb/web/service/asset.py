@@ -14,9 +14,11 @@ class Asset(BaseServiceList):
     def __init__(self):
         # 查询条件的配置
         condition_config = [
-            {'name': 'cabinet_num', 'text': '机柜号', 'condition_type': 'input'},
-            {'name': 'device_type_id', 'text': '资产类型', 'condition_type': 'select', 'global_name': 'device_type_list'},
-            {'name': 'device_status_id', 'text': '资产状态', 'condition_type': 'select',
+            {'name': 'host_ip', 'text': 'IP', 'condition_type': 'input'},
+            {'name': 'business_1', 'text': '业务类型1', 'condition_type': 'select', 'global_name': 'business_1_list'},
+            {'name': 'business_2', 'text': '业务类型2', 'condition_type': 'select', 'global_name': 'business_2_list'},
+            {'name': 'business_3', 'text': '业务类型3', 'condition_type': 'select', 'global_name': 'business_3_list'},
+            {'name': 'host_status', 'text': '资产状态', 'condition_type': 'select',
              'global_name': 'device_status_list'},
         ]
         # 表格的配置
@@ -29,76 +31,57 @@ class Asset(BaseServiceList):
                 'attr': {}  # 自定义属性
             },
             {
-                'q': 'device_type_id',
-                'title': "资产类型",
+                'q': 'host_ip',
+                'title': "IP",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@@device_type_list'}},
+                'text': {'content': "{n}", 'kwargs': {'n': '@host_ip'}},
                 'attr': {}
             },
             {
-                'q': 'server_title',
+                'q': 'host_name',
                 'title': "主机名",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@server_title'}},
+                'text': {'content': "{n}", 'kwargs': {'n': '@host_name'}},
                 'attr': {}
             },
             {
-                'q': 'network_title',
-                'title': "网络设备标识",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@network_title'}},
-                'attr': {}
-            },
-            {
-                'q': 'idc_id',
-                'title': "IDC",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@@idc_list'}},
-                'attr': {'name': 'idc_id', 'id': '@idc_id', 'origin': '@idc_id', 'edit-enable': 'true',
-                         'edit-type': 'select',
-                         'global-name': 'idc_list'}
-            },
-            {
-                'q': 'cabinet_num',
-                'title': "机柜号",
-                'display': 1,
-                'text': {'content': "{cabinet_num}", 'kwargs': {'cabinet_num': '@cabinet_num'}},
-                'attr': {'name': 'cabinet_num', 'edit-enable': 'true', 'edit-type': 'input', 'origin': '@cabinet_num', }
-            },
-            {
-                'q': 'cabinet_order',
-                'title': "位置",
-                'display': 1,
-                'text': {'content': "{cabinet_order}", 'kwargs': {'cabinet_order': '@cabinet_order'}},
-                'attr': {'name': 'cabinet_order', 'edit-enable': 'true', 'edit-type': 'input',
-                         'origin': '@cabinet_order', }
-            },
-            {
-                'q': 'business_unit_id',
-                'title': "业务线ID",
-                'display': 0,
-                'text': {'content': "", 'kwargs': {}},
-                'attr': {}
-            },
-            {
-                'q': 'business_unit__name',
-                'title': "业务线",
-                'display': 1,
-                'text': {'content': "{business_unit__name}", 'kwargs': {'business_unit__name': '@business_unit__name'}},
-                'attr': {'name': 'business_unit_id', 'id': '@business_unit_id', 'origin': '@business_unit_id',
-                         'edit-enable': 'true',
-                         'edit-type': 'select',
-                         'global-name': 'business_unit_list'}
-            },
-            {
-                'q': 'device_status_id',
-                'title': "资产状态",
+                'q': 'host_status',
+                'title': "状态",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@device_status_list'}},
-                'attr': {'name': 'device_status_id', 'id': '@device_status_id', 'origin': '@device_status_id',
+                'attr': {'name': 'host_status', 'id': '@host_status', 'origin': '@host_status',
                          'edit-enable': 'true',
                          'edit-type': 'select',
                          'global-name': 'device_status_list'}
+            },
+            {
+                'q': 'business_1_id',
+                'title': "业务1",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@business_1_list'}},
+                'attr': {'name': 'business_1_id', 'id': '@business_1_id', 'origin': '@business_1_id', 'edit-enable': 'true',
+                         'edit-type': 'select',
+                         'global-name': 'business_1_list'}
+            },
+            {
+                'q': 'business_2_id',
+                'title': "业务2",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@business_2_list'}},
+                'attr': {'name': 'business_2_id', 'id': '@business_2_id', 'origin': '@business_2_id',
+                         'edit-enable': 'true',
+                         'edit-type': 'select',
+                         'global-name': 'business_2_list'}
+            },
+            {
+                'q': 'business_3_id',
+                'title': "业务3",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@business_3_list'}},
+                'attr': {'name': 'business_3_id', 'id': '@business_3_id', 'origin': '@business_3_id',
+                         'edit-enable': 'true',
+                         'edit-type': 'select',
+                         'global-name': 'business_3_list'}
             },
             {
                 'q': None,
@@ -135,6 +118,24 @@ class Asset(BaseServiceList):
         return list(result)
 
     @property
+    def business_1_list(self):
+        values = models.BusinessOne.objects.only('id', 'name')
+        result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
+        return list(result)
+
+    @property
+    def business_2_list(self):
+        values = models.BusinessTwo.objects.only('id', 'name')
+        result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
+        return list(result)
+
+    @property
+    def business_3_list(self):
+        values = models.BusinessThree.objects.only('id', 'name')
+        result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
+        return list(result)
+
+    @property
     def business_unit_list(self):
         values = models.BusinessUnit.objects.values('id', 'name')
         return list(values)
@@ -142,6 +143,7 @@ class Asset(BaseServiceList):
     @staticmethod
     def assets_condition(request):
         con_str = request.GET.get('condition', None)
+        print(con_str)
         if not con_str:
             con_dict = {}
         else:
@@ -178,7 +180,10 @@ class Asset(BaseServiceList):
                 'device_status_list': self.device_status_list,
                 'device_type_list': self.device_type_list,
                 'idc_list': self.idc_list,
-                'business_unit_list': self.business_unit_list
+                'business_unit_list': self.business_unit_list,
+                'business_1_list': self.business_1_list,
+                'business_2_list': self.business_2_list,
+                'business_3_list': self.business_3_list
             }
             response.data = ret
             response.message = '获取成功'

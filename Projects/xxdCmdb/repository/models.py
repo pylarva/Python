@@ -76,29 +76,72 @@ class Asset(models.Model):
         (1, '在线'),
         (2, '离线'),
     )
+    device_item_choices = (
+        (1, 'c1'),
+        (1, 'c2'),
+    )
 
     host_ip = models.CharField(max_length=32, null=True, blank=True)
     host_name = models.CharField(max_length=128, null=True, blank=True)
-    status =
-    device_type_id = models.IntegerField(choices=device_type_choices, default=1)
-    device_status_id = models.IntegerField(choices=device_status_choices, default=1)
-
-    cabinet_num = models.CharField('机柜号', max_length=30, null=True, blank=True)
-    cabinet_order = models.CharField('机柜中序号', max_length=30, null=True, blank=True)
-
-    idc = models.ForeignKey('IDC', verbose_name='IDC机房', null=True, blank=True)
-    business_unit = models.ForeignKey('BusinessUnit', verbose_name='属于的业务线', null=True, blank=True)
-
-    tag = models.ManyToManyField('Tag')
-
-    latest_date = models.DateField(null=True)
-    create_at = models.DateTimeField(auto_now_add=True)
+    host_status = models.IntegerField(choices=device_status_choices, default=2)
+    host_item = models.IntegerField(choices=device_item_choices, default=1)
+    business_1 = models.ForeignKey('BusinessOne', verbose_name='业务线1', null=True, blank=True, default=1)
+    business_2 = models.ForeignKey('BusinessTwo', verbose_name='业务线2', null=True, blank=True, default=1)
+    business_3 = models.ForeignKey('BusinessThree', verbose_name='业务线3', null=True, blank=True, default=1)
+    host_type = models.IntegerField(choices=device_type_choices, default=2)
+    host_machine = models.CharField(max_length=32, null=True, blank=True)
+    host_cpu = models.CharField(max_length=32, null=True, blank=True)
+    host_memory = models.CharField(max_length=32, null=True, blank=True)
+    ctime = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "资产总表"
 
     def __str__(self):
-        return "%s-%s-%s" % (self.idc.name, self.cabinet_num, self.cabinet_order)
+        return "%s-%s-%s" % (self.host_ip, self.host_name, self.host_status)
+
+
+class BusinessOne(models.Model):
+    """
+    一级业务线
+    """
+    name = models.CharField('一级业务线', max_length=64, unique=True)
+    # contact = models.ForeignKey('UserGroup', verbose_name='业务联系人', related_name='c')
+    # manager = models.ForeignKey('UserGroup', verbose_name='系统管理员', related_name='m')
+
+    class Meta:
+        verbose_name_plural = "一级业务线表"
+
+    def __str__(self):
+        return self.name
+
+
+class BusinessTwo(models.Model):
+    """
+    二级业务线
+    """
+    name = models.CharField('二级业务线', max_length=64, unique=True)
+    superior_business = models.ForeignKey('BusinessOne', verbose_name='一级业务线', related_name='b1')
+
+    class Meta:
+        verbose_name_plural = "二级业务线表"
+
+    def __str__(self):
+        return self.name
+
+
+class BusinessThree(models.Model):
+    """
+    三级业务线
+    """
+    name = models.CharField('三级业务线', max_length=64, unique=True)
+    superior_business = models.ForeignKey('BusinessTwo', verbose_name='二级业务线', related_name='b1')
+
+    class Meta:
+        verbose_name_plural = "三级业务线表"
+
+    def __str__(self):
+        return self.name
 
 
 class UserProfile(models.Model):
@@ -121,7 +164,7 @@ class AdminInfo(models.Model):
     """
     用户登陆相关信息
     """
-    user_info = models.OneToOneField("UserProfile")
+    # user_info = models.OneToOneField("UserProfile")
     username = models.CharField(u'用户名', max_length=64)
     password = models.CharField(u'密码', max_length=64)
 
@@ -129,7 +172,7 @@ class AdminInfo(models.Model):
         verbose_name_plural = "管理员表"
 
     def __str__(self):
-        return self.user_info.name
+        return self.username
 
 
 class UserGroup(models.Model):

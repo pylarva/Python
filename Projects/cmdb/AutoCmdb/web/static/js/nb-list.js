@@ -204,6 +204,7 @@
     function initialize(pager) {
         $.Show('#shade,#loading');
         var conditions = JSON.stringify(aggregationSearchCondition());
+        alert(conditions);
         var $body = $('#table_body');
         $.ajax({
             url: requestUrl,

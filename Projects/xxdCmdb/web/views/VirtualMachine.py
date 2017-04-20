@@ -8,8 +8,10 @@ from repository import models
 from django.views import View
 from multiprocessing import Process
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse
+from django.utils.decorators import method_decorator
 from xml.etree import ElementTree as ET
 from utils import pagination
 
@@ -18,8 +20,27 @@ from web.service import asset
 
 data_dict = {'status': False, 'message': ""}
 
+USER_NAME = {}
 
+
+def auth(func):
+    def inner(request, *args, **kwargs):
+        # v = request.COOKIES.get('user_cookie')
+        v = request.session.get('is_login', None)
+        print(v)
+        if not v:
+            return redirect('login.html')
+        global USER_NAME
+        USER_NAME['name'] = v
+        return func(request, *args, **kwargs)
+    return inner
+
+
+@method_decorator(auth, name='dispatch')
 class VirtualListView(View):
+    def dispatch(self, request, *args, **kwargs):
+        return super(VirtualListView, self).dispatch(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         data = models.VirtualMachines.objects.all()
         host = models.HostMachines.objects.all()
@@ -108,8 +129,8 @@ class VirtualListView(View):
             ssh.close()
 
             # 创建进程去执行任务
-            # p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num, br_name, new_gateway))
-            # p.start()
+            p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num, br_name, new_gateway))
+            p.start()
 
         except Exception:
 
