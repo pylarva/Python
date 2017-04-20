@@ -5,6 +5,8 @@ from web.views import account
 from web.views import home
 from web.views import asset
 from web.views import user
+from web.views import read
+from web.views import business
 from web.views import PhysicalMachine
 from web.views import VirtualMachine
 
@@ -22,6 +24,17 @@ urlpatterns = [
     url(r'^asset-(?P<device_type_id>\d+)-(?P<asset_nid>\d+).html$', asset.AssetDetailView.as_view()),
     url(r'^add-asset.html$', asset.AddAssetView.as_view()),
 
+    url(r'^read.html$', read.ReadListView.as_view()),
+    url(r'^reads.html$', read.ReadJsonView.as_view()),
+
+    url(r'^business_1.html$', business.Business1ListView.as_view()),
+    url(r'^business_1s.html$', business.Business1JsonView.as_view()),
+
+    url(r'^business_2.html$', business.Business2ListView.as_view()),
+    url(r'^business_2s.html$', business.Business2JsonView.as_view()),
+
+    url(r'^business_3.html$', business.Business3ListView.as_view()),
+    url(r'^business_3s.html$', business.Business3JsonView.as_view()),
 
     url(r'^users.html$', user.UserListView.as_view()),
     url(r'^user.html$', user.UserJsonView.as_view()),

@@ -26,7 +26,7 @@ def auth(func):
 @method_decorator(auth, name='dispatch')
 class IndexView(View):
     def dispatch(self, request, *args, **kwargs):
-        return super(IndexView,self).dispatch(request, *args, **kwargs)
+        return super(IndexView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         return render(request, 'index.html')
@@ -58,3 +58,12 @@ class TaskView(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'task.html')
+
+
+@method_decorator(auth, name='dispatch')
+class ReadView(View):
+    def dispatch(self, request, *args, **kwargs):
+        return super(ReadView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'read.html')

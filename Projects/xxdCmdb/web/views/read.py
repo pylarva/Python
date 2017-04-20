@@ -6,8 +6,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from web.service import asset
-
-USER_NAME = {}
+from web.service import read
 
 
 def auth(func):
@@ -23,18 +22,18 @@ def auth(func):
     return inner
 
 
-@method_decorator(auth, name='dispatch')
-class AssetListView(View):
+# @method_decorator(auth, name='dispatch')
+class ReadListView(View):
     def dispatch(self, request, *args, **kwargs):
-        return super(AssetListView, self).dispatch(request, *args, **kwargs)
+        return super(ReadListView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'asset_list.html')
+        return render(request, 'read_list.html')
 
 
-class AssetJsonView(View):
+class ReadJsonView(View):
     def get(self, request):
-        obj = asset.Asset()
+        obj = read.Asset()
         response = obj.fetch_assets(request)
         return JsonResponse(response.__dict__)
 

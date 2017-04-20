@@ -21,51 +21,30 @@
             <i class="fa fa-connectdevelop" aria-hidden="true"></i>
             <span>资产管理</span>
         </a>
-
-        <a class="menu-item" href="#">
+        <a class="menu-item" href="/read.html">
+            <i class="fa fa-map-o" aria-hidden="true"></i>
+            <span>资产查询</span>
+        </a>
+        <a class="menu-item" id="business" style="cursor:pointer">
             <i class="fa fa-free-code-camp" aria-hidden="true"></i>
             <span>业务管理</span>
+            <i id="business_icn" style="margin-left: 50px" class="fa fa-chevron-down" aria-hidden="true"></i>
         </a>
-
+        <div style="display: none" id="show_bussiness">
+        <a class="menu-item" id="business" style="cursor:pointer" href="/business_1.html">
+            <i class="fa fa-caret-right" aria-hidden="true"></i>
+            <span>业务线一</span>
+        </a>
+        <a class="menu-item" id="business" style="cursor:pointer" href="/business_2.html">
+            <i class="fa fa-caret-right" aria-hidden="true"></i>
+            <span>业务线二</span>
+        </a>
+        <a class="menu-item" id="business" style="cursor:pointer" href="/business_3.html">
+            <i class="fa fa-caret-right" aria-hidden="true"></i>
+            <span>业务线三</span>
+        </a>
+        </div>
         <ul class="tree" style="margin-left: -25px">
-{#          <li><a href="">Home</a></li>#}
-          <li><span>NET</span>
-            <ul>
-              <li><a href="#">webserver</a>
-                <ul>
-                  <li><a href="#">dev</a></li>
-                  <li><a href="#">test1</a></li>
-                  <li><a href="#">test2</a></li>
-                </ul>
-              </li>
-              <li><a href="#">front</a>
-                <ul>
-                  <li><a href="#">dev</a></li>
-                  <li><a href="#">stage</a></li>
-                </ul>
-              </li>
-            </ul>
-
-        <ul class="tree" style="margin-left: -25px"></ul>
-{#          <li><a href="">ddddd</a></li>#}
-          <li><span>DB</span>
-            <ul>
-              <li><a href="#">mysql</a>
-                <ul>
-                  <li><a href="#">dev</a></li>
-                  <li><a href="#">test1</a></li>
-                  <li><a href="#">test2</a></li>
-                </ul>
-              </li>
-              <li><a href="#">oracle</a>
-              </li>
-
-        </ul>
-
-        <ul class="tree" style="margin-left: -25px"></ul>
-          <li><span>Buffer</span>
-        <ul>
-
 
 
     </div>
@@ -77,7 +56,17 @@
 <script type="text/javascript" src="/static/js/jquery.treemenu.js"></script>
 <script>
 $(function(){
-        $(".tree").treemenu({delay:300}).openActive();
+        $("#business").click(function () {
+            if ($('#show_bussiness').attr('style')){
+                $('#show_bussiness').removeAttr('style');
+                $('#business_icn').removeClass('fa fa-chevron-down');
+                $('#business_icn').addClass('fa fa-chevron-up');
+            }else {
+                $('#show_bussiness').attr('style','display:none');
+                $('#business_icn').removeClass('fa fa-chevron-up');
+                $('#business_icn').addClass('fa fa-chevron-down');
+            }
+        })
     });
 </script>
 {% block js %}{% endblock %}
