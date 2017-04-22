@@ -22,7 +22,7 @@ class LoginView(View):
             user_num = models.AdminInfo.objects.filter(username=u1, password=p1).count()
 
             if user_num > 0:
-                print(u1, p1, user_num)
+                # print(u1, p1, user_num)
                 data_dict['status'] = True
                 data_dict['message'] = 'ok'
 

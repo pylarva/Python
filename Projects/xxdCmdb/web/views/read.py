@@ -13,7 +13,7 @@ def auth(func):
     def inner(request, *args, **kwargs):
         # v = request.COOKIES.get('user_cookie')
         v = request.session.get('is_login', None)
-        print(v)
+        # print(v)
         if not v:
             return redirect('login.html')
         global USER_NAME

@@ -27,7 +27,7 @@ def auth(func):
     def inner(request, *args, **kwargs):
         # v = request.COOKIES.get('user_cookie')
         v = request.session.get('is_login', None)
-        print(v)
+        # print(v)
         if not v:
             return redirect('login.html')
         global USER_NAME
@@ -42,11 +42,15 @@ class VirtualListView(View):
         return super(VirtualListView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        data = models.VirtualMachines.objects.all()
+        data = models.Asset.objects.all()
+        # data_status = models.Asset.device_status_choices
+        # print(data_status)
+        # data = models.VirtualMachines.objects.all()
         host = models.HostMachines.objects.all()
         machine_type = models.MachineType.objects.all()
 
-        data_total = models.VirtualMachines.objects.all().count()
+        data_total = models.Asset.objects.all().count()
+        # data_total = models.VirtualMachines.objects.all().count()
         current_page = request.GET.get('p', 1)
         current_page = int(current_page)
         print(current_page)
@@ -71,7 +75,8 @@ class VirtualListView(View):
         # ajax请求对应主机名
         if change_id:
             print(change_id)
-            change_data = models.VirtualMachines.objects.filter(id=change_id).first()
+            change_data = models.Asset.objects.filter(id=change_id).first()
+            # change_data = models.VirtualMachines.objects.filter(id=change_id).first()
             data_dict['id'] = change_id
             data_dict['hostname'] = change_data.host_name
             data_dict['status'] = True
@@ -90,7 +95,7 @@ class VirtualListView(View):
         if host_del_id:
             try:
                 # 删除目标虚拟机
-                print('del_id', host_del_id)
+                print('====', host_del_id)
                 self.host_del(host_del_id)
 
             except Exception as e:
@@ -112,7 +117,8 @@ class VirtualListView(View):
         new_gateway = new_gateway[0] + '.' + new_gateway[1] + '.' + new_gateway[2] + '.' + '253'
         print(host_machine, new_ip, new_name, machine_type, memory_num, cpu_num, new_gateway)
 
-        ip_num = models.VirtualMachines.objects.filter(host_ip=new_ip).count()
+        ip_num = models.Asset.objects.filter(host_ip=new_ip).count()
+        # ip_num = models.VirtualMachines.objects.filter(host_ip=new_ip).count()
 
         if ip_num:
             data_dict['status'] = False
@@ -139,8 +145,10 @@ class VirtualListView(View):
 
             return HttpResponse(json.dumps(data_dict))
 
-        models.VirtualMachines.objects.create(mudroom_host=host_machine, host_name=new_name, host_ip=new_ip,
-                                              machine_type_id=machine_type, cpu_num=cpu_num, memory_num=memory_num)
+        # models.VirtualMachines.objects.create(mudroom_host=host_machine, host_name=new_name, host_ip=new_ip,
+        #                                       machine_type_id=machine_type, cpu_num=cpu_num, memory_num=memory_num)
+        models.Asset.objects.create(host_machine=host_machine, host_name=new_name, host_ip=new_ip,
+                                    host_item=machine_type, host_cpu=cpu_num, host_memory=memory_num)
 
         data_dict['status'] = True
         data_dict['message'] = "ok"
@@ -275,10 +283,11 @@ class VirtualListView(View):
 
     def host_del(self, host_del_id):
 
-        obj = models.VirtualMachines.objects.filter(id=host_del_id)
-        print(obj[0].host_name, obj[0].mudroom_host)
+        obj = models.Asset.objects.filter(id=host_del_id)
+        # obj = models.VirtualMachines.objects.filter(id=host_del_id)
         host_name = obj[0].host_name
-        host_machine = obj[0].mudroom_host
+        host_machine = obj[0].host_machine
+        print(host_del_id, host_name)
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -303,11 +312,14 @@ class VirtualListView(View):
         # ssh.exec_command(cmd)
         # print(cmd)
 
-        models.VirtualMachines.objects.filter(id=host_del_id).delete()
+        models.Asset.objects.filter(id=host_del_id).delete()
+        # models.VirtualMachines.objects.filter(id=host_del_id).delete()
 
     def change_host_name(self, host_id, host_name):
-        models.VirtualMachines.objects.filter(id=host_id).update(host_name=host_name)
-        obj = models.VirtualMachines.objects.filter(id=host_id)
+        models.Asset.objects.filter(id=host_id).update(host_name=host_name)
+        # models.VirtualMachines.objects.filter(id=host_id).update(host_name=host_name)
+        obj = models.Asset.objects.filter(id=host_id)
+        # obj = models.VirtualMachines.objects.filter(id=host_id)
         host_ip = obj[0].host_ip
 
         ssh = paramiko.SSHClient()

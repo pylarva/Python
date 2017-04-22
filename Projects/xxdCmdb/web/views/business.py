@@ -20,7 +20,7 @@ from utils.response import BaseResponse
 def auth(func):
     def inner(request, *args, **kwargs):
         v = request.session.get('is_login', None)
-        print(v)
+        # print(v)
         if not v:
             return redirect('login.html')
         global USER_NAME

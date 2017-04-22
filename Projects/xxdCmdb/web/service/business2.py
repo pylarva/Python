@@ -94,7 +94,7 @@ class Asset(BaseServiceList):
     @staticmethod
     def assets_condition(request):
         con_str = request.GET.get('condition', None)
-        print(con_str)
+        # print(con_str)
         if not con_str:
             con_dict = {}
         else:

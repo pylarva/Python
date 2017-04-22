@@ -78,7 +78,7 @@ class Asset(models.Model):
     )
     device_item_choices = (
         (1, 'c1'),
-        (1, 'c2'),
+        (2, 'c2'),
     )
 
     host_ip = models.CharField(max_length=32, null=True, blank=True)

@@ -87,6 +87,37 @@ class Asset(BaseServiceList):
                          'global-name': 'business_3_list'}
             },
             {
+                'q': 'host_machine',
+                'title': "宿主机",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@host_machine'}},
+                'attr': {}
+            },
+            {
+                'q': 'host_cpu',
+                'title': "CPU",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@host_cpu'}},
+                'attr': {}
+            },
+            {
+                'q': 'host_memory',
+                'title': "内存",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@host_memory'}},
+                'attr': {}
+            },
+            {
+                'q': 'host_item',
+                'title': "设备类型",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@device_type_list'}},
+                'attr': {'name': 'host_item', 'id': '@host_item', 'original': '@host_item',
+                         'edit-enable': 'true',
+                         'edit-type': 'select',
+                         'global-name': 'device_type_list'}
+            },
+            {
                 'q': None,
                 'title': "选项",
                 'display': 1,
@@ -219,7 +250,7 @@ class Asset(BaseServiceList):
             for row_dict in update_list:
                 nid = row_dict.pop('nid')
                 num = row_dict.pop('num')
-                print(row_dict)
+                # print(row_dict)
 
                 # 更新主机名
                 host_name = row_dict.get('host_name')
