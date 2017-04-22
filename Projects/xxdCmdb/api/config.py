@@ -5,5 +5,4 @@ PLUGINS_DICT = {
     'nic': 'api.service.asset.HandleNic',
     'memory': 'api.service.asset.HandleMemory',
     'disk': 'api.service.asset.HandleDisk',
-
 }

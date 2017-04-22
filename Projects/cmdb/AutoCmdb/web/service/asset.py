@@ -212,6 +212,7 @@ class Asset(BaseServiceList):
             for row_dict in update_list:
                 nid = row_dict.pop('nid')
                 num = row_dict.pop('num')
+                print(nid, num, row_dict)
                 try:
                     models.Asset.objects.filter(id=nid).update(**row_dict)
                 except Exception as e:

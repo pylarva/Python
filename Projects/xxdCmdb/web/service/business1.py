@@ -22,7 +22,7 @@ class Asset(BaseServiceList):
             {
                 'q': 'id',  # 用于数据库查询的字段，即Model.Tb.objects.filter(*[])
                 'title': "ID",  # 前段表格中显示的标题
-                'display': 1,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
+                'display': 0,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
                 'attr': {}  # 自定义属性
             },
@@ -39,7 +39,7 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
+                    'content': "<a href='#'>详细...</a>",
                     'kwargs': {'id': '@id', 'nid': '@id'}},
                 'attr': {}
             },
@@ -178,6 +178,20 @@ class Asset(BaseServiceList):
                 response.message = '共%s条,失败%s条' % (len(update_list), error_count,)
             else:
                 response.message = '更新成功'
+        except Exception as e:
+            response.status = False
+            response.message = str(e)
+        return response
+
+
+    @staticmethod
+    def post_assets(request):
+        response = BaseResponse()
+        try:
+            response.error = []
+            name = request.POST.get('business1_name')
+            models.BusinessOne.objects.create(name=name)
+            response.message = '添加成功'
         except Exception as e:
             response.status = False
             response.message = str(e)

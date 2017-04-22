@@ -8,7 +8,7 @@
 {% block conent %}
     <ol class="breadcrumb" style="margin-bottom: 0;">
         <li><a href="/cmdb.html">首页</a></li>
-        <li class="active">用户管理</li>
+        <li class="active">业务线一管理</li>
     </ol>
     <div style="padding: 5px 8px;">
 
@@ -53,7 +53,7 @@
                     <a id="check_cancel" class="btn btn-default no-radius"><i class="fa fa-minus-square-o"></i> 取消</a>
                     <a id="check_reverse" class="btn btn-default no-radius"><i
                             class="fa fa-check-square-o"></i> 反选</a>
-                    <a class="btn btn-default no-radius" href="#"><i class="fa fa-plus-circle"></i>添加</a>
+                    <a id="do_add" class="btn btn-default no-radius" href="#"><i class="fa fa-plus-circle"></i>添加</a>
                     <a id="do_delete" class="btn btn-default no-radius"><i class="fa fa-trash"></i> 删除</a>
                     <a id="edit_mode_target" class="btn btn-default no-radius"><i class="fa fa-pencil-square-o"></i>
                         <span>进入编辑模式</span></a>
@@ -93,11 +93,39 @@
 
     </div>
 
+    <!-- 添加业务线开始 -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加一级业务线</h4>
+              </div>
+              <form id="form1">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">1.业务线名称</label>
+                    <input type="text" class="form-control" id="business_1_name">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <span id="error_message" style="color: red;"></span>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button id="save_1" type="button" class="btn btn-primary">保存</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+    <!-- 添加业务线开始 -->
+
+
+
     <!-- 删除层开始 -->
     <div id="modal_delete" class="alert alert-danger alert-dismissible fade in modal-delete hide" role="alert">
         <button type="button" class="close" aria-label="Close" onclick="$.Hide('#shade,#modal_delete');"><span>×</span>
         </button>
-        <h4>确定用户信息？</h4>
+        <h4>确定删除数据？</h4>
 
         <p style="text-align: right">
             <button type="button" class="btn btn-danger" id="do_delete_confirm">确定删除</button>
@@ -126,6 +154,10 @@
             $.initMenu('#menu_user_profile');
             $.nbDataList('/business_1s.html');
             $('#show_bussiness').removeAttr('style');
+            $('#do_add').click(function () {
+                $('#exampleModal').modal();
+            });
+
         });
 
 

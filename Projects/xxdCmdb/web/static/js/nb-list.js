@@ -129,6 +129,35 @@
         })
     }
 
+    // 添加业务线
+    function do_save1() {
+        v = $('#business_1_name').val();
+        $.ajax({
+            url: requestUrl,
+            type: 'POST',
+            data: {
+                'business1_name': v,
+            },
+            dataType: 'JSON',
+            success: function (response) {
+                if (response.status) {
+                    SuccessHandleStatus(response.message);
+                    $('#exampleModal').hide();
+                } else {
+                    alert(response.message);
+                }
+                $.Hide('#shade,#modal_delete');
+                refreshData();
+
+            },
+            error: function () {
+                $.Hide('#shade,#modal_delete');
+                alert('请求异常');
+            }
+        });
+
+    }
+
     /*
      绑定头部按钮事件
      */
@@ -162,6 +191,10 @@
 
         $('#do_refresh').click(function () {
             refreshData();
+        });
+
+        $('#save_1').click(function () {
+            do_save1();
         });
 
     }

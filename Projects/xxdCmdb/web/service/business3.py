@@ -184,6 +184,19 @@ class Asset(BaseServiceList):
         return response
 
     @staticmethod
+    def post_assets(request):
+        response = BaseResponse()
+        try:
+            response.error = []
+            name = request.POST.get('business1_name')
+            models.BusinessThree.objects.create(name=name)
+            response.message = '添加成功'
+        except Exception as e:
+            response.status = False
+            response.message = str(e)
+        return response
+
+    @staticmethod
     def assets_detail(device_type_id, asset_id):
 
         response = BaseResponse()

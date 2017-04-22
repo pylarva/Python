@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import json
+import re
 from django.db.models import Q
 from repository import models
 from utils.pager import PageInfo
 from utils.response import BaseResponse
 from django.http.request import QueryDict
-
+from utils.hostname import change_host_name
 from .base import BaseServiceList
 
 
@@ -26,7 +27,7 @@ class Asset(BaseServiceList):
             {
                 'q': 'id',  # 用于数据库查询的字段，即Model.Tb.objects.filter(*[])
                 'title': "ID",  # 前段表格中显示的标题
-                'display': 1,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
+                'display': 0,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
                 'attr': {}  # 自定义属性
             },
@@ -42,14 +43,16 @@ class Asset(BaseServiceList):
                 'title': "主机名",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@host_name'}},
-                'attr': {}
+                'attr': {'name': 'host_name', 'id': '@host_name', 'original': '@host_name',
+                         'edit-enable': 'true',
+                         'edit-type': 'input'}
             },
             {
                 'q': 'host_status',
                 'title': "状态",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@device_status_list'}},
-                'attr': {'name': 'host_status', 'id': '@host_status', 'origin': '@host_status',
+                'attr': {'name': 'host_status', 'id': '@host_status', 'original': '@host_status',
                          'edit-enable': 'true',
                          'edit-type': 'select',
                          'global-name': 'device_status_list'}
@@ -59,7 +62,7 @@ class Asset(BaseServiceList):
                 'title': "业务1",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@business_1_list'}},
-                'attr': {'name': 'business_1_id', 'id': '@business_1_id', 'origin': '@business_1_id', 'edit-enable': 'true',
+                'attr': {'name': 'business_1_id', 'id': '@business_1_id', 'original': '@business_1_id', 'edit-enable': 'true',
                          'edit-type': 'select',
                          'global-name': 'business_1_list'}
             },
@@ -68,7 +71,7 @@ class Asset(BaseServiceList):
                 'title': "业务2",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@business_2_list'}},
-                'attr': {'name': 'business_2_id', 'id': '@business_2_id', 'origin': '@business_2_id',
+                'attr': {'name': 'business_2_id', 'id': '@business_2_id', 'original': '@business_2_id',
                          'edit-enable': 'true',
                          'edit-type': 'select',
                          'global-name': 'business_2_list'}
@@ -78,7 +81,7 @@ class Asset(BaseServiceList):
                 'title': "业务3",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@business_3_list'}},
-                'attr': {'name': 'business_3_id', 'id': '@business_3_id', 'origin': '@business_3_id',
+                'attr': {'name': 'business_3_id', 'id': '@business_3_id', 'original': '@business_3_id',
                          'edit-enable': 'true',
                          'edit-type': 'select',
                          'global-name': 'business_3_list'}
@@ -88,7 +91,7 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='/asset-{device_type_id}-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
+                    'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}
             },
@@ -143,7 +146,6 @@ class Asset(BaseServiceList):
     @staticmethod
     def assets_condition(request):
         con_str = request.GET.get('condition', None)
-        print(con_str)
         if not con_str:
             con_dict = {}
         else:
@@ -217,14 +219,33 @@ class Asset(BaseServiceList):
             for row_dict in update_list:
                 nid = row_dict.pop('nid')
                 num = row_dict.pop('num')
-                try:
-                    models.Asset.objects.filter(id=nid).update(**row_dict)
-                except Exception as e:
-                    response.error.append({'num': num, 'message': str(e)})
-                    response.status = False
-                    error_count += 1
+                print(row_dict)
+
+                # 更新主机名
+                host_name = row_dict.get('host_name')
+                if host_name:
+                    if re.search('[》>$&()<!#*]', row_dict['host_name']):
+                        response.error.append({'num': num, 'message': '非法字符！'})
+                        response.status = False
+                        error_count += 1
+                    else:
+                        obj = models.Asset.objects.filter(id=nid)
+                        change_host_name(host_ip=obj[0].host_ip, host_name=row_dict['host_name'])
+                        try:
+                            models.Asset.objects.filter(id=nid).update(**row_dict)
+                        except Exception as e:
+                            response.error.append({'num': num, 'message': str(e)})
+                            response.status = False
+                            error_count += 1
+                else:
+                    try:
+                        models.Asset.objects.filter(id=nid).update(**row_dict)
+                    except Exception as e:
+                        response.error.append({'num': num, 'message': str(e)})
+                        response.status = False
+                        error_count += 1
             if error_count:
-                response.message = '共%s条,失败%s条' % (len(update_list), error_count,)
+                response.message = '非法字符！共%s条,失败%s条' % (len(update_list), error_count,)
             else:
                 response.message = '更新成功'
         except Exception as e:
@@ -246,3 +267,4 @@ class Asset(BaseServiceList):
             response.status = False
             response.message = str(e)
         return response
+

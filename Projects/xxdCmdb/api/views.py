@@ -46,17 +46,76 @@ class AssetView(View):
         # response = asset.get_untreated_servers()
         response = BaseResponse()
 
-        condition = Q()
+        print(kwargs)
+        b1 = kwargs.get('b1', None)
+        b2 = kwargs.get('b2', None)
+        b3 = kwargs.get('b3', None)
+        if b1:
+            try:
+                b1_id = models.BusinessOne.objects.filter(name=kwargs['b1']).first().id
+                if b2:
+                    try:
+                        b2_id = models.BusinessTwo.objects.filter(name=kwargs['b2']).first().id
+                        if b3:
+                            try:
+                                b3_id = models.BusinessThree.objects.filter(name=kwargs['b3']).first().id
 
-        con_business_1 = Q()
-        con_business_1.children.append(('business_1', '3'))
-        con_business_2 = Q()
-        con_business_2.children.append(('business_2', '3'))
+                                condition = Q()
+                                con_business_1 = Q()
+                                con_business_1.children.append(('business_1', b1_id))
+                                con_business_2 = Q()
+                                con_business_2.children.append(('business_2', b2_id))
+                                con_business_3 = Q()
+                                con_business_3.children.append(('business_3', b3_id))
 
-        condition.add(con_business_1, 'AND')
-        condition.add(con_business_2, 'AND')
+                                condition.add(con_business_1, 'AND')
+                                condition.add(con_business_2, 'AND')
+                                condition.add(con_business_3, 'AND')
 
-        result = models.Asset.objects.filter(condition).values('host_ip')
+                                result = models.Asset.objects.filter(condition).values('host_ip')
+                                response.data = list(result)
+                                response.status = True
+                                return JsonResponse(response.__dict__)
+                            except Exception as e:
+                                response.error = "Didn't find %s" % kwargs['b3']
+                                response.status = False
+                                return JsonResponse(response.__dict__)
+                        print(b2_id)
+                        condition = Q()
+                        con_business_1 = Q()
+                        con_business_1.children.append(('business_1', b1_id))
+                        con_business_2 = Q()
+                        con_business_2.children.append(('business_2', b2_id))
+
+                        condition.add(con_business_1, 'AND')
+                        condition.add(con_business_2, 'AND')
+
+                        result = models.Asset.objects.filter(condition).values('host_ip')
+                        response.data = list(result)
+                        response.status = True
+                        return JsonResponse(response.__dict__)
+                    except Exception as e:
+                        response.error = "Didn't find %s" % kwargs['b2']
+                        response.status = False
+                        return JsonResponse(response.__dict__)
+
+                print(b1_id)
+                condition = Q()
+                con_business_1 = Q()
+                con_business_1.children.append(('business_1', b1_id))
+
+                condition.add(con_business_1, 'AND')
+
+                result = models.Asset.objects.filter(condition).values('host_ip')
+                response.data = list(result)
+                response.status = True
+                return JsonResponse(response.__dict__)
+
+            except Exception as e:
+                response.error = "Didn't find %s" % kwargs['b1']
+                response.status = False
+                return JsonResponse(response.__dict__)
+        result = models.Asset.objects.all().values('host_ip')
         response.data = list(result)
         response.status = True
 

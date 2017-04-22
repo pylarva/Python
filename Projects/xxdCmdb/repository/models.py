@@ -85,9 +85,9 @@ class Asset(models.Model):
     host_name = models.CharField(max_length=128, null=True, blank=True)
     host_status = models.IntegerField(choices=device_status_choices, default=2)
     host_item = models.IntegerField(choices=device_item_choices, default=1)
-    business_1 = models.ForeignKey('BusinessOne', verbose_name='业务线1', null=True, blank=True, default=1)
-    business_2 = models.ForeignKey('BusinessTwo', verbose_name='业务线2', null=True, blank=True, default=1)
-    business_3 = models.ForeignKey('BusinessThree', verbose_name='业务线3', null=True, blank=True, default=1)
+    business_1 = models.ForeignKey('BusinessOne', verbose_name='业务线1', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
+    business_2 = models.ForeignKey('BusinessTwo', verbose_name='业务线2', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
+    business_3 = models.ForeignKey('BusinessThree', verbose_name='业务线3', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
     host_type = models.IntegerField(choices=device_type_choices, default=2)
     host_machine = models.CharField(max_length=32, null=True, blank=True)
     host_cpu = models.CharField(max_length=32, null=True, blank=True)
@@ -121,7 +121,7 @@ class BusinessTwo(models.Model):
     二级业务线
     """
     name = models.CharField('二级业务线', max_length=64, unique=True)
-    superior_business = models.ForeignKey('BusinessOne', verbose_name='一级业务线', related_name='b1')
+    # superior_business = models.ForeignKey('BusinessOne', verbose_name='一级业务线', related_name='b1')
 
     class Meta:
         verbose_name_plural = "二级业务线表"
@@ -135,7 +135,7 @@ class BusinessThree(models.Model):
     三级业务线
     """
     name = models.CharField('三级业务线', max_length=64, unique=True)
-    superior_business = models.ForeignKey('BusinessTwo', verbose_name='二级业务线', related_name='b1')
+    # superior_business = models.ForeignKey('BusinessTwo', verbose_name='二级业务线', related_name='b1')
 
     class Meta:
         verbose_name_plural = "三级业务线表"
@@ -233,7 +233,7 @@ class Tag(models.Model):
 
 class Assets(models.Model):
     """
-    资产信息表，所有资产公共信息（交换机，服务器，防火墙等）
+    资产信息表，所有资产公共信息（交换机，服务器，虚拟机等）
     """
     device_type_choices = (
         (1, '服务器'),
