@@ -53,7 +53,7 @@
                     <a id="check_cancel" class="btn btn-default no-radius"><i class="fa fa-minus-square-o"></i> 取消</a>
                     <a id="check_reverse" class="btn btn-default no-radius"><i
                             class="fa fa-check-square-o"></i> 反选</a>
-                    <a id="do_add" class="btn btn-default no-radius" href="#"><i class="fa fa-plus-circle"></i>添加</a>
+                    <a id="do_add" class="btn btn-default no-radius"><i class="fa fa-plus-circle"></i>添加</a>
                     <a id="do_delete" class="btn btn-default no-radius"><i class="fa fa-trash"></i> 删除</a>
                     <a id="edit_mode_target" class="btn btn-default no-radius"><i class="fa fa-pencil-square-o"></i>
                         <span>进入编辑模式</span></a>
@@ -150,11 +150,14 @@
     <script>
         $(function () {
             $.initMenu('#menu_user_profile');
-            $.nbDataList('/business_2s.html');
+            $.nbDataList('/business_2s.html', '1');
             $('#show_bussiness').removeAttr('style');
             $('#do_add').click(function () {
                 $('#exampleModal').modal();
             });
         });
+        function ChangePage(id) {
+                $.nbDataList('/business_2s.html', id);
+            }
     </script>
 {% endblock %}

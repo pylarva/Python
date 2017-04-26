@@ -126,9 +126,11 @@
     <script>
         $(function () {
             $.initMenu('#menu_asset');
-            $.nbDataList('/assets.html');
+            $.nbDataList('/assets.html', '1');
         });
 
-
+        function ChangePage(id) {
+                $.nbDataList('/assets.html', id);
+            }
     </script>
 {% endblock %}

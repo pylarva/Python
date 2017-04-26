@@ -39,7 +39,7 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
+                    'content': "<a href='#'>详细...</a>",
                     'kwargs': {'id': '@id', 'nid': '@id'}},
                 'attr': {}
             },

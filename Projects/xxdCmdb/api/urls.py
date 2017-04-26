@@ -5,7 +5,7 @@ from api import views
 
 urlpatterns = [
     url(r'^asset$', views.AssetView.as_view()),
-    url(r'^asset-(?P<b1>\w+)', views.AssetView.as_view()),
-    url(r'^asset-(?P<b1>\w+)-(?P<b2>\w+)', views.AssetView.as_view()),
-    url(r'^asset-(?P<b1>\w+)-(?P<b2>\w+)-(?P<b3>\w+)', views.AssetView.as_view()),
+    url(r'^asset-(?P<b1>\w+)$', views.AssetView.as_view()),
+    url(r'^asset-(?P<b1>\w+)-(?P<b2>\w+)$', views.AssetView.as_view()),
+    url(r'^asset-(?P<b1>\w+)-(?P<b2>\w+)-(?P<b3>\w+)$', views.AssetView.as_view()),
 ]

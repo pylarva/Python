@@ -42,23 +42,23 @@ class VirtualListView(View):
         return super(VirtualListView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        data = models.Asset.objects.all()
+        # data = models.Asset.objects.all()
         # data_status = models.Asset.device_status_choices
         # print(data_status)
-        # data = models.VirtualMachines.objects.all()
+        data = models.VirtualMachines.objects.all()
         host = models.HostMachines.objects.all()
         machine_type = models.MachineType.objects.all()
 
-        data_total = models.Asset.objects.all().count()
-        # data_total = models.VirtualMachines.objects.all().count()
+        # data_total = models.Asset.objects.all().count()
+        data_total = models.VirtualMachines.objects.all().count()
         current_page = request.GET.get('p', 1)
         current_page = int(current_page)
-        print(current_page)
+        # print(current_page)
 
-        val = request.COOKIES.get('per_page_count', 10)
+        val = request.COOKIES.get('per_page_count', 1000)
         page_init = {}
         page_init['per_page_count'] = val
-        print(val)
+        # print(val)
         val = int(val)
 
         page_obj = pagination.Page(current_page, data_total, val)
@@ -75,8 +75,8 @@ class VirtualListView(View):
         # ajax请求对应主机名
         if change_id:
             print(change_id)
-            change_data = models.Asset.objects.filter(id=change_id).first()
-            # change_data = models.VirtualMachines.objects.filter(id=change_id).first()
+            # change_data = models.Asset.objects.filter(id=change_id).first()
+            change_data = models.VirtualMachines.objects.filter(id=change_id).first()
             data_dict['id'] = change_id
             data_dict['hostname'] = change_data.host_name
             data_dict['status'] = True
@@ -117,8 +117,8 @@ class VirtualListView(View):
         new_gateway = new_gateway[0] + '.' + new_gateway[1] + '.' + new_gateway[2] + '.' + '253'
         print(host_machine, new_ip, new_name, machine_type, memory_num, cpu_num, new_gateway)
 
-        ip_num = models.Asset.objects.filter(host_ip=new_ip).count()
-        # ip_num = models.VirtualMachines.objects.filter(host_ip=new_ip).count()
+        # ip_num = models.Asset.objects.filter(host_ip=new_ip).count()
+        ip_num = models.VirtualMachines.objects.filter(host_ip=new_ip).count()
 
         if ip_num:
             data_dict['status'] = False
@@ -145,8 +145,8 @@ class VirtualListView(View):
 
             return HttpResponse(json.dumps(data_dict))
 
-        # models.VirtualMachines.objects.create(mudroom_host=host_machine, host_name=new_name, host_ip=new_ip,
-        #                                       machine_type_id=machine_type, cpu_num=cpu_num, memory_num=memory_num)
+        models.VirtualMachines.objects.create(mudroom_host=host_machine, host_name=new_name, host_ip=new_ip,
+                                              machine_type_id=machine_type, cpu_num=cpu_num, memory_num=memory_num)
         models.Asset.objects.create(host_machine=host_machine, host_name=new_name, host_ip=new_ip,
                                     host_item=machine_type, host_cpu=cpu_num, host_memory=memory_num)
 
@@ -174,7 +174,7 @@ class VirtualListView(View):
         # 1、拷贝镜像文件
         cmd = 'cp %s %s' % (template_mirror, new_mirror)
         ssh.exec_command(cmd)
-        time.sleep(10)
+        time.sleep(15)
         print(cmd)
 
         # 2、新建并修改xml文件
@@ -192,43 +192,46 @@ class VirtualListView(View):
         # 4、修改网卡配置文件
         cmd = 'mkdir /opt/data/%s' % host_name
         ssh.exec_command(cmd)
+        time.sleep(1)
         print(cmd)
         cmd = 'cp /opt/data/ifcfg-eth0 /opt/data/%s/' % host_name
         ssh.exec_command(cmd)
         print(cmd)
+        time.sleep(1)
         cmd = 'cp /opt/data/70-persistent-net.rules /opt/data/%s/' % host_name
         ssh.exec_command(cmd)
         print(cmd)
+        time.sleep(1)
         cmd = 'cp /opt/data/network /opt/data/%s/' % host_name
         ssh.exec_command(cmd)
         print(cmd)
-        cmd = "sed -i 's#%s#%s#g' /opt/data/%s/ifcfg-eth0" % (kvm_config.kvm_template_ip, new_ip, host_name)
-        ssh.exec_command(cmd)
+        time.sleep(2)
+        cmd = "sed -i 's#%s#%s#g' /opt/data/%s/ifcfg-eth0 && \
+               sed -i 's#%s#%s#g' /opt/data/%s/ifcfg-eth0 && \
+               sed -i 's#%s#%s#g' /opt/data/%s/network " % (kvm_config.kvm_template_ip, new_ip, host_name,
+                                                            '192.168.31.253', new_gateway, host_name,
+                                                            kvm_config.kvm_template_hostname, host_name, host_name)
+        stdin, stdout, stderr = ssh.exec_command(cmd)
+        result = stdout.read()
+
+        print(result)
         print(cmd)
-        cmd = "sed -i 's#%s#%s#g' /opt/data/%s/ifcfg-eth0" % ('192.168.31.253', new_gateway, host_name)
-        ssh.exec_command(cmd)
+
+        cmd = "ssh root@%s 'virt-copy-in -d %s /opt/data/%s/ifcfg-eth0 /etc/sysconfig/network-scripts/'" % (host_machine, host_name, host_name)
         print(cmd)
-        cmd = "sed -i 's#%s#%s#g' /opt/data/%s/network" % (kvm_config.kvm_template_hostname, host_name, host_name)
-        ssh.exec_command(cmd)
-        print(cmd)
-        cmd = "virt-copy-in -d %s /opt/data/%s/ifcfg-eth0 /etc/sysconfig/network-scripts/" % (host_name, host_name)
-        ssh.exec_command(cmd)
-        time.sleep(10)
-        print(cmd)
-        cmd = 'virt-copy-in -d %s /opt/data/%s/70-persistent-net.rules /etc/udev/rules.d/' % (host_name, host_name)
-        ssh.exec_command(cmd)
-        time.sleep(10)
-        print(cmd)
-        cmd = 'virt-copy-in -d %s /opt/data/%s/network /etc/sysconfig/' % (host_name, host_name)
-        ssh.exec_command(cmd)
-        time.sleep(10)
+        os.system(cmd)
+
+        cmd = "virt-copy-in -d %s /opt/data/%s/70-persistent-net.rules /etc/udev/rules.d/ && \
+               virt-copy-in -d %s /opt/data/%s/network /etc/sysconfig/ && \
+               virsh start %s" % (host_name, host_name, host_name, host_name, host_name)
         print(cmd)
 
         # 5、启动虚拟机
-        cmd = 'virsh start %s' % host_name
-        ssh.exec_command(cmd)
-        print(cmd)
+        # cmd = 'virsh start %s' % host_name
+        stdin, stdout, stderr = ssh.exec_command(cmd)
+        result = stdout.read()
 
+        print(result)
         ssh.close()
 
     def chang_ip(self, new_ip):
@@ -283,11 +286,11 @@ class VirtualListView(View):
 
     def host_del(self, host_del_id):
 
-        obj = models.Asset.objects.filter(id=host_del_id)
-        # obj = models.VirtualMachines.objects.filter(id=host_del_id)
+        # obj = models.Asset.objects.filter(id=host_del_id)
+        obj = models.VirtualMachines.objects.filter(id=host_del_id)
         host_name = obj[0].host_name
-        host_machine = obj[0].host_machine
-        print(host_del_id, host_name)
+        host_machine = obj[0].mudroom_host
+        print(host_del_id, host_name, host_machine)
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -312,14 +315,14 @@ class VirtualListView(View):
         # ssh.exec_command(cmd)
         # print(cmd)
 
-        models.Asset.objects.filter(id=host_del_id).delete()
-        # models.VirtualMachines.objects.filter(id=host_del_id).delete()
+        # models.Asset.objects.filter(id=host_del_id).delete()
+        models.VirtualMachines.objects.filter(id=host_del_id).delete()
 
     def change_host_name(self, host_id, host_name):
-        models.Asset.objects.filter(id=host_id).update(host_name=host_name)
-        # models.VirtualMachines.objects.filter(id=host_id).update(host_name=host_name)
-        obj = models.Asset.objects.filter(id=host_id)
-        # obj = models.VirtualMachines.objects.filter(id=host_id)
+        # models.Asset.objects.filter(id=host_id).update(host_name=host_name)
+        models.VirtualMachines.objects.filter(id=host_id).update(host_name=host_name)
+        # obj = models.Asset.objects.filter(id=host_id)
+        obj = models.VirtualMachines.objects.filter(id=host_id)
         host_ip = obj[0].host_ip
 
         ssh = paramiko.SSHClient()
@@ -331,8 +334,9 @@ class VirtualListView(View):
         cmd = "hostname %s && echo %s > /etc/hostname && \
                     echo %s >> /etc/hosts && \
                     sed -i s/HOSTNAME=.*/HOSTNAME=%s/g /etc/sysconfig/network && \
-                    service zabbix_agentd restart && \
-                    service rsyslog restart &" % (host_name, host_name, str_host, host_name)
+                    service zabbix_agentd restart" % (host_name, host_name, str_host, host_name)
+        ssh.exec_command(cmd)
+        cmd = "service rsyslog restart &"
         ssh.exec_command(cmd)
 
 

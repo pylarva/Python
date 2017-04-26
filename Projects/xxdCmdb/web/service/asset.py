@@ -91,7 +91,9 @@ class Asset(BaseServiceList):
                 'title': "宿主机",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@host_machine'}},
-                'attr': {}
+                'attr': {'name': 'host_machine', 'id': '@host_machine', 'original': '@host_machine',
+                         'edit-enable': 'true',
+                         'edit-type': 'input'}
             },
             {
                 'q': 'host_cpu',
@@ -108,11 +110,11 @@ class Asset(BaseServiceList):
                 'attr': {}
             },
             {
-                'q': 'host_item',
+                'q': 'host_type',
                 'title': "设备类型",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@device_type_list'}},
-                'attr': {'name': 'host_item', 'id': '@host_item', 'original': '@host_item',
+                'attr': {'name': 'host_type', 'id': '@host_type', 'original': '@host_type',
                          'edit-enable': 'true',
                          'edit-type': 'select',
                          'global-name': 'device_type_list'}
@@ -122,7 +124,8 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
+                    'content': "<a href='#'>查看详细</a>",
+                    # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}
             },
@@ -199,6 +202,9 @@ class Asset(BaseServiceList):
             conditions = self.assets_condition(request)
             asset_count = models.Asset.objects.filter(conditions).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
+            # page_info = PageInfo('2', asset_count)
+            # 打印
+            print(request.GET.get('pager', None))
             asset_list = models.Asset.objects.filter(conditions).extra(select=self.extra_select).values(
                 *self.values_list)[page_info.start:page_info.end]
 

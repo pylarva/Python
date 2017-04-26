@@ -2,7 +2,7 @@ from django.utils.safestring import mark_safe
 
 
 class Page:
-    def __init__(self, current_page, data_count, per_page_count=10, pager_num=7):
+    def __init__(self, current_page, data_count, per_page_count=1000, pager_num=7):
         self.current_page = current_page
         self.data_count = data_count
         self.per_page_count = per_page_count

@@ -145,10 +145,11 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ item.host_ip }}</td>
                     <td>{{ item.host_name }}</td>
-                    <td>{{ item.host_cpu }}核</td>
-                    <td>{{ item.host_memory }}G</td>
-                    <td>{{ item.get_host_item_display }}</td>
-                    <td>{{ item.host_machine }}</td>
+                    <td>{{ item.cpu_num }}核</td>
+                    <td>{{ item.memory_num }}G</td>
+                    <td>{{ item.machine_type }}</td>
+{#                    <td>{{ item.get_host_item_display }}</td>#}
+                    <td>{{ item.mudroom_host }}</td>
                     <td>
                         <div class="progress progress-striped" style="margin-bottom: 0px";>
 	                        <div class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width:100%">100%</div>
@@ -418,6 +419,7 @@
                             if (data_dict.status) {
                                 location.reload();
                             }else {
+                                $('#del_machine').hide();
                                 $('#connect_info').hide();
                                 $('#connect_failed').show();
                                 $('#message_info').text(data_dict.message);

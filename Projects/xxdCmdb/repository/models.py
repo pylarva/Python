@@ -81,7 +81,7 @@ class Asset(models.Model):
         (2, 'c2'),
     )
 
-    host_ip = models.CharField(max_length=32, null=True, blank=True)
+    host_ip = models.CharField(max_length=32, null=True, blank=True, unique=True)
     host_name = models.CharField(max_length=128, null=True, blank=True)
     host_status = models.IntegerField(choices=device_status_choices, default=2)
     host_item = models.IntegerField(choices=device_item_choices, default=1)

@@ -143,6 +143,7 @@
                 if (response.status) {
                     SuccessHandleStatus(response.message);
                     $('#exampleModal').hide();
+                    location.reload();
                 } else {
                     alert(response.message);
                 }
@@ -157,6 +158,14 @@
         });
 
     }
+
+    /*
+     分页
+     */
+    function ChangePage(id) {
+        initialize(id);
+    }
+
 
     /*
      绑定头部按钮事件
@@ -908,9 +917,9 @@
             });
         },
 
-        'nbDataList': function(url){
+        'nbDataList': function(url, page_num){
             requestUrl = url;
-            initialize(1);
+            initialize(page_num);
             bindMenuFunction();
             bindMultiSelect();
             bindSearchCondition();
