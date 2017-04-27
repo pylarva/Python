@@ -332,9 +332,9 @@ class VirtualListView(View):
         # 开始更新主机名
         str_host = host_ip + '    ' + host_name
         cmd = "hostname %s && echo %s > /etc/hostname && \
-                    echo %s >> /etc/hosts && \
+                    sed -i s/%s.*/%s/g /etc/hosts && \
                     sed -i s/HOSTNAME=.*/HOSTNAME=%s/g /etc/sysconfig/network && \
-                    service zabbix_agentd restart" % (host_name, host_name, str_host, host_name)
+                    service zabbix_agentd restart" % (host_name, host_name, host_ip, str_host, host_name)
         ssh.exec_command(cmd)
         cmd = "service rsyslog restart &"
         ssh.exec_command(cmd)

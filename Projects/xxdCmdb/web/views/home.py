@@ -2,28 +2,13 @@
 # -*- coding:utf-8 -*-
 from django.views import View
 from django.shortcuts import render
-from django.shortcuts import redirect
 from django.http import JsonResponse
 from web.service import chart
 from django.utils.decorators import method_decorator
-
-USER_NAME = {}
-
-
-def auth(func):
-    def inner(request, *args, **kwargs):
-        # v = request.COOKIES.get('user_cookie')
-        v = request.session.get('is_login', None)
-        # print(v)
-        if not v:
-            return redirect('login.html')
-        global USER_NAME
-        USER_NAME['name'] = v
-        return func(request, *args, **kwargs)
-    return inner
+from web.service.login import auth_admin
 
 
-@method_decorator(auth, name='dispatch')
+@method_decorator(auth_admin, name='dispatch')
 class IndexView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(IndexView, self).dispatch(request, *args, **kwargs)
@@ -32,7 +17,7 @@ class IndexView(View):
         return render(request, 'index.html')
 
 
-@method_decorator(auth, name='dispatch')
+@method_decorator(auth_admin, name='dispatch')
 class CmdbView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(CmdbView, self).dispatch(request, *args, **kwargs)
@@ -51,7 +36,7 @@ class ChartView(View):
         return JsonResponse(response.__dict__, safe=False, json_dumps_params={'ensure_ascii': False})
 
 
-@method_decorator(auth, name='dispatch')
+@method_decorator(auth_admin, name='dispatch')
 class TaskView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(TaskView, self).dispatch(request, *args, **kwargs)
@@ -60,7 +45,7 @@ class TaskView(View):
         return render(request, 'task.html')
 
 
-@method_decorator(auth, name='dispatch')
+@method_decorator(auth_admin, name='dispatch')
 class ReadView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(ReadView, self).dispatch(request, *args, **kwargs)

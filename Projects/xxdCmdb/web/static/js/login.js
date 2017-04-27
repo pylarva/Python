@@ -67,7 +67,11 @@ $(document).ready(function() {
             dataType: 'JSON',
             success: function (data_dict) {
                 if (data_dict.status){
-                    location.href = 'index.html';
+                	if($('#u').val()=='admin'){
+                    	location.href = 'index.html'}
+                    	else {
+                		location.href = 'read.html'
+					}
                 } else {
                     $('#u').focus().css({
                         border: "1px solid red",

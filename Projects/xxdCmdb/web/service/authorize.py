@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import json
+import re
 from django.db.models import Q
 from repository import models
 from utils.pager import PageInfo
 from utils.response import BaseResponse
 from django.http.request import QueryDict
-
+from utils.hostname import change_host_name
 from .base import BaseServiceList
 
 
@@ -26,81 +27,64 @@ class Asset(BaseServiceList):
             {
                 'q': 'id',  # 用于数据库查询的字段，即Model.Tb.objects.filter(*[])
                 'title': "ID",  # 前段表格中显示的标题
-                'display': 1,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
+                'display': 0,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
                 'attr': {}  # 自定义属性
             },
             {
-                'q': 'host_ip',
+                'q': 'username',
+                'title': "用户名",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@username'}},
+                'attr': {}
+            },
+            {
+                'q': 'ip',
                 'title': "IP",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@host_ip'}},
-                'attr': {}
+                'text': {'content': "{n}", 'kwargs': {'n': '@ip'}},
+                'attr': {'name': 'host_name', 'id': '@host_name', 'original': '@host_name',
+                         'edit-enable': 'true',
+                         'edit-type': 'input'}
             },
             {
-                'q': 'host_name',
-                'title': "主机名",
+                'q': 'rank',
+                'title': "权限",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@host_name'}},
-                'attr': {}
-            },
-            {
-                'q': 'host_status',
-                'title': "状态",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@@device_status_list'}},
-                'attr': {'name': 'host_status', 'id': '@host_status', 'origin': '@host_status',
+                'text': {'content': "{n}", 'kwargs': {'n': '@rank'}},
+                'attr': {'name': 'host_status', 'id': '@host_status', 'original': '@host_status',
                          'edit-enable': 'true',
                          'edit-type': 'select',
                          'global-name': 'device_status_list'}
             },
             {
-                'q': 'business_1_id',
-                'title': "业务1",
+                'q': 'status',
+                'title': "状态",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@@business_1_list'}},
-                'attr': {'name': 'business_1_id', 'id': '@business_1_id', 'origin': '@business_1_id', 'edit-enable': 'true',
+                'text': {'content': "{n}", 'kwargs': {'n': '@status'}},
+                'attr': {'name': 'business_1_id', 'id': '@business_1_id', 'original': '@business_1_id', 'edit-enable': 'true',
                          'edit-type': 'select',
                          'global-name': 'business_1_list'}
             },
             {
-                'q': 'business_2_id',
-                'title': "业务2",
+                'q': 'email',
+                'title': "邮箱",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@@business_2_list'}},
-                'attr': {'name': 'business_2_id', 'id': '@business_2_id', 'origin': '@business_2_id',
+                'text': {'content': "{n}", 'kwargs': {'n': '@email'}},
+                'attr': {'name': 'business_2_id', 'id': '@business_2_id', 'original': '@business_2_id',
                          'edit-enable': 'true',
                          'edit-type': 'select',
                          'global-name': 'business_2_list'}
-            },
-            {
-                'q': 'business_3_id',
-                'title': "业务3",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@@business_3_list'}},
-                'attr': {'name': 'business_3_id', 'id': '@business_3_id', 'origin': '@business_3_id',
-                         'edit-enable': 'true',
-                         'edit-type': 'select',
-                         'global-name': 'business_3_list'}
-            },
-            {
-                'q': None,
-                'title': "权限",
-                'display': 1,
-                'text': {
-                    'content': "<select><option value='3'>rd</option><option value='2'>admin</option><option value='1'>root</option></select>",
-                    'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
-                'attr': {}
             },
             {
                 'q': None,
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='#' onclick=authorize(this,{nid},{host_ip})>权限申请</a>",
-                    'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'},
-                    'attr': {}
-                }
+                    'content': "<a href='#'>查看详细</a>",
+                    # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
+                    'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
+                'attr': {}
             },
         ]
         # 额外搜索条件
@@ -114,11 +98,6 @@ class Asset(BaseServiceList):
     @property
     def device_status_list(self):
         result = map(lambda x: {'id': x[0], 'name': x[1]}, models.Asset.device_status_choices)
-        return list(result)
-
-    @property
-    def rank_list(self):
-        result = map(lambda x: {'id': x[0], 'name': x[1]}, models.Asset.auth_rank_choices)
         return list(result)
 
     @property
@@ -158,7 +137,6 @@ class Asset(BaseServiceList):
     @staticmethod
     def assets_condition(request):
         con_str = request.GET.get('condition', None)
-        # print(con_str)
         if not con_str:
             con_dict = {}
         else:
@@ -179,11 +157,10 @@ class Asset(BaseServiceList):
         try:
             ret = {}
             conditions = self.assets_condition(request)
-            asset_count = models.Asset.objects.filter(conditions).count()
+            asset_count = models.AuthInfo.objects.filter(conditions).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
-            asset_list = models.Asset.objects.filter(conditions).extra(select=self.extra_select).values(
+            asset_list = models.AuthInfo.objects.filter(conditions).extra(select=self.extra_select).values(
                 *self.values_list)[page_info.start:page_info.end]
-
             ret['table_config'] = self.table_config
             ret['condition_config'] = self.condition_config
             ret['data_list'] = list(asset_list)
@@ -214,7 +191,7 @@ class Asset(BaseServiceList):
         try:
             delete_dict = QueryDict(request.body, encoding='utf-8')
             id_list = delete_dict.getlist('id_list')
-            models.Asset.objects.filter(id__in=id_list).delete()
+            models.AuthInfo.objects.filter(id__in=id_list).delete()
             response.message = '删除成功'
         except Exception as e:
             response.status = False
@@ -232,14 +209,33 @@ class Asset(BaseServiceList):
             for row_dict in update_list:
                 nid = row_dict.pop('nid')
                 num = row_dict.pop('num')
-                try:
-                    models.Asset.objects.filter(id=nid).update(**row_dict)
-                except Exception as e:
-                    response.error.append({'num': num, 'message': str(e)})
-                    response.status = False
-                    error_count += 1
+                # print(row_dict)
+
+                # 更新主机名
+                host_name = row_dict.get('host_name')
+                if host_name:
+                    if re.search('[》>$&()<!#*]', row_dict['host_name']):
+                        response.error.append({'num': num, 'message': '非法字符！'})
+                        response.status = False
+                        error_count += 1
+                    else:
+                        obj = models.AuthInfo.objects.filter(id=nid)
+                        change_host_name(host_ip=obj[0].host_ip, host_name=row_dict['host_name'])
+                        try:
+                            models.AuthInfo.objects.filter(id=nid).update(**row_dict)
+                        except Exception as e:
+                            response.error.append({'num': num, 'message': str(e)})
+                            response.status = False
+                            error_count += 1
+                else:
+                    try:
+                        models.AuthInfo.objects.filter(id=nid).update(**row_dict)
+                    except Exception as e:
+                        response.error.append({'num': num, 'message': str(e)})
+                        response.status = False
+                        error_count += 1
             if error_count:
-                response.message = '共%s条,失败%s条' % (len(update_list), error_count,)
+                response.message = '非法字符！共%s条,失败%s条' % (len(update_list), error_count,)
             else:
                 response.message = '更新成功'
         except Exception as e:
@@ -261,3 +257,4 @@ class Asset(BaseServiceList):
             response.status = False
             response.message = str(e)
         return response
+

@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -26,6 +25,16 @@ SECRET_KEY = '$(i)78vv)qw)hggq%t)sg0f_ysprbfg9o*g455rx$zd)aqvy70'
 DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0', 'cmdb.xxd.com', '192.168.31.110', '172.16.18.106']
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）
+
+
+SESSION_COOKIE_DOMAIN = None
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_AGE = 1209600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = False
 
 
 # Application definition

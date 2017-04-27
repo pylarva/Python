@@ -3,6 +3,33 @@
 from django.db import models
 
 
+class AuthInfo(models.Model):
+    """
+    用户堡垒机权限表
+    """
+    auth_rank_choices = (
+        (1, 'root'),
+        (2, 'admin'),
+        (3, 'rd')
+    )
+    auth_rank_status = (
+        (1, 'apply'),
+        (2, 'pass'),
+        (3, 'refuse')
+    )
+    username = models.CharField(max_length=32, null=True, blank=True)
+    ip = models.CharField(max_length=32, null=True, blank=True)
+    rank = models.IntegerField(choices=auth_rank_choices, default=3)
+    status = models.IntegerField(choices=auth_rank_status, default=1)
+    email = models.CharField(max_length=64, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "用户堡垒机权限表"
+
+    def __str__(self):
+        return self.username
+
+
 class MachineType(models.Model):
     """
     虚拟机配置类型表
@@ -81,7 +108,7 @@ class Asset(models.Model):
         (2, 'c2'),
     )
 
-    host_ip = models.CharField(max_length=32, null=True, blank=True, unique=True)
+    host_ip = models.CharField(max_length=32, null=True, blank=True)
     host_name = models.CharField(max_length=128, null=True, blank=True)
     host_status = models.IntegerField(choices=device_status_choices, default=2)
     host_item = models.IntegerField(choices=device_item_choices, default=1)

@@ -274,6 +274,14 @@
     }
 
     /*
+     检查cookie里面的用户名
+     */
+    function usernameCookie() {
+        var v =$.cookie('username');
+        $('#username_cookie').text(v);
+    }
+
+    /*
      初始化全局变量
      */
     function initGlobal(globalDict) {
@@ -919,6 +927,7 @@
 
         'nbDataList': function(url, page_num){
             requestUrl = url;
+            usernameCookie();
             initialize(page_num);
             bindMenuFunction();
             bindMultiSelect();

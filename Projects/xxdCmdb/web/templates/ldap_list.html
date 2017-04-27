@@ -1,4 +1,4 @@
-{% extends 'layout/_layread.html' %}
+{% extends 'layout/_laybusiness.html' %}
 
 {% block css %}
 
@@ -8,7 +8,7 @@
 {% block conent %}
     <ol class="breadcrumb" style="margin-bottom: 0;">
         <li><a href="/cmdb.html">首页</a></li>
-        <li class="active">资产查询</li>
+        <li class="active">xxxxxxxxx</li>
     </ol>
     <div style="padding: 5px 8px;">
 
@@ -46,6 +46,24 @@
 
             </div>
 
+            <div class="clearfix function-area">
+                <div class="btn-group btn-group-sm custom-btn-group">
+                    <a id="check_all" class="btn btn-default no-radius"><i
+                            class="fa fa-check-square"></i> 全选</a>
+                    <a id="check_cancel" class="btn btn-default no-radius"><i class="fa fa-minus-square-o"></i> 取消</a>
+                    <a id="check_reverse" class="btn btn-default no-radius"><i
+                            class="fa fa-check-square-o"></i> 反选</a>
+                    <a class="btn btn-default no-radius" href="#"><i class="fa fa-plus-circle"></i>添加</a>
+                    <a id="do_delete" class="btn btn-default no-radius"><i class="fa fa-trash"></i> 删除</a>
+                    <a id="edit_mode_target" class="btn btn-default no-radius"><i class="fa fa-pencil-square-o"></i>
+                        <span>进入编辑模式</span></a>
+                    <a id="do_save" class="btn btn-default no-radius"><i class="fa fa-floppy-o"></i> 保存</a>
+                    <a id="do_refresh" class="btn btn-default no-radius"><i class="fa fa-refresh"></i> 刷新</a>
+                    <a id="handle_status" class="btn no-radius" tabindex="0" role="button" data-toggle="manual"
+                       data-trigger="focus" data-container="body" data-html="true" data-placement="bottom" title="错误详细"
+                       data-content=""></a>
+                </div>
+            </div>
 
             <div class="table-responsive table-area">
                 <table class="table table-striped table-bordered">
@@ -79,9 +97,7 @@
     <div id="modal_delete" class="alert alert-danger alert-dismissible fade in modal-delete hide" role="alert">
         <button type="button" class="close" aria-label="Close" onclick="$.Hide('#shade,#modal_delete');"><span>×</span>
         </button>
-        <h4>确定删除资产？</h4>
-
-        <p>与该资产相关联的网卡、硬盘、内存和日志等将全部被删除！<br/> &nbsp;</p>
+        <h4>确定用户信息？</h4>
 
         <p style="text-align: right">
             <button type="button" class="btn btn-danger" id="do_delete_confirm">确定删除</button>
@@ -98,6 +114,17 @@
     <div id='loading' class='loading hide'></div>
     <!-- 加载层结束 -->
 
+    <div class="form-group" style="width: 150px; display: inline-block">
+        <input id="a1" type="email" class="form-control" placeholder="用户名">
+    </div>
+
+    <div class="form-group" style="width: 150px; display: inline-block">
+        <input id="a2" type="email" class="form-control" placeholder="密码">
+    </div>
+
+    <button id="virtual_add" type="button" class="btn btn-primary" onclick="add()">提交</button>
+
+
 {% endblock %}
 
 {% block js %}
@@ -107,15 +134,31 @@
 
     <script>
         $(function () {
-            $.initMenu('#menu_asset');
-            $.nbDataList('/reads.html');
+            $.initMenu('#menu_user_profile');
+            $.nbDataList('/user.html');
+
         });
-        function ChangePage(id) {
-                $.nbDataList('/assets.html', id);
-            }
-        function authorize(ths, id) {
-            alert($(ths).parent().prev().children().val());
-            alert(id);
+        
+        function add() {
+            var v1 = $('#a1').val();
+            var v2 = $('#a2').val();
+            $.ajax({
+                url: 'ldap.html',
+                type: 'POST',
+                data: {
+                    'name': v1,
+                    'pwd': v2,
+                },
+                dataType: 'JSON',
+                success: function (data_dict) {
+                    if (data_dict.status) {
+                        alert('主机名更新成功！');
+                    }else {
+                    }
+                }
+            });
+
         }
+
     </script>
 {% endblock %}
