@@ -26,7 +26,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0', 'cmdb.xxd.com', '192.168.31.110', '172.16.18.106']
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 
 SESSION_COOKIE_DOMAIN = None

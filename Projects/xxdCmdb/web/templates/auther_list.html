@@ -1,4 +1,4 @@
-{% extends 'layout/_laybusiness.html' %}
+{% extends 'layout/_layread.html' %}
 
 {% block css %}
 
@@ -131,13 +131,31 @@
     <script>
         $(function () {
             $.initMenu('#menu_asset');
-            $.nbDataList('/authorizes.html', '1');
+            $.nbDataList('/authorizers.html', '1');
         });
         function ChangePage(id) {
-                $.nbDataList('/authorizes.html', id);
+                $.nbDataList('/authorizers.html', id);
             }
-        function do_pass(id) {
-            
+        function d_record(id) {
+            $('#del_record').modal();
+
+            $('#del_confirm').click(function () {
+                var list = [];
+                list.push(id);
+                $.ajax({
+                url: 'authorizers.html',
+                type: 'DELETE',
+                data: {'del_list': list},
+                dataType: 'JSON',
+                traditional: true,
+                success: function (response) {
+                    if (response.status){
+                        location.reload();
+                    } else {
+                    }
+                }
+                })
+        });
         }
     </script>
 {% endblock %}

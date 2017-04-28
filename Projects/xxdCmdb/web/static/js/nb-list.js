@@ -156,7 +156,6 @@
                 alert('请求异常');
             }
         });
-
     }
 
     /*
@@ -247,11 +246,12 @@
         $.Show('#shade,#loading');
         var conditions = JSON.stringify(aggregationSearchCondition());
         var $body = $('#table_body');
+        var username = $.cookie('username');
         $.ajax({
             url: requestUrl,
             type: 'GET',
             traditional: true,
-            data: {'condition': conditions, 'pager': pager},
+            data: {'condition': conditions, 'pager': pager, 'username': username},
             dataType: 'JSON',
             success: function (response) {
                 $.Hide('#shade,#loading');

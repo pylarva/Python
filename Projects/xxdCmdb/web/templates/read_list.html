@@ -111,11 +111,26 @@
             $.nbDataList('/reads.html');
         });
         function ChangePage(id) {
-                $.nbDataList('/assets.html', id);
+                $.nbDataList('/reads.html', id);
             }
-        function authorize(ths, id) {
-            alert($(ths).parent().prev().children().val());
-            alert(id);
+        function authorize(ths, ip, id) {
+            var user_rank = $(ths).parent().prev().children().val();
+            var username = $.cookie('username');
+            var email = $.cookie('email');
+            $.ajax({
+			url: 'authorizes.html',
+            type: 'POST',
+            data: {'username': username, 'ip': ip, 'user_rank': user_rank, 'email': email},
+            dataType: 'JSON',
+            success: function (data_dict) {
+			    var s = '#host_' + id;
+                if (data_dict.status){
+                    $(s).text('申请中...')
+                } else {
+                    alert('该主机权限已经申请过...');
+                }
+            }
+		})
         }
     </script>
 {% endblock %}

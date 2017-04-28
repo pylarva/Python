@@ -13,15 +13,16 @@ class AuthInfo(models.Model):
         (3, 'rd')
     )
     auth_rank_status = (
-        (1, 'apply'),
-        (2, 'pass'),
-        (3, 'refuse')
+        (1, '[申请中]'),
+        (2, '[通过]'),
+        (3, '[拒绝]')
     )
     username = models.CharField(max_length=32, null=True, blank=True)
     ip = models.CharField(max_length=32, null=True, blank=True)
     rank = models.IntegerField(choices=auth_rank_choices, default=3)
     status = models.IntegerField(choices=auth_rank_status, default=1)
     email = models.CharField(max_length=64, null=True, blank=True)
+    ctime = models.DateField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "用户堡垒机权限表"

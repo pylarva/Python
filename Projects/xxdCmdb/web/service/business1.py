@@ -20,11 +20,11 @@ class Asset(BaseServiceList):
         # 表格的配置
         table_config = [
             {
-                'q': 'id',  # 用于数据库查询的字段，即Model.Tb.objects.filter(*[])
-                'title': "ID",  # 前段表格中显示的标题
-                'display': 0,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
+                'q': 'id',
+                'title': "ID",
+                'display': 0,
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
-                'attr': {}  # 自定义属性
+                'attr': {}
             },
             {
                 'q': 'name',

@@ -38,6 +38,10 @@
 {% endblock %}
 
 {% block js %}
+    <script type="text/javascript" src="/static/js/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/js/nb-list.js"></script>
     <script type="text/javascript" src="/static/plugins/highstock/code/highstock.js"></script>
     <script type="text/javascript" src="/static/plugins/highchart/code/highcharts.js"></script>
     <script type="text/javascript" src="/static/plugins/highchart/code/highcharts-3d.js"></script>
@@ -48,6 +52,8 @@
             initCategory();
             initGroup();
             //initDynamic();
+            $.initMenu('#menu_user_profile');
+            $.nbDataList('/business_1s.html', '1');
         });
     </script>
 {% endblock %}

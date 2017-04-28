@@ -51,32 +51,25 @@ class Asset(BaseServiceList):
                 'attr': {}
             },
             {
+                'q': 'status',
+                'title': "状态",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@device_status_list'}},
+                'attr': {'style': 'color:green'}
+            },
+            {
                 'q': 'email',
                 'title': "邮箱",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@email'}},
                 'attr': {}
             },
             {
-                'q': 'ctime',
-                'title': "申请时间",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@ctime'}},
-                'attr': {}
-            },
-            {
-                'q': 'status',
-                'title': "状态",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@@rank_status_list'}},
-                'attr': {'style': 'color:green'}
-            },
-            {
                 'q': None,
-                'title': "审批",
+                'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='#' onclick=do_pass({nid})>通过</a> | <a href='#' onclick=do_refuse({nid})>拒绝</a>",
+                    'content': "<a href='#' onclick=d_record({nid})>取消</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}
@@ -89,9 +82,8 @@ class Asset(BaseServiceList):
         }
         super(Asset, self).__init__(condition_config, table_config, extra_select)
 
-
     @property
-    def rank_status_list(self):
+    def device_status_list(self):
         result = map(lambda x: {'id': x[0], 'name': x[1]}, models.AuthInfo.auth_rank_status)
         return list(result)
 
@@ -148,15 +140,14 @@ class Asset(BaseServiceList):
         return con_q
 
     def fetch_assets(self, request):
-        username = request.GET.get('username', None)
-        print(username)
         response = BaseResponse()
+        username = request.GET.get('username')
         try:
             ret = {}
-            conditions = self.assets_condition(request)
-            asset_count = models.AuthInfo.objects.filter(conditions).count()
+            # conditions = self.assets_condition(request)
+            asset_count = models.AuthInfo.objects.filter(username=username).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
-            asset_list = models.AuthInfo.objects.filter(conditions).extra(select=self.extra_select).values(
+            asset_list = models.AuthInfo.objects.filter(username=username).extra(select=self.extra_select).values(
                 *self.values_list)[page_info.start:page_info.end]
             ret['table_config'] = self.table_config
             ret['condition_config'] = self.condition_config
@@ -166,7 +157,7 @@ class Asset(BaseServiceList):
                 "page_start": page_info.start,
             }
             ret['global_dict'] = {
-                'rank_status_list': self.rank_status_list,
+                'device_status_list': self.device_status_list,
                 'rank_list': self.rank_list,
                 'idc_list': self.idc_list,
                 'business_unit_list': self.business_unit_list,
@@ -187,7 +178,7 @@ class Asset(BaseServiceList):
         response = BaseResponse()
         try:
             delete_dict = QueryDict(request.body, encoding='utf-8')
-            id_list = delete_dict.getlist('id_list')
+            id_list = delete_dict.getlist('del_list')
             models.AuthInfo.objects.filter(id__in=id_list).delete()
             response.message = '删除成功'
         except Exception as e:

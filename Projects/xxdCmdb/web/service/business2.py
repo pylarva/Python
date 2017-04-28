@@ -12,19 +12,17 @@ from .base import BaseServiceList
 
 class Asset(BaseServiceList):
     def __init__(self):
-        # 查询条件的配置
         condition_config = [
             {'name': 'host_ip', 'text': 'IP', 'condition_type': 'input'},
             {'name': 'business_2', 'text': '业务类型1', 'condition_type': 'select', 'global_name': 'business_2_list'},
         ]
-        # 表格的配置
         table_config = [
             {
-                'q': 'id',  # 用于数据库查询的字段，即Model.Tb.objects.filter(*[])
-                'title': "ID",  # 前段表格中显示的标题
-                'display': 0,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
+                'q': 'id',
+                'title': "ID",
+                'display': 0,
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
-                'attr': {}  # 自定义属性
+                'attr': {}
             },
             {
                 'q': 'name',

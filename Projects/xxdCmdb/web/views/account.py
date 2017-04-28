@@ -48,6 +48,7 @@ class LoginView(View):
 
                 ret = HttpResponse(json.dumps(data_dict))
                 ret.set_cookie('username', u1)
+                ret.set_cookie('email', email)
 
                 return ret
             else:

@@ -13,23 +13,21 @@ from .base import BaseServiceList
 
 class Asset(BaseServiceList):
     def __init__(self):
-        # 查询条件的配置
         condition_config = [
             {'name': 'host_ip', 'text': 'IP', 'condition_type': 'input'},
-            {'name': 'business_1', 'text': '业务类型1', 'condition_type': 'select', 'global_name': 'business_1_list'},
-            {'name': 'business_2', 'text': '业务类型2', 'condition_type': 'select', 'global_name': 'business_2_list'},
-            {'name': 'business_3', 'text': '业务类型3', 'condition_type': 'select', 'global_name': 'business_3_list'},
+            {'name': 'business_1', 'text': '环境', 'condition_type': 'select', 'global_name': 'business_1_list'},
+            {'name': 'business_2', 'text': '二级业务线', 'condition_type': 'select', 'global_name': 'business_2_list'},
+            {'name': 'business_3', 'text': '三级业务线', 'condition_type': 'select', 'global_name': 'business_3_list'},
             {'name': 'host_status', 'text': '资产状态', 'condition_type': 'select',
              'global_name': 'device_status_list'},
         ]
-        # 表格的配置
         table_config = [
             {
-                'q': 'id',  # 用于数据库查询的字段，即Model.Tb.objects.filter(*[])
-                'title': "ID",  # 前段表格中显示的标题
-                'display': 0,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
+                'q': 'id',
+                'title': "ID",
+                'display': 0,
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
-                'attr': {}  # 自定义属性
+                'attr': {}
             },
             {
                 'q': 'host_ip',
@@ -59,7 +57,7 @@ class Asset(BaseServiceList):
             },
             {
                 'q': 'business_1_id',
-                'title': "业务1",
+                'title': "环境",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@business_1_list'}},
                 'attr': {'name': 'business_1_id', 'id': '@business_1_id', 'original': '@business_1_id', 'edit-enable': 'true',
@@ -68,7 +66,7 @@ class Asset(BaseServiceList):
             },
             {
                 'q': 'business_2_id',
-                'title': "业务2",
+                'title': "二级业务线",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@business_2_list'}},
                 'attr': {'name': 'business_2_id', 'id': '@business_2_id', 'original': '@business_2_id',
@@ -78,7 +76,7 @@ class Asset(BaseServiceList):
             },
             {
                 'q': 'business_3_id',
-                'title': "业务3",
+                'title': "三级业务线",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@business_3_list'}},
                 'attr': {'name': 'business_3_id', 'id': '@business_3_id', 'original': '@business_3_id',

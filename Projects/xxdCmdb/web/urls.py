@@ -6,6 +6,7 @@ from web.views import home
 from web.views import asset
 from web.views import user
 from web.views import authorize
+from web.views import authorizer
 from web.views import read
 from web.views import business
 from web.views import PhysicalMachine
@@ -30,6 +31,9 @@ urlpatterns = [
 
     url(r'^authorize.html$', authorize.AuthListView.as_view()),
     url(r'^authorizes.html$', authorize.AuthJsonView.as_view()),
+
+    url(r'^authorizer.html$', authorizer.AuthListView.as_view()),
+    url(r'^authorizers.html$', authorizer.AuthJsonView.as_view()),
 
     url(r'^business_1.html$', business.Business1ListView.as_view()),
     url(r'^business_1s.html$', business.Business1JsonView.as_view()),
