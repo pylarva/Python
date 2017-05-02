@@ -2,13 +2,17 @@
 # -*- coding:utf-8 -*-
 import json
 import re
+import time
 from django.db.models import Q
 from repository import models
 from utils.pager import PageInfo
 from utils.response import BaseResponse
 from django.http.request import QueryDict
 from utils.hostname import change_host_name
+from multiprocessing import Process
 from .base import BaseServiceList
+from web.service.mail import send_mail
+from conf import mail_config
 
 
 class Asset(BaseServiceList):
@@ -44,6 +48,13 @@ class Asset(BaseServiceList):
                 'attr': {}
             },
             {
+                'q': 'hostname',
+                'title': "主机名",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@hostname'}},
+                'attr': {}
+            },
+            {
                 'q': 'rank',
                 'title': "权限",
                 'display': 1,
@@ -69,7 +80,9 @@ class Asset(BaseServiceList):
                 'title': "状态",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@rank_status_list'}},
-                'attr': {'style': 'color:green'}
+                # 'attr': {'style': 'color:green;border:1px solid red;margin-left: 5px;display: inline-block;'}
+                # 绿色 92 184 92  黄色 240 173 87 红色 217 83 79
+                'attr': {'style' : 'display: inline-block; padding: 5px; background-color: rgb(92,184,92)'}
             },
             {
                 'q': None,
@@ -197,48 +210,7 @@ class Asset(BaseServiceList):
 
     @staticmethod
     def put_assets(request):
-        response = BaseResponse()
-        try:
-            response.error = []
-            put_dict = QueryDict(request.body, encoding='utf-8')
-            update_list = json.loads(put_dict.get('update_list'))
-            error_count = 0
-            for row_dict in update_list:
-                nid = row_dict.pop('nid')
-                num = row_dict.pop('num')
-                # print(row_dict)
-
-                # 更新主机名
-                host_name = row_dict.get('host_name')
-                if host_name:
-                    if re.search('[》>$&()<!#*]', row_dict['host_name']):
-                        response.error.append({'num': num, 'message': '非法字符！'})
-                        response.status = False
-                        error_count += 1
-                    else:
-                        obj = models.AuthInfo.objects.filter(id=nid)
-                        change_host_name(host_ip=obj[0].host_ip, host_name=row_dict['host_name'])
-                        try:
-                            models.AuthInfo.objects.filter(id=nid).update(**row_dict)
-                        except Exception as e:
-                            response.error.append({'num': num, 'message': str(e)})
-                            response.status = False
-                            error_count += 1
-                else:
-                    try:
-                        models.AuthInfo.objects.filter(id=nid).update(**row_dict)
-                    except Exception as e:
-                        response.error.append({'num': num, 'message': str(e)})
-                        response.status = False
-                        error_count += 1
-            if error_count:
-                response.message = '非法字符！共%s条,失败%s条' % (len(update_list), error_count,)
-            else:
-                response.message = '更新成功'
-        except Exception as e:
-            response.status = False
-            response.message = str(e)
-        return response
+        pass
 
     @staticmethod
     def assets_detail(device_type_id, asset_id):
@@ -255,22 +227,102 @@ class Asset(BaseServiceList):
             response.message = str(e)
         return response
 
+    def pass_email(asset_id):
+        asset = models.AuthInfo.objects.filter(id=asset_id).all()
+        ip = asset[0].ip
+        hostname = asset[0].hostname
+        username = asset[0].username
+        rank = asset[0].get_rank_display()
+        email = asset[0].email
+
+        mail_info = '堡垒机权限申请成功'
+        mail_str = '''
+        申请的堡垒机权限已被管理员审批>>
+
+        【   IP   】: %s
+
+        【 主机名 】：%s
+
+        【申请用户】：%s
+
+        【申请权限】：%s
+
+        --------------
+
+        【查询地址】: http://cmdb.xxd.com/authorizer.html
+        ''' % (ip, hostname, username, rank)
+        send_mail(email, mail_info, mail_str)
+        return True
+
     @staticmethod
     def post_assets(request):
         response = BaseResponse()
+
+        refuse_id = request.POST.get('refuse_id', None)
+        pass_id = request.POST.get('pass_id', None)
+
+        if refuse_id:
+            try:
+                models.AuthInfo.objects.filter(id=refuse_id).update(status=3)
+            except Exception as e:
+                response.status = False
+                response.message = str(e)
+                return response
+            response.status = True
+            return response
+
+        elif pass_id:
+            try:
+                models.AuthInfo.objects.filter(id=pass_id).update(status=2)
+                # 发送邮件
+                # p = Process(target=Asset.pass_email, args=(pass_id,))
+                # p.start()
+            except Exception as e:
+                response.status = False
+                response.message = str(e)
+                return response
+            response.status = True
+            return response
 
         ip = request.POST.get('ip')
         username = request.POST.get('username')
         user_rank = request.POST.get('user_rank')
         email = request.POST.get('email')
+        hostname = request.POST.get('hostname')
 
-        record = models.AuthInfo.objects.filter(username=username, ip=ip, rank=user_rank).count()
+        ctime = time.strftime("%Y-%m-%d %H:%S")
+        mail_subject = '堡垒机权限申请--%s' % username
+        mail_content = '''
+        新增用户堡垒机权限申请>>
+
+        【   IP   】: %s
+
+        【 主机名 】：%s
+
+        【申请用户】：%s
+
+        【申请时间】：%s
+
+        --------------
+
+        【审批地址】: http://cmdb.xxd.com/authorize.html
+        ''' % (ip, hostname, username, ctime)
+
+        if not username:
+            response.status = False
+            response.message = '请先登陆..'
+            return response
+
+        record = models.AuthInfo.objects.filter(username=username, ip=ip).count()
         if record > 0:
             response.status = False
-            response.message = '不能重复申请'
+            response.message = '已经申请过该主机权限，如果要变更权限，请先取消已有权限并重新申请...'
             return response
         try:
-            models.AuthInfo.objects.create(username=username, ip=ip, rank=user_rank, email=email)
+            models.AuthInfo.objects.create(username=username, ip=ip, rank=user_rank, email=email, hostname=hostname)
+            # 发送邮件
+            # p = Process(target=send_mail, args=(mail_config.mail_admin, mail_subject, mail_content))
+            # p.start()
         except Exception as e:
             response.status = False
             response.message = str(e)

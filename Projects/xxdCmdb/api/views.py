@@ -4,6 +4,7 @@ import json
 import importlib
 from django.views import View
 from django.http import JsonResponse
+from utils.response import BaseResponse
 from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -12,6 +13,32 @@ from django.utils.decorators import method_decorator
 from api import config
 from repository import models
 from api.service import asset
+
+
+class LimitView(View):
+    def dispatch(self, request, *args, **kwargs):
+        return super(LimitView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        response = BaseResponse()
+
+        name = kwargs.get('n1', None)
+        if name:
+            try:
+                result = models.AuthInfo.objects.filter(username=name, status=2).values('username', 'ip', 'hostname', 'rank')
+                response.data = list(result)
+                response.status = True
+                return JsonResponse(response.__dict__)
+            except Exception as e:
+                response.error = "Didn't find %s" % name
+                response.status = False
+                return JsonResponse(response.__dict__)
+
+        result = models.AuthInfo.objects.all().values('username', 'ip', 'hostname', 'rank', 'status')
+        # result = models.AuthInfo.objects.all()
+        response.data = list(result)
+        response.status = True
+        return JsonResponse(response.__dict__)
 
 
 class AssetView(View):
@@ -40,13 +67,12 @@ class AssetView(View):
 
         # test = {'user': '用户名', 'pwd': '密码'}
         # return JsonResponse(test, json_dumps_params={"ensure_ascii": False})
-        from utils.response import BaseResponse
         from django.db.models import Q
 
         # response = asset.get_untreated_servers()
         response = BaseResponse()
 
-        print(kwargs)
+        # print(kwargs)
         b1 = kwargs.get('b1', None)
         b2 = kwargs.get('b2', None)
         b3 = kwargs.get('b3', None)

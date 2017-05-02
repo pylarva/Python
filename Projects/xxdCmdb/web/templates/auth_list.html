@@ -132,12 +132,48 @@
         $(function () {
             $.initMenu('#menu_asset');
             $.nbDataList('/authorizes.html', '1');
+
+{#            $('#table_body').each(function () {#}
+{#                v = $(this).html();#}
+{#                alert(v);#}
+{#            });#}
+{#            var v = $("table_body tr:last td:eq(3)").text();#}
+{#            alert(v);#}
+
+
         });
         function ChangePage(id) {
                 $.nbDataList('/authorizes.html', id);
             }
         function do_pass(id) {
-            
+            $.ajax({
+            url: 'authorizes.html',
+            type: 'POST',
+            data: {'pass_id': id},
+            dataType: 'JSON',
+            traditional: true,
+            success: function (response) {
+                if (response.status){
+                    location.reload();
+                } else {
+                }
+            }
+            })
+        }
+        function do_refuse(id) {
+            $.ajax({
+            url: 'authorizes.html',
+            type: 'POST',
+            data: {'refuse_id': id},
+            dataType: 'JSON',
+            traditional: true,
+            success: function (response) {
+                if (response.status){
+                    location.reload();
+                } else {
+                }
+            }
+            })
         }
     </script>
 {% endblock %}

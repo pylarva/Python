@@ -19,6 +19,7 @@ class AuthInfo(models.Model):
     )
     username = models.CharField(max_length=32, null=True, blank=True)
     ip = models.CharField(max_length=32, null=True, blank=True)
+    hostname = models.CharField(max_length=64, null=True, blank=True)
     rank = models.IntegerField(choices=auth_rank_choices, default=3)
     status = models.IntegerField(choices=auth_rank_status, default=1)
     email = models.CharField(max_length=64, null=True, blank=True)

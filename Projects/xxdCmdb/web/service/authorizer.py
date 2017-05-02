@@ -44,6 +44,13 @@ class Asset(BaseServiceList):
                 'attr': {}
             },
             {
+                'q': 'hostname',
+                'title': "主机名",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@hostname'}},
+                'attr': {}
+            },
+            {
                 'q': 'rank',
                 'title': "权限",
                 'display': 1,
@@ -55,7 +62,7 @@ class Asset(BaseServiceList):
                 'title': "状态",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@device_status_list'}},
-                'attr': {'style': 'color:green'}
+                'attr': {'style': 'color:green;'}
             },
             {
                 'q': 'email',

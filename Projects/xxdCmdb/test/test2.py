@@ -1,30 +1,72 @@
-# !/usr/bin/env python
-# -*- coding:utf-8 -*-
+#!/usr/bin/env python
+# coding: utf-8
 
-from xml.etree import ElementTree as ET
+import smtplib
+from email.mime.text import MIMEText
+import os
+import argparse
+import logging
+import datetime
 
-tree = ET.parse('template.xml')  # 首先建立了一个 xml tree 对象
-root = tree.getroot()
-print(root)  # 获取根节点
-print(root.tag)  # 取根节点名
-print(root.attrib)  # 获取节点属性
+mail_host = 'smtp.partner.outlook.cn'
+mail_port = 587
+mail_user = 'monitor@xinxindai.com'
+mail_pass = 'Yhblsqt520'
+mail_postfix = 'xinxindai.com'
 
-# for child in root:
-#     print(child.tag, child.attrib)
-#     for child_second in child:
-#         print(child_second.tag, child_second.text)
 
-# for node in root[10][1][1]:
-#     print(node.tag, node.attrib)
-    # new = int(8388608)
-    # node.text = str(new)
-print(root[10][1][1].tag)
-root[10][1][1].attrib['file'] = '1111'
-print(root[10][1][1].attrib)
+def send_mail(mail_to='lichengbing@xinxindai.com',subject='ssss',content='222'):
+    #me = mail_user+"<"+mail_user+"@"+mail_postfix+">"
+    me = mail_user
+    msg = MIMEText(content,'html','utf-8')
+    msg['Subject'] = subject
+    msg['From'] = me
+    msg['to'] = mail_to
+    global sendstatus
+    global senderr
+    try:
+        smtp = smtplib.SMTP()
+        smtp.connect(mail_host,mail_port)
+        smtp.starttls()
+        smtp.login(mail_user,mail_pass)
+        #print mail_user,mail_to,msg.as_string()
+        smtp.sendmail(me,mail_to,msg.as_string())
+        smtp.close()
+        print('send ok')
+        sendstatus = True
+    except Exception as e:
+        senderr = str(e)
+        print(senderr)
+        sendstatus = False
 
-print(root[10][8][0].tag)
-root[10][8][0].attrib['bridge'] = 'brrrr'
-print(root[10][8][0].attrib)
 
-tree = ET.ElementTree(root)
-tree.write('new_xo.xml', encoding='utf-8')
+def logwrite(sendstatus,mail_to,content):
+    logpath = '/tmp/zabbix_alert'
+    if not sendstatus:
+        content = senderr
+    if not os.path.isdir(logpath):
+        os.makedirs(logpath)
+
+    t = datetime.datetime.now()
+    daytime = t.strftime('%Y-%m-%d')
+    daylogfile = logpath+'/mail_'+str(daytime)+'.log'
+    logging.basicConfig(filename=daylogfile,level=logging.DEBUG)
+    logging.debug(str(t)+' mail send to {0},content is: \n {1}'.format(mail_to,content))
+
+
+# if __name__ == "__main__":
+# if 1:
+parser = argparse.ArgumentParser(description='Send mail to user for zabbix alerting')
+parser.add_argument('mail_to',action="store",help='The address of E-mail that send to user')
+parser.add_argument('subject',action="store",help='The E-mail subject')
+parser.add_argument('content',action="store",help='The E-mail content')
+args = parser.parse_args()
+mail_to = args.mail_to
+subject = args.subject
+content = args.content
+print(111)
+
+    # send_mail(mail_to,subject,content)
+send_mail()
+    # send_mail(mail_to='lichengbing@xinxindai.com', subject='sss', content='1111')
+    # logwrite(sendstatus,mail_to,content)

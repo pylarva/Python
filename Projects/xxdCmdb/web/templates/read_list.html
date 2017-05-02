@@ -115,19 +115,20 @@
             }
         function authorize(ths, ip, id) {
             var user_rank = $(ths).parent().prev().children().val();
+            var host_name = $(ths).parent().prev().prev().prev().prev().prev().prev().text();
             var username = $.cookie('username');
             var email = $.cookie('email');
             $.ajax({
 			url: 'authorizes.html',
             type: 'POST',
-            data: {'username': username, 'ip': ip, 'user_rank': user_rank, 'email': email},
+            data: {'username': username, 'ip': ip, 'user_rank': user_rank, 'email': email, 'hostname': host_name},
             dataType: 'JSON',
-            success: function (data_dict) {
+            success: function (response) {
 			    var s = '#host_' + id;
-                if (data_dict.status){
+                if (response.status){
                     $(s).text('申请中...')
                 } else {
-                    alert('该主机权限已经申请过...');
+                    alert(response.message);
                 }
             }
 		})
