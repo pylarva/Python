@@ -18,12 +18,9 @@ from conf import mail_config
 class Asset(BaseServiceList):
     def __init__(self):
         condition_config = [
-            {'name': 'host_ip', 'text': 'IP', 'condition_type': 'input'},
-            {'name': 'business_1', 'text': '业务类型1', 'condition_type': 'select', 'global_name': 'business_1_list'},
-            {'name': 'business_2', 'text': '业务类型2', 'condition_type': 'select', 'global_name': 'business_2_list'},
-            {'name': 'business_3', 'text': '业务类型3', 'condition_type': 'select', 'global_name': 'business_3_list'},
-            {'name': 'host_status', 'text': '资产状态', 'condition_type': 'select',
-             'global_name': 'device_status_list'},
+            {'name': 'ip', 'text': 'IP', 'condition_type': 'input'},
+            {'name': 'username', 'text': '用户名', 'condition_type': 'input'},
+            {'name': 'rank', 'text': '权限', 'condition_type': 'select', 'global_name': 'rank_list'},
         ]
         table_config = [
             {
@@ -82,7 +79,8 @@ class Asset(BaseServiceList):
                 'text': {'content': "{n}", 'kwargs': {'n': '@@rank_status_list'}},
                 # 'attr': {'style': 'color:green;border:1px solid red;margin-left: 5px;display: inline-block;'}
                 # 绿色 92 184 92  黄色 240 173 87 红色 217 83 79
-                'attr': {'style' : 'display: inline-block; padding: 5px; background-color: rgb(92,184,92)'}
+                # 'attr': {'style': 'display: inline-block; padding: 5px; background-color: rgb(92,184,92)', 'id': 'sss'}
+                'attr': {}
             },
             {
                 'q': None,
@@ -169,7 +167,7 @@ class Asset(BaseServiceList):
             conditions = self.assets_condition(request)
             asset_count = models.AuthInfo.objects.filter(conditions).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
-            asset_list = models.AuthInfo.objects.filter(conditions).extra(select=self.extra_select).values(
+            asset_list = models.AuthInfo.objects.filter(conditions).order_by('-id').extra(select=self.extra_select).values(
                 *self.values_list)[page_info.start:page_info.end]
             ret['table_config'] = self.table_config
             ret['condition_config'] = self.condition_config

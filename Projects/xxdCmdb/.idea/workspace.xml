@@ -32,75 +32,75 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api/views.py">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/repository/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="40" column="46" lean-forward="true" selection-start-line="40" selection-start-column="46" selection-end-line="40" selection-end-column="46" />
+            <state relative-caret-position="170">
+              <caret line="17" column="20" lean-forward="true" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="auth_list.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/templates/auth_list.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="222">
+              <caret line="139" column="44" lean-forward="true" selection-start-line="139" selection-start-column="44" selection-end-line="139" selection-end-column="44" />
+              <folding>
+                <element signature="e#250#275#0#HTML" expanded="true" />
+                <marker date="1493807288000" expanded="false" signature="1291:1304" ph="..." />
+                <marker date="1493807288000" expanded="false" signature="1306:1312" ph=" " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="nb-list.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/static/js/nb-list.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="248">
+              <caret line="244" column="23" lean-forward="true" selection-start-line="244" selection-start-column="23" selection-end-line="244" selection-end-column="23" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="authorize.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/service/authorize.py">
+        <entry file="file://$PROJECT_DIR$/web/views/authorize.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1428">
-              <caret line="84" column="75" lean-forward="true" selection-start-line="84" selection-start-column="75" selection-end-line="84" selection-end-column="75" />
+            <state relative-caret-position="374">
+              <caret line="29" column="35" lean-forward="false" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
               <folding>
                 <element signature="e#45#56#0" expanded="true" />
-                <marker date="1493727552000" expanded="true" signature="3717:3846" ph="select hostn... repository_server" />
-                <marker date="1493727552000" expanded="true" signature="3879:4027" ph="select manag... repository_networkdevice" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="auth_list.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/web/templates/auth_list.html">
+      <file leaf-file-name="authorize.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web/service/authorize.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
-              <caret line="147" column="30" lean-forward="true" selection-start-line="147" selection-start-column="30" selection-end-line="147" selection-end-column="30" />
+            <state relative-caret-position="272">
+              <caret line="34" column="31" lean-forward="true" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
               <folding>
-                <marker date="1493732162000" expanded="false" signature="1361:1374" ph="..." />
-                <marker date="1493732162000" expanded="false" signature="1376:1382" ph=" " />
+                <element signature="e#45#56#0" expanded="true" />
+                <marker date="1493807989000" expanded="true" signature="3453:3582" ph="select hostn... repository_server" />
+                <marker date="1493807989000" expanded="true" signature="3615:3763" ph="select manag... repository_networkdevice" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="virtual_list.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/templates/virtual_list.html">
+      <file leaf-file-name="business1.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/service/business1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="214" column="65" lean-forward="true" selection-start-line="214" selection-start-column="16" selection-end-line="214" selection-end-column="65" />
+            <state relative-caret-position="153">
+              <caret line="38" column="30" lean-forward="true" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
               <folding>
-                <element signature="e#7771#7797#0#HTML" expanded="true" />
-                <marker date="1493171396000" expanded="false" signature="7354:7372" ph="..." />
-                <marker date="1493171396000" expanded="false" signature="7539:7567" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="auther_list.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/templates/auther_list.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="147" column="41" lean-forward="true" selection-start-line="147" selection-start-column="41" selection-end-line="147" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="authorizer.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/service/authorizer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="66" column="13" lean-forward="true" selection-start-line="66" selection-start-column="13" selection-end-line="66" selection-end-column="13" />
-              <folding>
-                <marker date="1493726096000" expanded="true" signature="3109:3238" ph="select hostn... repository_server" />
-                <marker date="1493726096000" expanded="true" signature="3271:3419" ph="select manag... repository_networkdevice" />
+                <element signature="e#45#56#0" expanded="true" />
+                <marker date="1493346077000" expanded="true" signature="1525:1654" ph="select hostn... repository_server" />
+                <marker date="1493346077000" expanded="true" signature="1687:1835" ph="select manag... repository_networkdevice" />
               </folding>
             </state>
           </provider>
@@ -117,7 +117,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>do_s</find>
       <find>alert</find>
       <find>@@</find>
       <find>VirtualMachines</find>
@@ -147,6 +146,7 @@
       <find>do_save1</find>
       <find>DELE</find>
       <find>d</find>
+      <find>search_condition_submit</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -174,7 +174,6 @@
         <option value="$PROJECT_DIR$/web/service/login.py" />
         <option value="$PROJECT_DIR$/conf/ldap_acount.py" />
         <option value="$PROJECT_DIR$/utils/ldap.py" />
-        <option value="$PROJECT_DIR$/web/templates/index.html" />
         <option value="$PROJECT_DIR$/web/templates/cmdb.html" />
         <option value="$PROJECT_DIR$/web/service/business1.py" />
         <option value="$PROJECT_DIR$/web/service/business2.py" />
@@ -185,12 +184,8 @@
         <option value="$PROJECT_DIR$/web/urls.py" />
         <option value="$PROJECT_DIR$/web/views/authorizer.py" />
         <option value="$PROJECT_DIR$/web/templates/layout/_layread.html" />
-        <option value="$PROJECT_DIR$/web/static/js/nb-list.js" />
         <option value="$PROJECT_DIR$/web/service/asset.py" />
-        <option value="$PROJECT_DIR$/web/templates/auther_list.html" />
-        <option value="$PROJECT_DIR$/xxdCmdb/settings.py" />
         <option value="$PROJECT_DIR$/api/urls.py" />
-        <option value="$PROJECT_DIR$/repository/models.py" />
         <option value="$PROJECT_DIR$/test/test2.py" />
         <option value="$PROJECT_DIR$/web/templates/include/header.html" />
         <option value="$PROJECT_DIR$/web/templates/include/header_menu.html" />
@@ -201,8 +196,13 @@
         <option value="$PROJECT_DIR$/test/test4.py" />
         <option value="$PROJECT_DIR$/api/views.py" />
         <option value="$PROJECT_DIR$/web/service/authorizer.py" />
-        <option value="$PROJECT_DIR$/web/service/authorize.py" />
+        <option value="$PROJECT_DIR$/web/templates/index.html" />
+        <option value="$PROJECT_DIR$/xxdCmdb/settings.py" />
+        <option value="$PROJECT_DIR$/repository/models.py" />
+        <option value="$PROJECT_DIR$/web/templates/auther_list.html" />
         <option value="$PROJECT_DIR$/web/templates/auth_list.html" />
+        <option value="$PROJECT_DIR$/web/static/js/nb-list.js" />
+        <option value="$PROJECT_DIR$/web/service/authorize.py" />
       </list>
     </option>
   </component>
@@ -306,6 +306,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="include" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -853,7 +875,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39948782" sideWeight="0.49213162" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25480154" sideWeight="0.48855507" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25480154" sideWeight="0.48855507" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.4892704" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
@@ -916,14 +938,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="256">
           <caret line="152" column="21" lean-forward="false" selection-start-line="152" selection-start-column="21" selection-end-line="152" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="77" selection-end-column="72" />
           <folding />
         </state>
       </provider>
@@ -1009,21 +1023,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/service/business1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="38" column="30" lean-forward="true" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/business_1_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="154" column="23" lean-forward="false" selection-start-line="154" selection-start-column="23" selection-end-line="154" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/layout/_layread.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -1059,14 +1058,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="40" column="37" lean-forward="true" selection-start-line="40" selection-start-column="37" selection-end-line="40" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="34" lean-forward="false" selection-start-line="21" selection-start-column="34" selection-end-line="21" selection-end-column="34" />
           <folding />
         </state>
       </provider>
@@ -1113,16 +1104,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/include/header.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="71" lean-forward="true" selection-start-line="18" selection-start-column="71" selection-end-line="18" selection-end-column="71" />
-          <folding>
-            <element signature="n#style#0;n#a#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/service/asset.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
@@ -1140,16 +1121,6 @@
         <state relative-caret-position="119">
           <caret line="7" column="8" lean-forward="false" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/authorizer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="36" column="42" lean-forward="true" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
-          <folding>
-            <element signature="e#45#56#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1203,16 +1174,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/authorize.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="36" column="42" lean-forward="false" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
-          <folding>
-            <element signature="e#45#56#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/test2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -1237,14 +1198,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/repository/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="21" lean-forward="false" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="418">
@@ -1253,64 +1206,136 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/static/js/nb-list.js">
+    <entry file="file://$PROJECT_DIR$/web/views/authorizer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10268">
-          <caret line="604" column="26" lean-forward="true" selection-start-line="604" selection-start-column="26" selection-end-line="604" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/service/authorize.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1428">
-          <caret line="84" column="75" lean-forward="true" selection-start-line="84" selection-start-column="75" selection-end-line="84" selection-end-column="75" />
+        <state relative-caret-position="95">
+          <caret line="24" column="30" lean-forward="true" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
           <folding>
             <element signature="e#45#56#0" expanded="true" />
-            <marker date="1493727552000" expanded="true" signature="3717:3846" ph="select hostn... repository_server" />
-            <marker date="1493727552000" expanded="true" signature="3879:4027" ph="select manag... repository_networkdevice" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/auther_list.html">
+    <entry file="file://$PROJECT_DIR$/web/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="147" column="41" lean-forward="true" selection-start-line="147" selection-start-column="41" selection-end-line="147" selection-end-column="41" />
+        <state relative-caret-position="316">
+          <caret line="40" column="48" lean-forward="true" selection-start-line="40" selection-start-column="48" selection-end-line="40" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/service/authorizer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="66" column="13" lean-forward="true" selection-start-line="66" selection-start-column="13" selection-end-line="66" selection-end-column="13" />
+        <state relative-caret-position="235">
+          <caret line="64" column="49" lean-forward="true" selection-start-line="64" selection-start-column="49" selection-end-line="64" selection-end-column="49" />
           <folding>
-            <marker date="1493726096000" expanded="true" signature="3109:3238" ph="select hostn... repository_server" />
-            <marker date="1493726096000" expanded="true" signature="3271:3419" ph="select manag... repository_networkdevice" />
+            <marker date="1493774929000" expanded="true" signature="3109:3238" ph="select hostn... repository_server" />
+            <marker date="1493774929000" expanded="true" signature="3271:3419" ph="select manag... repository_networkdevice" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/virtual_list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="214" column="65" lean-forward="true" selection-start-line="214" selection-start-column="16" selection-end-line="214" selection-end-column="65" />
+        <state relative-caret-position="2091">
+          <caret line="202" column="0" lean-forward="true" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
           <folding>
-            <element signature="e#7771#7797#0#HTML" expanded="true" />
             <marker date="1493171396000" expanded="false" signature="7354:7372" ph="..." />
             <marker date="1493171396000" expanded="false" signature="7539:7567" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/include/header.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="31" lean-forward="true" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/business_1_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="154" column="23" lean-forward="false" selection-start-line="154" selection-start-column="23" selection-end-line="154" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/repository/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="17" column="20" lean-forward="true" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/auther_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="22" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="28" column="54" lean-forward="true" selection-start-line="28" selection-start-column="54" selection-end-line="28" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/service/business1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="38" column="30" lean-forward="true" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
+          <folding>
+            <element signature="e#45#56#0" expanded="true" />
+            <marker date="1493346077000" expanded="true" signature="1525:1654" ph="select hostn... repository_server" />
+            <marker date="1493346077000" expanded="true" signature="1687:1835" ph="select manag... repository_networkdevice" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/auth_list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="147" column="30" lean-forward="true" selection-start-line="147" selection-start-column="30" selection-end-line="147" selection-end-column="30" />
+        <state relative-caret-position="222">
+          <caret line="139" column="44" lean-forward="true" selection-start-line="139" selection-start-column="44" selection-end-line="139" selection-end-column="44" />
           <folding>
-            <marker date="1493732162000" expanded="false" signature="1361:1374" ph="..." />
-            <marker date="1493732162000" expanded="false" signature="1376:1382" ph=" " />
+            <element signature="e#250#275#0#HTML" expanded="true" />
+            <marker date="1493807288000" expanded="false" signature="1291:1304" ph="..." />
+            <marker date="1493807288000" expanded="false" signature="1306:1312" ph=" " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/static/js/nb-list.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="244" column="23" lean-forward="true" selection-start-line="244" selection-start-column="23" selection-end-line="244" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/authorize.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="29" column="35" lean-forward="false" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+          <folding>
+            <element signature="e#45#56#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/service/authorize.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="34" column="31" lean-forward="true" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
+          <folding>
+            <element signature="e#45#56#0" expanded="true" />
+            <marker date="1493807989000" expanded="true" signature="3453:3582" ph="select hostn... repository_server" />
+            <marker date="1493807989000" expanded="true" signature="3615:3763" ph="select manag... repository_networkdevice" />
           </folding>
         </state>
       </provider>

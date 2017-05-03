@@ -14,8 +14,8 @@ class AuthInfo(models.Model):
     )
     auth_rank_status = (
         (1, '[申请中]'),
-        (2, '[通过]'),
-        (3, '[拒绝]')
+        (2, '[已通过]'),
+        (3, '[已拒绝]')
     )
     username = models.CharField(max_length=32, null=True, blank=True)
     ip = models.CharField(max_length=32, null=True, blank=True)
