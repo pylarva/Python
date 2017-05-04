@@ -240,26 +240,6 @@
     }
 
     /*
-     权限状态添加样式
-     */
-    function do_aaa() {
-        $('#table_body').children().each(function () {
-            var v = $(this).children().next().next().next().next().next().next().next().next().html();
-            if(v == "[申请中]"){
-                $(this).children().next().next().next().next().next().next().next().next().attr('style', 'display: inline-block; padding: 3px; background-color: rgb(240,173,87); margin-top:4px; margin-left:6px; margin-right:-20px');
-                $(this).children().next().next().next().next().next().next().next().next().next().attr('style', '')
-            }else if(v == "[已通过]"){
-                $(this).children().next().next().next().next().next().next().next().next().attr('style', 'display: inline-block; padding: 3px;background-color: rgb(92,184,92); margin-top:4px; margin-left:6px; margin-right:-20px');
-                $(this).children().next().next().next().next().next().next().next().next().next().attr('style', '')
-            }else if(v == "[已拒绝]"){
-                $(this).children().next().next().next().next().next().next().next().next().attr('style', 'display: inline-block; padding: 3px; background-color: rgb(217,83,79); margin-top:4px; margin-left:6px; margin-right:-20px');
-                $(this).children().next().next().next().next().next().next().next().next().next().attr('style', '')
-            }else {
-            }
-    });
-}
-
-    /*
      页面初始化（获取数据，绑定事件）
      */
     function initialize(pager) {
@@ -282,7 +262,6 @@
                     initPager(response.data.page_info.page_str);
                     initSearchCondition(response.data.condition_config);
                     $.BindDoSingleCheck('#table_body', null, null);
-                    setTimeout("do_aaa()", 100);
                 } else {
                     alert(response.message);
                 }

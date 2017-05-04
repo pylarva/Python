@@ -200,9 +200,6 @@ class Asset(BaseServiceList):
             conditions = self.assets_condition(request)
             asset_count = models.Asset.objects.filter(conditions).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
-            # page_info = PageInfo('2', asset_count)
-            # 打印
-            print(request.GET.get('pager', None))
             asset_list = models.Asset.objects.filter(conditions).extra(select=self.extra_select).values(
                 *self.values_list)[page_info.start:page_info.end]
 
@@ -268,6 +265,8 @@ class Asset(BaseServiceList):
                         change_host_name(host_ip=obj[0].host_ip, host_name=row_dict['host_name'])
                         try:
                             models.Asset.objects.filter(id=nid).update(**row_dict)
+                            # 更新权限管理表中的主机名
+                            models.AuthInfo.objects.filter(ip=obj[0].host_ip).update(hostname=host_name)
                         except Exception as e:
                             response.error.append({'num': num, 'message': str(e)})
                             response.status = False

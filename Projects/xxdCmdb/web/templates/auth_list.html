@@ -132,7 +132,6 @@
         $(function () {
             $.initMenu('#menu_asset');
             $.nbDataList('/authorizes.html', '1');
-
             setTimeout("do_aaa()", 100);
         });
         function ChangePage(id) {
@@ -148,7 +147,13 @@
             traditional: true,
             success: function (response) {
                 if (response.status){
-                    location.reload();
+                    $('#pager').children().each(function () {
+                        if($(this).hasClass('active')){
+                            var v = $(this).children().text();
+                            $.nbDataList('/authorizes.html', v);
+                            setTimeout("do_aaa()", 100);
+                        }
+                    })
                 } else {
                 }
             }
@@ -163,7 +168,13 @@
             traditional: true,
             success: function (response) {
                 if (response.status){
-                    location.reload();
+                    $('#pager').children().each(function () {
+                        if($(this).hasClass('active')){
+                            var v = $(this).children().text();
+                            $.nbDataList('/authorizes.html', v);
+                            setTimeout("do_aaa()", 100);
+                        }
+                    })
                 } else {
                 }
             }

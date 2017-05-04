@@ -160,7 +160,6 @@ class Asset(BaseServiceList):
 
     def fetch_assets(self, request):
         username = request.GET.get('username', None)
-        print(username)
         response = BaseResponse()
         try:
             ret = {}
@@ -258,6 +257,8 @@ class Asset(BaseServiceList):
 
         refuse_id = request.POST.get('refuse_id', None)
         pass_id = request.POST.get('pass_id', None)
+        # pager_id = request.POST.get('pager', 1)
+        # print(pager_id)
 
         if refuse_id:
             try:

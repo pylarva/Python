@@ -37,8 +37,9 @@ class LoginView(View):
                 data_dict['message'] = '用户名或者密码错误...'
                 return HttpResponse(json.dumps(data_dict))
         else:
-            res, msg, email = ldap.authorize(user=u1, password=p1)
-            if res:
+            try:
+                res, msg, email = ldap.authorize(user=u1, password=p1)
+
                 data_dict['status'] = True
                 data_dict['message'] = 'ok'
 
@@ -49,9 +50,9 @@ class LoginView(View):
                 ret = HttpResponse(json.dumps(data_dict))
                 ret.set_cookie('username', u1)
                 ret.set_cookie('email', email)
-
                 return ret
-            else:
+
+            except Exception as e:
                 data_dict['status'] = False
                 data_dict['message'] = '用户名或者密码错误...'
                 return HttpResponse(json.dumps(data_dict))

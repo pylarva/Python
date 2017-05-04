@@ -51,8 +51,7 @@ function getParam(pname) {
             } 
         } 
     } 
-}  
-
+}
 
 var reMethod = "POST",
 	pwdmin = 6;

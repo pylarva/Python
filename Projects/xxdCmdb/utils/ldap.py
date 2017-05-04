@@ -27,6 +27,3 @@ def authorize(host=ldap_acount.ldap_ip, port=ldap_acount.ldap_port, user=None, p
         if conn:
             conn.unbind()
         return False, e
-
-# succ, msg, email = authorize(user='lichengbing', password='Bingo123')
-# print(succ, msg, email)

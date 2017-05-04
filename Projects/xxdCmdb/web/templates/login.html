@@ -41,11 +41,11 @@
                <label class="input-tips" for="p">密码：</label> 
                <div class="inputOuter" id="pArea">
                     
-                    <input type="password" id="p" name="pwd1" class="inputstyle"/>
+                    <input type="password" id="p" name="pwd1" class="inputstyle" onkeypress="if(event.keyCode==13){logi.click();return false;}"/>
                 </div>
                 </div>
                 <div id="err"></div>
-                <div style="padding-left:50px;margin-top:20px;"><input type="button" id="logi" value="登 录" style="width:210px;" class="button_blue" /></div>
+                <div style="padding-left:50px;margin-top:20px;"><input name="logi" type="button" id="logi" value="登 录" style="width:210px;" class="button_blue" /></div>
               </form>
            </div>
            
