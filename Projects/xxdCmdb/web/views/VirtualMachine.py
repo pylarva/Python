@@ -45,7 +45,7 @@ class VirtualListView(View):
         # data = models.Asset.objects.all()
         # data_status = models.Asset.device_status_choices
         # print(data_status)
-        data = models.VirtualMachines.objects.all()
+        data = models.VirtualMachines.objects.all().order_by('-id')
         host = models.HostMachines.objects.all()
         machine_type = models.MachineType.objects.all()
 
@@ -118,11 +118,12 @@ class VirtualListView(View):
         print(host_machine, new_ip, new_name, machine_type, memory_num, cpu_num, new_gateway)
 
         # ip_num = models.Asset.objects.filter(host_ip=new_ip).count()
-        ip_num = models.VirtualMachines.objects.filter(host_ip=new_ip).count()
+        ip_num_a = models.VirtualMachines.objects.filter(host_ip=new_ip).count()
+        ip_num_b = models.Asset.objects.filter(host_ip=new_ip).count()
 
-        if ip_num:
+        if ip_num_a or ip_num_b:
             data_dict['status'] = False
-            data_dict['message'] = "IP地址已经存在 不允许重复装机！"
+            data_dict['message'] = "IP地址在总资产表中已经存在 不允许重复装机！"
             return HttpResponse(json.dumps(data_dict))
 
         try:
@@ -286,10 +287,10 @@ class VirtualListView(View):
 
     def host_del(self, host_del_id):
 
-        # obj = models.Asset.objects.filter(id=host_del_id)
         obj = models.VirtualMachines.objects.filter(id=host_del_id)
         host_name = obj[0].host_name
         host_machine = obj[0].mudroom_host
+        host_ip = obj[0].host_ip
         print(host_del_id, host_name, host_machine)
 
         ssh = paramiko.SSHClient()
@@ -315,13 +316,13 @@ class VirtualListView(View):
         # ssh.exec_command(cmd)
         # print(cmd)
 
-        # models.Asset.objects.filter(id=host_del_id).delete()
         models.VirtualMachines.objects.filter(id=host_del_id).delete()
 
+        # 在总资产表中删除主机
+        models.Asset.objects.filter(host_ip=host_ip).delete()
+
     def change_host_name(self, host_id, host_name):
-        # models.Asset.objects.filter(id=host_id).update(host_name=host_name)
         models.VirtualMachines.objects.filter(id=host_id).update(host_name=host_name)
-        # obj = models.Asset.objects.filter(id=host_id)
         obj = models.VirtualMachines.objects.filter(id=host_id)
         host_ip = obj[0].host_ip
 

@@ -136,7 +136,6 @@
                     <td>配置</td>
                     <td>宿主机</td>
                     <td>状态</td>
-{#                    <td>管理</td>#}
                     <td>操作</td>
                     <td>时间</td>
                 </tr>
@@ -212,7 +211,7 @@
                 $('#connect_info').text('虚机部署任务发布成功！');
 
                 // 进度条选择显示列
-                $("table tr:last td:eq(7)").children().children().attr('id', 'progress_show');
+                $("table tr:eq(1) td:eq(7)").children().children().attr('id', 'progress_show');
                 setTimeout(function () {
                     var op = 0;
                     var tag = document.getElementById('progress_show');
@@ -226,8 +225,8 @@
                             clearInterval(interval);
                             tag.innerText = '100%';
                         }
-                    }, 500);
-                }, 500);
+                    }, 700);
+                }, 700);
 
             }
 
@@ -253,10 +252,6 @@
                             location.href=url
                         }else {
                             $('#add_machine').modal('hide');
-{#                            $('#connect_info').hide();#}
-{#                            $('#connect_failed').show();#}
-{#                            $('#message_info').text(data_dict.message);#}
-
                             $('#connect_info').removeClass('alert-info');
                             $('#connect_info').addClass('alert-danger');
                             $('#connect_info').addClass('alert-dismissable');

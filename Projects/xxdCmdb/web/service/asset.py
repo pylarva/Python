@@ -154,6 +154,7 @@ class Asset(BaseServiceList):
 
     @property
     def business_1_list(self):
+
         values = models.BusinessOne.objects.only('id', 'name')
         result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
         return list(result)

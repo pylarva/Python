@@ -133,6 +133,9 @@
             $.initMenu('#menu_asset');
             $.nbDataList('/authorizes.html', '1');
             setTimeout("do_aaa()", 100);
+
+            $('#menu_asset').removeClass('active');
+            $('#menu_auth').addClass('active');
         });
         function ChangePage(id) {
                 $.nbDataList('/authorizes.html', id);

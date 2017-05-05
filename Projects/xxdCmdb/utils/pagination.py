@@ -61,7 +61,7 @@ class Page:
         page_list.append(nex)
 
         jump = """
-        <input type='text' style="height: 30px; width:50px" placeholder="跳转" /><a onclick='jumpTo(this, "%s?p=");'>GO</a>
+        <input style="display: none" type='text' style="height: 30px; width:50px" placeholder="跳转" /><a onclick='jumpTo(this, "%s?p=");'></a>
         <script>
             function jumpTo(ths,base){
                 var val = ths.previousSibling.value;

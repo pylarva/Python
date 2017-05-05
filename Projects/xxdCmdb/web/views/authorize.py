@@ -23,9 +23,6 @@ class AuthJsonView(View):
     def get(self, request):
         obj = authorize.Asset()
         response = obj.fetch_assets(request)
-        # ret = HttpResponse(json.dumps(response))
-        # ret.set_cookie('vvv', '111')
-        # return ret
         return JsonResponse(response.__dict__)
 
     def delete(self, request):
