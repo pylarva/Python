@@ -5,6 +5,7 @@ from web.views import account
 from web.views import home
 from web.views import asset
 from web.views import user
+from web.views import group
 from web.views import authorize
 from web.views import authorizer
 from web.views import read
@@ -46,6 +47,10 @@ urlpatterns = [
 
     url(r'^users.html$', user.UserListView.as_view()),
     url(r'^user.html$', user.UserJsonView.as_view()),
+
+    url(r'^group.html$', group.GroupListView.as_view()),
+    url(r'^groups.html$', group.GroupJsonView.as_view()),
+
     url(r'^ldap.html$', user.LdapListView.as_view()),
 
     url(r'^chart-(?P<chart_type>\w+).html$', home.ChartView.as_view()),
