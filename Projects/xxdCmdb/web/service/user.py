@@ -15,7 +15,6 @@ class User(BaseServiceList):
         # 查询条件的配置
         condition_config = [
             {'name': 'name', 'text': '用户名', 'condition_type': 'input'},
-            {'name': 'email', 'text': '邮箱', 'condition_type': 'input'},
         ]
         # 表格的配置
         table_config = [
@@ -35,30 +34,46 @@ class User(BaseServiceList):
                          'edit-type': 'input', }
             },
             {
-                'q': 'email',
-                'title': "邮箱",
+                'q': 'group',
+                'title': "用户组",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@email'}},
+                'text': {'content': "{n}", 'kwargs': {'n': '@group'}},
                 'attr': {'name': 'email', 'id': '@email', 'origin': '@email', 'edit-enable': 'true',
                          'edit-type': 'input', }
             },
             {
-                'q': 'mobile',
-                'title': "手机",
+                'q': 'business_one',
+                'title': "环境",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@mobile'}},
-                'attr': {'name': 'mobile', 'id': '@mobile', 'origin': '@mobile', 'edit-enable': 'true',
+                'text': {'content': "{n}", 'kwargs': {'n': '@business_one'}},
+                'attr': {'name': 'email', 'id': '@email', 'origin': '@email', 'edit-enable': 'true',
                          'edit-type': 'input', }
             },
             {
-                'q': 'phone',
-                'title': "电话",
+                'q': 'business_two',
+                'title': "业务2",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@phone'}},
-                'attr': {'name': 'phone', 'id': '@phone', 'origin': '@phone', 'edit-enable': 'true',
+                'text': {'content': "{n}", 'kwargs': {'n': '@business_two'}},
+                'attr': {'name': 'email', 'id': '@email', 'origin': '@email', 'edit-enable': 'true',
                          'edit-type': 'input', }
             },
-
+            {
+                'q': 'business_three',
+                'title': "业务3",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@business_three'}},
+                'attr': {'name': 'email', 'id': '@email', 'origin': '@email', 'edit-enable': 'true',
+                         'edit-type': 'input', }
+            },
+            {
+                'q': None,
+                'title': "选项",
+                'display': 1,
+                'text': {
+                    'content': "<a href='#'>编辑</a>",
+                    'kwargs': {'id': '@id', 'nid': '@id'}},
+                'attr': {}
+            },
         ]
         # 额外搜索条件
         extra_select = {}
@@ -131,3 +146,48 @@ class User(BaseServiceList):
             response.status = False
             response.message = str(e)
         return response
+
+    @staticmethod
+    def post_users(request):
+        response = BaseResponse()
+
+        nid = request.POST.get('nid')
+        business_1 = request.POST.getlist('business_1_list')
+        business_2 = request.POST.getlist('business_2_list')
+        business_3 = request.POST.getlist('business_3_list')
+        group_id = request.POST.get('group_name')
+
+        print(nid, business_1, business_2, business_3, group_id)
+
+        models.UserProfile.objects.filter(id=nid).update(group_id=group_id)
+        obj = models.UserProfile.objects.filter(id=nid).first()
+        # obj.name = group_name
+        if business_1 == ['']:
+            r = obj.business_one.all().values_list('id', flat=True)
+            r = r[0:len(r)]
+            for item in r:
+                obj.business_one.remove(item)
+        else:
+            obj.business_one.set(business_1)
+
+        if business_2 == ['']:
+            r = obj.business_two.all().values_list('id', flat=True)
+            r = r[0:len(r)]
+            for item in r:
+                obj.business_two.remove(item)
+        else:
+            obj.business_two.set(business_2)
+
+        if business_3 == ['']:
+            r = obj.business_three.all().values_list('id', flat=True)
+            r = r[0:len(r)]
+            for item in r:
+                obj.business_three.remove(item)
+        else:
+            obj.business_three.set(business_3)
+
+        obj.save()
+
+        response.status = True
+        return response
+

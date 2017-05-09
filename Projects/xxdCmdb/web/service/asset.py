@@ -135,7 +135,6 @@ class Asset(BaseServiceList):
         }
         super(Asset, self).__init__(condition_config, table_config, extra_select)
 
-
     @property
     def device_status_list(self):
         result = map(lambda x: {'id': x[0], 'name': x[1]}, models.Asset.device_status_choices)
@@ -154,8 +153,28 @@ class Asset(BaseServiceList):
 
     @property
     def business_1_list(self):
-
-        values = models.BusinessOne.objects.only('id', 'name')
+        # # 基于用户session用户名来查用户权限
+        # username = request.GET.get('username')
+        #
+        # # 1、业务1权限
+        # business_one_condition = Q()
+        #
+        # #    先将用户组中的权限添加进condition
+        # obj = models.UserProfile.objects.filter(name=username).first()
+        # business_one_obj = obj.group.business_one.all()
+        # business_one_condition.connector = 'OR'
+        # for item in business_one_obj:
+        #     print(item)
+        #     item = str(item)
+        #     business_one_condition.children.append(('name', item))
+        #
+        # #    再将自定义的业务权限添加进condition
+        # business_one_modification = obj.business_one.all()
+        # for item in business_one_modification:
+        #     print(item)
+        #     item = str(item)
+        #     business_one_condition.children.append(('name', item))
+        values = models.BusinessOne.objects.filter().only('id', 'name')
         result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
         return list(result)
 
@@ -179,6 +198,7 @@ class Asset(BaseServiceList):
     @staticmethod
     def assets_condition(request):
         con_str = request.GET.get('condition', None)
+        print(con_str)
         if not con_str:
             con_dict = {}
         else:
@@ -191,6 +211,8 @@ class Asset(BaseServiceList):
             for item in v:
                 temp.children.append((k, item))
             con_q.add(temp, 'AND')
+
+        print(con_q)
 
         return con_q
 

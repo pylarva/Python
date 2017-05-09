@@ -16,13 +16,11 @@ def auth(func):
         # print(v)
         if not v:
             return redirect('login.html')
-        global USER_NAME
-        USER_NAME['name'] = v
         return func(request, *args, **kwargs)
     return inner
 
 
-# @method_decorator(auth, name='dispatch')
+@method_decorator(auth, name='dispatch')
 class ReadListView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(ReadListView, self).dispatch(request, *args, **kwargs)

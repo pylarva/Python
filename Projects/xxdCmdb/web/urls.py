@@ -45,8 +45,8 @@ urlpatterns = [
     url(r'^business_3.html$', business.Business3ListView.as_view()),
     url(r'^business_3s.html$', business.Business3JsonView.as_view()),
 
-    url(r'^users.html$', user.UserListView.as_view()),
-    url(r'^user.html$', user.UserJsonView.as_view()),
+    url(r'^user.html$', user.UserListView.as_view()),
+    url(r'^users.html$', user.UserJsonView.as_view()),
 
     url(r'^group.html$', group.GroupListView.as_view()),
     url(r'^groups.html$', group.GroupJsonView.as_view()),

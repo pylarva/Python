@@ -3,13 +3,20 @@
 from django.views import View
 from django.shortcuts import render
 from django.http import JsonResponse
+from repository import models
 
 from web.service import user
 
 
 class UserListView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'users_list.html')
+        user_list = models.UserProfile.objects.all()
+        group_list = models.UserGroup.objects.all()
+        business_one_list = models.BusinessOne.objects.all()
+        business_two_list = models.BusinessTwo.objects.all()
+        business_three_list = models.BusinessThree.objects.all()
+        return render(request, 'users_list.html', {'user_list': user_list, 'group_list': group_list, 'business_one_list': business_one_list
+            , 'business_two_list': business_two_list, 'business_three_list': business_three_list})
 
 
 class UserJsonView(View):
@@ -24,6 +31,10 @@ class UserJsonView(View):
 
     def put(self, request):
         response = user.User.put_users(request)
+        return JsonResponse(response.__dict__)
+
+    def post(self, request):
+        response = user.User.post_users(request)
         return JsonResponse(response.__dict__)
 
 

@@ -132,9 +132,28 @@ class Asset(BaseServiceList):
         result = map(lambda x: {'id': x.id, 'name': "%s-%s" % (x.name, x.floor)}, values)
         return list(result)
 
-    @property
-    def business_1_list(self):
-        values = models.BusinessOne.objects.only('id', 'name')
+    # @property
+    def business_1_list(self, request):
+        # # 基于用户session用户名来查用户权限
+        # username = request.GET.get('username')
+        #
+        # # 先将用户组中的权限添加进condition
+        # obj = models.UserProfile.objects.filter(name=username).first()
+        # business_one_obj = obj.group.business_one.all()
+        # q = Q()
+        # q.connector = 'OR'
+        # for item in business_one_obj:
+        #     print(item)
+        #     q.children.append(('name', item))
+        #
+        # # 再将自定义的业务权限添加进condition
+        # business_one_modification = obj.business_one.all()
+        # for item in business_one_modification:
+        #     print(item)
+        #     q.children.append(('name', item))
+        # q = self.get_authority(request)
+
+        values = models.BusinessOne.objects.filter().only('id', 'name')
         result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
         return list(result)
 
@@ -156,14 +175,89 @@ class Asset(BaseServiceList):
         return list(values)
 
     @staticmethod
-    def assets_condition(request):
-        con_str = request.GET.get('condition', None)
-        # print(con_str)
-        if not con_str:
-            con_dict = {}
-        else:
-            con_dict = json.loads(con_str)
+    def get_authority(request):
+        # 基于用户session用户名来查用户权限
+        username = request.GET.get('username')
 
+        # 1、业务1权限
+        business_one_condition = Q()
+
+        #    先将用户组中的权限添加进condition
+        obj = models.UserProfile.objects.filter(name=username).first()
+        business_one_obj = obj.group.business_one.all()
+        business_one_condition.connector = 'OR'
+        for item in business_one_obj:
+            print(item)
+            item = str(item)
+            business_one_condition.children.append(('name', item))
+
+        #    再将自定义的业务权限添加进condition
+        business_one_modification = obj.business_one.all()
+        for item in business_one_modification:
+            print(item)
+            item = str(item)
+            business_one_condition.children.append(('name', item))
+
+        # 2、业务2权限
+        con_q = Q()
+        con_q.add(business_one_condition, 'AND')
+
+        print(business_one_condition)
+        print(con_q)
+
+        return business_one_condition, con_q
+
+    @staticmethod
+    def assets_condition(request):
+        # 创建权限字典
+        # condition_dict = {"business_1":["2","3"],"business_2":["3"],"business_3":["3"]}
+        condition_dict = {"business_1": [], "business_2": [], "business_3": []}
+
+        # 开始根据用户名查权限
+        username = request.GET.get('username')
+        print(username)
+        obj = models.UserProfile.objects.filter(name=username).first()
+
+        # 用户组权限
+        business_one_obj = obj.group.business_one.values('id')
+        for item in business_one_obj:
+            condition_dict['business_1'].append(str(item['id']))
+        business_two_obj = obj.group.business_two.values('id')
+        for item in business_two_obj:
+            condition_dict['business_2'].append(str(item['id']))
+        business_three_obj = obj.group.business_three.values('id')
+        for item in business_three_obj:
+            condition_dict['business_3'].append(str(item['id']))
+
+        # 自定义权限
+        business_one_m = obj.business_one.values('id')
+        for item in business_one_m:
+            condition_dict['business_1'].append(str(item['id']))
+        business_two_m = obj.business_one.values('id')
+        for item in business_two_m:
+            condition_dict['business_2'].append(str(item['id']))
+        business_three_m = obj.business_three.values('id')
+        for item in business_three_m:
+            condition_dict['business_3'].append(str(item['id']))
+
+        print(condition_dict)
+
+        con_str = request.GET.get('condition', None)
+        print('~~~~~', con_str)
+        if con_str != "{}":
+            con_dicts = json.loads(con_str)
+            con_dicts = dict(con_dicts)
+            print('-----', con_dicts, type(con_dicts))
+
+            if con_dicts['business_1']:
+                print(666)
+                condition_dict['business_1'] = []
+                for item in con_dicts['business_1']:
+                    condition_dict['business_1'].append(item)
+                    print(2222)
+
+        con_dict = condition_dict
+        print(con_dict)
         con_q = Q()
         for k, v in con_dict.items():
             temp = Q()
@@ -171,7 +265,6 @@ class Asset(BaseServiceList):
             for item in v:
                 temp.children.append((k, item))
             con_q.add(temp, 'AND')
-
         return con_q
 
     def fetch_assets(self, request):
@@ -179,6 +272,9 @@ class Asset(BaseServiceList):
         try:
             ret = {}
             conditions = self.assets_condition(request)
+            print(conditions)
+            # condition, conditions = self.get_authority(request)
+            # print(conditions)
             asset_count = models.Asset.objects.filter(conditions).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
             asset_list = models.Asset.objects.filter(conditions).extra(select=self.extra_select).values(
@@ -191,12 +287,13 @@ class Asset(BaseServiceList):
                 "page_str": page_info.pager(),
                 "page_start": page_info.start,
             }
+            business_1_lists = self.business_1_list(request)
             ret['global_dict'] = {
                 'device_status_list': self.device_status_list,
                 'device_type_list': self.device_type_list,
                 'idc_list': self.idc_list,
                 'business_unit_list': self.business_unit_list,
-                'business_1_list': self.business_1_list,
+                'business_1_list': business_1_lists,
                 'business_2_list': self.business_2_list,
                 'business_3_list': self.business_3_list
             }

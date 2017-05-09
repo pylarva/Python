@@ -179,10 +179,13 @@ class UserProfile(models.Model):
     """
     name = models.CharField(u'姓名', max_length=32)
     # group = models.CharField(u'用户组', max_length=32, null=True, blank=True)
-    group = models.OneToOneField('UserGroup')
-    business_one = models.CharField(u'业务1', max_length=64, null=True, blank=True)
-    business_two = models.CharField(u'业务2', max_length=64, null=True, blank=True)
-    business_three = models.CharField(u'业务3', max_length=64, null=True, blank=True)
+    group = models.OneToOneField('UserGroup', null=True, blank=True)
+    # business_one = models.CharField(u'业务1', max_length=64, null=True, blank=True)
+    # business_two = models.CharField(u'业务2', max_length=64, null=True, blank=True)
+    # business_three = models.CharField(u'业务3', max_length=64, null=True, blank=True)
+    business_one = models.ManyToManyField('BusinessOne', null=True, blank=True)
+    business_two = models.ManyToManyField('BusinessTwo', null=True, blank=True)
+    business_three = models.ManyToManyField('BusinessThree', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "用户表"
