@@ -136,6 +136,24 @@ class Group(BaseServiceList):
     def post_users(request):
         response = BaseResponse()
 
+        new_group_name = request.POST.get('new_group_name', None)
+        if new_group_name:
+            try:
+                models.UserGroup.objects.create(name=new_group_name)
+                response.status = True
+            except Exception as e:
+                response.status = False
+            return response
+
+        del_group_id = request.POST.get('del_group_id', None)
+        if del_group_id:
+            try:
+                models.UserGroup.objects.filter(id=del_group_id).delete()
+                response.status = True
+            except Exception as e:
+                response.status = False
+            return response
+
         nid = request.POST.get('nid')
         business_1 = request.POST.getlist('business_1_list')
         business_2 = request.POST.getlist('business_2_list')

@@ -100,6 +100,7 @@
                         <td>
                             {{ obj.name }}
                         </td>
+                        <td id="g_id" style="display: none">{{ obj.group_id }}</td>
                         <td><div style="display: inline-block; padding: 3px;background-color: rgb(240,172,81); border-radius: 3px">{{ obj.group }}</div></td>
                         <td>
                             {% for host in obj.business_one.all %}
@@ -116,8 +117,12 @@
                                 <span style="display: inline-block; padding: 3px;background-color: rgb(92,184,92);border-radius: 3px; " hid="{{ host.id }}">{{ host.name }}</span>
                             {% endfor %}
                         </td>
-                        <td>
+                        <td style="width: 200px; font-size: 13px; line-height: 25px;">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             <a href="#" onclick="edit_user(this, {{ obj.id }})">编辑</a> |
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                            <a href="#" onclick="add_user(this, {{ obj.id }})">添加</a> |
+                            <i class="fa fa-times" aria-hidden="true"></i>
                             <a href="#" onclick="del_user({{ obj.id }})">删除</a>
                         </td>
                     </tr>
@@ -192,14 +197,40 @@
       </div>
     </div>
 
+    <!-- 添加用户开始 -->
+    <div class="modal fade" id="add_u" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加用户</h4>
+              </div>
+              <form id="form1">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">1.用户名</label>
+                    <input type="text" class="form-control" id="user_name">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <span id="error_message" style="color: red;"></span>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button id="add_users" type="button" class="btn btn-primary">保存</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+    <!-- 添加用户结束 -->
+
     <!-- 删除层开始 -->
     <div id="modal_delete" class="alert alert-danger alert-dismissible fade in modal-delete hide" role="alert">
         <button type="button" class="close" aria-label="Close" onclick="$.Hide('#shade,#modal_delete');"><span>×</span>
         </button>
-        <h4>确定用户信息？</h4>
+        <h4>确定删除用户？</h4>
 
         <p style="text-align: right">
-            <button type="button" class="btn btn-danger" id="do_delete_confirm">确定删除</button>
+            <button type="button" class="btn btn-danger" id="do_delete_user">确定删除</button>
             <button type="button" class="btn btn-default" onclick="$.Hide('#shade,#modal_delete');">取消</button>
         </p>
     </div>
@@ -224,7 +255,7 @@
     <script>
         $(function () {
             $.initMenu('#menu_user_profile');
-            $.nbDataList('/user.html');
+            $.nbDataList('/users.html');
         });
         function edit_user(ths, nid) {
             $('#edit_example').modal();
@@ -233,6 +264,9 @@
             var business_one_list = [];
             var business_two_list = [];
             var business_three_list = [];
+            var group_id = $(ths).parent().prev().prev().prev().prev().prev().text();
+            $('#groups').selectpicker('val', group_id);
+
             $(ths).parent().prev().prev().prev().children().each(function () {
                 var v = $(this).attr('hid');
                 business_one_list.push(v);
@@ -257,8 +291,46 @@
                     type: 'POST',
                     dataType: 'JSON',
                     traditional: true,
-                    data: {'group_name': $('#groups').val(), 'nid': nid, 'business_1_list': $('#business_1').selectpicker('val')
+                    data: {'group_id': $('#groups').selectpicker('val'), 'nid': nid, 'business_1_list': $('#business_1').selectpicker('val')
                     , 'business_2_list': $('#business_2').selectpicker('val'), 'business_3_list': $('#business_3').selectpicker('val')},
+                    success: function (data_dict) {
+                        if(data_dict.status){
+                            location.reload();
+                        }else {
+                            $('#add_error_02').text(data_dict.message)
+                        }
+                    }
+                })
+            })
+        }
+        function add_user() {
+            $('#add_u').modal();
+            $('#add_users').click(function () {
+                $.ajax({
+                    url : '/users.html',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    traditional: true,
+                    data: {'new_user_name': $('#user_name').val()},
+                    success: function (data_dict) {
+                        if(data_dict.status){
+                            location.reload();
+                        }else {
+                            $('#add_error_02').text(data_dict.message)
+                        }
+                    }
+                })
+            })
+        }
+        function del_user(nid) {
+            $.Show('#shade,#modal_delete');
+            $('#do_delete_user').click(function () {
+                $.ajax({
+                    url : '/users.html',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    traditional: true,
+                    data: {'del_user_id': nid},
                     success: function (data_dict) {
                         if(data_dict.status){
                             location.reload();

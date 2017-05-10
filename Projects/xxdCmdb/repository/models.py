@@ -178,11 +178,7 @@ class UserProfile(models.Model):
     用户信息
     """
     name = models.CharField(u'姓名', max_length=32)
-    # group = models.CharField(u'用户组', max_length=32, null=True, blank=True)
-    group = models.OneToOneField('UserGroup', null=True, blank=True)
-    # business_one = models.CharField(u'业务1', max_length=64, null=True, blank=True)
-    # business_two = models.CharField(u'业务2', max_length=64, null=True, blank=True)
-    # business_three = models.CharField(u'业务3', max_length=64, null=True, blank=True)
+    group = models.ForeignKey('UserGroup', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
     business_one = models.ManyToManyField('BusinessOne', null=True, blank=True)
     business_two = models.ManyToManyField('BusinessTwo', null=True, blank=True)
     business_three = models.ManyToManyField('BusinessThree', null=True, blank=True)
@@ -213,7 +209,7 @@ class UserGroup(models.Model):
     """
     用户组
     """
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, unique=True)
     business_one = models.ManyToManyField('BusinessOne')
     business_two = models.ManyToManyField('BusinessTwo')
     business_three = models.ManyToManyField('BusinessThree')
@@ -229,7 +225,7 @@ class BusinessUnit(models.Model):
     """
     业务线
     """
-    name = models.CharField('业务线', max_length=64, unique=True)
+    name = models.CharField('业务线', max_length=64)
     contact = models.ForeignKey('UserGroup', verbose_name='业务联系人', related_name='c')
     manager = models.ForeignKey('UserGroup', verbose_name='系统管理员', related_name='m')
 

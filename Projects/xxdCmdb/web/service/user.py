@@ -151,17 +151,47 @@ class User(BaseServiceList):
     def post_users(request):
         response = BaseResponse()
 
+        new_user_name = request.POST.get('new_user_name', None)
+        if new_user_name:
+            try:
+                models.UserProfile.objects.create(name=new_user_name)
+                # models.UserProfile.objects.filter(name=new_user_name).update(group_id=1)
+                # obj = models.UserProfile.objects.filter(name=new_user_name).first()
+                # obj.group
+                # obj.save()
+                response.status = True
+            except Exception as e:
+                print(e)
+                print(99999)
+                response.status = False
+            return response
+
+        del_user_id = request.POST.get('del_user_id', None)
+        if del_user_id:
+            try:
+                models.UserProfile.objects.filter(id=del_user_id).delete()
+                response.status = True
+            except Exception as e:
+                response.status = False
+            return response
+
         nid = request.POST.get('nid')
         business_1 = request.POST.getlist('business_1_list')
         business_2 = request.POST.getlist('business_2_list')
         business_3 = request.POST.getlist('business_3_list')
-        group_id = request.POST.get('group_name')
+        new_group_id = request.POST.get('group_id')
 
-        print(nid, business_1, business_2, business_3, group_id)
+        print(nid, business_1, business_2, business_3, new_group_id)
 
-        models.UserProfile.objects.filter(id=nid).update(group_id=group_id)
+        # 更新用户组
+        models.UserProfile.objects.filter(id=nid).update(group_id=new_group_id)
+        # obj.group.set(new_group_id)
+        # obj.group_id = new_group_id
+        # obj.save()
+
         obj = models.UserProfile.objects.filter(id=nid).first()
         # obj.name = group_name
+        # 编辑用户权限时如果用户发来数据为空 则删除原有权限
         if business_1 == ['']:
             r = obj.business_one.all().values_list('id', flat=True)
             r = r[0:len(r)]

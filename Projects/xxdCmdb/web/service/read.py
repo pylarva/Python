@@ -243,54 +243,59 @@ class Asset(BaseServiceList):
 
         # 开始根据用户名查权限
         username = request.GET.get('username')
+
+        # 如果用户属于管理员组 则不限制查询条件
         obj = models.UserProfile.objects.filter(name=username).first()
+        is_admin = obj.group.name
+        if is_admin != 'admin':
+            # 用户组权限
+            business_one_obj = obj.group.business_one.values('id')
+            for item in business_one_obj:
+                condition_dict['business_1'].append(str(item['id']))
+            business_two_obj = obj.group.business_two.values('id')
+            for item in business_two_obj:
+                condition_dict['business_2'].append(str(item['id']))
+            business_three_obj = obj.group.business_three.values('id')
+            for item in business_three_obj:
+                condition_dict['business_3'].append(str(item['id']))
 
-        # 用户组权限
-        business_one_obj = obj.group.business_one.values('id')
-        for item in business_one_obj:
-            condition_dict['business_1'].append(str(item['id']))
-        business_two_obj = obj.group.business_two.values('id')
-        for item in business_two_obj:
-            condition_dict['business_2'].append(str(item['id']))
-        business_three_obj = obj.group.business_three.values('id')
-        for item in business_three_obj:
-            condition_dict['business_3'].append(str(item['id']))
+            # 自定义权限
+            business_one_m = obj.business_one.values('id')
+            for item in business_one_m:
+                condition_dict['business_1'].append(str(item['id']))
+            business_two_m = obj.business_one.values('id')
+            for item in business_two_m:
+                condition_dict['business_2'].append(str(item['id']))
+            business_three_m = obj.business_three.values('id')
+            for item in business_three_m:
+                condition_dict['business_3'].append(str(item['id']))
 
-        # 自定义权限
-        business_one_m = obj.business_one.values('id')
-        for item in business_one_m:
-            condition_dict['business_1'].append(str(item['id']))
-        business_two_m = obj.business_one.values('id')
-        for item in business_two_m:
-            condition_dict['business_2'].append(str(item['id']))
-        business_three_m = obj.business_three.values('id')
-        for item in business_three_m:
-            condition_dict['business_3'].append(str(item['id']))
+            # 如果用户从前端提交查询条件 需要覆盖condition里面对应business_1 2 3 条件
+            con_str = request.GET.get('condition', None)
+            if con_str != "{}":
+                con_dicts = json.loads(con_str)
+                con_dicts = dict(con_dicts)
+                print('-----', con_dicts, type(con_dicts))
 
-        # 如果用户从前端提交查询条件 需要覆盖condition里面对应business_1 2 3 条件
-        con_str = request.GET.get('condition', None)
-        if con_str != "{}":
-            con_dicts = json.loads(con_str)
-            con_dicts = dict(con_dicts)
-            print('-----', con_dicts, type(con_dicts))
+                if con_dicts.get('business_1'):
+                    condition_dict['business_1'] = []
+                    for item in con_dicts['business_1']:
+                        condition_dict['business_1'].append(item)
 
-            if con_dicts.get('business_1'):
-                condition_dict['business_1'] = []
-                for item in con_dicts['business_1']:
-                    condition_dict['business_1'].append(item)
+                if con_dicts.get('business_2'):
+                    condition_dict['business_2'] = []
+                    for item in con_dicts['business_2']:
+                        condition_dict['business_2'].append(item)
 
-            if con_dicts.get('business_2'):
-                condition_dict['business_2'] = []
-                for item in con_dicts['business_2']:
-                    condition_dict['business_2'].append(item)
+                if con_dicts.get('business_3'):
+                    condition_dict['business_3'] = []
+                    for item in con_dicts['business_3']:
+                        condition_dict['business_3'].append(item)
 
-            if con_dicts.get('business_3'):
-                condition_dict['business_3'] = []
-                for item in con_dicts['business_3']:
-                    condition_dict['business_3'].append(item)
-
-            if con_dicts.get('host_ip__contains'):
-                condition_dict['host_ip__contains'] = con_dicts.get('host_ip__contains')
+                if con_dicts.get('host_ip__contains'):
+                    condition_dict['host_ip__contains'] = con_dicts.get('host_ip__contains')
+        else:
+            condition_dict = {}
 
         # 使用Q进行条件格式化
         con_dict = condition_dict

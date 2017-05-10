@@ -40,6 +40,12 @@ class LoginView(View):
             try:
                 res, msg, email = ldap.authorize(user=u1, password=p1)
 
+                # 域用户第一次登陆将会注册到userprofile
+                if res:
+                    user_nums = models.UserProfile.objects.filter(name=u1).count()
+                    if user_nums < 1:
+                        models.UserProfile.objects.create(name=u1)
+
                 data_dict['status'] = True
                 data_dict['message'] = 'ok'
 
@@ -49,7 +55,7 @@ class LoginView(View):
 
                 ret = HttpResponse(json.dumps(data_dict))
                 ret.set_cookie('username', u1)
-                ret.set_cookie('email', email)
+                # ret.set_cookie('email', email)
                 return ret
 
             except Exception as e:
