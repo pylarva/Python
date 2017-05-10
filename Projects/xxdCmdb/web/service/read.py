@@ -18,8 +18,6 @@ class Asset(BaseServiceList):
             {'name': 'business_1', 'text': '环境', 'condition_type': 'select', 'global_name': 'business_1_list'},
             {'name': 'business_2', 'text': '二级业务线', 'condition_type': 'select', 'global_name': 'business_2_list'},
             {'name': 'business_3', 'text': '三级业务线', 'condition_type': 'select', 'global_name': 'business_3_list'},
-            {'name': 'host_status', 'text': '资产状态', 'condition_type': 'select',
-             'global_name': 'device_status_list'},
         ]
         # 表格的配置
         table_config = [
@@ -134,38 +132,68 @@ class Asset(BaseServiceList):
 
     # @property
     def business_1_list(self, request):
-        # # 基于用户session用户名来查用户权限
-        # username = request.GET.get('username')
-        #
-        # # 先将用户组中的权限添加进condition
-        # obj = models.UserProfile.objects.filter(name=username).first()
-        # business_one_obj = obj.group.business_one.all()
-        # q = Q()
-        # q.connector = 'OR'
-        # for item in business_one_obj:
-        #     print(item)
-        #     q.children.append(('name', item))
-        #
-        # # 再将自定义的业务权限添加进condition
-        # business_one_modification = obj.business_one.all()
-        # for item in business_one_modification:
-        #     print(item)
-        #     q.children.append(('name', item))
+        # 基于用户session用户名来查用户权限
+        username = request.GET.get('username')
+
+        # 先将用户组中的权限添加进condition
+        obj = models.UserProfile.objects.filter(name=username).first()
+        business_one_obj = obj.group.business_one.all()
+        q = Q()
+        q.connector = 'OR'
+        for item in business_one_obj:
+            print(item)
+            q.children.append(('name', item))
+
+        # 再将自定义的业务权限添加进condition
+        business_one_modification = obj.business_one.all()
+        for item in business_one_modification:
+            print(item)
+            q.children.append(('name', item))
         # q = self.get_authority(request)
 
-        values = models.BusinessOne.objects.filter().only('id', 'name')
+        values = models.BusinessOne.objects.filter(q).only('id', 'name')
         result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
         return list(result)
 
-    @property
-    def business_2_list(self):
-        values = models.BusinessTwo.objects.only('id', 'name')
+    # @property
+    def business_3_list(self, request):
+        username = request.GET.get('username')
+
+        obj = models.UserProfile.objects.filter(name=username).first()
+        business_three_obj = obj.group.business_three.all()
+        q = Q()
+        q.connector = 'OR'
+        for item in business_three_obj:
+            print(item)
+            q.children.append(('name', item))
+
+        business_three_modification = obj.business_three.all()
+        for item in business_three_modification:
+            print(item)
+            q.children.append(('name', item))
+
+        values = models.BusinessThree.objects.filter(q).only('id', 'name')
         result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
         return list(result)
 
-    @property
-    def business_3_list(self):
-        values = models.BusinessThree.objects.only('id', 'name')
+    # @property
+    def business_2_list(self, request):
+        username = request.GET.get('username')
+
+        obj = models.UserProfile.objects.filter(name=username).first()
+        business_two_obj = obj.group.business_two.all()
+        q = Q()
+        q.connector = 'OR'
+        for item in business_two_obj:
+            print(item)
+            q.children.append(('name', item))
+
+        business_two_modification = obj.business_two.all()
+        for item in business_two_modification:
+            print(item)
+            q.children.append(('name', item))
+
+        values = models.BusinessTwo.objects.filter(q).only('id', 'name')
         result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
         return list(result)
 
@@ -211,11 +239,10 @@ class Asset(BaseServiceList):
     def assets_condition(request):
         # 创建权限字典
         # condition_dict = {"business_1":["2","3"],"business_2":["3"],"business_3":["3"]}
-        condition_dict = {"business_1": [], "business_2": [], "business_3": []}
+        condition_dict = {"business_1": [], "business_2": [], "business_3": [], "host_ip__contains": []}
 
         # 开始根据用户名查权限
         username = request.GET.get('username')
-        print(username)
         obj = models.UserProfile.objects.filter(name=username).first()
 
         # 用户组权限
@@ -240,24 +267,33 @@ class Asset(BaseServiceList):
         for item in business_three_m:
             condition_dict['business_3'].append(str(item['id']))
 
-        print(condition_dict)
-
+        # 如果用户从前端提交查询条件 需要覆盖condition里面对应business_1 2 3 条件
         con_str = request.GET.get('condition', None)
-        print('~~~~~', con_str)
         if con_str != "{}":
             con_dicts = json.loads(con_str)
             con_dicts = dict(con_dicts)
             print('-----', con_dicts, type(con_dicts))
 
-            if con_dicts['business_1']:
-                print(666)
+            if con_dicts.get('business_1'):
                 condition_dict['business_1'] = []
                 for item in con_dicts['business_1']:
                     condition_dict['business_1'].append(item)
-                    print(2222)
 
+            if con_dicts.get('business_2'):
+                condition_dict['business_2'] = []
+                for item in con_dicts['business_2']:
+                    condition_dict['business_2'].append(item)
+
+            if con_dicts.get('business_3'):
+                condition_dict['business_3'] = []
+                for item in con_dicts['business_3']:
+                    condition_dict['business_3'].append(item)
+
+            if con_dicts.get('host_ip__contains'):
+                condition_dict['host_ip__contains'] = con_dicts.get('host_ip__contains')
+
+        # 使用Q进行条件格式化
         con_dict = condition_dict
-        print(con_dict)
         con_q = Q()
         for k, v in con_dict.items():
             temp = Q()
@@ -272,9 +308,6 @@ class Asset(BaseServiceList):
         try:
             ret = {}
             conditions = self.assets_condition(request)
-            print(conditions)
-            # condition, conditions = self.get_authority(request)
-            # print(conditions)
             asset_count = models.Asset.objects.filter(conditions).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
             asset_list = models.Asset.objects.filter(conditions).extra(select=self.extra_select).values(
@@ -288,14 +321,16 @@ class Asset(BaseServiceList):
                 "page_start": page_info.start,
             }
             business_1_lists = self.business_1_list(request)
+            business_2_lists = self.business_2_list(request)
+            business_3_lists = self.business_3_list(request)
             ret['global_dict'] = {
                 'device_status_list': self.device_status_list,
                 'device_type_list': self.device_type_list,
                 'idc_list': self.idc_list,
                 'business_unit_list': self.business_unit_list,
                 'business_1_list': business_1_lists,
-                'business_2_list': self.business_2_list,
-                'business_3_list': self.business_3_list
+                'business_2_list': business_2_lists,
+                'business_3_list': business_3_lists
             }
             response.data = ret
             response.message = '获取成功'
