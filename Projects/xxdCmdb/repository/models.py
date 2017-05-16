@@ -178,7 +178,7 @@ class UserProfile(models.Model):
     用户信息
     """
     name = models.CharField(u'姓名', max_length=32)
-    group = models.ForeignKey('UserGroup', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
+    group = models.ForeignKey('UserGroup', null=True, blank=True, default=2, on_delete=models.SET_DEFAULT)
     business_one = models.ManyToManyField('BusinessOne', null=True, blank=True)
     business_two = models.ManyToManyField('BusinessTwo', null=True, blank=True)
     business_three = models.ManyToManyField('BusinessThree', null=True, blank=True)
