@@ -16,7 +16,7 @@ class UserListView(View):
         business_two_list = models.BusinessTwo.objects.all()
         business_three_list = models.BusinessThree.objects.all()
         return render(request, 'users_list.html', {'user_list': user_list, 'group_list': group_list, 'business_one_list': business_one_list
-            , 'business_two_list': business_two_list, 'business_three_list': business_three_list})
+            ,'business_two_list': business_two_list, 'business_three_list': business_three_list})
 
 
 class UserJsonView(View):
@@ -24,6 +24,7 @@ class UserJsonView(View):
         obj = user.User()
         response = obj.fetch_users(request)
         return JsonResponse(response.__dict__)
+        # return render(request, 'users_list.html', {'user_list': response.data['data_list']})
 
     def delete(self, request):
         response = user.User.delete_users(request)

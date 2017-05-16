@@ -1,4 +1,4 @@
-{% extends 'layout/_laybusiness.html' %}
+{% extends 'layout/_layread.html' %}
 
 {% block css %}
     <link rel="stylesheet" href="/static/css/bootstrap-select.css">
@@ -7,42 +7,43 @@
 {% block conent %}
     <ol class="breadcrumb" style="margin-bottom: 0;">
         <li><a href="/cmdb.html">首页</a></li>
-        <li class="active">用户管理</li>
+        <li class="active">用户组管理</li>
     </ol>
     <div style="padding: 5px 8px;">
 
         <div class="list-block">
-            <div class="clearfix search-area">
-
-                <div class="col-md-offset-10 do-submit">
-                    <a id="search_condition_submit" class="btn btn-primary no-radius">
-                        <i class="fa fa-search"></i> 搜索
-                    </a>
-                </div>
-
-                <div id="search_conditions" class="col-md-offset-2 col-md-8">
-                    <div class="condition">
-                        <div class="icons">
-                            <a class="btn btn-default no-radius" onclick="$.AddSearchCondition(this)"><i
-                                    class="fa fa-plus-square"></i></a>
-                        </div>
-                        <div class="inputs">
-                            <div class="input-group">
-                                <div id="search_condition" init="false" class="input-group-btn">
-                                    <label type="button" class="btn btn-default no-radius" style="width: 100px;">&nbsp;</label>
-                                    <button type="button" class="btn btn-default dropdown-toggle no-border-r" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
-                                    <ul class="change-search-condition dropdown-menu">
-
-                                    </ul>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+{#            <div class="clearfix search-area">#}
+{##}
+{#                <div class="col-md-offset-10 do-submit">#}
+{#                    <a id="search_condition_submit" class="btn btn-primary no-radius">#}
+{#                        <i class="fa fa-search"></i> 搜索#}
+{#                    </a>#}
+{#                </div>#}
+{##}
+{#                <div id="search_conditions" class="col-md-offset-2 col-md-8">#}
+{#                    <div class="condition">#}
+{#                        <div class="icons">#}
+{#                            <a class="btn btn-default no-radius" onclick="$.AddSearchCondition(this)"><i#}
+{#                                    class="fa fa-plus-square"></i></a>#}
+{#                        </div>#}
+{#                        <div class="inputs">#}
+{#                            <div class="input-group">#}
+{#                                <div id="search_condition" init="false" class="input-group-btn">#}
+{#                                    <label type="button" class="btn btn-default no-radius" style="width: 100px;">&nbsp;</label>#}
+{#                                    <button type="button" class="btn btn-default dropdown-toggle no-border-r" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>#}
+{#                                    <ul class="change-search-condition dropdown-menu">#}
+{##}
+{#                                    </ul>#}
+{#                                </div>#}
+{##}
+{##}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#            </div>#}
 
 {#            <div class="clearfix function-area">#}
 {#                <div class="btn-group btn-group-sm custom-btn-group">#}
@@ -64,7 +65,7 @@
 {#            </div>#}
 
             <div class="table-responsive table-area">
-                <table class="table table-striped table-bordered" style="display: none" >
+                <table class="table table-striped table-bordered" style="display: none">
                     <!-- 表格标题开始 -->
                     <thead id="table_head" style="display: none">
                     <tr>
@@ -80,53 +81,39 @@
                     <!-- 表格内容结束 -->
 
                 </table>
-
                 <table class="table table-striped table-bordered">
                     <thead id="table_head">
                     <tr>
                         <th>序号</th>
-                        <th>用户名</th>
-                        <th>用户组</th>
+                        <th>项目名称</th>
                         <th>环境</th>
-                        <th>业务2</th>
-                        <th>业务3</th>
+                        <th>业务线</th>
+                        <th>最新发布时间</th>
+                        <th>发布ID</th>
+                        <th>状态</th>
                         <th>操作</th>
                     </tr>
                     </thead>
-                {% for obj in user_list %}
-{#                {% for obj in response.data.data_list %}#}
+                <thead id="table_bodys">
+                {% for obj in data_list %}
                     <tr>
                         <th>{{ forloop.counter }}</th>
-                        <td>
-                            {{ obj.name }}
-                        </td>
-                        <td id="g_id" style="display: none">{{ obj.group_id }}</td>
-                        <td><div style="display: inline-block; padding: 3px;background-color: rgb(240,172,81); border-radius: 3px">{{ obj.group }}</div></td>
-                        <td>
-                            {% for host in obj.business_one.all %}
-                                <span style="display: inline-block; padding: 3px;background-color: rgb(92,184,92); border-radius: 3px; " hid="{{ host.id }}">{{ host.name }}</span>
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for host in obj.business_two.all %}
-                                <span style="display: inline-block; padding: 3px;background-color: rgb(92,184,92);border-radius: 3px;" hid="{{ host.id }}">{{ host.name }}</span>
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for host in obj.business_three.all %}
-                                <span style="display: inline-block; padding: 3px;background-color: rgb(92,184,92);border-radius: 3px; " hid="{{ host.id }}">{{ host.name }}</span>
-                            {% endfor %}
-                        </td>
+                        <td>{{ obj.project_name }}</td>
+                        <td>{{ obj.business_1 }}</td>
+                        <td>{{ obj.business_2 }}</td>
+                        <td>{{ obj.ctime|date:"Y-m-d H:i:s" }}</td>
+                        <td>{{ obj.release_id }}</td>
+                        <td>{{ obj.get_status_display }}</td>
                         <td style="width: 200px; font-size: 13px; line-height: 25px;">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            <a href="#" onclick="edit_user(this, {{ obj.id }})">编辑</a> |
-                            <i class="fa fa-user-plus" aria-hidden="true"></i>
-                            <a href="#" onclick="add_user(this, {{ obj.id }})">添加</a> |
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                            <a href="#" onclick="del_user({{ obj.id }})">删除</a>
+                            <i class="fa fa-edge" aria-hidden="true"></i>
+                            <a href="#" onclick="edit_group(this, {{ obj.id }})">上线</a> |
+                            <i class="fa fa-reply-all" aria-hidden="true"></i>
+                            <a href="#" onclick="del_group({{ obj.id }})">回滚</a>
                         </td>
                     </tr>
                 {% endfor %}
+                </thead>
+
                 </table>
 
                 <div class="clearfix">
@@ -152,12 +139,7 @@
           <div class="modal-body">
               <div class="form-group">
                 <label for="recipient-name" class="control-label">用户组</label>
-                <br>
-                  <select id="groups" class="selectpicker">
-                      {% for item in group_list %}
-                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
-                      {% endfor %}
-                  </select>
+                <input type="text" class="form-control" id="ap_name">
               </div>
               <div class="form-group">
                 <label for="recipient-name" class="control-label">选择环境</label>
@@ -197,40 +179,40 @@
       </div>
     </div>
 
-    <!-- 添加用户开始 -->
-    <div class="modal fade" id="add_u" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <!-- 添加用户组开始 -->
+    <div class="modal fade" id="add_g" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
           <div class="modal-dialog" role="document">
             <div class="modal-content" style="border-radius: 5px">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">添加用户</h4>
+                <h4 class="modal-title" id="exampleModalLabel">添加用户组</h4>
               </div>
               <form id="form1">
               <div class="modal-body">
                   <div class="form-group">
-                    <label for="recipient-name" class="control-label">1.用户名</label>
-                    <input type="text" class="form-control" id="user_name">
+                    <label for="recipient-name" class="control-label">1.用户组名称</label>
+                    <input type="text" class="form-control" id="group_name">
                   </div>
               </div>
               <div class="modal-footer">
                   <span id="error_message" style="color: red;"></span>
                   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button id="add_users" type="button" class="btn btn-primary">保存</button>
+                  <button id="add_groups" type="button" class="btn btn-primary">保存</button>
               </div>
             </form>
             </div>
           </div>
         </div>
-    <!-- 添加用户结束 -->
+    <!-- 添加用户组结束 -->
 
     <!-- 删除层开始 -->
     <div id="modal_delete" class="alert alert-danger alert-dismissible fade in modal-delete hide" role="alert">
         <button type="button" class="close" aria-label="Close" onclick="$.Hide('#shade,#modal_delete');"><span>×</span>
         </button>
-        <h4>确定删除用户？</h4>
+        <h4>确定删除该用户组吗？</h4>
 
         <p style="text-align: right">
-            <button type="button" class="btn btn-danger" id="do_delete_user">确定删除</button>
+            <button type="button" class="btn btn-danger" id="do_delete_group">确定删除</button>
             <button type="button" class="btn btn-default" onclick="$.Hide('#shade,#modal_delete');">取消</button>
         </p>
     </div>
@@ -252,21 +234,38 @@
     <script type="text/javascript" src="/static/js/nb-list.js"></script>
     <script src="/static/js/bootstrap-select.js"></script>
 
+
     <script>
         $(function () {
-            $.initMenu('#menu_user_profile');
-            $.nbDataList('/users.html');
+            $.initMenu('#menu_online');
+            $.nbDataList('/groups.html');
+            setTimeout("do_aaa()", 100);
+
         });
-        function edit_user(ths, nid) {
+        function do_aaa() {
+            $('#table_bodys').children().each(function () {
+                var v = $(this).children().next().next().next().next().next().next().html();
+                if(v == "新提交"){
+                    $(this).children().next().next().next().next().next().next().attr('style', 'display: inline-block; padding: 3px; background-color: rgb(240,173,87); margin-top:4px; margin-left:6px; margin-right:-20px');
+                    $(this).children().next().next().next().next().next().next().next().attr('style', '')
+                }else if(v == "[已通过]"){
+                    $(this).children().next().next().next().next().next().next().attr('style', 'display: inline-block; padding: 3px;background-color: rgb(92,184,92); margin-top:4px; margin-left:6px; margin-right:-20px');
+                    $(this).children().next().next().next().next().next().next().next().attr('style', '')
+                }else if(v == "[已拒绝]"){
+                    $(this).children().next().next().next().next().next().next().attr('style', 'display: inline-block; padding: 3px; background-color: rgb(217,83,79); margin-top:4px; margin-left:6px; margin-right:-20px');
+                    $(this).children().next().next().next().next().next().next().next().attr('style', '')
+                }else {
+                }
+            });
+        }
+
+        function edit_group(ths, nid) {
             $('#edit_example').modal();
 
             <!-- 获取原环境列表 -->
             var business_one_list = [];
             var business_two_list = [];
             var business_three_list = [];
-            var group_id = $(ths).parent().prev().prev().prev().prev().prev().text();
-            $('#groups').selectpicker('val', group_id);
-
             $(ths).parent().prev().prev().prev().children().each(function () {
                 var v = $(this).attr('hid');
                 business_one_list.push(v);
@@ -287,11 +286,11 @@
 
             $('#save_edit').click(function () {
                 $.ajax({
-                    url : '/users.html',
+                    url : '/groups.html',
                     type: 'POST',
                     dataType: 'JSON',
                     traditional: true,
-                    data: {'group_id': $('#groups').selectpicker('val'), 'nid': nid, 'business_1_list': $('#business_1').selectpicker('val')
+                    data: {'group_name': $('#ap_name').val(), 'nid': nid, 'business_1_list': $('#business_1').selectpicker('val')
                     , 'business_2_list': $('#business_2').selectpicker('val'), 'business_3_list': $('#business_3').selectpicker('val')},
                     success: function (data_dict) {
                         if(data_dict.status){
@@ -303,15 +302,15 @@
                 })
             })
         }
-        function add_user() {
-            $('#add_u').modal();
-            $('#add_users').click(function () {
+        function add_group() {
+            $('#add_g').modal();
+            $('#add_groups').click(function () {
                 $.ajax({
-                    url : '/users.html',
+                    url : '/groups.html',
                     type: 'POST',
                     dataType: 'JSON',
                     traditional: true,
-                    data: {'new_user_name': $('#user_name').val()},
+                    data: {'new_group_name': $('#group_name').val()},
                     success: function (data_dict) {
                         if(data_dict.status){
                             location.reload();
@@ -322,15 +321,15 @@
                 })
             })
         }
-        function del_user(nid) {
+        function del_group(nid) {
             $.Show('#shade,#modal_delete');
-            $('#do_delete_user').click(function () {
+            $('#do_delete_group').click(function () {
                 $.ajax({
-                    url : '/users.html',
+                    url : '/groups.html',
                     type: 'POST',
                     dataType: 'JSON',
                     traditional: true,
-                    data: {'del_user_id': nid},
+                    data: {'del_group_id': nid},
                     success: function (data_dict) {
                         if(data_dict.status){
                             location.reload();

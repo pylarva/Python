@@ -221,6 +221,40 @@ class UserGroup(models.Model):
         return self.name
 
 
+class ReleaseType(models.Model):
+    name = models.CharField(max_length=32, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "发布类型表"
+
+    def __str__(self):
+        return self.name
+
+
+class ProjectTask(models.Model):
+    jdk_version_choise = (
+        (1, 'jdk-7'),
+        (2, 'jdk-8')
+    )
+
+    project_status_choice = (
+        (1, '新提交'),
+        (2, '发布成功'),
+        (3, '发布失败'),
+    )
+
+    project_name = models.CharField(max_length=108, null=True, blank=True)
+    business_1 = models.ForeignKey('BusinessOne', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
+    business_2 = models.ForeignKey('BusinessTwo', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
+    jdk_version = models.IntegerField(choices=jdk_version_choise, null=True, blank=True)
+    release_id = models.CharField(max_length=32, null=True, blank=True)
+    release_user = models.CharField(max_length=32, null=True, blank=True)
+    git_url = models.CharField(max_length=108, null=True, blank=True)
+    git_branch = models.CharField(max_length=32, null=True, blank=True)
+    status = models.IntegerField(choices=project_status_choice, null=True, blank=True, default=1)
+    ctime = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+
 class BusinessUnit(models.Model):
     """
     业务线

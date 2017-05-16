@@ -1,0 +1,156 @@
+{% extends 'layout/_layread.html' %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/bootstrap-select.css">
+    <style>
+        .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+            width: 598px;
+            border-radius: 1px; !important;
+        }
+    </style>
+{% endblock %}
+
+{% block conent %}
+    <ol class="breadcrumb" style="margin-bottom: 0;">
+        <li><a href="/cmdb.html">首页</a></li>
+        <li class="active">新建项目</li>
+    </ol>
+
+    <div style="padding: 5px 8px;">
+        <div class="list-block">
+            <form id="form1">
+
+                <div class="form-group">
+              <div class="form-group">
+{#                <label for="recipient-name" class="control-label">项目名</label>#}
+{#                  <span class="glyphicon glyphicon-edit"></span>#}
+                  <span class="label label-success">项目名称</span>
+                <input type="text" class="form-control" id="obj_name" style="width: 600px">
+              </div>
+
+{#                <label for="recipient-name" class="control-label">选择环境</label>#}
+                                  <span class="label label-success">选择环境</span>
+
+                <br>
+
+                  <select id="obj_env" class="selectpicker">
+                      {% for item in business_one_list %}
+                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
+                      {% endfor %}
+                  </select>
+                <br>
+
+                <br>
+{#                <label for="recipient-name" class="control-label">选择业务线</label>#}
+                                  <span class="label label-success">二级业务</span>
+
+                <br>
+                  <select id="business_2" class="selectpicker">
+                      {% for item in business_two_list %}
+                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
+                      {% endfor %}
+                  </select>
+                <br>
+                <br>
+
+{#                    <label for="recipient-name" class="control-label">发布类型</label>#}
+                                  <span class="label label-success">发布类型</span>
+
+                <br>
+                  <select id="obj_type" class="selectpicker" style="width: 600px; border-radius: 1px;">
+                      {% for item in release_type %}
+                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
+                      {% endfor %}
+                  </select>
+                    <br>
+                    <br>
+                <div>
+                      <span class="label label-info">JDK版本</span>
+
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked>
+                            JDK-7
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios2" value="2">
+                            JDK-8
+                          </label>
+                        </div>
+                </div>
+                <br>
+                  <span class="label label-success">GIT地址</span>
+                    <input type="text" class="form-control" id="git_url" style="width: 600px; border-radius: 1px;">
+                                <br>
+                                  <span class="label label-success">GIT分支</span>
+                    <input type="text" class="form-control" id="git_branch" style="width: 600px; border-radius: 1px;">
+              </div>
+                    <a id="obj_commit" class="btn btn-primary no-radius" style="width: 100px;">
+                        <i class="fa fa-hand-o-right"></i> 提交
+                    </a>
+            </form>
+        </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/js/nb-list.js"></script>
+    <script src="/static/js/bootstrap-select.js"></script>
+
+
+    <script>
+        $(function () {
+            $.initMenu('#menu_create');
+
+            $('#obj_commit').click(function () {
+                var obj_name = $('#obj_name').val();
+                var obj_env = $('#obj_env').selectpicker('val');
+                var obj_business = $('#business_2').selectpicker('val');
+                var obj_type = $('#obj_type').selectpicker('val');
+                var jdk_version = $("input[name='optionsRadios']:checked").val();
+                var git_url = $('#git_url').val();
+                var git_branch = $('#git_branch').val();
+                var user_name = $.cookie('username');
+                $.ajax({
+                    url: '_project.html',
+                    type: 'POST',
+                    data: {'obj_name': obj_name, 'obj_env': obj_env, 'obj_business': obj_business, 'obj_type': obj_type,
+                    'jdk_version': jdk_version, 'git_url': git_url, 'git_branch': git_branch, 'user_name': user_name},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if (response.status){
+                            alert(666);
+                        } else {
+                            alert(response.message);
+                        }
+                            }
+                        })
+                })
+        });
+
+        function authorize(ths, ip, id) {
+            var user_rank = $(ths).parent().prev().children().val();
+            var host_name = $(ths).parent().prev().prev().prev().prev().prev().prev().text();
+            var username = $.cookie('username');
+            var email = $.cookie('email');
+            $.ajax({
+			url: 'authorizes.html',
+            type: 'POST',
+            data: {'username': username, 'ip': ip, 'user_rank': user_rank, 'email': email, 'hostname': host_name},
+            dataType: 'JSON',
+            success: function (response) {
+			    var s = '#host_' + id;
+                if (response.status){
+                    $(s).text('申请中...')
+                } else {
+                    alert(response.message);
+                }
+            }
+		})
+        }
+    </script>
+{% endblock %}
