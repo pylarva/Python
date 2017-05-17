@@ -19,30 +19,16 @@
     <div style="padding: 5px 8px;">
         <div class="list-block">
             <form id="form1">
-
                 <div class="form-group">
-              <div class="form-group">
-{#                <label for="recipient-name" class="control-label">项目名</label>#}
-{#                  <span class="glyphicon glyphicon-edit"></span>#}
-                  <span class="label label-success">项目名称</span>
-                <input type="text" class="form-control" id="obj_name" style="width: 600px">
-              </div>
-
-{#                <label for="recipient-name" class="control-label">选择环境</label>#}
-                                  <span class="label label-success">选择环境</span>
-
-                <br>
-
-                  <select id="obj_env" class="selectpicker">
-                      {% for item in business_one_list %}
-                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
-                      {% endfor %}
-                  </select>
-                <br>
-
-                <br>
-{#                <label for="recipient-name" class="control-label">选择业务线</label>#}
-                                  <span class="label label-success">二级业务</span>
+{#                <span class="label label-success">选择环境</span>#}
+{##}
+{#                <br>#}
+{#                  <select id="obj_env" class="selectpicker">#}
+{#                      {% for item in business_one_list %}#}
+{#                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>#}
+{#                      {% endfor %}#}
+{#                  </select>#}
+                <span class="label label-success">项目名称</span>
 
                 <br>
                   <select id="business_2" class="selectpicker">
@@ -53,7 +39,6 @@
                 <br>
                 <br>
 
-{#                    <label for="recipient-name" class="control-label">发布类型</label>#}
                                   <span class="label label-success">发布类型</span>
 
                 <br>
@@ -84,8 +69,8 @@
                   <span class="label label-success">GIT地址</span>
                     <input type="text" class="form-control" id="git_url" style="width: 600px; border-radius: 1px;">
                                 <br>
-                                  <span class="label label-success">GIT分支</span>
-                    <input type="text" class="form-control" id="git_branch" style="width: 600px; border-radius: 1px;">
+{#                                  <span class="label label-success">GIT分支</span>#}
+{#                    <input type="text" class="form-control" id="git_branch" style="width: 600px; border-radius: 1px;">#}
               </div>
                     <a id="obj_commit" class="btn btn-primary no-radius" style="width: 100px;">
                         <i class="fa fa-hand-o-right"></i> 提交
@@ -107,23 +92,23 @@
             $.initMenu('#menu_create');
 
             $('#obj_commit').click(function () {
-                var obj_name = $('#obj_name').val();
-                var obj_env = $('#obj_env').selectpicker('val');
+{#                var obj_name = $('#obj_name').val();#}
+{#                var obj_env = $('#obj_env').selectpicker('val');#}
                 var obj_business = $('#business_2').selectpicker('val');
                 var obj_type = $('#obj_type').selectpicker('val');
                 var jdk_version = $("input[name='optionsRadios']:checked").val();
                 var git_url = $('#git_url').val();
-                var git_branch = $('#git_branch').val();
+{#                var git_branch = $('#git_branch').val();#}
                 var user_name = $.cookie('username');
                 $.ajax({
                     url: '_project.html',
                     type: 'POST',
-                    data: {'obj_name': obj_name, 'obj_env': obj_env, 'obj_business': obj_business, 'obj_type': obj_type,
-                    'jdk_version': jdk_version, 'git_url': git_url, 'git_branch': git_branch, 'user_name': user_name},
+                    data: {'obj_business': obj_business, 'obj_type': obj_type, 'jdk_version': jdk_version, 'git_url': git_url,'user_name': user_name},
                     dataType: 'JSON',
                     success: function (response) {
                         if (response.status){
                             alert(666);
+                            location.href = '/project-list.html'
                         } else {
                             alert(response.message);
                         }

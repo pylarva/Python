@@ -243,11 +243,13 @@ class ProjectTask(models.Model):
         (3, '发布失败'),
     )
 
-    project_name = models.CharField(max_length=108, null=True, blank=True)
+    # project_name = models.CharField(max_length=108, null=True, blank=True)
     business_1 = models.ForeignKey('BusinessOne', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
     business_2 = models.ForeignKey('BusinessTwo', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
+    project_type = models.ForeignKey('ReleaseType', null=True, blank=True, default=1, on_delete=models.SET_NULL)
     jdk_version = models.IntegerField(choices=jdk_version_choise, null=True, blank=True)
     release_id = models.CharField(max_length=32, null=True, blank=True)
+    release_last_time = models.CharField(max_length=32, null=True, blank=True)
     release_user = models.CharField(max_length=32, null=True, blank=True)
     git_url = models.CharField(max_length=108, null=True, blank=True)
     git_branch = models.CharField(max_length=32, null=True, blank=True)

@@ -9,25 +9,23 @@ from utils.response import BaseResponse
 from web.service import group
 
 
-class ProjectListView(View):
+class ReleaseListView(View):
     def get(self, request, *args, **kwargs):
-        release_type = models.ReleaseType.objects.all()
-        business_one_list = models.BusinessOne.objects.all()
-        business_two_list = models.BusinessTwo.objects.all()
-        business_three_list = models.BusinessThree.objects.all()
-        return render(request, 'project.html', {'release_type': release_type, 'business_one_list': business_one_list
-                                                    , 'business_two_list': business_two_list, 'business_three_list': business_three_list})
+        task_id = kwargs.get('b1', None)
+        data = models.ProjectTask.objects.filter(id=task_id).first()
+        print(data)
+        return render(request, 'release.html', {'data': data})
 
     def post(self, request, *args, **kwargs):
         response = BaseResponse()
 
-        # project_name = request.POST.get('obj_name')
-        # project_env = request.POST.get('obj_env')
+        project_name = request.POST.get('obj_name')
+        project_env = request.POST.get('obj_env')
         project_business = request.POST.get('obj_business')
         project_type = request.POST.get('obj_type')
         jdk_version = request.POST.get('jdk_version')
         git_url = request.POST.get('git_url')
-        # git_branch = request.POST.get('git_branch')
+        git_branch = request.POST.get('git_branch')
         user_name = request.POST.get('user_name')
 
         t = time.strftime('%Y%m%d')[3:]
@@ -36,10 +34,10 @@ class ProjectListView(View):
             release_id = str(t) + '0' + str(n)
         else:
             release_id = str(t) + str(n)
-        print(release_id, project_business, project_type, jdk_version, git_url)
+        print(release_id, project_name, project_env, project_business, project_type, jdk_version, git_url, git_branch)
 
-        models.ProjectTask.objects.create(business_2_id=project_business,
-                                          jdk_version=jdk_version, release_user=user_name, git_url=git_url,
+        models.ProjectTask.objects.create(project_name=project_name, business_1_id=project_env, business_2_id=project_business,
+                                          jdk_version=jdk_version, release_user=user_name, git_url=git_url, git_branch=git_branch,
                                           release_id=release_id)
         response.status = True
         return JsonResponse(response.__dict__)

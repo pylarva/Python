@@ -6,7 +6,7 @@ from repository import models
 from django.shortcuts import render
 from django.http import JsonResponse
 from utils.response import BaseResponse
-from web.service import group
+from web.service import project
 
 
 class ProjectsListView(View):
@@ -14,49 +14,23 @@ class ProjectsListView(View):
         data_list = models.ProjectTask.objects.all()
         return render(request, 'project_list.html', {'data_list': data_list})
 
-    def post(self, request, *args, **kwargs):
-        response = BaseResponse()
-
-        project_name = request.POST.get('obj_name')
-        project_env = request.POST.get('obj_env')
-        project_business = request.POST.get('obj_business')
-        project_type = request.POST.get('obj_type')
-        jdk_version = request.POST.get('jdk_version')
-        git_url = request.POST.get('git_url')
-        git_branch = request.POST.get('git_branch')
-        user_name = request.POST.get('user_name')
-
-        t = time.strftime('%Y%m%d')[3:]
-        n = models.ProjectTask.objects.filter(release_id__icontains=t).count() + 1
-        if len(str(n)) < 2:
-            release_id = str(t) + '0' + str(n)
-        else:
-            release_id = str(t) + str(n)
-        print(release_id, project_name, project_env, project_business, project_type, jdk_version, git_url, git_branch)
-
-        models.ProjectTask.objects.create(project_name=project_name, business_1_id=project_env, business_2_id=project_business,
-                                          jdk_version=jdk_version, release_user=user_name, git_url=git_url, git_branch=git_branch,
-                                          release_id=release_id)
-        response.status = True
-        return JsonResponse(response.__dict__)
-
 
 class ProjectsJsonView(View):
     def get(self, request):
-        obj = group.Group()
-        response = obj.fetch_users(request)
+        obj = project.Project()
+        response = obj.fetch_assets(request)
         return JsonResponse(response.__dict__)
 
     def delete(self, request):
-        response = group.Group.delete_users(request)
+        response = project.Project.delete_assets(request)
         return JsonResponse(response.__dict__)
 
     def put(self, request):
-        response = group.Group.put_users(request)
+        response = project.Project.put_assets(request)
         return JsonResponse(response.__dict__)
 
     def post(self, request):
-        response = group.Group.post_users(request)
+        response = project.Project.post_users(request)
         return JsonResponse(response.__dict__)
 
 
