@@ -92,23 +92,20 @@
             $.initMenu('#menu_create');
 
             $('#obj_commit').click(function () {
-{#                var obj_name = $('#obj_name').val();#}
-{#                var obj_env = $('#obj_env').selectpicker('val');#}
                 var obj_business = $('#business_2').selectpicker('val');
                 var obj_type = $('#obj_type').selectpicker('val');
                 var jdk_version = $("input[name='optionsRadios']:checked").val();
                 var git_url = $('#git_url').val();
-{#                var git_branch = $('#git_branch').val();#}
                 var user_name = $.cookie('username');
                 $.ajax({
                     url: '_project.html',
                     type: 'POST',
-                    data: {'obj_business': obj_business, 'obj_type': obj_type, 'jdk_version': jdk_version, 'git_url': git_url,'user_name': user_name},
+                    data: {'obj_env': obj_business, 'obj_type': obj_type, 'jdk_version': jdk_version, 'git_url': git_url,'user_name': user_name},
                     dataType: 'JSON',
                     success: function (response) {
                         if (response.status){
                             alert(666);
-                            location.href = '/project-list.html'
+                            location.href = '/project_list.html'
                         } else {
                             alert(response.message);
                         }

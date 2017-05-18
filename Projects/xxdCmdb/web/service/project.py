@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 import json
 import re
+import time
 from django.db.models import Q
 from repository import models
 from utils.pager import PageInfo
@@ -14,7 +15,7 @@ from .base import BaseServiceList
 class Project(BaseServiceList):
     def __init__(self):
         condition_config = [
-            {'name': 'business_1', 'text': '环境', 'condition_type': 'input', 'condition_type': 'select', 'global_name': 'business_1_list'},
+            {'name': 'business_2', 'text': '项目名', 'condition_type': 'input', 'condition_type': 'select', 'global_name': 'business_2_list'},
         ]
         table_config = [
             {
@@ -32,16 +33,6 @@ class Project(BaseServiceList):
                 'attr': {}
             },
             {
-                'q': 'business_1',
-                'title': "环境",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@@business_1_list'}},
-                'attr': {'name': 'business_1', 'id': '@business_1', 'original': '@business_1',
-                         'edit-enable': 'true',
-                         'edit-type': 'select',
-                         'global-name': 'business_1_list'}
-            },
-            {
                 'q': 'business_2',
                 'title': "项目名",
                 'display': 1,
@@ -49,10 +40,39 @@ class Project(BaseServiceList):
                 'attr': {}
             },
             {
-                'q': 'ctime',
+                'q': 'git_url',
+                'title': "GIT地址",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@git_url'}},
+                'attr': {}
+            },
+            {
+                'q': 'business_1',
+                'title': "环境",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@business_1_list'}},
+                'attr': {'name': 'business_1', 'id': '@business_1', 'original': '@business_1',
+                         'edit-enable': 'true',
+                         'edit-type': 'select',
+                         'global-name': 'business_1_list',
+                         'style': 'padding: 3px;'}
+            },
+            {
+                'q': 'git_branch',
+                'title': "分支",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@git_branch'}},
+                'attr': {'name': 'git_branch', 'id': '@git_branch', 'original': '@git_branch',
+                         'edit-enable': 'true',
+                         'edit-type': 'input',
+                         'placeholder': '111',
+                         'style': 'padding: 3px;'}
+            },
+            {
+                'q': 'release_last_time',
                 'title': "最新发布时间",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@ctime'}},
+                'text': {'content': "{n}", 'kwargs': {'n': '@release_last_time'}},
                 'attr': {}
             },
             {
@@ -67,7 +87,7 @@ class Project(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<i class='fa fa-edge' aria-hidden='true'></i><a href='/release-{nid}'>发布</a> | "
+                    'content': "<i class='fa fa-edge' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'>发布</a> | "
                                "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='del_group({{ obj.id }})'>详细</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
@@ -97,21 +117,70 @@ class Project(BaseServiceList):
         result = map(lambda x: {'id': x.id, 'name': "%s-%s" % (x.name, x.floor)}, values)
         return list(result)
 
-    @property
-    def business_1_list(self):
-        values = models.BusinessOne.objects.filter().only('id', 'name')
+    # @property
+    def business_1_list(self, request):
+        # 基于用户session用户名来查用户权限
+        username = request.GET.get('username')
+
+        # 先将用户组中的权限添加进condition
+        obj = models.UserProfile.objects.filter(name=username).first()
+        business_one_obj = obj.group.business_one.all()
+        q = Q()
+        q.connector = 'OR'
+        for item in business_one_obj:
+            print(item)
+            q.children.append(('name', item))
+
+        # 再将自定义的业务权限添加进condition
+        business_one_modification = obj.business_one.all()
+        for item in business_one_modification:
+            print(item)
+            q.children.append(('name', item))
+        # q = self.get_authority(request)
+
+        values = models.BusinessOne.objects.filter(q).only('id', 'name')
         result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
         return list(result)
 
-    @property
-    def business_2_list(self):
-        values = models.BusinessTwo.objects.only('id', 'name')
+    # @property
+    def business_3_list(self, request):
+        username = request.GET.get('username')
+
+        obj = models.UserProfile.objects.filter(name=username).first()
+        business_three_obj = obj.group.business_three.all()
+        q = Q()
+        q.connector = 'OR'
+        for item in business_three_obj:
+            print(item)
+            q.children.append(('name', item))
+
+        business_three_modification = obj.business_three.all()
+        for item in business_three_modification:
+            print(item)
+            q.children.append(('name', item))
+
+        values = models.BusinessThree.objects.filter(q).only('id', 'name')
         result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
         return list(result)
 
-    @property
-    def business_3_list(self):
-        values = models.BusinessThree.objects.only('id', 'name')
+    # @property
+    def business_2_list(self, request):
+        username = request.GET.get('username')
+
+        obj = models.UserProfile.objects.filter(name=username).first()
+        business_two_obj = obj.group.business_two.all()
+        q = Q()
+        q.connector = 'OR'
+        for item in business_two_obj:
+            print(item)
+            q.children.append(('name', item))
+
+        business_two_modification = obj.business_two.all()
+        for item in business_two_modification:
+            print(item)
+            q.children.append(('name', item))
+
+        values = models.BusinessTwo.objects.filter(q).only('id', 'name')
         result = map(lambda x: {'id': x.id, 'name': "%s" % x.name}, values)
         return list(result)
 
@@ -122,13 +191,68 @@ class Project(BaseServiceList):
 
     @staticmethod
     def assets_condition(request):
-        con_str = request.GET.get('condition', None)
-        print(con_str)
-        if not con_str:
-            con_dict = {}
-        else:
-            con_dict = json.loads(con_str)
+        # 创建权限字典
+        # condition_dict = {"business_1":["2","3"],"business_2":["3"],"business_3":["3"]}
+        condition_dict = {"business_1": [], "business_2": [], "business_3": [], "host_ip__contains": []}
 
+        # 开始根据用户名查权限
+        username = request.GET.get('username')
+
+        # 如果用户属于管理员组 则不限制查询条件
+        obj = models.UserProfile.objects.filter(name=username).first()
+        is_admin = obj.group.name
+        if is_admin != 'admin':
+            # 用户组权限
+            # business_one_obj = obj.group.business_one.values('id')
+            # for item in business_one_obj:
+            #     condition_dict['business_1'].append(str(item['id']))
+            business_two_obj = obj.group.business_two.values('id')
+            for item in business_two_obj:
+                condition_dict['business_2'].append(str(item['id']))
+            business_three_obj = obj.group.business_three.values('id')
+            for item in business_three_obj:
+                condition_dict['business_3'].append(str(item['id']))
+
+            # 自定义权限
+            # business_one_m = obj.business_one.values('id')
+            # for item in business_one_m:
+            #     condition_dict['business_1'].append(str(item['id']))
+            business_two_m = obj.business_one.values('id')
+            for item in business_two_m:
+                condition_dict['business_2'].append(str(item['id']))
+            business_three_m = obj.business_three.values('id')
+            for item in business_three_m:
+                condition_dict['business_3'].append(str(item['id']))
+
+            # 如果用户从前端提交查询条件 需要覆盖condition里面对应business_1 2 3 条件
+            con_str = request.GET.get('condition', None)
+            if con_str != "{}":
+                con_dicts = json.loads(con_str)
+                con_dicts = dict(con_dicts)
+                print('-----', con_dicts, type(con_dicts))
+
+                if con_dicts.get('business_1'):
+                    condition_dict['business_1'] = []
+                    for item in con_dicts['business_1']:
+                        condition_dict['business_1'].append(item)
+
+                if con_dicts.get('business_2'):
+                    condition_dict['business_2'] = []
+                    for item in con_dicts['business_2']:
+                        condition_dict['business_2'].append(item)
+
+                if con_dicts.get('business_3'):
+                    condition_dict['business_3'] = []
+                    for item in con_dicts['business_3']:
+                        condition_dict['business_3'].append(item)
+
+                if con_dicts.get('host_ip__contains'):
+                    condition_dict['host_ip__contains'] = con_dicts.get('host_ip__contains')
+        else:
+            condition_dict = {}
+
+        # 使用Q进行条件格式化
+        con_dict = condition_dict
         con_q = Q()
         for k, v in con_dict.items():
             temp = Q()
@@ -136,9 +260,6 @@ class Project(BaseServiceList):
             for item in v:
                 temp.children.append((k, item))
             con_q.add(temp, 'AND')
-
-        print(con_q)
-
         return con_q
 
     def fetch_assets(self, request):
@@ -158,14 +279,17 @@ class Project(BaseServiceList):
                 "page_str": page_info.pager(),
                 "page_start": page_info.start,
             }
+            business_1_lists = self.business_1_list(request)
+            business_2_lists = self.business_2_list(request)
+            business_3_lists = self.business_3_list(request)
             ret['global_dict'] = {
                 'device_status_list': self.device_status_list,
                 'device_type_list': self.device_type_list,
                 'idc_list': self.idc_list,
                 'business_unit_list': self.business_unit_list,
-                'business_1_list': self.business_1_list,
-                'business_2_list': self.business_2_list,
-                'business_3_list': self.business_3_list
+                'business_1_list': business_1_lists,
+                'business_2_list': business_2_lists,
+                'business_3_list': business_3_lists
             }
             response.data = ret
             response.message = '获取成功'
@@ -248,5 +372,31 @@ class Project(BaseServiceList):
         except Exception as e:
             response.status = False
             response.message = str(e)
+        return response
+
+    @staticmethod
+    def post_task(request):
+        response = BaseResponse()
+        release_id = request.POST.get('id')
+        release_env = request.POST.get('release_env')
+        release_branch = request.POST.get('release_branch')
+        release_time = time.strftime('%Y%m%d %H:%M')
+        release_user = request.POST.get('user_name')
+
+        print(release_branch, type(release_branch))
+
+        obj = models.ProjectTask.objects.filter(id=release_id).first()
+        release_name = obj.business_2
+        release_git_url = obj.git_url
+        # release_git_branch = obj.git_branch
+        release_jdk_version = obj.jdk_version
+        release_type = obj.project_type_id
+
+        models.ReleaseTask.objects.create(release_name=release_name, release_env_id=release_env, release_time=release_time, release_git_branch=release_branch,
+                                          release_user=release_user, release_git_url=release_git_url,
+                                          release_jdk_version=release_jdk_version, release_type_id=release_type)
+
+        # print(release_id, release_env, release_branch, release_name)
+        response.status = True
         return response
 

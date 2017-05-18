@@ -243,18 +243,52 @@ class ProjectTask(models.Model):
         (3, '发布失败'),
     )
 
-    # project_name = models.CharField(max_length=108, null=True, blank=True)
     business_1 = models.ForeignKey('BusinessOne', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
     business_2 = models.ForeignKey('BusinessTwo', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
     project_type = models.ForeignKey('ReleaseType', null=True, blank=True, default=1, on_delete=models.SET_NULL)
     jdk_version = models.IntegerField(choices=jdk_version_choise, null=True, blank=True)
     release_id = models.CharField(max_length=32, null=True, blank=True)
-    release_last_time = models.CharField(max_length=32, null=True, blank=True)
+    release_last_time = models.CharField(max_length=32, null=True, blank=True, default='-')
     release_user = models.CharField(max_length=32, null=True, blank=True)
     git_url = models.CharField(max_length=108, null=True, blank=True)
     git_branch = models.CharField(max_length=32, null=True, blank=True)
     status = models.IntegerField(choices=project_status_choice, null=True, blank=True, default=1)
     ctime = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "项目表"
+
+    def __str__(self):
+        return self.business_2
+
+
+class ReleaseTask(models.Model):
+    release_status_choices = (
+        (1, '发布中'),
+        (2, '发布成功'),
+        (3, '发布失败'),
+    )
+
+    jdk_version_choise = (
+        (1, 'jdk-7'),
+        (2, 'jdk-8')
+    )
+
+    release_name = models.ForeignKey('BusinessTwo', null=True, blank=True, default=1, on_delete=models.SET_NULL)
+    release_env = models.ForeignKey('BusinessOne', null=True, blank=True, default=1, on_delete=models.SET_NULL)
+    release_time = models.CharField(max_length=32, null=True, blank=True)
+    release_status = models.IntegerField(choices=release_status_choices, null=True, blank=True, default=1)
+    release_user = models.CharField(max_length=32, null=True, blank=True)
+    release_git_url = models.CharField(max_length=64, null=True, blank=True)
+    release_git_branch = models.CharField(max_length=32, null=True, blank=True)
+    release_type = models.ForeignKey('ReleaseType', null=True, blank=True, on_delete=models.SET_NULL)
+    release_jdk_version = models.IntegerField(choices=jdk_version_choise, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "发布列表"
+
+    def __str__(self):
+        return self.release_name
 
 
 class BusinessUnit(models.Model):

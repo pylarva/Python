@@ -7,7 +7,7 @@
 {% block conent %}
     <ol class="breadcrumb" style="margin-bottom: 0;">
         <li><a href="/cmdb.html">首页</a></li>
-        <li class="active">用户组管理</li>
+        <li class="active">项目列表</li>
     </ol>
     <div style="padding: 5px 8px;">
 
@@ -232,7 +232,7 @@
 {% block js %}
     <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
-    <script type="text/javascript" src="/static/js/nb-list.js"></script>
+    <script type="text/javascript" src="/static/js/nb-list2.js"></script>
     <script src="/static/js/bootstrap-select.js"></script>
 
 
@@ -242,107 +242,36 @@
             $.nbDataList('/projects_list.html');
             $('#table_body').attr('edit-mode', 'true');
 
-{#            setTimeout("do_aaa()", 100);#}
-
         });
 
-        function do_aaa() {
-            $('#table_bodys').children().each(function () {
-                var v = $(this).children().next().next().next().next().next().next().html();
-                if(v == "新提交"){
-                    $(this).children().next().next().next().next().next().next().attr('style', 'display: inline-block; padding: 3px; background-color: rgb(240,173,87); margin-top:4px; margin-left:6px; margin-right:-20px');
-                    $(this).children().next().next().next().next().next().next().next().attr('style', '')
-                }else if(v == "[已通过]"){
-                    $(this).children().next().next().next().next().next().next().attr('style', 'display: inline-block; padding: 3px;background-color: rgb(92,184,92); margin-top:4px; margin-left:6px; margin-right:-20px');
-                    $(this).children().next().next().next().next().next().next().next().attr('style', '')
-                }else if(v == "[已拒绝]"){
-                    $(this).children().next().next().next().next().next().next().attr('style', 'display: inline-block; padding: 3px; background-color: rgb(217,83,79); margin-top:4px; margin-left:6px; margin-right:-20px');
-                    $(this).children().next().next().next().next().next().next().next().attr('style', '')
-                }else {
-                }
-            });
-        }
+        function do_release(ths, id) {
+            var release_env = $(ths).parent().prev().prev().prev().prev().children().val();
+            var release_branch = $(ths).parent().prev().prev().prev().children().val();
+            var user_name = $.cookie('username');
+            var reg = /^[0-9a-zA-Z_//./*]*$/g;
 
-        function edit_group(ths, nid) {
-            $('#edit_example').modal();
-
-            <!-- 获取原环境列表 -->
-            var business_one_list = [];
-            var business_two_list = [];
-            var business_three_list = [];
-            $(ths).parent().prev().prev().prev().children().each(function () {
-                var v = $(this).attr('hid');
-                business_one_list.push(v);
-            });
-            $('#business_1').selectpicker('val', business_one_list);
-            var group_name = $(ths).parents().prev().prev().prev().prev().text();
-            $('#ap_name').val(group_name);
-            $(ths).parent().prev().prev().children().each(function () {
-                var v = $(this).attr('hid');
-                business_two_list.push(v);
-            });
-            $('#business_2').selectpicker('val', business_two_list);
-            $(ths).parent().prev().children().each(function () {
-                var v = $(this).attr('hid');
-                business_three_list.push(v);
-            });
-            $('#business_3').selectpicker('val', business_three_list);
-
-            $('#save_edit').click(function () {
+            if(release_env==1){
+                alert('项目发布【环境】不能为buffer...');
+                return false;
+            }else if(release_branch==''||reg.test(release_branch)==false){
+                alert('项目发布【分支】不能为空或者分支名格式包含非法字符...');
+                return false;
+            }else {
                 $.ajax({
-                    url : '/groups.html',
+                    url: '/projects_list.html',
                     type: 'POST',
+                    data: {'id': id, 'release_env': release_env, 'release_branch': release_branch, 'user_name': user_name},
                     dataType: 'JSON',
-                    traditional: true,
-                    data: {'group_name': $('#ap_name').val(), 'nid': nid, 'business_1_list': $('#business_1').selectpicker('val')
-                    , 'business_2_list': $('#business_2').selectpicker('val'), 'business_3_list': $('#business_3').selectpicker('val')},
-                    success: function (data_dict) {
-                        if(data_dict.status){
-                            location.reload();
-                        }else {
-                            $('#add_error_02').text(data_dict.message)
+                    success: function (response) {
+                        if (response.status){
+                            alert(666);
+{#                            location.href = '/project_list.html'#}
+                        } else {
+                            alert(response.message);
                         }
-                    }
-                })
-            })
-        }
-        function add_group() {
-            $('#add_g').modal();
-            $('#add_groups').click(function () {
-                $.ajax({
-                    url : '/groups.html',
-                    type: 'POST',
-                    dataType: 'JSON',
-                    traditional: true,
-                    data: {'new_group_name': $('#group_name').val()},
-                    success: function (data_dict) {
-                        if(data_dict.status){
-                            location.reload();
-                        }else {
-                            $('#add_error_02').text(data_dict.message)
-                        }
-                    }
-                })
-            })
-        }
-        function del_group(nid) {
-            $.Show('#shade,#modal_delete');
-            $('#do_delete_group').click(function () {
-                $.ajax({
-                    url : '/groups.html',
-                    type: 'POST',
-                    dataType: 'JSON',
-                    traditional: true,
-                    data: {'del_group_id': nid},
-                    success: function (data_dict) {
-                        if(data_dict.status){
-                            location.reload();
-                        }else {
-                            $('#add_error_02').text(data_dict.message)
-                        }
-                    }
-                })
-            })
+                            }
+                        })
+            }
         }
     </script>
 {% endblock %}

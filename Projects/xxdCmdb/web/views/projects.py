@@ -30,7 +30,7 @@ class ProjectsJsonView(View):
         return JsonResponse(response.__dict__)
 
     def post(self, request):
-        response = project.Project.post_users(request)
+        response = project.Project.post_task(request)
         return JsonResponse(response.__dict__)
 
 

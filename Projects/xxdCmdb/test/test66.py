@@ -3,8 +3,8 @@
 
 # 666
 import time
-t = time.strftime('%Y%m%d')
+t = time.strftime('%Y%m%d %H:%M')
 
-t = t[3:]
+# t = t[3:]
 
 print(t, type(t))
