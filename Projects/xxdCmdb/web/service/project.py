@@ -20,8 +20,8 @@ class Project(BaseServiceList):
         table_config = [
             {
                 'q': 'id',
-                'title': "ID",
-                'display': 0,
+                'title': "项目ID",
+                'display': 1,
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
                 'attr': {}
             },
@@ -69,8 +69,15 @@ class Project(BaseServiceList):
                          'style': 'padding: 3px;'}
             },
             {
+                'q': 'release_last_id',
+                'title': "最新发布ID",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@release_last_id'}},
+                'attr': {}
+            },
+            {
                 'q': 'release_last_time',
-                'title': "最新发布时间",
+                'title': "发布时间",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@release_last_time'}},
                 'attr': {}
@@ -88,7 +95,7 @@ class Project(BaseServiceList):
                 'display': 1,
                 'text': {
                     'content': "<i class='fa fa-edge' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'>发布</a> | "
-                               "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='del_group({{ obj.id }})'>详细</a>",
+                               "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='do_log({nid})'>详细</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}
@@ -380,10 +387,10 @@ class Project(BaseServiceList):
         release_id = request.POST.get('id')
         release_env = request.POST.get('release_env')
         release_branch = request.POST.get('release_branch')
-        release_time = time.strftime('%Y%m%d %H:%M')
+        release_time = time.strftime('%Y-%m-%d %H:%M')
         release_user = request.POST.get('user_name')
 
-        print(release_branch, type(release_branch))
+        # print(release_branch, type(release_branch))
 
         obj = models.ProjectTask.objects.filter(id=release_id).first()
         release_name = obj.business_2
@@ -392,9 +399,17 @@ class Project(BaseServiceList):
         release_jdk_version = obj.jdk_version
         release_type = obj.project_type_id
 
-        models.ReleaseTask.objects.create(release_name=release_name, release_env_id=release_env, release_time=release_time, release_git_branch=release_branch,
-                                          release_user=release_user, release_git_url=release_git_url,
-                                          release_jdk_version=release_jdk_version, release_type_id=release_type)
+        # release_obj = models.ReleaseTask.objects.all()
+
+        release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
+                                         release_git_branch=release_branch,
+                                         release_user=release_user, release_git_url=release_git_url,
+                                         release_jdk_version=release_jdk_version, release_type_id=release_type)
+        release_obj.save()
+
+        models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id, release_last_time=release_time)
+        # print(release_obj.id)
+
 
         # print(release_id, release_env, release_branch, release_name)
         response.status = True

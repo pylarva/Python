@@ -126,85 +126,19 @@
             </div>
         </div>
 
+        <div id="release_div" style="display: none">
+            <span class="label label-primary">发布日志</span>
+            <div style="border: solid rgb(47,114,171) 1px; height: auto"></div>
+            <div id="release_log"></div>
+{#            {% for item in response.data.data_list %}#}
+{#                <a href="#">{{ item.msg }}</a>#}
+{#            {% endfor %}#}
+
+        </div>
+
     </div>
 
-    <!-- 编辑应用 模态对话框 -->
-    <div class="modal fade" id="edit_example" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="exampleModalLabel">编辑权限</h4>
-          </div>
-          <form id="form1">
-          <div class="modal-body">
-              <div class="form-group">
-                <label for="recipient-name" class="control-label">用户组</label>
-                <input type="text" class="form-control" id="ap_name">
-              </div>
-              <div class="form-group">
-                <label for="recipient-name" class="control-label">选择环境</label>
-                <br>
-                  <select id="business_1" class="selectpicker" multiple>
-                      {% for item in business_one_list %}
-                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
-                      {% endfor %}
-                  </select>
-              </div>
-              <div class="form-group">
-                <label for="recipient-name" class="control-label">选择业务线2</label>
-                <br>
-                  <select id="business_2" class="selectpicker" multiple>
-                      {% for item in business_two_list %}
-                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
-                      {% endfor %}
-                  </select>
-              </div>
-              <div class="form-group">
-                <label for="recipient-name" class="control-label">选择业务线3</label>
-                <br>
-                  <select id="business_3" class="selectpicker" multiple>
-                      {% for item in business_three_list %}
-                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
-                      {% endfor %}
-                  </select>
-              </div>
-          </div>
-          <div class="modal-footer">
-              <span id="add_error_02" style="color: red;"></span>
-              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-              <button id="save_edit" type="button" class="btn btn-primary">保存</button>
-          </div>
-        </form>
-        </div>
-      </div>
-    </div>
 
-    <!-- 添加用户组开始 -->
-    <div class="modal fade" id="add_g" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content" style="border-radius: 5px">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">添加用户组</h4>
-              </div>
-              <form id="form1">
-              <div class="modal-body">
-                  <div class="form-group">
-                    <label for="recipient-name" class="control-label">1.用户组名称</label>
-                    <input type="text" class="form-control" id="group_name">
-                  </div>
-              </div>
-              <div class="modal-footer">
-                  <span id="error_message" style="color: red;"></span>
-                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button id="add_groups" type="button" class="btn btn-primary">保存</button>
-              </div>
-            </form>
-            </div>
-          </div>
-        </div>
-    <!-- 添加用户组结束 -->
 
     <!-- 删除层开始 -->
     <div id="modal_delete" class="alert alert-danger alert-dismissible fade in modal-delete hide" role="alert">
@@ -242,14 +176,57 @@
             $.nbDataList('/projects_list.html');
             $('#table_body').attr('edit-mode', 'true');
 
+            var t1 = window.setInterval(do_reload, 1000);
+{#            setTimeout("do_reload()", 100);#}
+
         });
+        function do_reload() {
+            $('#table_body').children().each(function () {
+                var v = $(this).children().next().next().next().next().next().next().next().html();
+                var obj_id = $(this).children().next().html();
+                var s = 'do_release(this,' + obj_id + ')';
+                if(v!='-'){
+                    $(this).children().next().next().next().next().next().next().next().next().next().attr('id', 'status');
+                    $(this).children().next().next().next().next().next().next().next().next().next().next().attr('id', '');
+{#                    $('#status').text('111');#}
+                    $.ajax({
+                        url: '/project_list.html',
+                        type: 'POST',
+                        data: {'task_id': v},
+                        dataType: 'JSON',
+                        success: function (response) {
+                            if (response.status){
+                                if(response.data['status']==1){
+                                    $('#status').text('发布中 ');
+                                    $('#status').attr('style', 'color: green');
+                                    $('#status').next().children(' :first-child').next().attr('onclick', '');
+                                    $('#status').append("<img src='/static/imgs/avatar/reload.gif'>");
+{#                                    do_log(obj_id);#}
+                                }else if(response.data['status']==2){
+                                    $('#status').text('发布成功');
+                                    $('#status').attr('style', 'color: green');
+                                    $('#status').next().children(' :first-child').next().attr('onclick', s);
+                                }
+                            } else {
+                                alert(response.message);
+                            }
+                        }
+                    })
+                }
+            })
+        }
 
         function do_release(ths, id) {
-            var release_env = $(ths).parent().prev().prev().prev().prev().children().val();
-            var release_branch = $(ths).parent().prev().prev().prev().children().val();
+            var release_env = $(ths).parent().prev().prev().prev().prev().prev().children().val();
+            var release_branch = $(ths).parent().prev().prev().prev().prev().children().val();
             var user_name = $.cookie('username');
             var reg = /^[0-9a-zA-Z_//./*]*$/g;
 
+{#            var release_status = $(ths).parent().prev().text();#}
+{#            $(ths).parent().prev().text('发布中');#}
+{#            ($(ths).parent().prev().attr()#}
+{#            $(ths).parent().prev().append("<img src='/static/imgs/avatar/reload.gif'>");#}
+{#            return false;#}
             if(release_env==1){
                 alert('项目发布【环境】不能为buffer...');
                 return false;
@@ -264,14 +241,47 @@
                     dataType: 'JSON',
                     success: function (response) {
                         if (response.status){
-                            alert(666);
-{#                            location.href = '/project_list.html'#}
+                            get_log(id, false);
                         } else {
                             alert(response.message);
                         }
-                            }
-                        })
+                    }
+                })
             }
         }
+        
+        function do_log(id) {
+            $('#release_div').attr('style', '');
+            // 如果
+            $.ajax({
+                    url: '/release_log.html',
+                    type: 'GET',
+                    data: {'id': id},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if (response.status){
+                            $('#release_log').empty();
+{#                            alert(response.data['data_list'][0]['time']);#}
+                            $.each(response.data['data_list'], function (k,v) {
+                                var s = '<a>' + v['time'] + '&nbsp&nbsp&nbsp' + v['msg'] +'</a><br>';
+                                $('#release_log').append(s);
+                            } )
+                        } else {
+                            alert(response.message);
+                        }
+                    }
+            })
+        }
+
+        function get_log(id, timeout) {
+
+{#        var timeout = false; //启动及关闭按钮  #}
+
+          if(timeout) return;
+          do_log(id);
+          setTimeout(get_log,100); //time是指本身,延时递归调用自己,100为间隔调用时间,单位毫秒
+
+        }
+
     </script>
 {% endblock %}

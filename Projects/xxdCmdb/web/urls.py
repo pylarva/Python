@@ -15,6 +15,7 @@ from web.views import VirtualMachine
 from web.views import project
 from web.views import projects
 from web.views import release
+from web.views import logs
 
 urlpatterns = [
     url(r'^login.html$', account.LoginView.as_view()),
@@ -60,6 +61,8 @@ urlpatterns = [
 
     url(r'^release.html$', release.ReleaseListView.as_view()),
     url(r'^releases.html$', release.ReleaseJsonView.as_view()),
+
+    url(r'^release_log.html$', logs.ReleaseLogJsonView.as_view()),
 
     url(r'^ldap.html$', user.LdapListView.as_view()),
 

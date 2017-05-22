@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 from django.db import models
+from pytz import timezone
+from django.utils import timezone
+import datetime
+from pytz import timezone
+
+utc_zone = timezone("utc")
+my_zone = timezone("Asia/Shanghai")
+my_time = datetime.datetime.utcnow().replace(tzinfo=utc_zone)
+# out_time = my_time.astimezone(my_zone)
+# print out_time.strftime('%Y-%m-%d %H:%M:%S')
 
 
 class AuthInfo(models.Model):
@@ -232,6 +242,9 @@ class ReleaseType(models.Model):
 
 
 class ProjectTask(models.Model):
+    """
+    发布项目表
+    """
     jdk_version_choise = (
         (1, 'jdk-7'),
         (2, 'jdk-8')
@@ -247,7 +260,7 @@ class ProjectTask(models.Model):
     business_2 = models.ForeignKey('BusinessTwo', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
     project_type = models.ForeignKey('ReleaseType', null=True, blank=True, default=1, on_delete=models.SET_NULL)
     jdk_version = models.IntegerField(choices=jdk_version_choise, null=True, blank=True)
-    release_id = models.CharField(max_length=32, null=True, blank=True)
+    release_last_id = models.CharField(max_length=32, null=True, blank=True, default='-')
     release_last_time = models.CharField(max_length=32, null=True, blank=True, default='-')
     release_user = models.CharField(max_length=32, null=True, blank=True)
     git_url = models.CharField(max_length=108, null=True, blank=True)
@@ -263,13 +276,16 @@ class ProjectTask(models.Model):
 
 
 class ReleaseTask(models.Model):
+    """
+    发布任务记录表
+    """
     release_status_choices = (
         (1, '发布中'),
         (2, '发布成功'),
         (3, '发布失败'),
     )
 
-    jdk_version_choise = (
+    jdk_version_choice = (
         (1, 'jdk-7'),
         (2, 'jdk-8')
     )
@@ -282,13 +298,28 @@ class ReleaseTask(models.Model):
     release_git_url = models.CharField(max_length=64, null=True, blank=True)
     release_git_branch = models.CharField(max_length=32, null=True, blank=True)
     release_type = models.ForeignKey('ReleaseType', null=True, blank=True, on_delete=models.SET_NULL)
-    release_jdk_version = models.IntegerField(choices=jdk_version_choise, null=True, blank=True)
+    release_jdk_version = models.IntegerField(choices=jdk_version_choice, null=True, blank=True)
 
     class Meta:
-        verbose_name_plural = "发布列表"
+        verbose_name_plural = "发布任务记录表"
 
     def __str__(self):
         return self.release_name
+
+
+class ReleaseLog(models.Model):
+    """
+    发布任务日志
+    """
+    release_id = models.IntegerField(null=True, blank=True)
+    release_time = models.DateTimeField('时间', default=my_time)
+    release_msg = models.CharField('日志', max_length=1000, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "发布任务日志"
+
+    def __str__(self):
+        return self.release_id
 
 
 class BusinessUnit(models.Model):
