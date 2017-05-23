@@ -180,13 +180,19 @@
 {#            setTimeout("do_reload()", 100);#}
 
         });
+
+        // 进入项目列表页面 定时刷新检查后台发布任务状态
         function do_reload() {
+            var i = 0;
             $('#table_body').children().each(function () {
+                i = i + 1;
+                var str_id = 'status' + i;
+                var jquery_id = '#status' + i;
                 var v = $(this).children().next().next().next().next().next().next().next().html();
                 var obj_id = $(this).children().next().html();
                 var s = 'do_release(this,' + obj_id + ')';
                 if(v!='-'){
-                    $(this).children().next().next().next().next().next().next().next().next().next().attr('id', 'status');
+                    $(this).children().next().next().next().next().next().next().next().next().next().attr('id', str_id);
                     $(this).children().next().next().next().next().next().next().next().next().next().next().attr('id', '');
 {#                    $('#status').text('111');#}
                     $.ajax({
@@ -197,15 +203,14 @@
                         success: function (response) {
                             if (response.status){
                                 if(response.data['status']==1){
-                                    $('#status').text('发布中 ');
-                                    $('#status').attr('style', 'color: green');
-                                    $('#status').next().children(' :first-child').next().attr('onclick', '');
-                                    $('#status').append("<img src='/static/imgs/avatar/reload.gif'>");
-{#                                    do_log(obj_id);#}
+                                    $(jquery_id).text('发布中 ');
+                                    $(jquery_id).attr('style', 'color: green');
+                                    $(jquery_id).next().children(' :first-child').next().attr('onclick', '');
+                                    $(jquery_id).append("<img src='/static/imgs/avatar/reload.gif'>");
                                 }else if(response.data['status']==2){
-                                    $('#status').text('发布成功');
-                                    $('#status').attr('style', 'color: green');
-                                    $('#status').next().children(' :first-child').next().attr('onclick', s);
+                                    $(jquery_id).text('发布成功');
+                                    $(jquery_id).attr('style', 'color: green');
+                                    $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
                                 }
                             } else {
                                 alert(response.message);
@@ -216,17 +221,14 @@
             })
         }
 
+        // 点击发布按钮 进行数据校验 + 后台创建发布任务 + 前端更新该行数据发布ID和发布时间
         function do_release(ths, id) {
+
             var release_env = $(ths).parent().prev().prev().prev().prev().prev().children().val();
             var release_branch = $(ths).parent().prev().prev().prev().prev().children().val();
             var user_name = $.cookie('username');
             var reg = /^[0-9a-zA-Z_//./*]*$/g;
 
-{#            var release_status = $(ths).parent().prev().text();#}
-{#            $(ths).parent().prev().text('发布中');#}
-{#            ($(ths).parent().prev().attr()#}
-{#            $(ths).parent().prev().append("<img src='/static/imgs/avatar/reload.gif'>");#}
-{#            return false;#}
             if(release_env==1){
                 alert('项目发布【环境】不能为buffer...');
                 return false;
@@ -241,6 +243,9 @@
                     dataType: 'JSON',
                     success: function (response) {
                         if (response.status){
+                            $(ths).parent().prev().prev().prev().html(response.data['id']);
+                            $(ths).parent().prev().prev().html(response.data['time']);
+                            // 刷新日志
                             get_log(id, false);
                         } else {
                             alert(response.message);
@@ -251,6 +256,7 @@
         }
         
         function do_log(id) {
+{#            alert(111);#}
             $('#release_div').attr('style', '');
             // 如果
             $.ajax({
@@ -274,13 +280,15 @@
         }
 
         function get_log(id, timeout) {
-
-{#        var timeout = false; //启动及关闭按钮  #}
-
-          if(timeout) return;
-          do_log(id);
-          setTimeout(get_log,100); //time是指本身,延时递归调用自己,100为间隔调用时间,单位毫秒
-
+{#            window.clearInterval(t2);#}
+{#            window.clearTimeout(t1);#}
+            var s = 'get_log(' + id + ')';
+            // var timeout = false; //启动及关闭按钮
+            if(timeout) return;
+            do_log(id);
+            var t2 = window.setTimeout(s, 3000);
+{#            var t1 = window.setInterval(s, 3000);#}
+            window.clearTimeout(t2);
         }
 
     </script>

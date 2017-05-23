@@ -95,7 +95,7 @@ class Project(BaseServiceList):
                 'display': 1,
                 'text': {
                     'content': "<i class='fa fa-edge' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'>发布</a> | "
-                               "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='do_log({nid})'>详细</a>",
+                               "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='get_log({nid},false)'>详细</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}
@@ -410,6 +410,9 @@ class Project(BaseServiceList):
         models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id, release_last_time=release_time)
         # print(release_obj.id)
 
+        # 返回给页面新的发布ID和时间
+        response.data = {'id': release_obj.id, 'time': release_time}
+        print(response.data)
 
         # print(release_id, release_env, release_branch, release_name)
         response.status = True
