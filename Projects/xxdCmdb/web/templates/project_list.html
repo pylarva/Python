@@ -176,8 +176,8 @@
             $.nbDataList('/projects_list.html');
             $('#table_body').attr('edit-mode', 'true');
 
+            // 项目列表刷新数据定时器
             var t1 = window.setInterval(do_reload, 1000);
-{#            setTimeout("do_reload()", 100);#}
 
         });
 
@@ -194,7 +194,6 @@
                 if(v!='-'){
                     $(this).children().next().next().next().next().next().next().next().next().next().attr('id', str_id);
                     $(this).children().next().next().next().next().next().next().next().next().next().next().attr('id', '');
-{#                    $('#status').text('111');#}
                     $.ajax({
                         url: '/project_list.html',
                         type: 'POST',
@@ -226,6 +225,10 @@
 
             var release_env = $(ths).parent().prev().prev().prev().prev().prev().children().val();
             var release_branch = $(ths).parent().prev().prev().prev().prev().children().val();
+
+            var v = $(ths).parent().prev().prev().prev().prev().prev().prev().prev().prev().prev().prev().html();
+            var s = '#status' + v
+
             var user_name = $.cookie('username');
             var reg = /^[0-9a-zA-Z_//./*]*$/g;
 
@@ -245,6 +248,10 @@
                         if (response.status){
                             $(ths).parent().prev().prev().prev().html(response.data['id']);
                             $(ths).parent().prev().prev().html(response.data['time']);
+                            $(s).text('发布中 ');
+                            $(s).attr('style', 'color: green');
+                            $(s).next().children(' :first-child').next().attr('onclick', '');
+                            $(s).append("<img src='/static/imgs/avatar/reload.gif'>");
                             // 刷新日志
                             get_log(id, false);
                         } else {
@@ -254,11 +261,10 @@
                 })
             }
         }
-        
+
+        // 查询日志函数
         function do_log(id) {
-{#            alert(111);#}
             $('#release_div').attr('style', '');
-            // 如果
             $.ajax({
                     url: '/release_log.html',
                     type: 'GET',
@@ -267,29 +273,37 @@
                     success: function (response) {
                         if (response.status){
                             $('#release_log').empty();
-{#                            alert(response.data['data_list'][0]['time']);#}
                             $.each(response.data['data_list'], function (k,v) {
                                 var s = '<a>' + v['time'] + '&nbsp&nbsp&nbsp' + v['msg'] +'</a><br>';
                                 $('#release_log').append(s);
                             } )
                         } else {
-                            alert(response.message);
+                            $('#release_log').html('<a>未查询到日志</a>');
                         }
                     }
             })
         }
 
+        // 回调函数内部使用setTimeout 防止可能阻塞代码
         function get_log(id, timeout) {
-{#            window.clearInterval(t2);#}
-{#            window.clearTimeout(t1);#}
+            // 暴力清除所有定时器
+            for(var i = 1; i < 200; i++) {
+                clearTimeout(i);
+            }
             var s = 'get_log(' + id + ')';
-            // var timeout = false; //启动及关闭按钮
-            if(timeout) return;
+            if(timeout=='1') return;
             do_log(id);
             var t2 = window.setTimeout(s, 3000);
-{#            var t1 = window.setInterval(s, 3000);#}
-            window.clearTimeout(t2);
+            var t1 = window.setInterval(do_reload, 1000);
+
         }
+
+{#        function gets_log(id, timeout) {#}
+{#            var s = 'get_log(' + id + ')';#}
+{#            if(timeout=='1') return;#}
+{#            do_log(id);#}
+{#            var t2 = window.setTimeout(s, 3000);#}
+{#        }#}
 
     </script>
 {% endblock %}

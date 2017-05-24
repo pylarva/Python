@@ -44,28 +44,34 @@ class ReleaseLogJsonView(View):
 
         ret = {}
         release_id = request.GET.get('id')
-        print(release_id)
+        # print(release_id)
         obj = models.ProjectTask.objects.filter(id=release_id).first()
-        release_id = int(obj.release_last_id)
-        values = models.ReleaseLog.objects.filter(release_id=release_id).only('release_time', 'release_msg')
-        result = map(lambda x: {'time': x.release_time, 'msg': "%s" % x.release_msg}, values)
-        result = list(result)
 
-        ret['data_list'] = result
+        if obj.release_last_id == '-':
+            response.status = False
+            return JsonResponse(response.__dict__)
 
-        for item in ret['data_list']:
-            print(item)
+        else:
+            release_id = int(obj.release_last_id)
+            values = models.ReleaseLog.objects.filter(release_id=release_id).only('release_time', 'release_msg')
+            result = map(lambda x: {'time': x.release_time, 'msg': "%s" % x.release_msg}, values)
+            result = list(result)
 
-        # print(list(ret))
-        # for item in ret[0]:
-        #     print(item.release_time)
-        # ret = list(ret)
+            ret['data_list'] = result
 
-        # return HttpResponse(json.dumps(ret))
-        response.status = True
-        response.data = ret
-        # response.data = json.dumps(ret)
-        return JsonResponse(response.__dict__)
+            # for item in ret['data_list']:
+            #     print(item)
+
+            # print(list(ret))
+            # for item in ret[0]:
+            #     print(item.release_time)
+            # ret = list(ret)
+
+            # return HttpResponse(json.dumps(ret))
+            response.status = True
+            response.data = ret
+            # response.data = json.dumps(ret)
+            return JsonResponse(response.__dict__)
 
     def delete(self, request):
         response = release.Asset.delete_assets(request)
