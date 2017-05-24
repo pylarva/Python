@@ -59,8 +59,14 @@ urlpatterns = [
     url(r'^project_list.html$', projects.ProjectsListView.as_view()),
     url(r'^projects_list.html$', projects.ProjectsJsonView.as_view()),
 
+    url(r'^project_list_r.html$', projects.ProjectsReadListView.as_view()),
+    url(r'^projects_list_r.html$', projects.ProjectsJsonView.as_view()),
+
     url(r'^release.html$', release.ReleaseListView.as_view()),
     url(r'^releases.html$', release.ReleaseJsonView.as_view()),
+
+    url(r'^release_r.html$', release.ReleaseReadListView.as_view()),
+    url(r'^releases_r.html$', release.ReleaseJsonView.as_view()),
 
     url(r'^release_log.html$', logs.ReleaseLogJsonView.as_view()),
 

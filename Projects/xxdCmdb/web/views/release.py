@@ -46,12 +46,9 @@ class ReleaseJsonView(View):
         return JsonResponse(response.__dict__)
 
 
-class AssetDetailView(View):
-    def get(self, request, device_type_id, asset_nid):
-        response = release.Asset.assets_detail(device_type_id, asset_nid)
-        return render(request, 'asset_detail.html', {'response': response, 'device_type_id': device_type_id})
+class ReleaseReadListView(View):
+    def dispatch(self, request, *args, **kwargs):
+        return super(ReleaseReadListView, self).dispatch(request, *args, **kwargs)
 
-
-class AddAssetView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'add_asset.html')
+        return render(request, 'release_r.html')

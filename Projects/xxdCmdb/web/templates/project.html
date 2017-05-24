@@ -1,4 +1,4 @@
-{% extends 'layout/_layread.html' %}
+{% extends 'layout/_laybusiness.html' %}
 
 {% block css %}
     <link rel="stylesheet" href="/static/css/bootstrap-select.css">
@@ -104,7 +104,6 @@
                     dataType: 'JSON',
                     success: function (response) {
                         if (response.status){
-                            alert(666);
                             location.href = '/project_list.html'
                         } else {
                             alert(response.message);

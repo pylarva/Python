@@ -51,33 +51,27 @@ class ProjectsJsonView(View):
         return JsonResponse(response.__dict__)
 
 
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.contrib.auth.models import User
-from django.shortcuts import HttpResponse
-import json
-
-
-class LdapListView(View):
+class ProjectsReadListView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'ldap_list.html')
+        data_list = models.ProjectTask.objects.all()
+        return render(request, 'project_list_r.html', {'data_list': data_list})
 
-    def post(self, request):
-        data_dict = {}
-        user_loggedin = 'Guest'
-        errors_list = []
-        name = request.POST.get('name')
-        password = request.POST.get('pwd')
-        print(name, password)
-        user = authenticate(username=name, password=password)
-        print('authuser', user)
-        # if user is not None:
-        #     auth_login(request, user)
-        #     uu = request.user
-        #     u = User.objects.get(username=uu)
-        #     return HttpResponse("../check_dict")
-        data_dict['status'] = True
-        return HttpResponse(json.dumps(data_dict))
+    def post(self, request, *args, **kwargs):
+        """
+        project_list.html 页面循环发送ajax 查询发布任务状态 如果为发布中则进行前端展示
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        response = BaseResponse()
+        task_id = request.POST.get('task_id')
+        obj = models.ReleaseTask.objects.filter(id=task_id).first()
+        task_status = obj.release_status
+        # print(task_status)
+        response.status = True
+        response.data = {'status': task_status}
+        return JsonResponse(response.__dict__)
 
 
-        # context = {'errors_list': errors_list, 'user_loggedin': user_loggedin}
-        # return render(request, 'aptest/loginauth.html', context)
+
