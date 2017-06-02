@@ -42,6 +42,7 @@
             $.TableEditMode('#edit_mode_target', '#table_body', null, null);
         }
 
+
         // 获取被修改过的数据
         var updateData = [];
         $('#table_body').children().each(function () {
@@ -955,6 +956,10 @@
             bindMenuFunction();
             bindMultiSelect();
             bindSearchCondition();
+        },
+
+        'nbDataLists': function (page_num) {
+            initialize(page_num);
         }
 
     });
