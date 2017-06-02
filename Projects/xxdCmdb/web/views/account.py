@@ -52,6 +52,7 @@ class LoginView(View):
                 # 设置session
                 request.session['username'] = u1
                 request.session['is_login'] = True
+                request.session.set_expiry(0)
 
                 ret = HttpResponse(json.dumps(data_dict))
                 ret.set_cookie('username', u1)

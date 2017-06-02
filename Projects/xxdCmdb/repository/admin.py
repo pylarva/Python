@@ -13,6 +13,7 @@ from repository import models
 # admin.site.register(models.NIC)
 # admin.site.register(models.AssetRecord)
 # admin.site.register(models.ErrorLog)
+
 admin.site.register(models.PhysicalMachines)
 admin.site.register(models.VirtualMachines)
 admin.site.register(models.HostMachines)
@@ -24,3 +25,4 @@ admin.site.register(models.BusinessThree)
 admin.site.register(models.AdminInfo)
 admin.site.register(models.AuthInfo)
 admin.site.register(models.ReleaseType)
+admin.site.register(models.UserGroup)

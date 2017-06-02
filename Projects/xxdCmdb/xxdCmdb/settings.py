@@ -36,7 +36,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_DOMAIN = None
 SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_AGE = 1209600
+SESSION_COOKIE_AGE = 86400
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = False
 
@@ -89,23 +89,23 @@ WSGI_APPLICATION = 'xxdCmdb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db02.sqlite3'),
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME':'xxdcmdb',
-#         'USER': 'cmdb',
-#         'PASSWORD': 'cmdb',
-#         'HOST': '192.168.31.110',
-#         'PORT': '3306',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db03.sqlite3'),
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'xxdcmdb',
+        'USER': 'cmdb',
+        'PASSWORD': 'cmdb',
+        'HOST': '192.168.33.110',
+        'PORT': '3306',
+    }
+}
 
 
 # Password validation

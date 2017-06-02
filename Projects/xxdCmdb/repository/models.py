@@ -9,8 +9,7 @@ from pytz import timezone
 utc_zone = timezone("utc")
 my_zone = timezone("Asia/Shanghai")
 my_time = datetime.datetime.utcnow().replace(tzinfo=utc_zone)
-# out_time = my_time.astimezone(my_zone)
-# print out_time.strftime('%Y-%m-%d %H:%M:%S')
+out_time = my_time.astimezone(my_zone)
 
 
 class AuthInfo(models.Model):
@@ -245,7 +244,7 @@ class ProjectTask(models.Model):
     """
     发布项目表
     """
-    jdk_version_choise = (
+    jdk_version_choice = (
         (1, 'jdk-7'),
         (2, 'jdk-8')
     )
@@ -259,12 +258,12 @@ class ProjectTask(models.Model):
     business_1 = models.ForeignKey('BusinessOne', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
     business_2 = models.ForeignKey('BusinessTwo', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
     project_type = models.ForeignKey('ReleaseType', null=True, blank=True, default=1, on_delete=models.SET_NULL)
-    jdk_version = models.IntegerField(choices=jdk_version_choise, null=True, blank=True)
+    jdk_version = models.IntegerField(choices=jdk_version_choice, null=True, blank=True)
     release_last_id = models.CharField(max_length=32, null=True, blank=True, default='-')
     release_last_time = models.CharField(max_length=32, null=True, blank=True, default='-')
     release_user = models.CharField(max_length=32, null=True, blank=True)
     git_url = models.CharField(max_length=108, null=True, blank=True)
-    git_branch = models.CharField(max_length=32, null=True, blank=True)
+    git_branch = models.CharField(max_length=108, null=True, blank=True)
     status = models.IntegerField(choices=project_status_choice, null=True, blank=True, default=1)
     ctime = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
@@ -494,7 +493,6 @@ class Memory(models.Model):
 
     server_obj = models.ForeignKey('Server',related_name='memory')
 
-
     class Meta:
         verbose_name_plural = "内存表"
 
@@ -510,7 +508,6 @@ class AssetRecord(models.Model):
     content = models.TextField(null=True)
     creator = models.ForeignKey('UserProfile', null=True, blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
-
 
     class Meta:
         verbose_name_plural = "资产记录表"
