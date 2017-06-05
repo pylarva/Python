@@ -1,8 +1,8 @@
 {% extends 'layout/_laytask.html' %}
 
 {% block css %}
-
-
+    <link href="/static/css/bootstrap-switch.css" rel="stylesheet">
+{#    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css">#}
 {% endblock %}
 
 {% block conent %}
@@ -61,13 +61,13 @@
             </div>
         </div>
 
-        <!-- 修改主机名 -->
-        <div id="change_name" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- 自定义模版 -->
+        <div id="template_name" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">修改主机名</h4>
+                        <h4 class="modal-title">自定义镜像名称</h4>
                     </div>
                     <div class="form-group">
                         <input id="change_iid" type="text" class="form-control" style="display: none">
@@ -86,7 +86,7 @@
 
         <div id="connect_info" class="alert alert-info" role="alert" style="margin-bottom: 15px;">
             <button class="close" type="button" data-dismiss="alert">&times;</button>
-            确认宿主机开启 镜像模版文件存放在/opt/mv/目录！</div>
+            确认宿主机开启 镜像模版文件存放在/opt/mvs/目录！</div>
 
         <div id="connect_failed" class="alert alert-danger alert-dismissable" role="alert">
             <button class="close" type="button" data-dismiss="alert">&times;</button>
@@ -101,7 +101,7 @@
             </select>
         </div>
 
-        <div class="form-group" style="display: inline-block;">
+        <div class="form-group" style="display: inline-block;" onchange="turn_off()">
             <select class="selectpicker" id="recipient-name4">
                   {% for item in machine_type %}
                       <option id="recipient-name4" value={{ item.id }}>{{ item.machine_type }}</option>
@@ -109,7 +109,18 @@
             </select>
         </div>
 
-        </br>
+{#            <div class="switch has-switch" data-on="info" data-off="success" style="display: inline-block;">#}
+{#                <div id="mySwitch" class="switch-mini switch-on">#}
+{#                    <input type="checkbox" name="my-checkbox" />#}
+{#                </div>#}
+{#            </div>#}
+{#    <div class="bootstrap-switch-on bootstrap-switch-id-switch-state bootstrap-switch bootstrap-switch-wrapper bootstrap-switch-animate"></div>#}
+{#        <div class="col-sm-6 col-lg-4">#}
+        <input id="switch-state" type="checkbox" name="my-checkbox">
+{#            <div class="btn-group">#}
+{#                <button type="button" data-switch-toggle="state" class="btn btn-default">Toggle</button>#}
+{#            </div>#}
+        <button style="display: none" type="button" data-switch-set="state" data-switch-value="false" class="btn btn-default">Toggle</button>
 
         <div class="form-group" style="width: 150px; display: inline-block">
             <input id="host_ip" type="email" class="form-control" placeholder="IP地址">
@@ -126,7 +137,7 @@
         <button id="virtual_add" type="button" class="btn btn-primary" onclick="add_host()">新增虚机</button>
 
 
-        <table class="table table-bordered" id="table">
+        <table class="table table-striped table-bordered" id="table">
                 <tr>
                     <td>序号</td>
                     <td>IP</td>
@@ -137,6 +148,7 @@
                     <td>宿主机</td>
                     <td>状态</td>
                     <td>操作</td>
+                    <td>模版</td>
                     <td>时间</td>
                 </tr>
             {% for item in data %}
@@ -162,6 +174,11 @@
                     <td>
                         <div class="progress progress-striped" style="margin-bottom: 0px";>
 	                        <div class="progress-bar progress-bar-danger"  role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width:100%; cursor: pointer" onclick="host_del({{ item.id }})">删除</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress progress-striped" style="margin-bottom: 0px";>
+	                        <div class="progress-bar progress-bar-info"  role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width:100%; cursor: pointer" onclick="modify_template({{ item.id }})">定义模版</div>
                         </div>
                     </td>
                     <td>{{ item.ctime|date:"Y-m-d H:i:s" }}</td>
@@ -193,11 +210,68 @@
     <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="/static/js/nb-list.js"></script>
+{#    <script src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script>#}
     <script type="text/javascript" src="/static/js/bootstrap-select.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-switch.js"></script>
 
     <script>
 
         $(function () {
+            // 页面switch开关
+            $("#switch-state").bootstrapSwitch();
+            $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
+{#              console.log(this); // DOM element#}
+{#              console.log(event); // jQuery event#}
+{#              console.log(state); // true | false#}
+                var template_name = $('#recipient-name4 option:selected').text();
+                var template_id = $('#recipient-name4').val();
+                var template_status = state;
+
+                $.ajax({
+                    url: 'task_virtual.html',
+                    type: 'POST',
+                    data: {
+                        'template_id': template_id,
+                        'template_status': template_status,
+                    },
+                    dataType: 'JSON',
+                    success: function (data_dict) {
+                        if (data_dict.status) {
+                            $('#connect_success').show();
+                            $('#connect_failed').hide();
+                            var url = 'virtual_list.html?p=' + v;
+                            location.href=url
+                        }else {
+                            $('#add_machine').modal('hide');
+                            $('#connect_info').removeClass('alert-info');
+                            $('#connect_info').addClass('alert-danger');
+                            $('#connect_info').addClass('alert-dismissable');
+                            $('#connect_info').text(data_dict.message);
+
+                        }
+                    }
+                });
+
+                if(state == true) {
+                    $('#connect_info').removeClass('alert-info');
+                    $('#connect_info').removeClass('alert-danger');
+                    $('#connect_info').addClass('alert-warning');
+                    $('#connect_info').addClass('alert-dismissable');
+                    $('#connect_info').text('模版机正在启动...1分钟后可登陆IP进行模版修改');
+                }else if(state == false){
+                    $('#connect_info').removeClass('alert-info');
+                    $('#connect_info').addClass('alert-danger');
+                    $('#connect_info').addClass('alert-dismissable');
+                    $('#connect_info').text('模版机已关闭！');
+                }
+            });
+
+            $('[data-switch-set]').on('click', function () {
+              var type;
+              type = $(this).data('switch-set');
+              $('#switch-' + type).bootstrapSwitch(type, $(this).data('switch-value'))
+            });
+
             $('.activ').addClass('active');
 
             $('#connect_success').hide();
@@ -264,6 +338,17 @@
 
         });
 
+{#        function capitalize (string) {#}
+{#            return string.charAt(0).toUpperCase() + string.slice(1)#}
+{#        }#}
+
+        function modify_template() {
+            $('#template_name').modal();
+        }
+
+        function turn_off() {
+          $('[data-switch-set]').click();
+        }
 
         function add_host() {
             if($('#host_ip').val().length<1){

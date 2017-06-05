@@ -70,11 +70,19 @@ class VirtualListView(View):
 
     def post(self, request, *args, **kwargs):
 
+        # 前端switch开关请求模版主机IP
+        template_id = request.POST.get('template_id', None)
+        if template_id:
+            template_obj = models.VirtualMachines.objects.filter(id=template_id).first()
+            data_dict['template_ip'] = template_obj.machine_ip
+            data_dict['status'] = True
+            return HttpResponse(json.dumps(data_dict))
+
         change_id = request.POST.get('change_id', None)
 
         # ajax请求对应主机名
         if change_id:
-            print(change_id)
+            # print(change_id)
             # change_data = models.Asset.objects.filter(id=change_id).first()
             change_data = models.VirtualMachines.objects.filter(id=change_id).first()
             data_dict['id'] = change_id

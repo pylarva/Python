@@ -46,6 +46,7 @@ class MachineType(models.Model):
     虚拟机配置类型表
     """
     machine_type = models.CharField(max_length=32)
+    machine_ip = models.CharField(max_length=32, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "虚拟机配置类型表"
@@ -311,7 +312,7 @@ class ReleaseLog(models.Model):
     发布任务日志
     """
     release_id = models.IntegerField(null=True, blank=True)
-    release_time = models.DateTimeField('时间', default=my_time)
+    # release_time = models.DateTimeField('时间', default=my_time)
     release_msg = models.CharField('日志', max_length=1000, null=True, blank=True)
 
     class Meta:
