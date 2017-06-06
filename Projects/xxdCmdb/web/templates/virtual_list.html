@@ -67,18 +67,22 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">自定义镜像名称</h4>
+                        <h4 class="modal-title">自定义镜像</h4>
                     </div>
                     <div class="form-group">
                         <input id="change_iid" type="text" class="form-control" style="display: none">
                     </div>
                     <div class="form-group">
-                        <input id="change_hostname" type="text" class="form-control" style="width: 298px;margin-bottom: -15px;margin-top: -15px">
+                        <input id="mirror_name" type="text" class="form-control" placeholder="镜像名称" style="width: 298px;margin-bottom: -15px;margin-top: -15px">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <input id="mirror_ip" type="text" class="form-control" placeholder="镜像IP" style="width: 298px;margin-bottom: -15px;margin-top: -15px">
                     </div>
                     <a id="change_error" style="color: red;font-size: 0.1px"></a>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button id="change_confirm" type="button" class="btn btn-primary">确定</button>
+                        <button id="mirror_confirm" type="button" class="btn btn-primary">确定</button>
                     </div>
                 </div>
             </div>
@@ -220,27 +224,33 @@
             // 页面switch开关
             $("#switch-state").bootstrapSwitch();
             $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-{#              console.log(this); // DOM element#}
-{#              console.log(event); // jQuery event#}
-{#              console.log(state); // true | false#}
+              // console.log(this); // DOM element
+              // console.log(event); // jQuery event
+              // console.log(state); // true | false
                 var template_name = $('#recipient-name4 option:selected').text();
                 var template_id = $('#recipient-name4').val();
                 var template_status = state;
 
-                $.ajax({
+
+                if(state == true) {
+                    $.ajax({
                     url: 'task_virtual.html',
                     type: 'POST',
                     data: {
                         'template_id': template_id,
-                        'template_status': template_status,
+                        'template_status': template_status
                     },
                     dataType: 'JSON',
                     success: function (data_dict) {
                         if (data_dict.status) {
-                            $('#connect_success').show();
-                            $('#connect_failed').hide();
-                            var url = 'virtual_list.html?p=' + v;
-                            location.href=url
+{#                            $('#connect_success').show();#}
+{#                            $('#connect_failed').hide();#}
+                              $('#connect_info').removeClass('alert-info');
+                              $('#connect_info').removeClass('alert-danger');
+                              $('#connect_info').addClass('alert-warning');
+                              $('#connect_info').addClass('alert-dismissable');
+                            var str_ip = '模版机正在启动...1分钟后可登陆模版进行修改 ' + ' 【模版IP→ ' + data_dict['template_ip'] + '】';
+                            $('#connect_info').text(str_ip);
                         }else {
                             $('#add_machine').modal('hide');
                             $('#connect_info').removeClass('alert-info');
@@ -251,19 +261,39 @@
                         }
                     }
                 });
-
-                if(state == true) {
-                    $('#connect_info').removeClass('alert-info');
-                    $('#connect_info').removeClass('alert-danger');
-                    $('#connect_info').addClass('alert-warning');
-                    $('#connect_info').addClass('alert-dismissable');
-                    $('#connect_info').text('模版机正在启动...1分钟后可登陆IP进行模版修改');
                 }else if(state == false){
-                    $('#connect_info').removeClass('alert-info');
-                    $('#connect_info').addClass('alert-danger');
-                    $('#connect_info').addClass('alert-dismissable');
-                    $('#connect_info').text('模版机已关闭！');
+                    $.ajax({
+                    url: 'task_virtual.html',
+                    type: 'POST',
+                    data: {
+                        'template_id': template_id,
+                        'template_status': template_status
+                    },
+                    dataType: 'JSON',
+                    success: function (data_dict) {
+                        if (data_dict.status) {
+                            $('#connect_info').removeClass('alert-info');
+                            $('#connect_info').addClass('alert-danger');
+                            $('#connect_info').addClass('alert-dismissable');
+                            $('#connect_info').text('模版机已关闭！');
+                        }else {
+                        }
+                    }
+                });
                 }
+
+{#                if(state == true) {#}
+{#                    $('#connect_info').removeClass('alert-info');#}
+{#                    $('#connect_info').removeClass('alert-danger');#}
+{#                    $('#connect_info').addClass('alert-warning');#}
+{#                    $('#connect_info').addClass('alert-dismissable');#}
+{#                    $('#connect_info').text('模版机正在启动...1分钟后可登陆IP进行模版修改');#}
+{#                }else if(state == false){#}
+{#                    $('#connect_info').removeClass('alert-info');#}
+{#                    $('#connect_info').addClass('alert-danger');#}
+{#                    $('#connect_info').addClass('alert-dismissable');#}
+{#                    $('#connect_info').text('模版机已关闭！');#}
+{#                }#}
             });
 
             $('[data-switch-set]').on('click', function () {
@@ -336,18 +366,48 @@
                 });
             });
 
+            $('#mirror_confirm').click(function () {
+                var mirror_name = $('#mirror_name').val();
+                var mirror_ip = $('#mirror_ip').val();
+                if($('#mirror_name').val().length <1 || $('#mirror_ip').val().length<1){
+                    $('#change_error').text('输入不能为空');
+                    return false;
+                }
+                $.ajax({
+                    url: 'task_virtual.html',
+                    type: 'POST',
+                    data: {
+                        'new_id': $('#change_iid').val(),
+                        'mirror_name': mirror_name,
+                        'mirror_ip': mirror_ip
+                    },
+                    dataType: 'JSON',
+                    success: function (data_dict) {
+                        if (data_dict.status) {
+                            alert('主机名更新成功！');
+                        }else {
+                        }
+                    }
+                });
+            })
+
         });
 
 {#        function capitalize (string) {#}
 {#            return string.charAt(0).toUpperCase() + string.slice(1)#}
 {#        }#}
 
-        function modify_template() {
+        function modify_template(id) {
             $('#template_name').modal();
+            $('#change_iid').val(id);
         }
 
         function turn_off() {
-          $('[data-switch-set]').click();
+            $('#connect_info').removeClass('alert-warning');
+            $('#connect_info').removeClass('alert-danger');
+            $('#connect_info').addClass('alert-info');
+            $('#connect_info').text('确认宿主机开启 镜像模版文件存放在/opt/mvs/目录！');
+            $('[data-switch-set]').click();
         }
 
         function add_host() {
@@ -455,32 +515,6 @@
                             }
                         }
                     });
-
-                $('#change_confirm').click(function () {
-                    var new_hostname = $('#change_hostname').val();
-                    var reg_hostname = /^[a-zA-Z0-9_-]*(\.)*[a-zA-Z0-9_-]*$/;
-                    if(reg_hostname.test(new_hostname)==false){
-                        $('#change_error').text('除 英文、数字、-、_、.、意外，包含非法字符！');
-                        return false;
-                    }
-
-                    $.ajax({
-                        url: 'task_virtual.html',
-                        type: 'POST',
-                        data: {
-                            'change_iid': $('#change_iid').val(),
-                            'change_hostname': $('#change_hostname').val(),
-                        },
-                        dataType: 'JSON',
-                        success: function (data_dict) {
-                            if (data_dict.status) {
-                                alert('主机名更新成功！');
-                                location.reload();
-                            }else {
-                            }
-                        }
-                    });
-                })
 
             }
 

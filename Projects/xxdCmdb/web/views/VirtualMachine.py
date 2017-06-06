@@ -73,14 +73,18 @@ class VirtualListView(View):
         # 前端switch开关请求模版主机IP
         template_id = request.POST.get('template_id', None)
         if template_id:
-            template_obj = models.VirtualMachines.objects.filter(id=template_id).first()
+            template_obj = models.MachineType.objects.filter(id=template_id).first()
+
+            template_status = request.POST.get('template_status', None)
+            # 开启关闭模版机
+            self.turn_on_off_template(template_id, template_status)
+
             data_dict['template_ip'] = template_obj.machine_ip
             data_dict['status'] = True
             return HttpResponse(json.dumps(data_dict))
 
-        change_id = request.POST.get('change_id', None)
-
         # ajax请求对应主机名
+        change_id = request.POST.get('change_id', None)
         if change_id:
             # print(change_id)
             # change_data = models.Asset.objects.filter(id=change_id).first()
@@ -88,22 +92,30 @@ class VirtualListView(View):
             data_dict['id'] = change_id
             data_dict['hostname'] = change_data.host_name
             data_dict['status'] = True
-
             return HttpResponse(json.dumps(data_dict))
 
-        change_hostname = request.POST.get('change_hostname', None)
+        # 新增镜像
+        new_mirror_id = request.POST.get('new_id', None)
+        if new_mirror_id:
+            mirror_name = request.POST.get('mirror_name', None)
+            mirror_ip = request.POST.get('mirror_ip', None)
+            self.add_new_mirror(new_mirror_id, mirror_name, mirror_ip)
+            data_dict['status'] = True
+            return HttpResponse(json.dumps(data_dict))
 
+        # 修改主机名
+        change_hostname = request.POST.get('change_hostname', None)
         if change_hostname:
             change_id = request.POST.get('change_iid', None)
             self.change_host_name(change_id, change_hostname)
             data_dict['status'] = True
             return HttpResponse(json.dumps(data_dict))
 
+        # 删除主机
         host_del_id = request.POST.get('host_del_id', None)
         if host_del_id:
             try:
                 # 删除目标虚拟机
-                print('====', host_del_id)
                 self.host_del(host_del_id)
 
             except Exception as e:
@@ -144,8 +156,8 @@ class VirtualListView(View):
             ssh.close()
 
             # 创建进程去执行任务
-            p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num, br_name, new_gateway))
-            p.start()
+            # p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num, br_name, new_gateway))
+            # p.start()
 
         except Exception:
 
@@ -176,8 +188,8 @@ class VirtualListView(View):
         print(result)
 
         template_mirror = kvm_config.CentOS_6[machine_type]
-        system_version = template_mirror[20]
-        print(system_version)
+        # system_version = template_mirror[20]
+        # print(system_version)
         new_mirror = kvm_config.kvm_qcow_dir + host_name + '.qcow2'
 
         # 1、拷贝镜像文件
@@ -243,24 +255,16 @@ class VirtualListView(View):
         print(result)
         ssh.close()
 
-    def chang_ip(self, new_ip):
-
-        transport = paramiko.Transport(('192.168.31.115', 22))
-        transport.connect(username='root', password='123456')
-        ssh = paramiko.SSHClient()
-        ssh._transport = transport
-
-        print('更改ip...')
-        stdin, stdout, stderr = ssh.exec_command(
-            "sed -i 's#192.168.31.115#%s#g' /etc/sysconfig/network-scripts/ifcfg-eth0" % new_ip)
-        result = stdout.read()
-        print('IP完成...', result)
-        stdin, stdout, stderr = ssh.exec_command("ifdown eth0 && ifup eth0", timeout=1)
-        # result = stdout.read()
-        print('虚机部署完成...', result)
-        transport.close()
-
     def change_cpu_memory(self, host_name, new_cpu, new_memory,  new_mirror, br_name):
+        """
+        修改KVM模版xml文件 定义新主机
+        :param host_name:
+        :param new_cpu:
+        :param new_memory:
+        :param new_mirror:
+        :param br_name:
+        :return:
+        """
         template_xml_file = kvm_config.kvm_template_xml
 
         tree = ET.parse(template_xml_file)
@@ -330,6 +334,12 @@ class VirtualListView(View):
         models.Asset.objects.filter(host_ip=host_ip).delete()
 
     def change_host_name(self, host_id, host_name):
+        """
+        修改主机名
+        :param host_id:
+        :param host_name:
+        :return:
+        """
         models.VirtualMachines.objects.filter(id=host_id).update(host_name=host_name)
         obj = models.VirtualMachines.objects.filter(id=host_id)
         host_ip = obj[0].host_ip
@@ -347,6 +357,49 @@ class VirtualListView(View):
         ssh.exec_command(cmd)
         cmd = "service rsyslog restart &"
         ssh.exec_command(cmd)
+
+    def turn_on_off_template(self, template_id, template_status):
+        """
+        开启或者关闭模版机 模版机有对应IP方便修改
+        :param template_id:
+        :param template_status:
+        :return:
+        """
+        obj = models.MachineType.objects.filter(id=template_id).first()
+        template_host = obj.machine_host
+        template_name = obj.machine_name
+
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(template_host, port=22, username='root', key_filename=kvm_config.ssh_key_file,
+                    timeout=kvm_config.ssh_timeout)
+
+        if template_status == 'true':
+            cmd = "virsh start %s" % template_name
+            ssh.exec_command(cmd)
+        else:
+            cmd = "virsh shutdown %s" % template_name
+            ssh.exec_command(cmd)
+
+        ssh.close()
+
+    def add_new_mirror(self, mirror_id, mirror_name, mirror_ip):
+        """
+        自定义镜像文件
+        :param mirror_id:
+        :param mirror_name:
+        :param mirror_ip:
+        :return:
+        """
+        obj = models.VirtualMachines.objects.filter(id=mirror_id).first()
+        host = obj.mudroom_host
+        old_ip = obj.host_ip
+        old_name = 'a0-kvm-vhost-%s-%s.yh' % (old_ip.split('.')[-2], old_ip.split('.')[-1])
+
+
+        # self.exec_task()
+
+        print(host, mirror_name, mirror_ip)
 
 
 class AssetJsonView(View):

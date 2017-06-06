@@ -47,6 +47,8 @@ class MachineType(models.Model):
     """
     machine_type = models.CharField(max_length=32)
     machine_ip = models.CharField(max_length=32, null=True, blank=True)
+    machine_host = models.CharField(max_length=32, null=True, blank=True)
+    machine_name = models.CharField(max_length=32, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "虚拟机配置类型表"
