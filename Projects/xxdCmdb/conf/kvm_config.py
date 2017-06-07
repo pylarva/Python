@@ -4,6 +4,9 @@
 # 虚拟机镜像存放目录
 kvm_qcow_dir = '/opt/mv/'
 
+# 模版镜像存放目录
+kvm_template_dir = '/opt/mvs/'
+
 # 虚拟机xml目录
 kvm_xml_dir = '/opt/xml/'
 

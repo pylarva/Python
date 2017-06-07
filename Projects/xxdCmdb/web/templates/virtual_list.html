@@ -373,6 +373,11 @@
                     $('#change_error').text('输入不能为空');
                     return false;
                 }
+                var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+                if(reg.test(mirror_ip)==false){
+                    $('#change_error').text('IP格式错误');
+                    return false;
+                }
                 $.ajax({
                     url: 'task_virtual.html',
                     type: 'POST',
@@ -384,7 +389,8 @@
                     dataType: 'JSON',
                     success: function (data_dict) {
                         if (data_dict.status) {
-                            alert('主机名更新成功！');
+                            alert('自定义镜像成功！请5分钟后再使用新镜像装机！');
+                            location.reload()
                         }else {
                         }
                     }
@@ -419,8 +425,8 @@
                 return false;
             }
 
-            var ip = $('#host_ip').val()
-            var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+            var ip = $('#host_ip').val();
+            var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
             if(reg.test(ip)==false){
                 $('#connect_info').removeClass('alert-info');
                 $('#connect_info').addClass('alert-danger');

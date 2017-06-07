@@ -1,5 +1,5 @@
 <domain type="kvm">
-  <name>a0-kvm-vhost-31-140.yh</name>
+  <name>a0-kvm-vhost-31-248.yh</name>
   <memory unit="KiB">2388608</memory>
   <currentMemory unit="KiB">2388608</currentMemory>
   <vcpu placement="static">2</vcpu>
@@ -20,7 +20,7 @@
     <emulator>/usr/libexec/qemu-kvm</emulator>
     <disk device="disk" type="file">
       <driver cache="none" name="qemu" type="qcow2" />
-      <source file="/opt/mv/a0-kvm-vhost-31-140.yh.qcow2" />
+      <source file="/opt/mv/a0-kvm-vhost-31-248.yh.qcow2" />
       <target bus="virtio" dev="vda" />
       <address bus="0x00" domain="0x0000" function="0x0" slot="0x05" type="pci" />
     </disk>

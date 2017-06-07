@@ -135,6 +135,10 @@ class VirtualListView(View):
         new_name = 'a0-kvm-vhost-%s-%s.yh' % (new_ip.split('.')[-2], new_ip.split('.')[-1])
         new_gateway = new_ip.split('.')
         new_gateway = new_gateway[0] + '.' + new_gateway[1] + '.' + new_gateway[2] + '.' + '253'
+
+        template_mirror_obj = models.MachineType.objects.filter(id=machine_type).first()
+        template_mirror = template_mirror_obj.machine_type
+
         print(host_machine, new_ip, new_name, machine_type, memory_num, cpu_num, new_gateway)
 
         # ip_num = models.Asset.objects.filter(host_ip=new_ip).count()
@@ -156,8 +160,8 @@ class VirtualListView(View):
             ssh.close()
 
             # 创建进程去执行任务
-            # p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, machine_type, cpu_num, memory_num, br_name, new_gateway))
-            # p.start()
+            p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, cpu_num, memory_num, br_name, new_gateway, template_mirror))
+            p.start()
 
         except Exception:
 
@@ -179,7 +183,7 @@ class VirtualListView(View):
         ret.set_cookie('mess', '200', max_age=5)
         return ret
 
-    def exec_task(self, host_machine, host_name, new_ip, machine_type, cpu_num, memory_num, br_name, new_gateway):
+    def exec_task(self, host_machine, host_name, new_ip, cpu_num, memory_num, br_name, new_gateway, template_mirror):
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(host_machine, port=22, username='root', key_filename=kvm_config.ssh_key_file, timeout=kvm_config.ssh_timeout)
@@ -187,15 +191,18 @@ class VirtualListView(View):
         result = stdout.read()
         print(result)
 
-        template_mirror = kvm_config.CentOS_6[machine_type]
+        # 查询数据库中的镜像名称
+        template_mirror = kvm_config.kvm_template_dir + template_mirror + '.qcow2'
+        # template_mirror = kvm_config.CentOS_6[machine_type]
         # system_version = template_mirror[20]
         # print(system_version)
         new_mirror = kvm_config.kvm_qcow_dir + host_name + '.qcow2'
 
         # 1、拷贝镜像文件
-        cmd = 'cp %s %s' % (template_mirror, new_mirror)
-        ssh.exec_command(cmd)
-        time.sleep(15)
+        # cmd = 'cp %s %s' % (template_mirror, new_mirror)
+        cmd = "ssh root@%s 'cp %s %s'" % (host_machine, template_mirror, new_mirror)
+        # ssh.exec_command(cmd)
+        os.system(cmd)
         print(cmd)
 
         # 2、新建并修改xml文件
@@ -206,53 +213,70 @@ class VirtualListView(View):
 
         # 3、define虚拟机
         xml_file = '/opt/xml/' + host_name + '.xml'
-        cmd = 'virsh define %s' % xml_file
-        ssh.exec_command(cmd)
+        # cmd = 'virsh define %s' % xml_file
+        # ssh.exec_command(cmd)
+        cmd = "ssh root@%s 'virsh define %s'" % (host_machine, xml_file)
         print(cmd)
+        os.system(cmd)
 
         # 4、修改网卡配置文件
-        cmd = 'mkdir /opt/data/%s' % host_name
-        ssh.exec_command(cmd)
-        time.sleep(1)
+        cmd = "ssh root@%s 'mkdir /opt/data/%s && \
+        cp /opt/data/ifcfg-eth0 /opt/data/%s/ && \
+        cp /opt/data/70-persistent-net.rules /opt/data/%s/ && \
+        cp /opt/data/network /opt/data/%s/'" % (host_machine, host_name, host_name, host_name, host_name)
         print(cmd)
-        cmd = 'cp /opt/data/ifcfg-eth0 /opt/data/%s/' % host_name
-        ssh.exec_command(cmd)
-        print(cmd)
-        time.sleep(1)
-        cmd = 'cp /opt/data/70-persistent-net.rules /opt/data/%s/' % host_name
-        ssh.exec_command(cmd)
-        print(cmd)
-        time.sleep(1)
-        cmd = 'cp /opt/data/network /opt/data/%s/' % host_name
-        ssh.exec_command(cmd)
-        print(cmd)
-        time.sleep(2)
-        cmd = "sed -i 's#%s#%s#g' /opt/data/%s/ifcfg-eth0 && \
+        os.system(cmd)
+
+        # cmd = 'mkdir /opt/data/%s' % host_name
+        # ssh.exec_command(cmd)
+        # print(cmd)
+        # cmd = 'cp /opt/data/ifcfg-eth0 /opt/data/%s/' % host_name
+        # ssh.exec_command(cmd)
+        # print(cmd)
+        # cmd = 'cp /opt/data/70-persistent-net.rules /opt/data/%s/' % host_name
+        # ssh.exec_command(cmd)
+        # print(cmd)
+        # cmd = 'cp /opt/data/network /opt/data/%s/' % host_name
+        # ssh.exec_command(cmd)
+        # print(cmd)
+        # time.sleep(2)
+        cmd_str = "sed -i 's#%s#%s#g' /opt/data/%s/ifcfg-eth0 && \
                sed -i 's#%s#%s#g' /opt/data/%s/ifcfg-eth0 && \
                sed -i 's#%s#%s#g' /opt/data/%s/network " % (kvm_config.kvm_template_ip, new_ip, host_name,
                                                             '192.168.31.253', new_gateway, host_name,
                                                             kvm_config.kvm_template_hostname, host_name, host_name)
-        stdin, stdout, stderr = ssh.exec_command(cmd)
-        result = stdout.read()
-
-        print(result)
+        # stdin, stdout, stderr = ssh.exec_command(cmd)
+        # result = stdout.read()
+        cmd = "ssh root@%s '%s'" % (host_machine, cmd_str)
+        os.system(cmd)
         print(cmd)
 
         cmd = "ssh root@%s 'virt-copy-in -d %s /opt/data/%s/ifcfg-eth0 /etc/sysconfig/network-scripts/'" % (host_machine, host_name, host_name)
         print(cmd)
         os.system(cmd)
 
-        cmd = "virt-copy-in -d %s /opt/data/%s/70-persistent-net.rules /etc/udev/rules.d/ && \
-               virt-copy-in -d %s /opt/data/%s/network /etc/sysconfig/ && \
-               virsh start %s" % (host_name, host_name, host_name, host_name, host_name)
+        # cmd = "virt-copy-in -d %s /opt/data/%s/70-persistent-net.rules /etc/udev/rules.d/ && \
+        #        virt-copy-in -d %s /opt/data/%s/network /etc/sysconfig/ && \
+        #        virsh start %s" % (host_name, host_name, host_name, host_name, host_name)
+        # print(cmd)
+
+        cmd = "ssh root@%s 'virt-copy-in -d %s /opt/data/%s/70-persistent-net.rules /etc/udev/rules.d/'" % (host_machine, host_name, host_name)
         print(cmd)
+        os.system(cmd)
+
+        cmd = "ssh root@%s 'virt-copy-in -d %s /opt/data/%s/network /etc/sysconfig/'" % (host_machine, host_name, host_name)
+        print(cmd)
+        os.system(cmd)
+
+        cmd = "ssh root@%s 'virsh start %s'" % (host_machine, host_name)
+        print(cmd)
+        os.system(cmd)
 
         # 5、启动虚拟机
         # cmd = 'virsh start %s' % host_name
-        stdin, stdout, stderr = ssh.exec_command(cmd)
-        result = stdout.read()
-
-        print(result)
+        # stdin, stdout, stderr = ssh.exec_command(cmd)
+        # result = stdout.read()
+        # print(result)
         ssh.close()
 
     def change_cpu_memory(self, host_name, new_cpu, new_memory,  new_mirror, br_name):
@@ -377,9 +401,11 @@ class VirtualListView(View):
         if template_status == 'true':
             cmd = "virsh start %s" % template_name
             ssh.exec_command(cmd)
+            print(cmd)
         else:
-            cmd = "virsh shutdown %s" % template_name
+            cmd = "virsh destroy %s" % template_name
             ssh.exec_command(cmd)
+            print(cmd)
 
         ssh.close()
 
@@ -395,11 +421,49 @@ class VirtualListView(View):
         host = obj.mudroom_host
         old_ip = obj.host_ip
         old_name = 'a0-kvm-vhost-%s-%s.yh' % (old_ip.split('.')[-2], old_ip.split('.')[-1])
+        old_mirror = kvm_config.kvm_qcow_dir + old_name + '.qcow2'
+        new_mirror = kvm_config.kvm_template_dir + mirror_name + '.qcow2'
 
+        new_name = 'a0-kvm-vhost-%s-%s.yh' % (mirror_ip.split('.')[-2], mirror_ip.split('.')[-1])
 
-        # self.exec_task()
+        new_gateway = mirror_ip.split('.')
+        new_gateway = new_gateway[0] + '.' + new_gateway[1] + '.' + new_gateway[2] + '.' + '253'
 
-        print(host, mirror_name, mirror_ip)
+        # 创建数据库
+        machine_type_obj = models.MachineType(machine_type=mirror_name, machine_ip=mirror_ip, machine_host=host, machine_name=new_name)
+        machine_type_obj.save()
+
+        template_mirror_obj = models.MachineType.objects.filter(id=machine_type_obj.id).first()
+        template_mirror = template_mirror_obj.machine_type
+
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(host, port=22, username='root', key_filename=kvm_config.ssh_key_file,
+                    timeout=kvm_config.ssh_timeout)
+        stdin, stdout, stderr = ssh.exec_command('ip addr | grep %s' % host)
+        br_name = stdout.read()
+        br_name = str(br_name, encoding='utf-8').split(' ')[-1].split('\n')[0]
+        cmd = "cp %s %s" % (old_mirror, new_mirror)
+        ssh.exec_command(cmd)
+        print(cmd)
+        ssh.close()
+
+        p = Process(target=self.exec_task,
+                    args=(host, new_name, mirror_ip, 2, 2, br_name, new_gateway, template_mirror))
+        p.start()
+
+        models.VirtualMachines.objects.create(mudroom_host=host, host_name=new_name, host_ip=mirror_ip,
+                                              machine_type_id=machine_type_obj.id, cpu_num=2, memory_num=2)
+        models.Asset.objects.create(host_machine=host, host_name=new_name, host_ip=mirror_ip,
+                                    host_item=mirror_name, host_cpu=2, host_memory=2)
+
+        data_dict['status'] = True
+        data_dict['message'] = "ok"
+
+        ret = HttpResponse(json.dumps(data_dict))
+        # 设置一个cookie值 引导前端进度条执行
+        ret.set_cookie('mess', '200', max_age=5)
+        return ret
 
 
 class AssetJsonView(View):
