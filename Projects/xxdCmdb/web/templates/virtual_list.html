@@ -97,49 +97,47 @@
             宿主机连接失败！请确认已在目标宿主机增加SSH_key公钥验证...
         </div>
 
-        <div class="form-group" style="display: inline-block; width: 233px">
-            <select class="selectpicker" id="recipient-name3">
-                  {% for item in host_list %}
-                      <option value={{ item.host_machines_ip }}>{{ item.host_machines_ip }}</option>
-                  {% endfor %}
-            </select>
+        <div>
+            <div style="width: 800px; float: left">
+                <div class="form-group" style="display: inline-block; width: 233px">
+                    <select class="selectpicker" id="recipient-name3">
+                          {% for item in host_list %}
+                              <option value={{ item.host_machines_ip }}>{{ item.host_machines_ip }}</option>
+                          {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group" style="display: inline-block;" onchange="turn_off()">
+                    <select class="selectpicker" id="recipient-name4">
+                          {% for item in machine_type %}
+                              <option id="recipient-name4" value={{ item.id }}>{{ item.machine_type }}</option>
+                          {% endfor %}
+                    </select>
+                </div>
+                <input id="switch-state" type="checkbox" name="my-checkbox">
+                <button style="display: none" type="button" data-switch-set="state" data-switch-value="false" class="btn btn-default">Toggle</button>
+    {#            <br>#}
+                <button style="display: inline" id="virtual_add" type="button" class="btn btn-info" onclick="host_info()">宿主机信息</button>
+
+                <div class="form-group" style="width: 150px; display: inline-block">
+                    <input id="host_ip" type="email" class="form-control" placeholder="IP地址">
+                </div>
+
+                <div class="form-group" style="width: 150px; display: inline-block">
+                    <input id="host_cpu" type="email" class="form-control" placeholder="CPU核心数">
+                </div>
+
+                <div class="form-group" style="width: 150px; display: inline-block">
+                    <input id="host_memory" type="email" class="form-control" placeholder="内存／G">
+                </div>
+
+                <button style="display: inline; width: 200px" id="virtual_add" type="button" class="btn btn-success" onclick="add_host()">新增虚机</button>
+            </div>
+                <div id="host_div" style="width: 500px; float: right; display: none;" class="alert alert-success" role="alert" style="margin-bottom: 15px;">
+                <button  class="close" type="button" data-dismiss="alert">&times;</button>
+                    <p id="host_info"></p>
+                </div>
         </div>
-
-        <div class="form-group" style="display: inline-block;" onchange="turn_off()">
-            <select class="selectpicker" id="recipient-name4">
-                  {% for item in machine_type %}
-                      <option id="recipient-name4" value={{ item.id }}>{{ item.machine_type }}</option>
-                  {% endfor %}
-            </select>
-        </div>
-
-{#            <div class="switch has-switch" data-on="info" data-off="success" style="display: inline-block;">#}
-{#                <div id="mySwitch" class="switch-mini switch-on">#}
-{#                    <input type="checkbox" name="my-checkbox" />#}
-{#                </div>#}
-{#            </div>#}
-{#    <div class="bootstrap-switch-on bootstrap-switch-id-switch-state bootstrap-switch bootstrap-switch-wrapper bootstrap-switch-animate"></div>#}
-{#        <div class="col-sm-6 col-lg-4">#}
-        <input id="switch-state" type="checkbox" name="my-checkbox">
-{#            <div class="btn-group">#}
-{#                <button type="button" data-switch-toggle="state" class="btn btn-default">Toggle</button>#}
-{#            </div>#}
-        <button style="display: none" type="button" data-switch-set="state" data-switch-value="false" class="btn btn-default">Toggle</button>
-
-        <div class="form-group" style="width: 150px; display: inline-block">
-            <input id="host_ip" type="email" class="form-control" placeholder="IP地址">
-        </div>
-
-        <div class="form-group" style="width: 150px; display: inline-block">
-            <input id="host_cpu" type="email" class="form-control" placeholder="CPU核心数">
-        </div>
-
-        <div class="form-group" style="width: 150px; display: inline-block">
-            <input id="host_memory" type="email" class="form-control" placeholder="内存／G">
-        </div>
-
-        <button id="virtual_add" type="button" class="btn btn-primary" onclick="add_host()">新增虚机</button>
-
 
         <table class="table table-striped table-bordered" id="table">
                 <tr>
@@ -214,13 +212,13 @@
     <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="/static/js/nb-list.js"></script>
-{#    <script src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script>#}
     <script type="text/javascript" src="/static/js/bootstrap-select.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-switch.js"></script>
 
     <script>
 
         $(function () {
+    
             // 页面switch开关
             $("#switch-state").bootstrapSwitch();
             $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
@@ -243,8 +241,6 @@
                     dataType: 'JSON',
                     success: function (data_dict) {
                         if (data_dict.status) {
-{#                            $('#connect_success').show();#}
-{#                            $('#connect_failed').hide();#}
                               $('#connect_info').removeClass('alert-info');
                               $('#connect_info').removeClass('alert-danger');
                               $('#connect_info').addClass('alert-warning');
@@ -281,19 +277,6 @@
                     }
                 });
                 }
-
-{#                if(state == true) {#}
-{#                    $('#connect_info').removeClass('alert-info');#}
-{#                    $('#connect_info').removeClass('alert-danger');#}
-{#                    $('#connect_info').addClass('alert-warning');#}
-{#                    $('#connect_info').addClass('alert-dismissable');#}
-{#                    $('#connect_info').text('模版机正在启动...1分钟后可登陆IP进行模版修改');#}
-{#                }else if(state == false){#}
-{#                    $('#connect_info').removeClass('alert-info');#}
-{#                    $('#connect_info').addClass('alert-danger');#}
-{#                    $('#connect_info').addClass('alert-dismissable');#}
-{#                    $('#connect_info').text('模版机已关闭！');#}
-{#                }#}
             });
 
             $('[data-switch-set]').on('click', function () {
@@ -399,15 +382,46 @@
 
         });
 
-{#        function capitalize (string) {#}
-{#            return string.charAt(0).toUpperCase() + string.slice(1)#}
-{#        }#}
+        // 获取宿主机信息
+        function host_info() {
+            if($('#host_div').hasClass("show")){
+                $('#host_div').removeClass("show");
+                $('#host_div').prop('style', 'width: 500px; float: right; display: none');
+            }else{
+                $('#host_div').prop('class', 'alert alert-success show');
+                $('#host_div').prop('style', 'width: 500px; float: right;');
+                var host = $('#recipient-name3').val();
+                $.ajax({
+                        url: 'task_virtual.html',
+                        type: 'POST',
+                        data: {
+                            'host': host,
+                        },
+                        dataType: 'JSON',
+                        success: function (data_dict) {
+                            if (data_dict.status) {
+                                var str = data_dict.data;
+                                var s = str.toString(str);
+                                var new_str = s.replace(/,/g, "<br>");
+                                var new_str_1 = '【' + host + '】宿主机信息：<br>' + new_str ;
+                                var new_str_memory = new_str_1 + '<br>【总内存】 64376 MB <br>【虚拟内存使用】 ' + data_dict.memory + 'MB';
+                                var new_str_cpu = new_str_memory + '<br>【总cpu核数】64 核 <br>【虚拟cpu使用】 ' + data_dict.cpu + '核';
+                                $('#host_info').html(new_str_cpu);
+                            }else {
+                                $('#host_info').html('未获取到数据...');
+                            }
+                        }
+                    });
+            }
+        }
 
+        // 自定义模版
         function modify_template(id) {
             $('#template_name').modal();
             $('#change_iid').val(id);
         }
 
+        // 开启或关闭模版
         function turn_off() {
             $('#connect_info').removeClass('alert-warning');
             $('#connect_info').removeClass('alert-danger');
@@ -416,6 +430,7 @@
             $('[data-switch-set]').click();
         }
 
+        // 新增主机
         function add_host() {
             if($('#host_ip').val().length<1){
                 $('#connect_info').removeClass('alert-info');

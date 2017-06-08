@@ -37,7 +37,11 @@ from pytz import timezone
 
 import os
 import time
-cmd = "ssh root@192.168.31.15 'sh /opt/1.sh'"
-os.system(cmd)
-time.sleep(10)
-print(77777)
+import subprocess
+cmd = "ssh root@192.168.31.15 'virsh list --all'"
+result = os.popen(cmd).readlines()
+# result = subprocess.call(cmd, shell=True)
+# print(result)
+
+for item in result:
+    print(item)

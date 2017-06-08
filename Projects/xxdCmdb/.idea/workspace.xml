@@ -10,7 +10,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/xxdCmdb$test4.coverage" NAME="test4 Coverage Results" MODIFIED="1496816235872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
+    <SUITE FILE_PATH="coverage/xxdCmdb$test4.coverage" NAME="test4 Coverage Results" MODIFIED="1496823708029" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/xxdCmdb$test66.coverage" NAME="test66 Coverage Results" MODIFIED="1495173323981" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/xxdCmdb$ldap.coverage" NAME="ldap Coverage Results" MODIFIED="1493295315079" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
     <SUITE FILE_PATH="coverage/xxdCmdb$test3.coverage" NAME="test3 Coverage Results" MODIFIED="1493270156921" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -33,34 +33,42 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="virtual_list.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="virtual_list.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/templates/virtual_list.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="391" column="48" lean-forward="false" selection-start-line="391" selection-start-column="48" selection-end-line="391" selection-end-column="48" />
+            <state relative-caret-position="413">
+              <caret line="410" column="66" lean-forward="true" selection-start-line="410" selection-start-column="66" selection-end-line="410" selection-end-column="66" />
               <folding>
                 <element signature="e#3616#3637#0#HTML" expanded="true" />
                 <element signature="e#3811#3870#0#HTML" expanded="true" />
                 <element signature="e#4067#4126#0#HTML" expanded="true" />
                 <element signature="e#4196#4231#0#HTML" expanded="true" />
-                <element signature="e#5437#5467#0#HTML" expanded="true" />
-                <element signature="e#6527#6548#0#HTML" expanded="true" />
-                <element signature="e#9302#9337#0#HTML" expanded="true" />
-                <element signature="e#9701#9736#0#HTML" expanded="true" />
-                <marker date="1496817600000" expanded="false" signature="8708:8726" ph="..." />
-                <marker date="1496817600000" expanded="false" signature="8893:8921" ph="..." />
-                <marker date="1496817600000" expanded="true" signature="19423:19752" ph="..." />
+                <element signature="e#4643#4671#0#HTML" expanded="true" />
+                <element signature="e#5080#5113#0#HTML" expanded="true" />
+                <element signature="e#5567#5597#0#HTML" expanded="true" />
+                <element signature="e#6054#6075#0#HTML" expanded="true" />
+                <element signature="e#6229#6252#0#HTML" expanded="true" />
+                <element signature="e#6983#7020#0#HTML" expanded="true" />
+                <element signature="e#7165#7215#0#HTML" expanded="true" />
+                <element signature="e#7257#7285#0#HTML" expanded="true" />
+                <element signature="e#9456#9491#0#HTML" expanded="true" />
+                <element signature="e#9855#9890#0#HTML" expanded="true" />
+                <marker date="1496894020000" expanded="false" signature="8862:8880" ph="..." />
+                <marker date="1496894020000" expanded="false" signature="9047:9075" ph="..." />
+                <marker date="1496894020000" expanded="true" signature="20141:20470" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VirtualMachine.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="VirtualMachine.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/views/VirtualMachine.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="363">
-              <caret line="355" column="0" lean-forward="true" selection-start-line="355" selection-start-column="0" selection-end-line="355" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="357">
+              <caret line="94" column="58" lean-forward="true" selection-start-line="94" selection-start-column="58" selection-end-line="94" selection-end-column="58" />
+              <folding>
+                <element signature="e#45#54#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -68,8 +76,8 @@
       <file leaf-file-name="test66.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test66.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="24" column="20" lean-forward="true" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
+            <state relative-caret-position="289">
+              <caret line="19" column="23" lean-forward="false" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -78,8 +86,8 @@
       <file leaf-file-name="test4.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test4.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="42" column="12" lean-forward="true" selection-start-line="42" selection-start-column="12" selection-end-line="42" selection-end-column="12" />
+            <state relative-caret-position="408">
+              <caret line="45" column="19" lean-forward="true" selection-start-line="45" selection-start-column="19" selection-end-line="45" selection-end-column="19" />
               <folding>
                 <element signature="e#39#50#0" expanded="true" />
               </folding>
@@ -135,21 +143,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="94" column="57" lean-forward="true" selection-start-line="94" selection-start-column="57" selection-end-line="94" selection-end-column="57" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/repository/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="275">
               <caret line="48" column="60" lean-forward="false" selection-start-line="48" selection-start-column="60" selection-end-line="48" selection-end-column="60" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="kvm_config.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/conf/kvm_config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="24" column="10" lean-forward="true" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -167,8 +175,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>release_last_id</find>
-      <find>session</find>
       <find>pageNum</find>
       <find>page_num</find>
       <find>per_items</find>
@@ -197,6 +203,8 @@
       <find>system_version</find>
       <find>create</find>
       <find>change_cpu_memory</find>
+      <find>host_info</find>
+      <find>recipient-name3</find>
     </findStrings>
     <replaceStrings>
       <replace>Project</replace>
@@ -255,8 +263,8 @@
         <option value="$PROJECT_DIR$/repository/models.py" />
         <option value="$PROJECT_DIR$/conf/kvm_config.py" />
         <option value="$PROJECT_DIR$/test/test4.py" />
-        <option value="$PROJECT_DIR$/web/views/VirtualMachine.py" />
         <option value="$PROJECT_DIR$/web/templates/virtual_list.html" />
+        <option value="$PROJECT_DIR$/web/views/VirtualMachine.py" />
       </list>
     </option>
   </component>
@@ -679,6 +687,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="migrations" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="conf" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1177,13 +1199,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/utils/ldap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="24" column="31" lean-forward="true" selection-start-line="24" selection-start-column="31" selection-end-line="24" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/conf/ldap_acount.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -1448,26 +1463,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/conf/kvm_config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="29" lean-forward="false" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
           <caret line="94" column="57" lean-forward="true" selection-start-line="94" selection-start-column="57" selection-end-line="94" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/repository/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="48" column="60" lean-forward="false" selection-start-line="48" selection-start-column="60" selection-end-line="48" selection-end-column="60" />
           <folding />
         </state>
       </provider>
@@ -1530,46 +1529,78 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test66.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="24" column="20" lean-forward="true" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
+        <state relative-caret-position="289">
+          <caret line="19" column="23" lean-forward="false" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test4.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="42" column="12" lean-forward="true" selection-start-line="42" selection-start-column="12" selection-end-line="42" selection-end-column="12" />
+        <state relative-caret-position="408">
+          <caret line="45" column="19" lean-forward="true" selection-start-line="45" selection-start-column="19" selection-end-line="45" selection-end-column="19" />
           <folding>
             <element signature="e#39#50#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/VirtualMachine.py">
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DHTML.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="355" column="0" lean-forward="true" selection-start-line="355" selection-start-column="0" selection-end-line="355" selection-end-column="0" />
+        <state relative-caret-position="149">
+          <caret line="1176" column="18" lean-forward="true" selection-start-line="1176" selection-start-column="18" selection-end-line="1176" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/repository/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="48" column="60" lean-forward="false" selection-start-line="48" selection-start-column="60" selection-end-line="48" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/kvm_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="10" lean-forward="true" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/virtual_list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="391" column="48" lean-forward="false" selection-start-line="391" selection-start-column="48" selection-end-line="391" selection-end-column="48" />
+        <state relative-caret-position="413">
+          <caret line="410" column="66" lean-forward="true" selection-start-line="410" selection-start-column="66" selection-end-line="410" selection-end-column="66" />
           <folding>
             <element signature="e#3616#3637#0#HTML" expanded="true" />
             <element signature="e#3811#3870#0#HTML" expanded="true" />
             <element signature="e#4067#4126#0#HTML" expanded="true" />
             <element signature="e#4196#4231#0#HTML" expanded="true" />
-            <element signature="e#5437#5467#0#HTML" expanded="true" />
-            <element signature="e#6527#6548#0#HTML" expanded="true" />
-            <element signature="e#9302#9337#0#HTML" expanded="true" />
-            <element signature="e#9701#9736#0#HTML" expanded="true" />
-            <marker date="1496817600000" expanded="false" signature="8708:8726" ph="..." />
-            <marker date="1496817600000" expanded="false" signature="8893:8921" ph="..." />
-            <marker date="1496817600000" expanded="true" signature="19423:19752" ph="..." />
+            <element signature="e#4643#4671#0#HTML" expanded="true" />
+            <element signature="e#5080#5113#0#HTML" expanded="true" />
+            <element signature="e#5567#5597#0#HTML" expanded="true" />
+            <element signature="e#6054#6075#0#HTML" expanded="true" />
+            <element signature="e#6229#6252#0#HTML" expanded="true" />
+            <element signature="e#6983#7020#0#HTML" expanded="true" />
+            <element signature="e#7165#7215#0#HTML" expanded="true" />
+            <element signature="e#7257#7285#0#HTML" expanded="true" />
+            <element signature="e#9456#9491#0#HTML" expanded="true" />
+            <element signature="e#9855#9890#0#HTML" expanded="true" />
+            <marker date="1496894020000" expanded="false" signature="8862:8880" ph="..." />
+            <marker date="1496894020000" expanded="false" signature="9047:9075" ph="..." />
+            <marker date="1496894020000" expanded="true" signature="20141:20470" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/VirtualMachine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="94" column="58" lean-forward="true" selection-start-line="94" selection-start-column="58" selection-end-line="94" selection-end-column="58" />
+          <folding>
+            <element signature="e#45#54#0" expanded="true" />
           </folding>
         </state>
       </provider>

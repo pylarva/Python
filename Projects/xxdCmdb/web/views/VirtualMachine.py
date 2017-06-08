@@ -4,6 +4,7 @@ import os
 import json
 import time
 import paramiko
+import subprocess
 from repository import models
 from django.views import View
 from multiprocessing import Process
@@ -69,6 +70,32 @@ class VirtualListView(View):
                                                      'page_str': page_str, 'page_init': page_init})
 
     def post(self, request, *args, **kwargs):
+
+        # 前端来获取宿主机信息
+        host = request.POST.get('host', None)
+        if host:
+            cmd = "ssh root@%s 'virsh list --all'" % host
+            result = os.popen(cmd).readlines()
+            cmd_1 = "ps -ef |grep kvm | awk '{print $1,$16}'|awk '{print $2}'|awk '{sum += $1} END {print sum}'"
+            cmd_2 = "ps -ef |grep kvm | awk '{print $1,$20}'|awk '{print $2}'|awk -F ',' '{print $1}'|awk '{sum += $1} END {print sum}'"
+            if host == '192.168.38.190':
+                cmd_1 = "ps -ef |grep kvm | awk '{print $1,$15}'|awk '{print $2}'|awk '{sum += $1} END {print sum}'"
+                cmd_2 = "ps -ef |grep kvm | awk '{print $1,$19}'|awk '{print $2}'|awk -F ',' '{print $1}'|awk '{sum += $1} END {print sum}'"
+            if host == '192.168.38.200' or host == '192.168.38.250':
+                cmd_2 = "ps -ef |grep kvm | awk '{print $1,$18}'|awk '{print $2}'|awk -F ',' '{print $1}'|awk '{sum += $1} END {print sum}'"
+            if result:
+                cmd_memory = "ssh root@%s %s" % (host, cmd_1)
+                memory_sum = os.popen(cmd_memory).readlines()
+                cmd_cpu = "ssh root@%s %s" % (host, cmd_2)
+                cpu_sum = os.popen(cmd_cpu).readlines()
+                data_dict['status'] = True
+                data_dict['data'] = result
+                data_dict['memory'] = memory_sum
+                data_dict['cpu'] = cpu_sum
+                return HttpResponse(json.dumps(data_dict))
+            else:
+                data_dict['status'] = False
+                return HttpResponse(json.dumps(data_dict))
 
         # 前端switch开关请求模版主机IP
         template_id = request.POST.get('template_id', None)
@@ -393,21 +420,14 @@ class VirtualListView(View):
         template_host = obj.machine_host
         template_name = obj.machine_name
 
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(template_host, port=22, username='root', key_filename=kvm_config.ssh_key_file,
-                    timeout=kvm_config.ssh_timeout)
-
         if template_status == 'true':
-            cmd = "virsh start %s" % template_name
-            ssh.exec_command(cmd)
+            cmd = "ssh root@%s 'virsh start %s'" % (template_host, template_name)
             print(cmd)
+            os.system(cmd)
         else:
-            cmd = "virsh destroy %s" % template_name
-            ssh.exec_command(cmd)
+            cmd = "ssh root@%s 'virsh destroy %s'" % (template_host, template_name)
             print(cmd)
-
-        ssh.close()
+            os.system(cmd)
 
     def add_new_mirror(self, mirror_id, mirror_name, mirror_ip):
         """
@@ -461,8 +481,6 @@ class VirtualListView(View):
         data_dict['message'] = "ok"
 
         ret = HttpResponse(json.dumps(data_dict))
-        # 设置一个cookie值 引导前端进度条执行
-        ret.set_cookie('mess', '200', max_age=5)
         return ret
 
 
