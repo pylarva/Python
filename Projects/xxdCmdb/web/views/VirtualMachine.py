@@ -81,7 +81,7 @@ class VirtualListView(View):
             if host == '192.168.38.190':
                 cmd_1 = "ps -ef |grep kvm | awk '{print $1,$15}'|awk '{print $2}'|awk '{sum += $1} END {print sum}'"
                 cmd_2 = "ps -ef |grep kvm | awk '{print $1,$19}'|awk '{print $2}'|awk -F ',' '{print $1}'|awk '{sum += $1} END {print sum}'"
-            if host == '192.168.38.200' or host == '192.168.38.250':
+            if host == '192.168.38.200' or host == '192.168.38.250' or host == '192.168.50.51':
                 cmd_2 = "ps -ef |grep kvm | awk '{print $1,$18}'|awk '{print $2}'|awk -F ',' '{print $1}'|awk '{sum += $1} END {print sum}'"
             if result:
                 cmd_memory = "ssh root@%s %s" % (host, cmd_1)
