@@ -210,10 +210,23 @@ class ReleaseView(View):
 
     def post(self, request, *args, **kwargs):
         response = BaseResponse()
+
         n1 = json.loads(request.body.decode('utf-8'))
         n1 = json.loads(n1)
-        r_id = n1['id']
-        msg = n1['msg']
+
+        r_id = n1.get('id', None)
+        msg = n1.get('msg', None)
+
+        # 上传包md5值
+        md5 = n1.get('md5', None)
+        if md5:
+            print(md5)
+            models.ReleaseTask.objects.filter(id=r_id).update(release_md5=md5)
+            models.ReleaseLog.objects.create(release_id=r_id, release_msg=md5)
+            # 发布任务成功上传
+            response.status = True
+            return JsonResponse(response.__dict__)
+
         print(r_id, msg)
         try:
             models.ReleaseLog.objects.create(release_id=r_id, release_msg=msg)

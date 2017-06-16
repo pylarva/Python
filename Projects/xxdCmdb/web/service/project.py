@@ -2,7 +2,11 @@
 # -*- coding:utf-8 -*-
 import json
 import re
+import os
 import time
+import threading
+import subprocess
+from multiprocessing import Process
 from django.db.models import Q
 from repository import models
 from utils.pager import PageInfo
@@ -10,6 +14,8 @@ from utils.response import BaseResponse
 from django.http.request import QueryDict
 from utils.hostname import change_host_name
 from .base import BaseServiceList
+import jenkins
+from conf import jenkins_config
 
 
 class Project(BaseServiceList):
@@ -381,8 +387,8 @@ class Project(BaseServiceList):
             response.message = str(e)
         return response
 
-    @staticmethod
-    def post_task(request):
+    # @staticmethod
+    def post_task(self, request):
         response = BaseResponse()
         release_id = request.POST.get('id')
         release_env = request.POST.get('release_env')
@@ -390,16 +396,12 @@ class Project(BaseServiceList):
         release_time = time.strftime('%Y-%m-%d %H:%M')
         release_user = request.POST.get('user_name')
 
-        # print(release_branch, type(release_branch))
-
         obj = models.ProjectTask.objects.filter(id=release_id).first()
         release_name = obj.business_2
+
         release_git_url = obj.git_url
-        # release_git_branch = obj.git_branch
         release_jdk_version = obj.jdk_version
         release_type = obj.project_type_id
-
-        # release_obj = models.ReleaseTask.objects.all()
 
         release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
                                          release_git_branch=release_branch,
@@ -408,13 +410,82 @@ class Project(BaseServiceList):
         release_obj.save()
 
         models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id, release_last_time=release_time)
-        # print(release_obj.id)
 
         # 返回给页面新的发布ID和时间
         response.data = {'id': release_obj.id, 'time': release_time}
-        print(response.data)
 
-        # print(release_id, release_env, release_branch, release_name)
+        release_business_1 = release_obj.release_env
+        release_business_2 = release_obj.release_name
+        task_id = release_obj.id
+
+        pkg_name = "/data/packages/%s/%s/%s/%s_%s_%s.war" % (release_business_1, release_business_2, release_obj.id,
+                                                             release_business_1, release_business_2, release_obj.id)
+
+        # 多进程执行连接Jenkins执行
+        # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
+        # p.start()
+
+        # 多线程
+        t = threading.Thread(target=self.jenkins_task, args=(pkg_name, release_git_url, release_branch, task_id,))
+        t.start()
+
         response.status = True
         return response
+
+    def jenkins_task(self, pkg_name, release_git_url, release_branch, task_id):
+
+        self.log(task_id, '发布部署开始...')
+        self.log(task_id, 'Jenkins下载源码打包...')
+
+        server = jenkins.Jenkins(jenkins_config.server_url, username=jenkins_config.user_name,
+                                 password=jenkins_config.api_token)
+        info = server.get_whoami()['fullName']
+        print(info)
+
+        param_dict = {"pkgUrl": pkg_name,
+                      "git_url": release_git_url, 'branch': release_branch}
+
+        build_name = 'template-tomcat'
+
+        ret = server.build_job(build_name, parameters=param_dict)
+        time.sleep(15)
+        LastBuild = server.get_job_info(build_name)['lastBuild']['number']
+        result = server.get_build_info(build_name, LastBuild)['result']
+        url = server.get_build_info(build_name, LastBuild)['url']
+        # log = server.get_build_console_output(build_name, LastBuild)
+
+        while result is None:
+            time.sleep(5)
+            result = server.get_build_info(build_name, LastBuild)['result']
+
+        print(LastBuild, result)
+        if result == 'FAILURE':
+            models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+            self.log(task_id, 'Jenkins下载源码打包...【失败】')
+            self.log(task_id, '%s%s' % (url, 'console'))
+
+        if result == 'SUCCESS':
+            # models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+            self.log(task_id, 'Jenkins下载源码打包...【完成】')
+            self.log(task_id, '%s%s' % (url, 'console'))
+
+            # 打包完成后上传md5值
+            cmd = "ssh root@%s 'python %s %s %s'" % (jenkins_config.host, jenkins_config.script_path, pkg_name, task_id)
+            ret = os.system(cmd)
+            if ret == 0:
+                self.log(task_id, '生成md5...【完成】')
+            else:
+                ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                       preexec_fn=os.setsid)
+                out, err = ret.communicate()
+                err = str(err, encoding='utf-8')
+                self.log(task_id, err)
+                self.log(task_id, '生成md5...【失败】')
+                models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+
+        return True
+
+    def log(self, task_id, msg):
+        models.ReleaseLog.objects.create(release_id=task_id, release_msg=msg)
+
 

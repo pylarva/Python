@@ -177,7 +177,7 @@
             $('#table_body').attr('edit-mode', 'true');
 
             // 项目列表刷新数据定时器
-            var t1 = window.setInterval(do_reload, 1000);
+            var t1 = window.setInterval(do_reload, 100);
 
         });
 
@@ -210,6 +210,10 @@
                                     $(jquery_id).text('发布成功');
                                     $(jquery_id).attr('style', 'color: green');
                                     $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
+                                }else if(response.data['status']==3){
+                                    $(jquery_id).text('发布失败');
+                                    $(jquery_id).attr('style', 'color: red');
+                                    $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
                                 }
                             } else {
                                 alert(response.message);
@@ -227,7 +231,7 @@
             var release_branch = $(ths).parent().prev().prev().prev().prev().children().val();
 
             var v = $(ths).parent().prev().prev().prev().prev().prev().prev().prev().prev().prev().prev().html();
-            var s = '#status' + v
+            var s = '#status' + v;
 
             var user_name = $.cookie('username');
             var reg = /^[0-9a-zA-Z_//./*]*$/g;
@@ -274,9 +278,14 @@
                         if (response.status){
                             $('#release_log').empty();
                             $.each(response.data['data_list'], function (k,v) {
-                                var s = '<a>' + v['time'] + '&nbsp&nbsp&nbsp' + v['msg'] +'</a><br>';
+                                var reg = /^http*/;
+                                if(reg.test(v['msg'])==false){
+                                    var s = '<p style="display: inline-block">' + '[' + v['time'] + ']' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none">' + v['msg'] +'</a><br>';}
+                                else{
+                                    var s = '<p style="display: inline-block">' + '[' + v['time'] + ']' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none" href="' + v['msg'] + '" target="_blank">' + v['msg'] +'</a><br>';
+                                }
                                 $('#release_log').append(s);
-                            } )
+                            })
                         } else {
                             $('#release_log').html('<a>未查询到日志</a>');
                         }
@@ -294,7 +303,7 @@
             if(timeout=='1') return;
             do_log(id);
             var t2 = window.setTimeout(s, 3000);
-            var t1 = window.setInterval(do_reload, 1000);
+            var t1 = window.setInterval(do_reload, 2000);
         }
 
 {#        function gets_log(id, timeout) {#}

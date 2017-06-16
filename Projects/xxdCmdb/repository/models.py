@@ -49,6 +49,7 @@ class MachineType(models.Model):
     machine_ip = models.CharField(max_length=32, null=True, blank=True)
     machine_host = models.CharField(max_length=32, null=True, blank=True)
     machine_name = models.CharField(max_length=32, null=True, blank=True)
+    machine_xml_name = models.CharField(max_length=32, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "虚拟机配置类型表"
@@ -301,6 +302,7 @@ class ReleaseTask(models.Model):
     release_git_branch = models.CharField(max_length=32, null=True, blank=True)
     release_type = models.ForeignKey('ReleaseType', null=True, blank=True, on_delete=models.SET_NULL)
     release_jdk_version = models.IntegerField(choices=jdk_version_choice, null=True, blank=True)
+    release_md5 = models.CharField(max_length=64, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "发布任务记录表"
@@ -314,7 +316,7 @@ class ReleaseLog(models.Model):
     发布任务日志
     """
     release_id = models.IntegerField(null=True, blank=True)
-    # release_time = models.DateTimeField('时间', default=my_time)
+    release_time = models.DateTimeField('时间', default=my_time)
     release_msg = models.CharField('日志', max_length=1000, null=True, blank=True)
 
     class Meta:

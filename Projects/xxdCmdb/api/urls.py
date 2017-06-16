@@ -13,5 +13,4 @@ urlpatterns = [
     url(r'^limit-(?P<n1>\w+)$', views.LimitView.as_view()),
 
     url(r'^release$', views.ReleaseView.as_view())
-
 ]
