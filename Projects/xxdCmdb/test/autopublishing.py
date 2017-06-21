@@ -29,13 +29,13 @@ import traceback
 from threading import Timer
 
 API_HOST = 'cmdb.xxd.com'
-API_URL = 'http://172.16.18.30:8005/api/release'
+API_URL = 'http://172.16.18.216:8005/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
 HOME_DIR = '/home/admin'
 LOGGER = None
-
+AUTH_KEY = 'vLCzbZjGVNKWPxqd'
 
 # define return code
 RET_OK = 0
@@ -319,7 +319,7 @@ def downloadFile(path, dest):
     try:
         ul.retrieve(path, dest)
     except IOError, e:
-        LOGGER.info('Download file failed: %s, exception: %s' %(path, str(e)))
+        LOGGER.info('Download file failed: %s, exception: %s' % (path, str(e)))
         return RET_ERROR_DOWNLOAD_FILE_FAILED
 
     return RET_OK
@@ -412,13 +412,15 @@ def publishCommonService(config, runas):
 def publishTomcatService(config, runas):
     retCode = RET_OK
 
-    if config['appFilePrefix'] == 'api':
-        retCode, output = execSystemCommandRunAs(config['stopTengineCommand'], runas)
-        recordStageLog(config['taskId'], 'stopTengineService', retCode, output)
-        if retCode != RET_OK: return retCode
+    # if config['appFilePrefix'] == 'api':
+    #     retCode, output = execSystemCommandRunAs(config['stopTengineCommand'], runas)
+    #     recordStageLog(config['taskId'], 'stopTengineService', retCode, output)
+    #     if retCode != RET_OK: return retCode
 
     # stop service
     if os.path.exists(config['stopServiceCommand']):
+        retCode, output = execSystemCommandRunAs(config['stopServiceCommand'], runas)
+        recordStageLog(config['taskId'], 'stopService', retCode, output)
         retCode, output = execSystemCommandRunAs(config['stopServiceCommand'], runas)
         recordStageLog(config['taskId'], 'stopService', retCode, output)
         if retCode != RET_OK: return retCode
@@ -433,6 +435,7 @@ def publishTomcatService(config, runas):
         retCode, output = execSystemCommandRunAs(cmd, runas)
 
     # publish files
+    # cmd = '/bin/cp %s %s/%s.war' %(config['destFile'], config['publishPath'], config['appFilePrefix'])
     cmd = '/bin/cp %s %s/%s.war' %(config['destFile'], config['publishPath'], config['appFilePrefix'])
     retCode, output = execSystemCommandRunAs(cmd, runas)
     recordStageLog(config['taskId'], 'publishFiles', retCode, output)
@@ -543,15 +546,18 @@ def publishHtmlService(config, runas):
     return retCode
 
 def runTask(pkgUrl, md5sum, taskId, serviceType, runas):
+    # build.xxd.com/infra/cmdb/97/infra_cmdb_97.war 6d200fd40a846900c72574e0521b7e26 97 tomcat
     config = {}
     url = urlparse.urlparse(pkgUrl)
     filename = os.path.basename(url.path)
     fileSuffix = filename.split('.')[-1]
     config['taskId'] = taskId
-    config['appFilePrefix'] = filename.split('_')[0]
+    config['appFilePrefix'] = filename.split('_')[1]
     config['tempDir'] = tempfile.mkdtemp(prefix='%s-' %config['appFilePrefix'], dir='/tmp/')
     config['destFile'] = os.path.join(config['tempDir'], filename)
     os.chmod(config['tempDir'], stat.S_IRWXG+stat.S_IRWXO+stat.S_IRWXU)
+
+    # print config
 
     LOGGER.info('=== start publishing ===')
     LOGGER.info('appFilePrefix = %s' %config['appFilePrefix'])
@@ -559,7 +565,7 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, runas):
 
     # print current environment
     retCode, output = execSystemCommandRunAs('env', runas)
-    LOGGER.debug('current environment: %s' %(output))
+    LOGGER.debug('current environment: %s' % (output))
 
     # download file
     retCode = downloadFile(pkgUrl, config['destFile'])
@@ -569,7 +575,11 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, runas):
     # check file md5sum
     retCode = checkFileMd5sum(config['destFile'], md5sum)
     recordStageLog(config['taskId'], 'checkMd5sum', retCode)
-    if retCode != RET_OK: return retCode
+    if retCode != RET_OK:
+        uploadLog(config['taskId'], 'checkMd5sum...failed')
+        return retCode
+    else:
+        uploadLog(config['taskId'], 'checkMd5sum...success')
 
     if serviceType == 'html':
         config['publishPath'] = '/home/admin/website/'
@@ -589,8 +599,8 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, runas):
         config['publishPath'] = '/home/admin/api/'
         retCode = publishApijarService(config, runas)
     else:
-        config['stopServiceCommand'] = '/home/admin/%s/service.sh' %(config['appFilePrefix'])
-        config['startServiceCommand'] = '/home/admin/%s/service.sh' %(config['appFilePrefix'])
+        config['stopServiceCommand'] = '/home/admin/%s/service.sh' % (config['appFilePrefix'])
+        config['startServiceCommand'] = '/home/admin/%s/service.sh' % (config['appFilePrefix'])
         config['publishPath'] = '/home/admin/'
         retCode = publishCommonService(config, runas)
  
@@ -614,8 +624,8 @@ def run(pkgUrl, md5sum, taskId, serviceType, runas='admin'):
         #setRunningUser(RUNNING_USER)
         global LOGGER
         LOGGER = initLogger(LOGGER_FILE)
-        LOGGER.info('uid: %s %s' %(os.getuid(),os.geteuid()))
-        LOGGER.info('chdir: %s' %(os.getcwd()))
+        LOGGER.info('uid: %s %s' % (os.getuid(),os.geteuid()))
+        LOGGER.info('chdir: %s' % (os.getcwd()))
         LOGGER.info(str(os.environ))
         retCode = runTask(pkgUrl, md5sum, taskId, serviceType, runas=RUNNING_USER)
     except Exception, e:
@@ -639,18 +649,45 @@ def uploadMd5(pkgUrl, taskId):
     msg = json.dumps(msg)
     response = requests.post(
         url=API_URL,
-        headers={'key': auth_key},
+        headers={'key': AUTH_KEY},
         json=msg,
     )
-    print md5
+
     return retCode
+
+def uploadLog(taskId, msg):
+    """
+    上传日志到Cmdb API ReleaseLog
+    :param taskId:
+    :param msg:
+    :return:
+    """
+    retCode = RET_OK
+
+    try:
+        msg = {'id': taskId, 'msg': msg}
+        msg = json.dumps(msg)
+        response = requests.post(
+            url=API_URL,
+            headers={'key': AUTH_KEY},
+            json=msg,
+        )
+    except Exception, e:
+        recordStageLog(taskId, 'uploadLog', 'failed', e)
+
+    return retCode
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 3:
+        # Jenkins端打包完毕后上传MD5值
         retCode = uploadMd5(sys.argv[1], sys.argv[2])
         sys.exit(retCode)
     if len(sys.argv) != 5:
         print "Miss arguments."
         sys.exit(1)
+    # build.xxd.com/infra/cmdb/97/infra_cmdb_97.war 6d200fd40a846900c72574e0521b7e26 97 tomcat
+    # print sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
     retCode = run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     exit(retCode)
+    # exit(0)

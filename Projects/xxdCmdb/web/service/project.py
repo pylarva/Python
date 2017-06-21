@@ -433,9 +433,17 @@ class Project(BaseServiceList):
         return response
 
     def jenkins_task(self, pkg_name, release_git_url, release_branch, task_id):
+        """
+        连接Jenkins开始执行job
+        :param pkg_name:
+        :param release_git_url:
+        :param release_branch:
+        :param task_id:
+        :return:
+        """
 
         self.log(task_id, '发布部署开始...')
-        self.log(task_id, 'Jenkins下载源码打包...')
+        self.log(task_id, 'Jenkins下载源码并打包...')
 
         server = jenkins.Jenkins(jenkins_config.server_url, username=jenkins_config.user_name,
                                  password=jenkins_config.api_token)
@@ -454,6 +462,7 @@ class Project(BaseServiceList):
         url = server.get_build_info(build_name, LastBuild)['url']
         # log = server.get_build_console_output(build_name, LastBuild)
 
+        # 开始循环去取Jenkins返回值
         while result is None:
             time.sleep(5)
             result = server.get_build_info(build_name, LastBuild)['result']
@@ -461,12 +470,12 @@ class Project(BaseServiceList):
         print(LastBuild, result)
         if result == 'FAILURE':
             models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
-            self.log(task_id, 'Jenkins下载源码打包...【失败】')
+            self.log(task_id, 'Jenkins下载源码并打包...【失败】')
             self.log(task_id, '%s%s' % (url, 'console'))
 
         if result == 'SUCCESS':
             # models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
-            self.log(task_id, 'Jenkins下载源码打包...【完成】')
+            self.log(task_id, 'Jenkins下载源码并打包...【完成】')
             self.log(task_id, '%s%s' % (url, 'console'))
 
             # 打包完成后上传md5值
@@ -474,6 +483,35 @@ class Project(BaseServiceList):
             ret = os.system(cmd)
             if ret == 0:
                 self.log(task_id, '生成md5...【完成】')
+                # 打包成功后查找业务线节点机器 环境 + 业务线
+                release_obj = models.ReleaseTask.objects.filter(id=task_id).first()
+                business_1 = release_obj.release_env
+                business_2 = release_obj.release_name
+                md5sum = release_obj.release_md5
+                release_type = release_obj.release_type
+                count = models.Asset.objects.filter(business_1=business_1, business_2=business_2).count()
+                values = models.Asset.objects.filter(business_1=business_1, business_2=business_2).only('id', 'host_ip')
+                self.log(task_id, '共需发布【%s】台节点机器...' % count)
+                num = 1
+                for item in values:
+                    print(item.host_ip)
+                    self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
+                    # 目标机开始执行发布脚本
+                    ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type)
+                    if not ret:
+                        self.log(task_id, '当前发布第%s台%s...【失败】' % (num, item.host_ip))
+                        self.log(task_id, '终止发布...')
+                        models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+                        break
+                    else:
+                        self.log(task_id, '当前发布第%s台%s...【完成】' % (num, item.host_ip))
+                    num += 1
+
+                self.log(task_id, '服务检查...【完成】')
+                self.log(task_id, '发布成功结束！')
+                models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+
+
             else:
                 ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
                                        preexec_fn=os.setsid)
@@ -486,6 +524,42 @@ class Project(BaseServiceList):
         return True
 
     def log(self, task_id, msg):
+        """
+        记录日志
+        :param task_id:
+        :param msg:
+        :return:
+        """
         models.ReleaseLog.objects.create(release_id=task_id, release_msg=msg)
+
+    def shell_task(self, ip, pkgUrl, md5sum, taskId, serviceType):
+        """
+        连接发布目标机开始执行发布脚本
+        :return:
+        """
+        pkgUrl = pkgUrl.replace('/data/packages', jenkins_config.pkgUrl)
+        cmd = "scp %s root@%s:/opt/" % ('/Users/pylarva/github/Python/Projects/xxdCmdb/test/autopublishing.py', ip)
+        os.system(cmd)
+
+        cmd = "ssh root@%s 'pip install requests'" % ip
+        os.system(cmd)
+
+        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId, serviceType)
+        print(cmd)
+        # ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+        #                        preexec_fn=os.setsid)
+        # out, err = ret.communicate()
+        # err = str(err, encoding='utf-8')
+        # 脚本执行过程中 会陆续上传执行日志
+        ret = os.system(cmd)
+        if ret:
+            self.log(taskId, '错误代码...%s' % ret)
+            print(ret)
+            return False
+        # print(out, err)
+        print(ret)
+        return True
+
+
 
 

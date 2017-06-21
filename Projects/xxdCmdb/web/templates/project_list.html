@@ -296,7 +296,7 @@
         // 回调函数内部使用setTimeout 防止可能阻塞代码
         function get_log(id, timeout) {
             // 暴力清除所有定时器
-            for(var i = 1; i < 200; i++) {
+            for(var i = 1; i < 1000; i++) {
                 clearTimeout(i);
             }
             var s = 'get_log(' + id + ')';
