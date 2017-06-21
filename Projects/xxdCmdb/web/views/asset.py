@@ -54,4 +54,5 @@ class AssetDetailView(View):
 
 class AddAssetView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'add_asset.html')
+        response = asset.Asset.assets_info()
+        return render(request, 'add_asset.html', {'response': response})

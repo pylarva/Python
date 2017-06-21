@@ -413,19 +413,22 @@ class Server(models.Model):
 
     hostname = models.CharField(max_length=128, unique=True)
     sn = models.CharField('SN号', max_length=64, db_index=True)
-    manufacturer = models.CharField(verbose_name='制造商', max_length=64, null=True, blank=True)
+    # manufacturer = models.CharField(verbose_name='制造商', max_length=64, null=True, blank=True)
     model = models.CharField('型号', max_length=64, null=True, blank=True)
 
     manage_ip = models.GenericIPAddressField('管理IP', null=True, blank=True)
 
-    os_platform = models.CharField('系统', max_length=16, null=True, blank=True)
-    os_version = models.CharField('系统版本', max_length=16, null=True, blank=True)
+    # os_platform = models.CharField('系统', max_length=16, null=True, blank=True)
+    os_version = models.CharField('系统版本', max_length=64, null=True, blank=True)
 
     cpu_count = models.IntegerField('CPU个数', null=True, blank=True)
-    cpu_physical_count = models.IntegerField('CPU物理个数', null=True, blank=True)
+    cpu_cores = models.IntegerField('CPU逻辑核心数', null=True, blank=True)
     cpu_model = models.CharField('CPU型号', max_length=128, null=True, blank=True)
 
-    create_at = models.DateTimeField(auto_now_add=True, blank=True)
+    putaway_time = models.CharField('上架时间', max_length=64, null=True, blank=True)
+    over_insured_time = models.CharField('过保时间', max_length=64, null=True, blank=True)
+
+
 
     class Meta:
         verbose_name_plural = "服务器表"
@@ -447,6 +450,19 @@ class NetworkDevice(models.Model):
 
     class Meta:
         verbose_name_plural = "网络设备"
+
+
+class Cpu(models.Model):
+    """
+    CPU类型
+    """
+    name = models.CharField('类型',  max_length=64, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "CPU表"
+
+    def __str__(self):
+        return self.name
 
 
 class Disk(models.Model):

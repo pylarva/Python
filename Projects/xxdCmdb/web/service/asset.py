@@ -325,3 +325,10 @@ class Asset(BaseServiceList):
             response.message = str(e)
         return response
 
+    @staticmethod
+    def assets_info():
+        response = BaseResponse()
+        response.data = models.Cpu.objects.all()
+        response.status = True
+        return response
+
