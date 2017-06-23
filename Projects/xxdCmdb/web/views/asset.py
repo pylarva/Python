@@ -47,8 +47,9 @@ class AssetJsonView(View):
 
 
 class AssetDetailView(View):
-    def get(self, request, device_type_id, asset_nid):
-        response = asset.Asset.assets_detail(device_type_id, asset_nid)
+    def get(self, request, nid):
+        device_type_id = '1'
+        response = asset.Asset.assets_detail(nid, device_type_id)
         return render(request, 'asset_detail.html', {'response': response, 'device_type_id': device_type_id})
 
 
@@ -56,3 +57,7 @@ class AddAssetView(View):
     def get(self, request, *args, **kwargs):
         response = asset.Asset.assets_info()
         return render(request, 'add_asset.html', {'response': response})
+
+    def post(self, request):
+        response = asset.Asset.post_assets(request)
+        return JsonResponse(response.__dict__)

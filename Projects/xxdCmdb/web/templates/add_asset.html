@@ -59,7 +59,7 @@
     </ol>
     <div style="padding: 5px 8px;">
 
-        <div style="width: 500px; float: left">
+        <div style="width: 600px; float: left">
             <div class="guige">
                 <table class="guige-table">
                    <tbody>
@@ -73,23 +73,23 @@
             <form role="form">
                 <label>主机名</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="">
+                  <input id="host" type="text" class="form-control" placeholder="">
                 </div>
                 <label>管理IP</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="">
+                  <input id="ip" type="text" class="form-control" placeholder="">
                 </div>
                 <label>机房</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="">
+                  <input id="idc" type="text" class="form-control" placeholder="">
                 </div>
                 <label>机柜</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="">
+                  <input id="cabinet" type="text" class="form-control" placeholder="">
                 </div>
                                 <label>上架日期</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="">
+                  <input id="putaway" type="text" class="form-control" placeholder="">
                 </div>
 {#                <label>型号</label>#}
 {#                <div class="form-group">#}
@@ -98,7 +98,7 @@
             </form>
         </div>
 
-        <div style="width: 500px; float: right">
+        <div style="width: 600px; float: right">
             <div class="guige" >
                 <table class="guige-table">
                    <tbody>
@@ -112,18 +112,18 @@
             <form role="form">
                 <label>机器型号</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="">
+                  <input id="machine" type="text" class="form-control" placeholder="">
                 </div>
                 <label>序列号</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="">
+                  <input id="sn" type="text" class="form-control" placeholder="">
                 </div>
                 <label>CPU</label>
             <div class="form-group" >
             <div id="wd">
                 <select class="selectpicker">
                       {% for item in response.data %}
-                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
+                      <option id="cpu" value={{ item.id }}>{{ item.name }}</option>
                       {% endfor %}
                 </select>
             </div>
@@ -131,15 +131,15 @@
                 <br>
                 <label>内存</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="">
+                  <input id="memory" type="text" class="form-control" placeholder="">
                 </div>
                 <label>RAID</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="">
+                  <input id="raid" type="text" class="form-control" placeholder="">
                 </div>
                                 <label>保修日期</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="">
+                  <input id="service" type="text" class="form-control" placeholder="">
                 </div>
             </form>
         <br>
@@ -159,14 +159,14 @@
                      <tr>
                        <th>选择</th>
                        <th>插槽</th>
-                       <th>容量</th>
+                       <th>容量(GB)</th>
                        <th>接口类型</th>
                        <th>型号</th>
                      </tr>
                     <tr id="eth">
                        <td></td>
                        <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="1"></td>
-                       <td><input type="text" style="border: none; margin-right: -84px; width: 120px" value="500G"></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 120px" value="500"></td>
                        <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="SAS"></td>
                        <td><input type="text" style="border: none; margin-right: -77px; width: 200px" value="SEAGATE ST300MM0006 LS08S0K2B5NV"></td>
                      </tr>
@@ -206,7 +206,7 @@
             </table>
         </div>
     <br>
-    <button class="btn btn-primary" type="button" style="float: right; margin-right: 20px; width: 150px">提交保存</button>
+    <button id="add_host_save" class="btn btn-primary" type="button" style="float: right; margin-right: 20px; width: 150px">提交保存</button>
 
     </div>
 
@@ -225,17 +225,71 @@
         $(function () {
             $.initMenu('#menu_asset');
             window.setTimeout(add_width, 100);
+
+            $('#add_host_save').click(function () {
+                var host = $('#host').val();
+                var ip = $('#ip').val();
+                var idc = $('#idc').val();
+                var cabinet = $('#cabinet').val();
+                var putaway = $('#putaway').val();
+                var machine = $('#machine').val();
+                var sn = $('#sn').val();
+                var cpu = $('#cpu').val();
+                var memory = $('#memory').val();
+                var raid = $('#raid').val();
+                var service = $('#service').val();
+{#                if(host == '' || ip == '' || idc == '' || cabinet == '' || putaway == '' || machine == '' || sn == '' ||#}
+{#                memory == '' || raid == '' || service == ''){#}
+                if(host == '' || ip == ''){
+                    alert('输入不能为空...')
+                }else{
+                    // 循环取硬盘值
+                    var disk_list = new Array();
+                    $('#disk_all').find('tr').each(function () {
+                        var list_s = new Array();
+                        $(this).find('td').each(function () {
+                            var v = $(this).children().val();
+                            list_s.push(v);
+                        });
+                        disk_list.push(list_s);
+                    });
+
+                    // 循环取网卡值
+                    var nic_list = new Array();
+                    $('#eth_all').find('tr').each(function () {
+                        var list_s = new Array();
+                        $(this).find('td').each(function () {
+                            var v = $(this).children().val();
+                            list_s.push(v);
+                        });
+                        nic_list.push(list_s);
+                    });
+
+                    $.ajax({
+                        url: '/add-asset.html',
+                        type: 'POST',
+                        data: {'host': host, 'ip': ip, 'memory': memory,
+                        'idc': idc, 'cabinet': cabinet, 'putaway': putaway, 'machine': machine, 'sn': sn,
+                            'cpu': cpu, 'service': service, 'raid': raid, 'disk_list': disk_list, 'nic_list': nic_list},
+                        dataType: 'JSON',
+                        traditional: true,
+                        success: function (response) {
+                            if(response.status){
+                                alert(666);
+                            }
+                        }
+                    })
+                }
+            })
         });
 
         function add_eth(ths) {
-{#            var p = $('#eth').clone();#}
             var p = $(ths).parent().parent().next().next().clone();
             $('#eth_all').append(p);
             $('#eth_all tr:last td:eq(0)').append("<i class='fa fa-minus-square-o' aria-hidden='true' onclick='remove(this);'></i>");
         }
 
         function add_disk(ths) {
-{#            var p = $('#eth').clone();#}
             var p = $(ths).parent().parent().next().next().clone();
             $('#disk_all').append(p);
             $('#disk_all tr:last td:eq(0)').append("<i class='fa fa-minus-square-o' aria-hidden='true' onclick='remove(this);'></i>");
@@ -246,8 +300,10 @@
         }
 
         function add_width() {
-            $('#wd').children().prop('style', 'width: 500px');
+            $('#wd').children().prop('style', 'width: 600px');
         }
+
+
     </script>
 
 {% endblock %}

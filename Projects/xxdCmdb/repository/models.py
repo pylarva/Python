@@ -355,19 +355,6 @@ class IDC(models.Model):
         return self.name
 
 
-class Tag(models.Model):
-    """
-    资产标签
-    """
-    name = models.CharField('标签', max_length=32, unique=True)
-
-    class Meta:
-        verbose_name_plural = "标签表"
-
-    def __str__(self):
-        return self.name
-
-
 class Assets(models.Model):
     """
     资产信息表，所有资产公共信息（交换机，服务器，虚拟机等）
@@ -404,31 +391,36 @@ class Assets(models.Model):
     def __str__(self):
         return "%s-%s-%s" % (self.idc.name, self.cabinet_num, self.cabinet_order)
 
+class Tag(models.Model):
+    """
+    资产标签
+    """
+    name = models.CharField('标签', max_length=32, unique=True)
 
-class Server(models.Model):
+    class Meta:
+        verbose_name_plural = "标签表"
+
+    def __str__(self):
+        return self.name
+
+
+class Physical(models.Model):
     """
     服务器信息
     """
     asset = models.OneToOneField('Asset')
 
-    hostname = models.CharField(max_length=128, unique=True)
-    sn = models.CharField('SN号', max_length=64, db_index=True)
-    # manufacturer = models.CharField(verbose_name='制造商', max_length=64, null=True, blank=True)
+    hostname = models.CharField('主机名', max_length=128, unique=True)
+    manage_ip = models.CharField('管理IP', max_length=32, null=True, blank=True)
+    idc = models.CharField('IDC', max_length=32, null=True, blank=True)
+    cabinet = models.CharField('机柜', max_length=32, null=True, blank=True)
+    putaway = models.CharField('上架时间', max_length=32, null=True, blank=True)
+
     model = models.CharField('型号', max_length=64, null=True, blank=True)
-
-    manage_ip = models.GenericIPAddressField('管理IP', null=True, blank=True)
-
-    # os_platform = models.CharField('系统', max_length=16, null=True, blank=True)
-    os_version = models.CharField('系统版本', max_length=64, null=True, blank=True)
-
-    cpu_count = models.IntegerField('CPU个数', null=True, blank=True)
-    cpu_cores = models.IntegerField('CPU逻辑核心数', null=True, blank=True)
-    cpu_model = models.CharField('CPU型号', max_length=128, null=True, blank=True)
-
-    putaway_time = models.CharField('上架时间', max_length=64, null=True, blank=True)
-    over_insured_time = models.CharField('过保时间', max_length=64, null=True, blank=True)
-
-
+    sn = models.CharField('SN号', max_length=64, db_index=True)
+    cpu = models.ForeignKey('Cpu', verbose_name='CPU型号', null=True, blank=True, on_delete=models.SET_NULL)
+    raid = models.CharField('Raid', max_length=8, null=True, blank=True)
+    service = models.CharField('保修期', max_length=32, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "服务器表"
@@ -465,34 +457,16 @@ class Cpu(models.Model):
         return self.name
 
 
-class Disk(models.Model):
-    """
-    硬盘信息
-    """
-    slot = models.CharField('插槽位', max_length=8)
-    model = models.CharField('磁盘型号', max_length=32)
-    capacity = models.FloatField('磁盘容量GB')
-    pd_type = models.CharField('磁盘类型', max_length=32)
-    server_obj = models.ForeignKey('Server',related_name='disk')
-
-    class Meta:
-        verbose_name_plural = "硬盘表"
-
-    def __str__(self):
-        return self.slot
-
-
 class NIC(models.Model):
     """
     网卡信息
     """
-    name = models.CharField('网卡名称', max_length=128)
-    hwaddr = models.CharField('网卡mac地址', max_length=64)
-    netmask = models.CharField(max_length=64)
-    ipaddrs = models.CharField('ip地址', max_length=256)
-    up = models.BooleanField(default=False)
-    server_obj = models.ForeignKey('Server',related_name='nic')
-
+    name = models.CharField('网卡名称', max_length=128, null=True, blank=True)
+    hwaddr = models.CharField('网卡mac地址', max_length=64, null=True, blank=True)
+    ipaddrs = models.CharField('ip地址', max_length=256, null=True, blank=True)
+    switch_ip = models.CharField('上联交换机IP', max_length=64, null=True, blank=True)
+    switch_port = models.CharField('上联交换机端口', max_length=64, null=True, blank=True)
+    server_obj = models.ForeignKey('DellServer', related_name='nic', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "网卡表"
@@ -511,8 +485,7 @@ class Memory(models.Model):
     capacity = models.FloatField('容量', null=True, blank=True)
     sn = models.CharField('内存SN号', max_length=64, null=True, blank=True)
     speed = models.CharField('速度', max_length=16, null=True, blank=True)
-
-    server_obj = models.ForeignKey('Server',related_name='memory')
+    # server_obj = models.ForeignKey('Servers',related_name='memory')
 
     class Meta:
         verbose_name_plural = "内存表"
@@ -552,6 +525,47 @@ class ErrorLog(models.Model):
     def __str__(self):
         return self.title
 
+
+class DellServer(models.Model):
+    """
+    服务器信息
+    """
+    asset_id = models.IntegerField('资产', null=True, blank=True)
+
+    hostname = models.CharField('主机名', max_length=128, null=True, blank=True)
+    manage_ip = models.CharField('管理IP', max_length=32, null=True, blank=True)
+    idc = models.CharField('IDC', max_length=32, null=True, blank=True)
+    cabinet = models.CharField('机柜', max_length=32, null=True, blank=True)
+    putaway = models.CharField('上架时间', max_length=32, null=True, blank=True)
+
+    model = models.CharField('型号', max_length=64, null=True, blank=True)
+    sn = models.CharField('SN号', max_length=64, db_index=True)
+    cpu = models.ForeignKey('Cpu', verbose_name='CPU型号', null=True, blank=True, on_delete=models.SET_NULL)
+    raid = models.CharField('Raid', max_length=8, null=True, blank=True)
+    service = models.CharField('保修期', max_length=32, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "服务器表"
+
+    def __str__(self):
+        return self.hostname
+
+
+class HardDisk(models.Model):
+    """
+    硬盘信息
+    """
+    slot = models.CharField('插槽位', max_length=8, null=True, blank=True)
+    model = models.CharField('磁盘型号', max_length=32, null=True, blank=True)
+    capacity = models.FloatField('磁盘容量GB', null=True, blank=True)
+    pd_type = models.CharField('磁盘类型', max_length=32, null=True, blank=True)
+    server_obj = models.ForeignKey('DellServer', related_name='disk', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "硬盘表"
+
+    def __str__(self):
+        return self.slot
 
 
 

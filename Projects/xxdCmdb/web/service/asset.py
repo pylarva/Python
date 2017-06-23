@@ -122,7 +122,7 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='#'>查看详细</a>",
+                    'content': "<a href='/asset-{nid}.html'>查看详细</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}
@@ -311,18 +311,20 @@ class Asset(BaseServiceList):
         return response
 
     @staticmethod
-    def assets_detail(device_type_id, asset_id):
+    def assets_detail(nid, device_type_id):
 
         response = BaseResponse()
         try:
             if device_type_id == '1':
-                response.data = models.Server.objects.filter(asset_id=asset_id).select_related('asset').first()
+                response.data = models.DellServer.objects.filter(asset_id=nid).first()
             else:
-                response.data = models.NetworkDevice.objects.filter(asset_id=asset_id).select_related('asset').first()
+                response.data = models.NetworkDevice.objects.fil    ter(asset_id=nid).first()
 
         except Exception as e:
             response.status = False
             response.message = str(e)
+        response.status = True
+
         return response
 
     @staticmethod
@@ -331,4 +333,56 @@ class Asset(BaseServiceList):
         response.data = models.Cpu.objects.all()
         response.status = True
         return response
+
+    @staticmethod
+    def post_assets(request):
+        response = BaseResponse()
+
+        host = request.POST.get('host')
+        ip = request.POST.get('ip')
+        memory = request.POST.get('memory')
+        idc = request.POST.get('idc')
+        cabinet = request.POST.get('cabinet')
+        putaway = request.POST.get('putaway')
+        machine = request.POST.get('machine')
+        sn = request.POST.get('sn')
+        cpu = request.POST.get('cpu')
+        raid = request.POST.get('raid')
+        service = request.POST.get('service')
+        disk_list = request.POST.getlist('disk_list')
+        nic_list = request.POST.getlist('nic_list')
+
+        # 首先创建 Assets资产表 ➡️ 创建Server表关联Asset ➡️ 创建Disk表关联Server表 ➡️ 创建Memory表关联Server表
+        asset_obj = models.Asset(host_ip=ip, host_name=host, host_status=1, host_type=1, host_cpu=64, host_memory=memory)
+        asset_obj.save()
+
+        server_obj = models.DellServer(asset_id=asset_obj.id, hostname=host, manage_ip=ip, idc=idc, cabinet=cabinet,
+                                       putaway=putaway, model=machine, sn=sn, cpu_id=cpu, raid=raid, service=service)
+        server_obj.save()
+
+        # ['', '', ',1,500G,SAS,SEAGATE ST300MM0006 LS08S0K2B5NV']
+        for item in disk_list[2:]:
+            item_list = item.split(',')
+            slot = item_list[1]
+            capacity = item_list[2]
+            model = item_list[3]
+            pd_type = item_list[4]
+            disk_obj = models.HardDisk(slot=slot, capacity=capacity, model=model, pd_type=pd_type, server_obj_id=server_obj.id)
+            disk_obj.save()
+
+        # ['', '', ',eth0,00:1c:42:a5:57:7a,192.168.1.1,192.168.1.254,8']
+        for item in nic_list[2:]:
+            item_list = item.split(',')
+            name = item_list[1]
+            hwaddr = item_list[2]
+            ippaddrs = item_list[3]
+            switch_ip = item_list[4]
+            switch_port = item_list[5]
+            nic_obj = models.NIC(name=name, hwaddr=hwaddr, ipaddrs=ippaddrs, switch_ip=switch_ip,
+                                 switch_port=switch_port, server_obj_id=server_obj.id)
+            nic_obj.save()
+
+        response.status = True
+        return response
+
 
