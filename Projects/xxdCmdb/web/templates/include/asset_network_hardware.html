@@ -1,1 +1,83 @@
-网络设备规格
+<style>
+    .guige {
+
+    }
+
+    .guige-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .guige-table .title {
+        background: #f5fafe;
+        text-align: left;
+        font-weight: bold;
+        line-height: 32px;
+        height: 32px;
+        font-family: "微软雅黑";
+        border-right: 1px solid #dcdcdc;
+        border-left: 2px solid #0488cd;
+    }
+
+    .guige-table td, .content .guige-table th {
+        border: 1px solid #dcdcdc;
+        line-height: 30px;
+        height: 30px;
+        padding: 0 10px;
+        border-top: 0;
+    }
+
+    .guige-table .body-left {
+        width: 126px;
+        font-weight: normal;
+        text-align: right;
+        color: #666;
+    }
+
+    .guige-table .body-right {
+        color: #333;
+    }
+
+</style>
+<div class="guige">
+    <table class="guige-table">
+        <tbody>
+
+        <tr>
+            <th colspan="5" class="title f14 th" style="border-left:2px solid #0488cd;"><span class="padding-l-8">交换机信息</span></th>
+        </tr>
+        <tr>
+            <td>名称</td>
+            <td colspan="4">值</td>
+        </tr>
+        <tr>
+            <td>型号</td>
+            <td colspan="1">{{ response.data.model }}</td>
+        </tr>
+                <tr>
+            <td>管理IP</td>
+            <td colspan="1">{{ response.data.ip }}</td>
+        </tr>
+                <tr>
+            <td>机房</td>
+            <td colspan="1">{{ response.data.idc }}</td>
+        </tr>
+                <tr>
+            <td>机柜</td>
+            <td colspan="1">{{ response.data.cabinet }}</td>
+        </tr>
+                        <tr>
+            <td>上架日期</td>
+            <td colspan="1">{{ response.data.putaway }}</td>
+        </tr>
+                        <tr>
+            <td>保修日期</td>
+            <td colspan="1">{{ response.data.service }}</td>
+        </tr>
+        </tbody>
+
+
+        </tbody>
+    </table>
+</div>

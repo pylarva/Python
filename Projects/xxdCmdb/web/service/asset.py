@@ -314,11 +314,12 @@ class Asset(BaseServiceList):
     def assets_detail(nid, device_type_id):
 
         response = BaseResponse()
+        print(device_type_id, nid)
         try:
-            if device_type_id == '1':
+            if device_type_id == 1:
                 response.data = models.DellServer.objects.filter(asset_id=nid).first()
             else:
-                response.data = models.NetworkDevice.objects.fil    ter(asset_id=nid).first()
+                response.data = models.NetWork.objects.filter(asset=nid).first()
 
         except Exception as e:
             response.status = False
@@ -336,7 +337,44 @@ class Asset(BaseServiceList):
 
     @staticmethod
     def post_assets(request):
+        """
+        添加资产信息
+        :param request:
+        :return:
+        """
+
         response = BaseResponse()
+
+        nic_model = request.POST.get('nic_model', None)
+        # 添加网卡设备
+        if nic_model:
+            nic_ip = request.POST.get('nic_ip')
+            nic_idc = request.POST.get('nic_idc')
+            nic_cabinet = request.POST.get('nic_cabinet')
+            nic_putaway = request.POST.get('nic_putaway')
+            nic_service = request.POST.get('nic_service')
+
+            num = models.Asset.objects.filter(host_ip=nic_ip).count()
+            if num != 0:
+                response.status = False
+                response.message = '资产IP地址已经存在！'
+                return response
+
+            try:
+                asset_obj = models.Asset(host_ip=nic_ip, host_name=nic_model, host_status=1, host_type=3, host_cpu=2,
+                                         host_memory=2)
+                asset_obj.save()
+
+                models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet,
+                                              putaway=nic_putaway, service=nic_service, asset=asset_obj.id)
+
+            except Exception as e:
+                response.status = False
+                response.message = '添加资产错误'
+                return response
+
+            response.status = True
+            return response
 
         host = request.POST.get('host')
         ip = request.POST.get('ip')
@@ -347,17 +385,28 @@ class Asset(BaseServiceList):
         machine = request.POST.get('machine')
         sn = request.POST.get('sn')
         cpu = request.POST.get('cpu')
+        cpu_num = request.POST.get('cpu_num')
+        core_num = request.POST.get('core_num')
         raid = request.POST.get('raid')
         service = request.POST.get('service')
         disk_list = request.POST.getlist('disk_list')
         nic_list = request.POST.getlist('nic_list')
+        os = request.POST.get('os')
+
+        # 检查重复IP
+        num = models.Asset.objects.filter(host_ip=ip).count()
+        if num != 0:
+            response.status = False
+            response.message = '资产IP地址已经存在！'
+            return response
 
         # 首先创建 Assets资产表 ➡️ 创建Server表关联Asset ➡️ 创建Disk表关联Server表 ➡️ 创建Memory表关联Server表
         asset_obj = models.Asset(host_ip=ip, host_name=host, host_status=1, host_type=1, host_cpu=64, host_memory=memory)
         asset_obj.save()
 
         server_obj = models.DellServer(asset_id=asset_obj.id, hostname=host, manage_ip=ip, idc=idc, cabinet=cabinet,
-                                       putaway=putaway, model=machine, sn=sn, cpu_id=cpu, raid=raid, service=service)
+                                       putaway=putaway, model=machine, sn=sn, cpu_id=cpu, raid=raid, service=service,
+                                       cpu_num=cpu_num, core_num=core_num, os=os)
         server_obj.save()
 
         # ['', '', ',1,500G,SAS,SEAGATE ST300MM0006 LS08S0K2B5NV']

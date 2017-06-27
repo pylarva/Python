@@ -112,7 +112,7 @@ class Asset(models.Model):
     device_type_choices = (
         (1, '物理服务器'),
         (2, '虚拟机'),
-        (3, '网络设备'),
+        (3, '交换机'),
     )
     device_status_choices = (
         (1, '在线'),
@@ -391,6 +391,7 @@ class Assets(models.Model):
     def __str__(self):
         return "%s-%s-%s" % (self.idc.name, self.cabinet_num, self.cabinet_order)
 
+
 class Tag(models.Model):
     """
     资产标签
@@ -408,14 +409,13 @@ class Physical(models.Model):
     """
     服务器信息
     """
-    asset = models.OneToOneField('Asset')
+    # asset = models.OneToOneField('Asset')
 
     hostname = models.CharField('主机名', max_length=128, unique=True)
     manage_ip = models.CharField('管理IP', max_length=32, null=True, blank=True)
     idc = models.CharField('IDC', max_length=32, null=True, blank=True)
     cabinet = models.CharField('机柜', max_length=32, null=True, blank=True)
     putaway = models.CharField('上架时间', max_length=32, null=True, blank=True)
-
     model = models.CharField('型号', max_length=64, null=True, blank=True)
     sn = models.CharField('SN号', max_length=64, db_index=True)
     cpu = models.ForeignKey('Cpu', verbose_name='CPU型号', null=True, blank=True, on_delete=models.SET_NULL)
@@ -467,6 +467,25 @@ class NIC(models.Model):
     switch_ip = models.CharField('上联交换机IP', max_length=64, null=True, blank=True)
     switch_port = models.CharField('上联交换机端口', max_length=64, null=True, blank=True)
     server_obj = models.ForeignKey('DellServer', related_name='nic', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "网卡表"
+
+    def __str__(self):
+        return self.name
+
+
+class NetWork(models.Model):
+    """
+    网络设备
+    """
+    model = models.CharField('设备型号', max_length=32, null=True, blank=True)
+    ip = models.CharField('管理IP', max_length=32, null=True, blank=True)
+    idc = models.CharField('机房', max_length=32, null=True, blank=True)
+    cabinet = models.CharField('机柜', max_length=32, null=True, blank=True)
+    putaway = models.CharField('上架日期', max_length=32, null=True, blank=True)
+    service = models.CharField('保修日期', max_length=32, null=True, blank=True)
+    asset = models.IntegerField('关联资产', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "网卡表"
@@ -537,7 +556,9 @@ class DellServer(models.Model):
     idc = models.CharField('IDC', max_length=32, null=True, blank=True)
     cabinet = models.CharField('机柜', max_length=32, null=True, blank=True)
     putaway = models.CharField('上架时间', max_length=32, null=True, blank=True)
-
+    cpu_num = models.IntegerField('cpu核数', null=True, blank=True)
+    core_num = models.IntegerField('cpu核数', null=True, blank=True)
+    os = models.CharField('操作系统', max_length=32, null=True, blank=True)
     model = models.CharField('型号', max_length=64, null=True, blank=True)
     sn = models.CharField('SN号', max_length=64, db_index=True)
     cpu = models.ForeignKey('Cpu', verbose_name='CPU型号', null=True, blank=True, on_delete=models.SET_NULL)

@@ -57,8 +57,16 @@
         <li><a href="/asset.html">资产列表</a></li>
         <li class="active">添加资产</li>
     </ol>
+    <ul class="nav nav-tabs">
+        <li class="active"><a aria-controls="hardware" role="tab" data-toggle="tab" href="#hardware">物理服务器</a></li>
+        <li><a aria-controls="nic" role="tab" data-toggle="tab" href="#nic">交换机</a></li>
+        <li><a href="##">路由器</a></li>
+        <li><a href="##">防火墙</a></li>
+    </ul>
     <div style="padding: 5px 8px;">
 
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="hardware">
         <div style="width: 600px; float: left">
             <div class="guige">
                 <table class="guige-table">
@@ -118,25 +126,68 @@
                 <div class="form-group">
                   <input id="sn" type="text" class="form-control" placeholder="">
                 </div>
-                <label>CPU</label>
-            <div class="form-group" >
-            <div id="wd">
-                <select class="selectpicker">
-                      {% for item in response.data %}
-                      <option id="cpu" value={{ item.id }}>{{ item.name }}</option>
-                      {% endfor %}
-                </select>
+
+                <label>操作系统</label>
+                    <div class="form-group" style="display: inline-block">
+                        <div id="wd_3">
+                            <select class="selectpicker" id="os">
+                                  <option value='CentOS_6.9'>CentOS_6.9</option>
+                                  <option value='CentOS_7.2'>CentOS_7.2</option>
+                            </select>
+                        </div>
+                    </div>
+                <label>CPU型号</label>
+                    <div class="form-group" >
+                        <div id="wd">
+                            <select class="selectpicker">
+                                  {% for item in response.data %}
+                                  <option id="cpu" value={{ item.id }}>{{ item.name }}</option>
+                                  {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+            <br>
+
+            <div>
+                <label>CPU核数</label>
+                    <div class="form-group" style="display: inline-block">
+                        <div id="wd_1">
+                            <select class="selectpicker" id="cpu_num">
+                                  <option id="cpu" value='1'>1</option>
+                                  <option id="cpu" value='2'>2</option>
+                                  <option id="cpu" value='3'>3</option>
+                                  <option id="cpu" value='4'>4</option>
+                            </select>
+                        </div>
+                    </div>
+
+                <label>逻辑核心数</label>
+                    <div class="form-group" style="display: inline-block">
+                        <div id="wd_2">
+                            <select class="selectpicker" id="core_num">
+                                  <option id="cpu" value='2'>2</option>
+                                  <option id="cpu" value='4'>4</option>
+                                  <option id="cpu" value='8'>8</option>
+                                  <option id="cpu" value='16'>16</option>
+                            </select>
+                        </div>
+                    </div>
             </div>
-            </div>
-                <br>
                 <label>内存</label>
                 <div class="form-group">
                   <input id="memory" type="text" class="form-control" placeholder="">
                 </div>
                 <label>RAID</label>
-                <div class="form-group">
-                  <input id="raid" type="text" class="form-control" placeholder="">
-                </div>
+                    <div class="form-group" style="display: inline-block">
+                        <div id="wd_4">
+                            <select class="selectpicker" id="raid">
+                                  <option id="cpu" value='10'>10</option>
+                                  <option id="cpu" value='5'>5</option>
+                                  <option id="cpu" value='1'>1</option>
+                                  <option id="cpu" value='0'>0</option>
+                            </select>
+                        </div>
+                    </div>
                                 <label>保修日期</label>
                 <div class="form-group">
                   <input id="service" type="text" class="form-control" placeholder="">
@@ -209,6 +260,37 @@
     <button id="add_host_save" class="btn btn-primary" type="button" style="float: right; margin-right: 20px; width: 150px">提交保存</button>
 
     </div>
+        <div role="tabpanel" class="tab-pane" id="nic">
+            <label>型号</label>
+            <div class="form-group">
+              <input id="nic_model" type="text" class="form-control" placeholder="">
+            </div>
+            <label>管理IP</label>
+            <div class="form-group">
+              <input id="nic_ip" type="text" class="form-control" placeholder="">
+            </div>
+            <label>机房</label>
+            <div class="form-group">
+              <input id="nic_idc" type="text" class="form-control" placeholder="">
+            </div>
+            <label>机柜</label>
+            <div class="form-group">
+              <input id="nic_cabinet" type="text" class="form-control" placeholder="">
+            </div>
+            <label>上架日期</label>
+            <div class="form-group">
+              <input id="nic_putaway" type="text" class="form-control" placeholder="">
+            </div>
+            <label>保修日期</label>
+            <div class="form-group">
+              <input id="nic_service" type="text" class="form-control" placeholder="">
+            </div>
+
+            <button id="add_nic_save" class="btn btn-primary" type="button" style="float: right; margin-right: 20px; width: 150px">提交保存</button>
+
+        </div>
+    </div>
+    </div>
 
 
 {% endblock %}
@@ -238,6 +320,9 @@
                 var memory = $('#memory').val();
                 var raid = $('#raid').val();
                 var service = $('#service').val();
+                var cpu_num = $('#cpu_num').val();
+                var core_num = $('#core_num').val();
+                var os = $('#os').val();
 {#                if(host == '' || ip == '' || idc == '' || cabinet == '' || putaway == '' || machine == '' || sn == '' ||#}
 {#                memory == '' || raid == '' || service == ''){#}
                 if(host == '' || ip == ''){
@@ -269,7 +354,8 @@
                         url: '/add-asset.html',
                         type: 'POST',
                         data: {'host': host, 'ip': ip, 'memory': memory,
-                        'idc': idc, 'cabinet': cabinet, 'putaway': putaway, 'machine': machine, 'sn': sn,
+                            'idc': idc, 'cabinet': cabinet, 'putaway': putaway, 'machine': machine, 'sn': sn,
+                            'cpu_num': cpu_num, 'core_num': core_num, 'os':os,
                             'cpu': cpu, 'service': service, 'raid': raid, 'disk_list': disk_list, 'nic_list': nic_list},
                         dataType: 'JSON',
                         traditional: true,
@@ -280,7 +366,38 @@
                         }
                     })
                 }
+            });
+
+            $('#add_nic_save').click(function () {
+                var nic_model = $('#nic_model').val();
+                var nic_ip = $('#nic_ip').val();
+                var nic_idc = $('#nic_idc').val();
+                var nic_cabinet = $('#nic_cabinet').val();
+                var nic_putaway = $('#nic_putaway').val();
+                var nic_service = $('#nic_service').val();
+                if(nic_model == ''|| nic_ip ==''|| nic_cabinet=='' || nic_putaway=='' || nic_service==''){
+                    alert('输入不能为空...');
+                    return false
+                }else {
+                    $.ajax({
+                        url: '/add-asset.html',
+                        type: 'POST',
+                        data: {'nic_model': nic_model, 'nic_ip': nic_ip, 'nic_idc': nic_idc,'nic_cabinet': nic_cabinet,
+                               'nic_putaway': nic_putaway, 'nic_service': nic_service},
+                        dataType: 'JSON',
+                        traditional: true,
+                        success: function (response) {
+                            if(response.status){
+                                alert('新资产添加成功！');
+                            }else {
+                                alert(response.message);
+                            }
+                        }
+                    })
+                }
             })
+
+
         });
 
         function add_eth(ths) {
@@ -301,6 +418,10 @@
 
         function add_width() {
             $('#wd').children().prop('style', 'width: 600px');
+            $('#wd_3').children().prop('style', 'width: 600px');
+            $('#wd_4').children().prop('style', 'width: 600px');
+            $('#wd_1').children().prop('style', 'width: 230px');
+            $('#wd_2').children().prop('style', 'width: 230px');
         }
 
 

@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from web.service import asset
+from repository import models
 
 USER_NAME = {}
 
@@ -48,7 +49,8 @@ class AssetJsonView(View):
 
 class AssetDetailView(View):
     def get(self, request, nid):
-        device_type_id = '1'
+        asset_obj = models.Asset.objects.filter(id=nid).first()
+        device_type_id = asset_obj.host_type
         response = asset.Asset.assets_detail(nid, device_type_id)
         return render(request, 'asset_detail.html', {'response': response, 'device_type_id': device_type_id})
 
