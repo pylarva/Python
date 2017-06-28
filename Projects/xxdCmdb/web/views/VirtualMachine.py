@@ -76,6 +76,7 @@ class VirtualListView(View):
         if host:
             cmd = "ssh root@%s 'virsh list --all'" % host
             result = os.popen(cmd).readlines()
+            cmd_all_memory = "free -m | awk 'NR==2{print $2}'"
             cmd_1 = "ps -ef |grep kvm | awk '{print $1,$16}'|awk '{print $2}'|awk '{sum += $1} END {print sum}'"
             cmd_2 = "ps -ef |grep kvm | awk '{print $1,$20}'|awk '{print $2}'|awk -F ',' '{print $1}'|awk '{sum += $1} END {print sum}'"
             if host == '192.168.38.190':
@@ -88,10 +89,13 @@ class VirtualListView(View):
                 memory_sum = os.popen(cmd_memory).readlines()
                 cmd_cpu = "ssh root@%s %s" % (host, cmd_2)
                 cpu_sum = os.popen(cmd_cpu).readlines()
+                cmd_total_memory = "ssh root@%s %s" % (host, cmd_all_memory)
+                total_memory = os.popen(cmd_total_memory).readlines()
                 data_dict['status'] = True
                 data_dict['data'] = result
                 data_dict['memory'] = memory_sum
                 data_dict['cpu'] = cpu_sum
+                data_dict['total_memory'] = total_memory
                 return HttpResponse(json.dumps(data_dict))
             else:
                 data_dict['status'] = False
@@ -155,13 +159,18 @@ class VirtualListView(View):
             return HttpResponse(json.dumps(data_dict))
 
         host_machine = request.POST.get('host_machine')
-        new_ip = request.POST.get('new_host_ip')
+        new_ip = request.POST.get('new_host_ip', None)
+
+        # 如果前端没有传来新IP地址 先对IP地址作标记 然后在进程里面再自动或去IP地址
+        # if not new_ip:
+        #     new_ip = '192.168.1.255'
+        # else:
         machine_type = request.POST.get('machine_type')
         memory_num = request.POST.get('memory_num')
         cpu_num = request.POST.get('cpu_num')
-        new_name = 'a0-kvm-vhost-%s-%s.yh' % (new_ip.split('.')[-2], new_ip.split('.')[-1])
+        new_name = '%s-kvm-vhost-%s-%s.%s' % (kvm_config.kvm_addr, new_ip.split('.')[-2], new_ip.split('.')[-1], kvm_config.kvm_str)
         new_gateway = new_ip.split('.')
-        new_gateway = new_gateway[0] + '.' + new_gateway[1] + '.' + new_gateway[2] + '.' + '253'
+        new_gateway = new_gateway[0] + '.' + new_gateway[1] + '.' + new_gateway[2] + '.' + kvm_config.kvm_last_gateway
 
         template_mirror_obj = models.MachineType.objects.filter(id=machine_type).first()
         template_mirror = template_mirror_obj.machine_type
@@ -440,11 +449,11 @@ class VirtualListView(View):
         obj = models.VirtualMachines.objects.filter(id=mirror_id).first()
         host = obj.mudroom_host
         old_ip = obj.host_ip
-        old_name = 'a0-kvm-vhost-%s-%s.yh' % (old_ip.split('.')[-2], old_ip.split('.')[-1])
+        old_name = '%s-kvm-vhost-%s-%s.%s' % (kvm_config.kvm_addr, old_ip.split('.')[-2], old_ip.split('.')[-1], kvm_config.kvm_str)
         old_mirror = kvm_config.kvm_qcow_dir + old_name + '.qcow2'
         new_mirror = kvm_config.kvm_template_dir + mirror_name + '.qcow2'
 
-        new_name = 'a0-kvm-vhost-%s-%s.yh' % (mirror_ip.split('.')[-2], mirror_ip.split('.')[-1])
+        new_name = '%s-kvm-vhost-%s-%s.%s' % (kvm_config.kvm_addr, mirror_ip.split('.')[-2], mirror_ip.split('.')[-1], kvm_config.kvm_str)
 
         new_gateway = mirror_ip.split('.')
         new_gateway = new_gateway[0] + '.' + new_gateway[1] + '.' + new_gateway[2] + '.' + '253'

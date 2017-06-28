@@ -89,9 +89,7 @@ class Asset(BaseServiceList):
                 'title': "宿主机",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@host_machine'}},
-                'attr': {'name': 'host_machine', 'id': '@host_machine', 'original': '@host_machine',
-                         'edit-enable': 'true',
-                         'edit-type': 'input'}
+                'attr': {}
             },
             {
                 'q': 'host_cpu',
@@ -393,15 +391,19 @@ class Asset(BaseServiceList):
         nic_list = request.POST.getlist('nic_list')
         os = request.POST.get('os')
 
+        for item in nic_list[2:]:
+            item_list = item.split(',')
+            ippaddrs = item_list[3]
+
         # 检查重复IP
-        num = models.Asset.objects.filter(host_ip=ip).count()
+        num = models.Asset.objects.filter(host_ip=ippaddrs).count()
         if num != 0:
             response.status = False
             response.message = '资产IP地址已经存在！'
             return response
 
         # 首先创建 Assets资产表 ➡️ 创建Server表关联Asset ➡️ 创建Disk表关联Server表 ➡️ 创建Memory表关联Server表
-        asset_obj = models.Asset(host_ip=ip, host_name=host, host_status=1, host_type=1, host_cpu=64, host_memory=memory)
+        asset_obj = models.Asset(host_ip=ippaddrs, host_name=host, host_status=1, host_type=1, host_cpu=64, host_memory=memory)
         asset_obj.save()
 
         server_obj = models.DellServer(asset_id=asset_obj.id, hostname=host, manage_ip=ip, idc=idc, cabinet=cabinet,
@@ -409,14 +411,15 @@ class Asset(BaseServiceList):
                                        cpu_num=cpu_num, core_num=core_num, os=os)
         server_obj.save()
 
-        # ['', '', ',1,500G,SAS,SEAGATE ST300MM0006 LS08S0K2B5NV']
+        # ['', '', ',1,500G,SAS,7200,SEAGATE ST300MM0006 LS08S0K2B5NV']
         for item in disk_list[2:]:
             item_list = item.split(',')
             slot = item_list[1]
             capacity = item_list[2]
             model = item_list[3]
-            pd_type = item_list[4]
-            disk_obj = models.HardDisk(slot=slot, capacity=capacity, model=model, pd_type=pd_type, server_obj_id=server_obj.id)
+            rpm = item_list[4]
+            pd_type = item_list[5]
+            disk_obj = models.HardDisk(slot=slot, capacity=capacity, model=model, rpm=rpm, pd_type=pd_type, server_obj_id=server_obj.id)
             disk_obj.save()
 
         # ['', '', ',eth0,00:1c:42:a5:57:7a,192.168.1.1,192.168.1.254,8']

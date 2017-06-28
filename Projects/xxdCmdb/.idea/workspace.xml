@@ -35,31 +35,53 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/repository/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3323">
+              <caret line="576" column="8" lean-forward="true" selection-start-line="576" selection-start-column="8" selection-end-line="576" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="kvm_config.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/conf/kvm_config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="26" column="56" lean-forward="false" selection-start-line="26" selection-start-column="56" selection-end-line="26" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="asset.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/views/asset.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="393">
+              <caret line="63" column="35" lean-forward="false" selection-start-line="63" selection-start-column="35" selection-end-line="63" selection-end-column="35" />
+              <folding>
+                <element signature="e#45#74#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="asset_detail.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/templates/asset_detail.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
+            <state relative-caret-position="136">
               <caret line="34" column="58" lean-forward="true" selection-start-line="34" selection-start-column="58" selection-end-line="34" selection-end-column="58" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="add_asset.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/web/templates/add_asset.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="389" column="48" lean-forward="true" selection-start-line="389" selection-start-column="48" selection-end-line="389" selection-end-column="48" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="asset_network_hardware.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/templates/include/asset_network_hardware.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="65" column="20" lean-forward="true" selection-start-line="65" selection-start-column="20" selection-end-line="65" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -68,11 +90,21 @@
       <file leaf-file-name="asset_server_hardware.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/templates/include/asset_server_hardware.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="83" column="61" lean-forward="true" selection-start-line="83" selection-start-column="61" selection-end-line="83" selection-end-column="61" />
+            <state relative-caret-position="2186">
+              <caret line="137" column="43" lean-forward="false" selection-start-line="137" selection-start-column="43" selection-end-line="137" selection-end-column="43" />
               <folding>
-                <marker date="1498545897000" expanded="false" signature="3686:3716" ph="..." />
+                <marker date="1498640786000" expanded="false" signature="3747:3777" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VirtualMachine.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/views/VirtualMachine.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="189">
+              <caret line="161" column="54" lean-forward="true" selection-start-line="161" selection-start-column="54" selection-end-line="161" selection-end-column="54" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -80,24 +112,38 @@
       <file leaf-file-name="asset.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/service/asset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="356" column="42" lean-forward="true" selection-start-line="356" selection-start-column="42" selection-end-line="356" selection-end-column="42" />
+            <state relative-caret-position="365">
+              <caret line="413" column="71" lean-forward="true" selection-start-line="413" selection-start-column="71" selection-end-line="413" selection-end-column="71" />
               <folding>
-                <marker date="1498546132000" expanded="true" signature="5520:5649" ph="select hostn... repository_server" />
-                <marker date="1498546132000" expanded="true" signature="5682:5830" ph="select manag... repository_networkdevice" />
+                <marker date="1498643074000" expanded="true" signature="5351:5480" ph="select hostn... repository_server" />
+                <marker date="1498643074000" expanded="true" signature="5513:5661" ph="select manag... repository_networkdevice" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="asset.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/views/asset.py">
+      <file leaf-file-name="add_asset.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web/templates/add_asset.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="53" column="37" lean-forward="false" selection-start-line="53" selection-start-column="37" selection-end-line="53" selection-end-column="37" />
+            <state relative-caret-position="124">
+              <caret line="171" column="65" lean-forward="true" selection-start-line="171" selection-start-column="65" selection-end-line="171" selection-end-column="65" />
               <folding>
-                <element signature="e#45#74#0" expanded="true" />
+                <element signature="e#4142#4171#0#HTML" expanded="true" />
+                <element signature="e#5138#5167#0#HTML" expanded="true" />
+                <element signature="e#8517#8571#0#HTML" expanded="true" />
+                <element signature="e#8636#8690#0#HTML" expanded="true" />
+                <element signature="e#9140#9178#0#HTML" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="virtual_list.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/templates/virtual_list.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="282">
+              <caret line="347" column="65" lean-forward="true" selection-start-line="347" selection-start-column="65" selection-end-line="347" selection-end-column="65" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -114,19 +160,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>system_version</find>
-      <find>create</find>
-      <find>change_cpu_memory</find>
-      <find>host_info</find>
-      <find>recipient-name3</find>
-      <find>result</find>
-      <find>Jenkins</find>
-      <find>lastbu</find>
-      <find>do_release</find>
-      <find>API_HOST</find>
-      <find>API_URL</find>
-      <find>sendHttpGetRequest</find>
-      <find>block</find>
       <find>check</find>
       <find>process</find>
       <find>pkg_name</find>
@@ -144,6 +177,19 @@
       <find>删除</find>
       <find>nic</find>
       <find>do_delete_confirm</find>
+      <find>a0</find>
+      <find>yh</find>
+      <find>gateway</find>
+      <find>new</find>
+      <find>mirror_ip</find>
+      <find>new_gateway</find>
+      <find>host_info</find>
+      <find>宿主机</find>
+      <find>800</find>
+      <find>自动</find>
+      <find>ip地址</find>
+      <find>IP</find>
+      <find>gate</find>
     </findStrings>
     <replaceStrings>
       <replace>Project</replace>
@@ -176,8 +222,6 @@
         <option value="$PROJECT_DIR$/web/static/js/less.js" />
         <option value="$PROJECT_DIR$/web/templates/layout/_laytask.html" />
         <option value="$PROJECT_DIR$/repository/migrations/__init__.py" />
-        <option value="$PROJECT_DIR$/web/templates/virtual_list.html" />
-        <option value="$PROJECT_DIR$/conf/kvm_config.py" />
         <option value="$PROJECT_DIR$/utils/jenkins.py" />
         <option value="$PROJECT_DIR$/utils/jenkinss.py" />
         <option value="$PROJECT_DIR$/test/test66.py" />
@@ -193,17 +237,19 @@
         <option value="$PROJECT_DIR$/xxdCmdb/settings.py" />
         <option value="$PROJECT_DIR$/web/templates/layout/_laybusiness.html" />
         <option value="$PROJECT_DIR$/repository/admin.py" />
-        <option value="$PROJECT_DIR$/web/urls.py" />
         <option value="$PROJECT_DIR$/web/templates/asset_list.html" />
-        <option value="$PROJECT_DIR$/repository/models.py" />
         <option value="$PROJECT_DIR$/web/templates/include/asset_network_hardware.html" />
         <option value="$PROJECT_DIR$/web/templates/include/asset_basic.html" />
-        <option value="$PROJECT_DIR$/web/views/VirtualMachine.py" />
         <option value="$PROJECT_DIR$/web/views/asset.py" />
         <option value="$PROJECT_DIR$/web/templates/asset_detail.html" />
+        <option value="$PROJECT_DIR$/conf/kvm_config.py" />
+        <option value="$PROJECT_DIR$/repository/models.py" />
         <option value="$PROJECT_DIR$/web/templates/include/asset_server_hardware.html" />
         <option value="$PROJECT_DIR$/web/service/asset.py" />
         <option value="$PROJECT_DIR$/web/templates/add_asset.html" />
+        <option value="$PROJECT_DIR$/web/templates/virtual_list.html" />
+        <option value="$PROJECT_DIR$/web/urls.py" />
+        <option value="$PROJECT_DIR$/web/views/VirtualMachine.py" />
       </list>
     </option>
   </component>
@@ -256,7 +302,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
+              <option name="myItemId" value="xxdCmdb" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -271,10 +317,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -335,6 +377,102 @@
               <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="font-awesome" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bootstrap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -386,6 +524,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="conf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -406,19 +558,19 @@
     </option>
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/web/static/css" />
+      <recent name="$PROJECT_DIR$/repository/migrations" />
+      <recent name="$PROJECT_DIR$/repository" />
+      <recent name="$PROJECT_DIR$/test" />
+      <recent name="$PROJECT_DIR$/conf" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/web/static/css" />
       <recent name="$PROJECT_DIR$/test" />
       <recent name="$PROJECT_DIR$/conf/xml" />
       <recent name="$PROJECT_DIR$/conf" />
       <recent name="$PROJECT_DIR$/conf/xml/template.xml" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/repository/migrations" />
-      <recent name="$PROJECT_DIR$/repository" />
-      <recent name="$PROJECT_DIR$/test" />
-      <recent name="$PROJECT_DIR$/conf" />
-      <recent name="$PROJECT_DIR$/web/static/js" />
     </key>
   </component>
   <component name="RunManager" selected="Django server.xxdCmdb">
@@ -870,20 +1022,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/api/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/tests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/api/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -920,13 +1058,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="65" column="40" lean-forward="false" selection-start-line="65" selection-start-column="40" selection-end-line="65" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/conf/kvm_config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="11" lean-forward="true" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -1037,22 +1168,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xxdCmdb/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/virtual_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="73">
-          <caret line="219" column="23" lean-forward="true" selection-start-line="219" selection-start-column="23" selection-end-line="219" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/project.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1371">
@@ -1148,14 +1263,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="32" column="59" lean-forward="false" selection-start-line="32" selection-start-column="59" selection-end-line="32" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils/response.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -1172,29 +1279,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/repository/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="53">
-          <caret line="114" column="19" lean-forward="true" selection-start-line="114" selection-start-column="19" selection-end-line="114" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/include/asset_basic.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="34" column="87" lean-forward="true" selection-start-line="34" selection-start-column="87" selection-end-line="34" selection-end-column="87" />
           <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#8;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#8;n#div#0;n#!!top" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/VirtualMachine.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="417" column="11" lean-forward="true" selection-start-line="417" selection-start-column="11" selection-end-line="417" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1214,14 +1305,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/asset_detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="34" column="58" lean-forward="true" selection-start-line="34" selection-start-column="58" selection-end-line="34" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/include/asset_network_hardware.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
@@ -1230,42 +1313,120 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/task.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xxdCmdb/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/kvm_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/static/css/awesome-bootstrap-checkbox.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3679">
+          <caret line="10" column="14" lean-forward="true" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/repository/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3323">
+          <caret line="576" column="8" lean-forward="true" selection-start-line="576" selection-start-column="8" selection-end-line="576" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/web/views/asset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="53" column="37" lean-forward="false" selection-start-line="53" selection-start-column="37" selection-end-line="53" selection-end-column="37" />
+        <state relative-caret-position="393">
+          <caret line="63" column="35" lean-forward="false" selection-start-line="63" selection-start-column="35" selection-end-line="63" selection-end-column="35" />
           <folding>
             <element signature="e#45#74#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/service/asset.py">
+    <entry file="file://$PROJECT_DIR$/web/templates/virtual_list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="356" column="42" lean-forward="true" selection-start-line="356" selection-start-column="42" selection-end-line="356" selection-end-column="42" />
-          <folding>
-            <marker date="1498546132000" expanded="true" signature="5520:5649" ph="select hostn... repository_server" />
-            <marker date="1498546132000" expanded="true" signature="5682:5830" ph="select manag... repository_networkdevice" />
-          </folding>
+        <state relative-caret-position="282">
+          <caret line="347" column="65" lean-forward="true" selection-start-line="347" selection-start-column="65" selection-end-line="347" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="26" column="56" lean-forward="false" selection-start-line="26" selection-start-column="56" selection-end-line="26" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/asset_detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="34" column="58" lean-forward="true" selection-start-line="34" selection-start-column="58" selection-end-line="34" selection-end-column="58" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/include/asset_server_hardware.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="83" column="61" lean-forward="true" selection-start-line="83" selection-start-column="61" selection-end-line="83" selection-end-column="61" />
+        <state relative-caret-position="2186">
+          <caret line="137" column="43" lean-forward="false" selection-start-line="137" selection-start-column="43" selection-end-line="137" selection-end-column="43" />
           <folding>
-            <marker date="1498545897000" expanded="false" signature="3686:3716" ph="..." />
+            <marker date="1498640786000" expanded="false" signature="3747:3777" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/service/asset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="413" column="71" lean-forward="true" selection-start-line="413" selection-start-column="71" selection-end-line="413" selection-end-column="71" />
+          <folding>
+            <marker date="1498643074000" expanded="true" signature="5351:5480" ph="select hostn... repository_server" />
+            <marker date="1498643074000" expanded="true" signature="5513:5661" ph="select manag... repository_networkdevice" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/VirtualMachine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="161" column="54" lean-forward="true" selection-start-line="161" selection-start-column="54" selection-end-line="161" selection-end-column="54" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/add_asset.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="389" column="48" lean-forward="true" selection-start-line="389" selection-start-column="48" selection-end-line="389" selection-end-column="48" />
-          <folding />
+        <state relative-caret-position="124">
+          <caret line="171" column="65" lean-forward="true" selection-start-line="171" selection-start-column="65" selection-end-line="171" selection-end-column="65" />
+          <folding>
+            <element signature="e#4142#4171#0#HTML" expanded="true" />
+            <element signature="e#5138#5167#0#HTML" expanded="true" />
+            <element signature="e#8517#8571#0#HTML" expanded="true" />
+            <element signature="e#8636#8690#0#HTML" expanded="true" />
+            <element signature="e#9140#9178#0#HTML" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

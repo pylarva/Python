@@ -579,6 +579,7 @@ class HardDisk(models.Model):
     slot = models.CharField('插槽位', max_length=8, null=True, blank=True)
     model = models.CharField('磁盘型号', max_length=32, null=True, blank=True)
     capacity = models.FloatField('磁盘容量GB', null=True, blank=True)
+    rpm = models.IntegerField('磁盘转速', null=True, blank=True)
     pd_type = models.CharField('磁盘类型', max_length=32, null=True, blank=True)
     server_obj = models.ForeignKey('DellServer', related_name='disk', null=True, blank=True)
 

@@ -2,6 +2,8 @@
 
 {% block css %}
     <link href="/static/css/bootstrap-switch.css" rel="stylesheet">
+    <link href="/static/css/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
 {#    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css">#}
 {% endblock %}
 
@@ -117,7 +119,15 @@
                 <input id="switch-state" type="checkbox" name="my-checkbox">
                 <button style="display: none" type="button" data-switch-set="state" data-switch-value="false" class="btn btn-default">Toggle</button>
     {#            <br>#}
-                <button style="display: inline" id="virtual_add" type="button" class="btn btn-info" onclick="host_info()">宿主机信息</button>
+                <button style="display: inline;width: 155px" id="virtual_add" type="button" class="btn btn-info" onclick="host_info()">宿主机信息</button>
+
+                <!-- checkbox -->
+                <div class="checkbox checkbox-primary" style="display: inline-block;">
+                    <input id="checkbox2" class="styled" type="checkbox" onclick="auto_ip()">
+                    <label for="checkbox2">
+                        自动获取装机IP地址
+                    </label>
+                </div>
 
                 <div class="form-group" style="width: 150px; display: inline-block">
                     <input id="host_ip" type="email" class="form-control" placeholder="IP地址">
@@ -131,7 +141,7 @@
                     <input id="host_memory" type="email" class="form-control" placeholder="内存／G">
                 </div>
 
-                <button style="display: inline; width: 200px" id="virtual_add" type="button" class="btn btn-success" onclick="add_host()">新增虚机</button>
+                <button style="display: inline; width: 110px" id="virtual_add" type="button" class="btn btn-success" onclick="add_host()">新增虚机</button>
             </div>
                 <div id="host_div" style="width: 500px; float: right; display: none;" class="alert alert-success" role="alert" style="margin-bottom: 15px;">
                 <button  class="close" type="button" data-dismiss="alert">&times;</button>
@@ -219,7 +229,7 @@
 
         $(function () {
     
-            // 页面switch开关
+            // 页面开启模版机switch开关
             $("#switch-state").bootstrapSwitch();
             $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
               // console.log(this); // DOM element
@@ -382,6 +392,16 @@
 
         });
 
+        //点击自动获取IP关闭IP地址输入框
+        function auto_ip() {
+            var v = $('#checkbox2').is(':checked');
+            if(v==true){
+                $('#host_ip').attr('disabled', '')
+            }else {
+                $('#host_ip').attr('disabled', false)
+            }
+        }
+
         // 获取宿主机信息
         function host_info() {
             if($('#host_div').hasClass("show")){
@@ -395,7 +415,7 @@
                         url: 'task_virtual.html',
                         type: 'POST',
                         data: {
-                            'host': host,
+                            'host': host
                         },
                         dataType: 'JSON',
                         success: function (data_dict) {
@@ -404,7 +424,7 @@
                                 var s = str.toString(str);
                                 var new_str = s.replace(/,/g, "<br>");
                                 var new_str_1 = '【' + host + '】宿主机信息：<br>' + new_str ;
-                                var new_str_memory = new_str_1 + '<br>【总内存】 64376 MB <br>【虚拟内存使用】 ' + data_dict.memory + 'MB';
+                                var new_str_memory = new_str_1 + '<br>【总内存】 ' + data_dict.total_memory + ' MB <br>【虚拟内存使用】 ' + data_dict.memory + 'MB';
                                 var new_str_cpu = new_str_memory + '<br>【总cpu核数】64 核 <br>【虚拟cpu使用】 ' + data_dict.cpu + '核';
                                 $('#host_info').html(new_str_cpu);
                             }else {
@@ -432,23 +452,27 @@
 
         // 新增主机
         function add_host() {
-            if($('#host_ip').val().length<1){
-                $('#connect_info').removeClass('alert-info');
-                $('#connect_info').addClass('alert-danger');
-                $('#connect_info').addClass('alert-dismissable');
-                $('#connect_info').text('虚拟机IP不能为空！');
-                return false;
+            var auto_ip = $('#checkbox2').is(':checked');
+            if(auto_ip==false){
+                if($('#host_ip').val().length<1){
+                    $('#connect_info').removeClass('alert-info');
+                    $('#connect_info').addClass('alert-danger');
+                    $('#connect_info').addClass('alert-dismissable');
+                    $('#connect_info').text('虚拟机IP不能为空！');
+                    return false;
+                }
+
+                var ip = $('#host_ip').val();
+                var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+                if(reg.test(ip)==false){
+                    $('#connect_info').removeClass('alert-info');
+                    $('#connect_info').addClass('alert-danger');
+                    $('#connect_info').addClass('alert-dismissable');
+                    $('#connect_info').text('IP地址格式错误！');
+                    return false;
+                }
             }
 
-            var ip = $('#host_ip').val();
-            var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
-            if(reg.test(ip)==false){
-                $('#connect_info').removeClass('alert-info');
-                $('#connect_info').addClass('alert-danger');
-                $('#connect_info').addClass('alert-dismissable');
-                $('#connect_info').text('IP地址格式错误！');
-                return false;
-            }
 
             if($('#host_cpu').val().length<1){
                 $('#connect_info').removeClass('alert-info');
@@ -494,7 +518,11 @@
 
             $('#confirm_host').text($('#recipient-name3').val());
             $('#confirm_cpu_num').text($('#host_cpu').val());
-            $('#confirm_ip').text($('#host_ip').val());
+            if(auto_ip==false){
+                $('#confirm_ip').text($('#host_ip').val());
+            }else{
+                $('#confirm_ip').text('自动获取')
+            }
             $('#confirm_memory_num').text($('#host_memory').val());
             if($('#recipient-name4').val()==1){
                 $('#confirm_type').text('CentOS_6.4_20G');

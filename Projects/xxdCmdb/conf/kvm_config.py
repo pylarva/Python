@@ -10,6 +10,14 @@ kvm_template_dir = '/opt/mvs/'
 # 虚拟机xml目录
 kvm_xml_dir = '/opt/xml/'
 
+# idc地址
+kvm_addr = 'a0'
+
+kvm_str = 'yh'
+
+# 自定义网关地址
+kvm_last_gateway = '253'
+
 # 模版镜像统一IP
 kvm_template_ip = '192.168.31.130'
 

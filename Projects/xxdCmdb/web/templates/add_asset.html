@@ -149,7 +149,7 @@
             <br>
 
             <div>
-                <label>CPU核数</label>
+                <label>CPU颗数</label>
                     <div class="form-group" style="display: inline-block">
                         <div id="wd_1">
                             <select class="selectpicker" id="cpu_num">
@@ -165,10 +165,11 @@
                     <div class="form-group" style="display: inline-block">
                         <div id="wd_2">
                             <select class="selectpicker" id="core_num">
-                                  <option id="cpu" value='2'>2</option>
                                   <option id="cpu" value='4'>4</option>
                                   <option id="cpu" value='8'>8</option>
                                   <option id="cpu" value='16'>16</option>
+                                  <option id="cpu" value='32'>32</option>
+                                  <option id="cpu" value='64'>64</option>
                             </select>
                         </div>
                     </div>
@@ -181,10 +182,10 @@
                     <div class="form-group" style="display: inline-block">
                         <div id="wd_4">
                             <select class="selectpicker" id="raid">
-                                  <option id="cpu" value='10'>10</option>
-                                  <option id="cpu" value='5'>5</option>
-                                  <option id="cpu" value='1'>1</option>
-                                  <option id="cpu" value='0'>0</option>
+                                  <option id="cpu" value='10'>RAID10</option>
+                                  <option id="cpu" value='5'>RAID5</option>
+                                  <option id="cpu" value='1'>RAID1</option>
+                                  <option id="cpu" value='0'>RAID0</option>
                             </select>
                         </div>
                     </div>
@@ -212,6 +213,7 @@
                        <th>插槽</th>
                        <th>容量(GB)</th>
                        <th>接口类型</th>
+                       <th>转速(RPM)</th>
                        <th>型号</th>
                      </tr>
                     <tr id="eth">
@@ -219,7 +221,8 @@
                        <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="1"></td>
                        <td><input type="text" style="border: none; margin-right: -84px; width: 120px" value="500"></td>
                        <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="SAS"></td>
-                       <td><input type="text" style="border: none; margin-right: -77px; width: 200px" value="SEAGATE ST300MM0006 LS08S0K2B5NV"></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="7200"></td>
+                       <td><input type="text" style="border: none; margin-right: -77px; width: 200px" value="SEAGATE ST300MM0006"></td>
                      </tr>
                 </tbody>
             </table>
@@ -323,9 +326,9 @@
                 var cpu_num = $('#cpu_num').val();
                 var core_num = $('#core_num').val();
                 var os = $('#os').val();
-{#                if(host == '' || ip == '' || idc == '' || cabinet == '' || putaway == '' || machine == '' || sn == '' ||#}
-{#                memory == '' || raid == '' || service == ''){#}
-                if(host == '' || ip == ''){
+                if(host == '' || ip == '' || idc == '' || cabinet == '' || putaway == '' || machine == '' || sn == '' ||
+                memory == '' || raid == '' || service == ''){
+{#                if(host == '' || ip == ''){#}
                     alert('输入不能为空...')
                 }else{
                     // 循环取硬盘值
@@ -361,7 +364,9 @@
                         traditional: true,
                         success: function (response) {
                             if(response.status){
-                                alert(666);
+                                alert('新资产添加成功！');
+                            }else {
+                                alert(response.message);
                             }
                         }
                     })
@@ -389,6 +394,7 @@
                         success: function (response) {
                             if(response.status){
                                 alert('新资产添加成功！');
+
                             }else {
                                 alert(response.message);
                             }
