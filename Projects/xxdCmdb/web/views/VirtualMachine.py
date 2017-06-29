@@ -5,6 +5,7 @@ import json
 import time
 import paramiko
 import subprocess
+from netaddr import IPNetwork
 from repository import models
 from django.views import View
 from multiprocessing import Process
@@ -70,6 +71,21 @@ class VirtualListView(View):
                                                      'page_str': page_str, 'page_init': page_init})
 
     def post(self, request, *args, **kwargs):
+        host_machine = request.POST.get('host_machine')
+
+        # 自动获取IP地址
+        get_new_ip = request.POST.get('get_new_ip', None)
+        if get_new_ip:
+            new_ip = self.get_ip(host_machine)
+            new_ip = str(new_ip)
+            if not new_ip:
+                data_dict['status'] = False
+                data_dict['message'] = "未分配到可用IP地址..."
+                return HttpResponse(json.dumps(data_dict))
+            else:
+                data_dict['status'] = True
+                data_dict['message'] = new_ip
+                return HttpResponse(json.dumps(data_dict))
 
         # 前端来获取宿主机信息
         host = request.POST.get('host', None)
@@ -158,20 +174,24 @@ class VirtualListView(View):
             data_dict['message'] = "虚拟机删除成功！"
             return HttpResponse(json.dumps(data_dict))
 
-        host_machine = request.POST.get('host_machine')
+        machine_type = request.POST.get('machine_type')
+        memory_num = request.POST.get('memory_num')
+        cpu_num = request.POST.get('cpu_num')
+        new_gateway_list = host_machine.split('.')
+        new_gateway = new_gateway_list[0] + '.' + new_gateway_list[1] + '.' + new_gateway_list[2] + '.' + kvm_config.kvm_last_gateway
+
         new_ip = request.POST.get('new_host_ip', None)
 
         # 如果前端没有传来新IP地址 先对IP地址作标记 然后在进程里面再自动或去IP地址
         # if not new_ip:
-        #     new_ip = '192.168.1.255'
-        # else:
-        machine_type = request.POST.get('machine_type')
-        memory_num = request.POST.get('memory_num')
-        cpu_num = request.POST.get('cpu_num')
-        new_name = '%s-kvm-vhost-%s-%s.%s' % (kvm_config.kvm_addr, new_ip.split('.')[-2], new_ip.split('.')[-1], kvm_config.kvm_str)
-        new_gateway = new_ip.split('.')
-        new_gateway = new_gateway[0] + '.' + new_gateway[1] + '.' + new_gateway[2] + '.' + kvm_config.kvm_last_gateway
+        #     new_ip = self.get_ip(host_machine)
+        #     new_ip = str(new_ip)
+        #     if not new_ip:
+        #         data_dict['status'] = False
+        #         data_dict['message'] = "未分配到可用IP地址..."
+        #         return HttpResponse(json.dumps(data_dict))
 
+        new_name = '%s-kvm-vhost-%s-%s.%s' % (kvm_config.kvm_addr, new_ip.split('.')[-2], new_ip.split('.')[-1], kvm_config.kvm_str)
         template_mirror_obj = models.MachineType.objects.filter(id=machine_type).first()
         template_mirror = template_mirror_obj.machine_type
 
@@ -212,7 +232,7 @@ class VirtualListView(View):
                                     host_item=machine_type, host_cpu=cpu_num, host_memory=memory_num)
 
         data_dict['status'] = True
-        data_dict['message'] = "ok"
+        data_dict['message'] = new_ip
 
         ret = HttpResponse(json.dumps(data_dict))
         # 设置一个cookie值 引导前端进度条执行
@@ -491,6 +511,21 @@ class VirtualListView(View):
 
         ret = HttpResponse(json.dumps(data_dict))
         return ret
+
+    def get_ip(self, host_machine):
+        """
+        自动获取IP地址
+        :param host_machine:
+        :return:
+        """
+        ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
+        for ip in ipaddr:
+            s = subprocess.call("ssh root@%s 'ping -c1 -W 1 %s > /dev/null'" % (host_machine, ip), shell=True)
+            if s != 0:
+                num = models.Asset.objects.filter(host_ip=ip).count()
+                if num == 0:
+                    return ip
+        return False
 
 
 class AssetJsonView(View):

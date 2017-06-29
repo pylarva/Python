@@ -18,6 +18,7 @@ class Asset(BaseServiceList):
             {'name': 'business_1', 'text': '环境', 'condition_type': 'select', 'global_name': 'business_1_list'},
             {'name': 'business_2', 'text': '二级业务线', 'condition_type': 'select', 'global_name': 'business_2_list'},
             {'name': 'business_3', 'text': '三级业务线', 'condition_type': 'select', 'global_name': 'business_3_list'},
+            {'name': 'host_type', 'text': '资产类型', 'condition_type': 'select', 'global_name': 'device_type_list'},
             {'name': 'host_status', 'text': '资产状态', 'condition_type': 'select',
              'global_name': 'device_status_list'},
         ]
@@ -89,7 +90,10 @@ class Asset(BaseServiceList):
                 'title': "宿主机",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@host_machine'}},
-                'attr': {}
+                'attr': {'name': 'host_machine', 'id': '@host_machine', 'original': '@host_machine',
+                         'edit-enable': 'true',
+                         'edit-type': 'input',
+                         }
             },
             {
                 'q': 'host_cpu',
@@ -343,19 +347,55 @@ class Asset(BaseServiceList):
 
         response = BaseResponse()
 
-        nic_model = request.POST.get('nic_model', None)
+        # 添加防火墙
+        isfirewall = request.POST.get('isfirewall', None)
+
+        if isfirewall:
+            print(isfirewall)
+            nic_model = request.POST.get('fire_model')
+            nic_ip = request.POST.get('fire_ip')
+            nic_sn = request.POST.get('fire_sn')
+            nic_idc = request.POST.get('fire_idc')
+            nic_cabinet = request.POST.get('fire_cabinet')
+            nic_putaway = request.POST.get('fire_putaway')
+            nic_service = request.POST.get('fire_service')
+
+            num = models.NetWork.objects.filter(sn=nic_sn).count()
+            if num != 0:
+                response.status = False
+                response.message = '相同的sn资产已经存在！--%s' % nic_sn
+                return response
+
+            try:
+                asset_obj = models.Asset(host_ip=nic_ip, host_name=nic_model, host_status=1, host_type=4, host_cpu=2,
+                                         host_memory=2)
+                asset_obj.save()
+
+                models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet, sn=nic_sn,
+                                              putaway=nic_putaway, service=nic_service, asset=asset_obj.id)
+
+            except Exception as e:
+                response.status = False
+                response.message = '添加资产错误'
+                return response
+
+            response.status = True
+            return response
+
         # 添加网卡设备
+        nic_model = request.POST.get('nic_model', None)
         if nic_model:
             nic_ip = request.POST.get('nic_ip')
+            nic_sn = request.POST.get('nic_sn')
             nic_idc = request.POST.get('nic_idc')
             nic_cabinet = request.POST.get('nic_cabinet')
             nic_putaway = request.POST.get('nic_putaway')
             nic_service = request.POST.get('nic_service')
 
-            num = models.Asset.objects.filter(host_ip=nic_ip).count()
+            num = models.NetWork.objects.filter(sn=nic_sn).count()
             if num != 0:
                 response.status = False
-                response.message = '资产IP地址已经存在！'
+                response.message = '相同的sn资产已经存在！--%s' % nic_sn
                 return response
 
             try:
@@ -363,7 +403,7 @@ class Asset(BaseServiceList):
                                          host_memory=2)
                 asset_obj.save()
 
-                models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet,
+                models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet, sn=nic_sn,
                                               putaway=nic_putaway, service=nic_service, asset=asset_obj.id)
 
             except Exception as e:
@@ -403,7 +443,7 @@ class Asset(BaseServiceList):
             return response
 
         # 首先创建 Assets资产表 ➡️ 创建Server表关联Asset ➡️ 创建Disk表关联Server表 ➡️ 创建Memory表关联Server表
-        asset_obj = models.Asset(host_ip=ippaddrs, host_name=host, host_status=1, host_type=1, host_cpu=64, host_memory=memory)
+        asset_obj = models.Asset(host_ip=ippaddrs, host_name=host, host_status=1, host_type=1, host_cpu=int(cpu_num)*int(core_num), host_memory=memory)
         asset_obj.save()
 
         server_obj = models.DellServer(asset_id=asset_obj.id, hostname=host, manage_ip=ip, idc=idc, cabinet=cabinet,
@@ -433,6 +473,37 @@ class Asset(BaseServiceList):
             nic_obj = models.NIC(name=name, hwaddr=hwaddr, ipaddrs=ippaddrs, switch_ip=switch_ip,
                                  switch_port=switch_port, server_obj_id=server_obj.id)
             nic_obj.save()
+
+        response.status = True
+        return response
+
+    def add_network(self, request):
+
+        nic_ip = request.POST.get('nic_ip')
+        nic_sn = request.POST.get('nic_sn')
+        nic_idc = request.POST.get('nic_idc')
+        nic_cabinet = request.POST.get('nic_cabinet')
+        nic_putaway = request.POST.get('nic_putaway')
+        nic_service = request.POST.get('nic_service')
+
+        num = models.NetWork.objects.filter(sn=nic_sn).count()
+        if num != 0:
+            response.status = False
+            response.message = '相同的sn资产已经存在！--%s' % nic_sn
+            return response
+
+        try:
+            asset_obj = models.Asset(host_ip=nic_ip, host_name=nic_model, host_status=1, host_type=3, host_cpu=2,
+                                     host_memory=2)
+            asset_obj.save()
+
+            models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet, sn=nic_sn,
+                                          putaway=nic_putaway, service=nic_service, asset=asset_obj.id)
+
+        except Exception as e:
+            response.status = False
+            response.message = '添加资产错误'
+            return response
 
         response.status = True
         return response

@@ -18,6 +18,9 @@ kvm_str = 'yh'
 # 自定义网关地址
 kvm_last_gateway = '253'
 
+# 自动获取IP地址范围
+kvm_range_ip = [51, 200]
+
 # 模版镜像统一IP
 kvm_template_ip = '192.168.31.130'
 

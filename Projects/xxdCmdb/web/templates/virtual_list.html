@@ -227,7 +227,7 @@
 
     <script>
 
-        $(function () {
+        $(function (jq) {
     
             // 页面开启模版机switch开关
             $("#switch-state").bootstrapSwitch();
@@ -332,6 +332,7 @@
 
             $('#add_confirm').click(function (){
                 var v = $('#page_count').children(":last").prev().prev().prev().prev().children(":first").text();
+                $.Show('#shade,#loading');
                 $.ajax({
                     url: 'task_virtual.html',
                     type: 'POST',
@@ -388,8 +389,7 @@
                         }
                     }
                 });
-            })
-
+            });
         });
 
         //点击自动获取IP关闭IP地址输入框
@@ -521,7 +521,7 @@
             if(auto_ip==false){
                 $('#confirm_ip').text($('#host_ip').val());
             }else{
-                $('#confirm_ip').text('自动获取')
+                $('#confirm_ip').text('自动获取ing...')
             }
             $('#confirm_memory_num').text($('#host_memory').val());
             if($('#recipient-name4').val()==1){
@@ -545,15 +545,36 @@
 
             $('#add_machine').modal();
 
-        }
+            if(auto_ip==true){
+                $('#add_confirm').attr('disabled', '');
+                    $.ajax({
+                        url: 'task_virtual.html',
+                        type: 'POST',
+                        data: {
+                            'get_new_ip': 1, 'host_machine': $('#recipient-name3').val()
+                        },
+                        dataType: 'JSON',
+                        success: function (response) {
+                            if (response.status) {
+                                $('#host_ip').val(response.message);
+                                $('#confirm_ip').text(response.message);
+                                $('#add_confirm').attr('disabled', false);
+                            }else {
+                                $('#confirm_ip').text(response.message);
+                            }
+                        }
+                    });
+            }
 
+
+        }
             function host_manage(id) {
                 $('#change_name').modal();
                     $.ajax({
                         url: 'task_virtual.html',
                         type: 'POST',
                         data: {
-                            'change_id': id,
+                            'change_id': id
                         },
                         dataType: 'JSON',
                         success: function (data_dict) {
@@ -575,7 +596,7 @@
                         url: 'task_virtual.html',
                         type: 'POST',
                         data: {
-                            'host_del_id': id,
+                            'host_del_id': id
                         },
                         dataType: 'JSON',
                         success: function (data_dict) {
@@ -593,6 +614,7 @@
                 });
 
             }
+
 
     </script>
 {% endblock %}

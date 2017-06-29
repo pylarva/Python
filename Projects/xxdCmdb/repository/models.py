@@ -113,6 +113,7 @@ class Asset(models.Model):
         (1, '物理服务器'),
         (2, '虚拟机'),
         (3, '交换机'),
+        (4, '防火墙'),
     )
     device_status_choices = (
         (1, '在线'),
@@ -481,6 +482,7 @@ class NetWork(models.Model):
     """
     model = models.CharField('设备型号', max_length=32, null=True, blank=True)
     ip = models.CharField('管理IP', max_length=32, null=True, blank=True)
+    sn = models.CharField('sn', max_length=32, null=True, blank=True)
     idc = models.CharField('机房', max_length=32, null=True, blank=True)
     cabinet = models.CharField('机柜', max_length=32, null=True, blank=True)
     putaway = models.CharField('上架日期', max_length=32, null=True, blank=True)
