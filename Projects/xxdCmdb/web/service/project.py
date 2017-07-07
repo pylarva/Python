@@ -398,6 +398,8 @@ class Project(BaseServiceList):
 
         obj = models.ProjectTask.objects.filter(id=release_id).first()
         release_name = obj.business_2
+        obj_env = models.BusinessOne.objects.filter(id=release_env).first()
+        release_env_name = obj_env.name
 
         release_git_url = obj.git_url
         release_jdk_version = obj.jdk_version
@@ -418,15 +420,17 @@ class Project(BaseServiceList):
         release_business_2 = release_obj.release_name
         task_id = release_obj.id
 
-        pkg_name = "/data/packages/%s/%s/%s/%s_%s_%s.war" % (release_business_1, release_business_2, release_obj.id,
-                                                             release_business_1, release_business_2, release_obj.id)
+        pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
+                                                       release_business_2)
+                                                             # release_business_1, release_business_2, release_obj.id)
 
         # 多进程执行连接Jenkins执行
         # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
         # p.start()
 
         # 多线程
-        t = threading.Thread(target=self.jenkins_task, args=(pkg_name, release_git_url, release_branch, task_id,))
+        t = threading.Thread(target=self.jenkins_tasks, args=(pkg_name, release_git_url, release_branch, task_id,
+                                                              release_name, release_env_name))
         t.start()
 
         response.status = True
@@ -522,6 +526,53 @@ class Project(BaseServiceList):
                 models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
 
         return True
+
+    def jenkins_tasks(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env):
+        # python /opt/autopublishing.py /data/packages/infra/cmdb/107/v6_batch.war 107 http://gitlab.xxd.com/service/v6_batch.git master cmdb infra"
+        cmd = "ssh root@%s 'python %s %s %s %s %s %s %s'" % (jenkins_config.host, jenkins_config.script_path,
+                                                             pkg_name, task_id, release_git_url, release_branch,
+                                                             release_name, release_env)
+        ret = os.system(cmd)
+        print(ret)
+        if ret == 0:
+            self.log(task_id, '生成md5...【完成】')
+            # 打包成功后查找业务线节点机器 环境 + 业务线
+            release_obj = models.ReleaseTask.objects.filter(id=task_id).first()
+            business_1 = release_obj.release_env
+            business_2 = release_obj.release_name
+            md5sum = release_obj.release_md5
+            release_type = release_obj.release_type
+            count = models.Asset.objects.filter(business_1=business_1, business_2=business_2).count()
+            values = models.Asset.objects.filter(business_1=business_1, business_2=business_2).only('id', 'host_ip')
+            self.log(task_id, '共需发布【%s】台节点机器...' % count)
+            num = 1
+            for item in values:
+                print(item.host_ip)
+                self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
+                # 目标机开始执行发布脚本
+                ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type)
+                if not ret:
+                    self.log(task_id, '当前发布第%s台%s...【失败】' % (num, item.host_ip))
+                    self.log(task_id, '终止发布...')
+                    models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+                    break
+                else:
+                    self.log(task_id, '当前发布第%s台%s...【完成】' % (num, item.host_ip))
+                num += 1
+
+            self.log(task_id, '服务检查...【完成】')
+            self.log(task_id, '发布成功结束！')
+            models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+
+
+        else:
+            ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                   preexec_fn=os.setsid)
+            out, err = ret.communicate()
+            err = str(err, encoding='utf-8')
+            self.log(task_id, err)
+            self.log(task_id, '生成md5...【失败】')
+            models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
 
     def log(self, task_id, msg):
         """

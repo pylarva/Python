@@ -351,7 +351,7 @@ class Asset(BaseServiceList):
         isfirewall = request.POST.get('isfirewall', None)
 
         if isfirewall:
-            print(isfirewall)
+            nic_brand = request.POST.get('fire_brand')
             nic_model = request.POST.get('fire_model')
             nic_ip = request.POST.get('fire_ip')
             nic_sn = request.POST.get('fire_sn')
@@ -372,7 +372,7 @@ class Asset(BaseServiceList):
                 asset_obj.save()
 
                 models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet, sn=nic_sn,
-                                              putaway=nic_putaway, service=nic_service, asset=asset_obj.id)
+                                              putaway=nic_putaway, service=nic_service, asset=asset_obj.id, brand=nic_brand)
 
             except Exception as e:
                 response.status = False
@@ -385,6 +385,7 @@ class Asset(BaseServiceList):
         # 添加网卡设备
         nic_model = request.POST.get('nic_model', None)
         if nic_model:
+            nic_brand = request.POST.get('nic_brand')
             nic_ip = request.POST.get('nic_ip')
             nic_sn = request.POST.get('nic_sn')
             nic_idc = request.POST.get('nic_idc')
@@ -404,7 +405,7 @@ class Asset(BaseServiceList):
                 asset_obj.save()
 
                 models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet, sn=nic_sn,
-                                              putaway=nic_putaway, service=nic_service, asset=asset_obj.id)
+                                              putaway=nic_putaway, service=nic_service, asset=asset_obj.id, brand=nic_brand)
 
             except Exception as e:
                 response.status = False
@@ -473,37 +474,6 @@ class Asset(BaseServiceList):
             nic_obj = models.NIC(name=name, hwaddr=hwaddr, ipaddrs=ippaddrs, switch_ip=switch_ip,
                                  switch_port=switch_port, server_obj_id=server_obj.id)
             nic_obj.save()
-
-        response.status = True
-        return response
-
-    def add_network(self, request):
-
-        nic_ip = request.POST.get('nic_ip')
-        nic_sn = request.POST.get('nic_sn')
-        nic_idc = request.POST.get('nic_idc')
-        nic_cabinet = request.POST.get('nic_cabinet')
-        nic_putaway = request.POST.get('nic_putaway')
-        nic_service = request.POST.get('nic_service')
-
-        num = models.NetWork.objects.filter(sn=nic_sn).count()
-        if num != 0:
-            response.status = False
-            response.message = '相同的sn资产已经存在！--%s' % nic_sn
-            return response
-
-        try:
-            asset_obj = models.Asset(host_ip=nic_ip, host_name=nic_model, host_status=1, host_type=3, host_cpu=2,
-                                     host_memory=2)
-            asset_obj.save()
-
-            models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet, sn=nic_sn,
-                                          putaway=nic_putaway, service=nic_service, asset=asset_obj.id)
-
-        except Exception as e:
-            response.status = False
-            response.message = '添加资产错误'
-            return response
 
         response.status = True
         return response

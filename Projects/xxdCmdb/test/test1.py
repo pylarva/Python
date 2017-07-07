@@ -3,11 +3,12 @@
 
 import os
 import subprocess
-from netaddr import IPNetwork
+import paramiko
+# from netaddr import IPNetwork
 
-ipaddr = IPNetwork('192.168.31.223/24')[50:60]
-for ip in ipaddr:
-    print(ip)
+# ipaddr = IPNetwork('192.168.31.223/24')[50:60]
+# for ip in ipaddr:
+#     print(ip)
 # ip_list = list(ipaddr)
 # print(ip_list)
 #     s = subprocess.call("ssh root@192.168.31.110 'ping -c1 -W 1 %s > /dev/null'" % ip, shell=True)
@@ -38,3 +39,49 @@ for ip in ipaddr:
 # output = popen.stdout.read()
 # timer.cancel()
 
+
+# if not os.path.exists('/tmp/aa/bb'):
+#     os.makedirs('/tmp/aa/bb')
+#
+# os.chdir('/tmp/aa/bb')
+# os.system('git init && \
+#            git config remote.origin.url http://gitlab.xxd.com/service/v6_batch.git && \
+#            git fetch --tags --progress http://gitlab.xxd.com/service/v6_batch.git +refs/heads/*:refs/remotes/origin/*')
+# cmd = 'git rev-parse origin/master'
+# ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
+# out, err = ret.communicate()
+# if err:
+#     err = str(err, encoding='utf-8')
+#     print('ERROR-->', err)
+# else:
+#     out = str(out, encoding='utf-8')
+#     os.system('git checkout -f %s' % out)
+
+# ssh = paramiko.SSHClient()
+# ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+# ssh.connect('192.168.31.80', port=22, username='root', password='xinxindai318', timeout=3)
+
+
+# cmd = "ssh root@192.168.31.80 'python /opt/autopublishing.py /data/packages/infra/cmdb/107/v6_batch.war " \
+#       "107 http://gitlab.xxd.com/service/v6_batch.git master cmdb infra'"
+
+# cmd = "python /opt/autopublishing.py /data/packages/infra/cmdb/107/infra_cmdb_107.war 107 http://gitlab.xxd.com/service/v6_batch.git master cmdb infra"
+# cmd = "python /opt/autopublishing.py /data/packages/infra/cmdb/107/v6_batch.war 107 http://gitlab.xxd.com/service/v6_batch.git master cmdb infra"
+
+# stdin, stdout, stderr = ssh.exec_command(cmd)
+#
+# result = stdout.read()
+# print(result)
+
+
+# ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
+# out, err = ret.communicate()
+# print(out, err)
+# ret = os.system(cmd)
+# print(ret)
+# ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
+
+# ret = os.path.dirname('/data/packages/infra/cmdb/107/infra_cmdb_107.war')
+# print(ret)
+
+os.mknod('/tmp/111111111.log')

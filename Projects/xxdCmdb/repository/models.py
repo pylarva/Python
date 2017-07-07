@@ -480,6 +480,7 @@ class NetWork(models.Model):
     """
     网络设备
     """
+    brand = models.CharField('品牌', max_length=32, null=True, blank=True)
     model = models.CharField('设备型号', max_length=32, null=True, blank=True)
     ip = models.CharField('管理IP', max_length=32, null=True, blank=True)
     sn = models.CharField('sn', max_length=32, null=True, blank=True)

@@ -26,19 +26,27 @@ import signal
 import socket
 import shutil
 import traceback
+import subprocess
 from threading import Timer
+from urllib import request
+
 
 API_HOST = 'cmdb.xxd.com'
-API_URL = 'http://172.16.18.216:8005/api/release'
+API_URL = 'http://172.16.18.215:8005/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
 HOME_DIR = '/home/admin'
 LOGGER = None
 AUTH_KEY = 'vLCzbZjGVNKWPxqd'
+CMDB_WORKSPACE = '/root/.cmdb/workspace/'
+run_log_file = '/home/admin/logs/run.log'
+error_log_file = '/home/admin/logs/err.log'
+CHECK_SERVICE_TIMEOUT = 120
 
 # define return code
 RET_OK = 0
+ERROR = 1
 RET_FINISHED = 10000
 RET_ERROR_DOWNLOAD_FILE_FAILED = 10001
 RET_ERROR_CHECK_FILE_MD5SUM_FAILED = 10002
@@ -50,8 +58,71 @@ RET_ERROR_CHECK_SERVICE_FAILED = 10007
 RET_ERROR_UNKNOW_FILE_TYPE = 10008
 RET_ERROR_RUN_EXCEPTION = 10009
 
+
+class Logger(object):
+    __instance = None
+
+    def __init__(self):
+        self.run_log_file = run_log_file
+        self.error_log_file = error_log_file
+        self.run_logger = None
+        self.error_logger = None
+
+        self.initialize_run_log()
+        self.initialize_error_log()
+
+    def __new__(cls, *args, **kwargs):
+        if not cls.__instance:
+            cls.__instance = object.__new__(cls, *args, **kwargs)
+        return cls.__instance
+
+    @staticmethod
+    def check_path_exist(log_abs_file):
+        log_path = os.path.split(log_abs_file)[0]
+        if not os.path.exists(log_path):
+            os.mkdir(log_path)
+
+    def initialize_run_log(self):
+        # self.check_path_exist(self.run_log_file)
+        file_1_1 = logging.FileHandler(self.run_log_file, 'a', encoding='utf-8')
+        fmt = logging.Formatter(fmt="%(asctime)s - %(levelname)s :  %(message)s")
+        file_1_1.setFormatter(fmt)
+        logger1 = logging.Logger('run_log', level=logging.INFO)
+        logger1.addHandler(file_1_1)
+        self.run_logger = logger1
+
+    def initialize_error_log(self):
+        # self.check_path_exist(self.error_log_file)
+        file_1_1 = logging.FileHandler(self.error_log_file, 'a', encoding='utf-8')
+        fmt = logging.Formatter(fmt="%(asctime)s  - %(levelname)s :  %(message)s")
+        file_1_1.setFormatter(fmt)
+        logger1 = logging.Logger('run_log', level=logging.ERROR)
+        logger1.addHandler(file_1_1)
+        self.error_logger = logger1
+
+    def log(self, message, mode=True):
+        """
+        写入日志
+        :param message: 日志信息
+        :param mode: True表示运行信息，False表示错误信息
+        :return:
+        """
+        if mode:
+            self.run_logger.info(message)
+        else:
+            self.error_logger.error(message)
 # stage info
 STAGE_MESSAGE_INFO = {
+    'gitPullCode': {
+        'success': {
+            'dbMessage': '拉取代码成功;',
+            'logMessage': 'pull code......success'
+        },
+        'failure': {
+            'dbMessage': '拉取代码失败;',
+            'logMessage': 'pull code......failure'
+        }
+    },
     'downloadFile': {
         'success': {
             'dbMessage': '下载发布文件成功;',    
@@ -181,6 +252,7 @@ def execSystemCommandRunAs(cmd, user, timeout=30):
     popen.wait()
     output = popen.stdout.read()
     timer.cancel()
+    Logger().log('%s->%s' % (cmd, output), True)
 
     return popen.returncode, output
 
@@ -308,8 +380,10 @@ def checkFileMd5sum(filepath, md5sum):
     with open(filepath) as f:
         data = f.read()    
         currentMd5sum = hashlib.md5(data).hexdigest()
+        Logger().log('%s->%s' % (filepath, md5sum), True)
 
     if currentMd5sum != md5sum:
+        Logger().log('MD5 check failed... %s->%s' % (filepath, md5sum), False)
         return RET_ERROR_CHECK_FILE_MD5SUM_FAILED
 
     return RET_OK
@@ -318,8 +392,10 @@ def downloadFile(path, dest):
     ul =urllib.URLopener()
     try:
         ul.retrieve(path, dest)
+        Logger().log('%s->%s' % (path, dest), True)
     except IOError, e:
         LOGGER.info('Download file failed: %s, exception: %s' % (path, str(e)))
+        Logger().log('Download file failed: %s, exception: %s' % (path, str(e)), False)
         return RET_ERROR_DOWNLOAD_FILE_FAILED
 
     return RET_OK
@@ -361,9 +437,30 @@ def recordStageLog(taskId, stage, retCode, output=None):
     commitTaskStatus(taskId, dbMessage, retCode)
 
 
-def checkApiService():
-    retCode = RET_ERROR_CHECK_SERVICE_FAILED
-    return retCode
+def checkApiService(ip):
+    # retCode = RET_ERROR_CHECK_SERVICE_FAILED
+    cmd = 'ps -ef | grep java | wc -l'
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
+    out, err = p.communicate()
+    out = str(out, encoding='utf-8')
+    if out.split()[0] == '2':
+        Logger().log('check services --> Java process not start....', False)
+        return RET_ERROR_CHECK_SERVICE_FAILED
+    else:
+        # curl 检查服务是否正常
+        total_time = CHECK_SERVICE_TIMEOUT
+        while total_time > 0:
+            total_time -= 1
+            time.sleep(1)
+            try:
+                cmd = 'curl -I http://%s:8080' % ip
+                p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                     preexec_fn=os.setsid)
+                out, err = p.communicate()
+                return 0
+            except Exception, e:
+                continue
+        return RET_ERROR_CHECK_SERVICE_FAILED
 
 
 def publishCommonService(config, runas):
@@ -421,8 +518,15 @@ def publishTomcatService(config, runas):
     if os.path.exists(config['stopServiceCommand']):
         retCode, output = execSystemCommandRunAs(config['stopServiceCommand'], runas)
         recordStageLog(config['taskId'], 'stopService', retCode, output)
-        retCode, output = execSystemCommandRunAs(config['stopServiceCommand'], runas)
-        recordStageLog(config['taskId'], 'stopService', retCode, output)
+
+        # 如果java进程无法关闭 kill进程
+        p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
+        out, err = p.communicate()
+        s = bytes('java', encoding='utf-8')
+        for line in out.splitlines():
+            if s in line:
+                pid = line.split()[0]
+                os.kill(int(pid), signal.SIGKILL)
         if retCode != RET_OK: return retCode
 
     # clean old files
@@ -431,16 +535,17 @@ def publishTomcatService(config, runas):
         retCode = moveFile(config['publishPath'], config['appFilePrefix'], config['tempDir'], matchPrefix=True)
         recordStageLog(config['taskId'], 'cleanOldFiles', retCode)
         if retCode != RET_OK: return retCode
-        cmd = '/bin/rm -rf %s/ROOT' %(config['publishPath'])
+        cmd = '/bin/rm -rf %s/ROOT' % (config['publishPath'])
+        retCode, output = execSystemCommandRunAs(cmd, runas)
+        cmd = '/bin/rm -rf /usr/local/tomcat/work/Catalina'
         retCode, output = execSystemCommandRunAs(cmd, runas)
 
     # publish files
     # cmd = '/bin/cp %s %s/%s.war' %(config['destFile'], config['publishPath'], config['appFilePrefix'])
-    cmd = '/bin/cp %s %s/%s.war' %(config['destFile'], config['publishPath'], config['appFilePrefix'])
+    cmd = '/bin/cp %s %s%s' %(config['destFile'], config['publishPath'], config['appFilePrefix'])
     retCode, output = execSystemCommandRunAs(cmd, runas)
     recordStageLog(config['taskId'], 'publishFiles', retCode, output)
     if retCode != RET_OK: return retCode
-
 
     # start service
     retCode, output = execSystemCommandRunAs(config['startServiceCommand'], runas, timeout=300)
@@ -546,7 +651,7 @@ def publishHtmlService(config, runas):
     return retCode
 
 def runTask(pkgUrl, md5sum, taskId, serviceType, runas):
-    # build.xxd.com/infra/cmdb/97/infra_cmdb_97.war 6d200fd40a846900c72574e0521b7e26 97 tomcat
+    # build.xxd.com/infra/cmdb/97/cmdb.war 6d200fd40a846900c72574e0521b7e26 97 tomcat
     config = {}
     url = urlparse.urlparse(pkgUrl)
     filename = os.path.basename(url.path)
@@ -556,16 +661,18 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, runas):
     config['tempDir'] = tempfile.mkdtemp(prefix='%s-' %config['appFilePrefix'], dir='/tmp/')
     config['destFile'] = os.path.join(config['tempDir'], filename)
     os.chmod(config['tempDir'], stat.S_IRWXG+stat.S_IRWXO+stat.S_IRWXU)
-
+    Logger().log(config, True)
     # print config
 
     LOGGER.info('=== start publishing ===')
-    LOGGER.info('appFilePrefix = %s' %config['appFilePrefix'])
+    LOGGER.info('appFilePrefix = %s' % config['appFilePrefix'])
     retCode = RET_OK
 
     # print current environment
     retCode, output = execSystemCommandRunAs('env', runas)
     LOGGER.debug('current environment: %s' % (output))
+    Logger().log('current environment: %s' % output, True)
+
 
     # download file
     retCode = downloadFile(pkgUrl, config['destFile'])
@@ -590,6 +697,7 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, runas):
         config['stopTengineCommand'] = 'sudo /etc/init.d/tengine stop'
         config['startTengineCommand'] = 'sudo /etc/init.d/tengine start'
         config['publishPath'] = '/usr/local/tomcat/webapps/'
+        Logger().log(config, True)
         retCode = publishTomcatService(config, runas)
     elif serviceType == 'apijar':
         config['stopServiceCommand'] = '/usr/local/tomcat/bin/shutdown.sh'
@@ -615,6 +723,12 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, runas):
     return RET_OK
 
 def run(pkgUrl, md5sum, taskId, serviceType, runas='admin'):
+    Logger()
+    if not os.path.exists(run_log_file):
+        os.mknod(run_log_file)
+    if not os.path.exists(error_log_file):
+        os.mknod(error_log_file)
+
     retCode = RET_OK
     try:
         os.chdir(HOME_DIR)
@@ -627,6 +741,7 @@ def run(pkgUrl, md5sum, taskId, serviceType, runas='admin'):
         LOGGER.info('uid: %s %s' % (os.getuid(),os.geteuid()))
         LOGGER.info('chdir: %s' % (os.getcwd()))
         LOGGER.info(str(os.environ))
+        Logger().log(str(os.environ), True)
         retCode = runTask(pkgUrl, md5sum, taskId, serviceType, runas=RUNNING_USER)
     except Exception, e:
         retCode = RET_ERROR_RUN_EXCEPTION
@@ -641,18 +756,21 @@ def uploadMd5(pkgUrl, taskId):
     retCode = RET_OK
     auth_key = 'vLCzbZjGVNKWPxqd'
 
-    with open(pkgUrl) as f:
-        data = f.read()
-        md5 = hashlib.md5(data).hexdigest()
+    try:
+        with open(pkgUrl) as f:
+            data = f.read()
+            md5 = hashlib.md5(data).hexdigest()
 
-    msg = {'id': taskId, 'md5': md5}
-    msg = json.dumps(msg)
-    response = requests.post(
-        url=API_URL,
-        headers={'key': AUTH_KEY},
-        json=msg,
-    )
-
+        msg = {'id': taskId, 'md5': md5}
+        msg = json.dumps(msg)
+        response = requests.post(
+            url=API_URL,
+            headers={'key': AUTH_KEY},
+            json=msg,
+        )
+        Logger().log('%s--%s' % (pkgUrl, md5) , True)
+    except Exception, e:
+        return e
     return retCode
 
 def uploadLog(taskId, msg):
@@ -672,16 +790,116 @@ def uploadLog(taskId, msg):
             headers={'key': AUTH_KEY},
             json=msg,
         )
+
     except Exception, e:
         recordStageLog(taskId, 'uploadLog', 'failed', e)
 
     return retCode
 
+def ExecCmd(cmd):
+    """
+    执行本地shell命令
+    :param cmd:
+    :return:
+    """
+    ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
+    out, err = ret.communicate()
+    if err:
+        err = str(err)
+        print('ERROR-->', err)
+        return 1, err
+    else:
+        out = str(out)
+        return 0, out
+
+
+def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env):
+    """
+    模拟Jenkins功能 拉代码 + 打包
+    :return:
+    """
+    Logger()
+    retCode = 0
+    # 拉去代码
+    # ('/data/packages/infra/cmdb/107/infra_cmdb_107.war', '107', 'http://gitlab.xxd.com/service/v6_batch.git', 'master', 'cmdb', 'infra')
+    # print(pkg_name, task_id, release_git_url, release_branch, name, env)
+    workspace_path = '%s%s' % (CMDB_WORKSPACE, name)
+    pkg_path = os.path.dirname(pkg_name)
+    if not os.path.exists(pkg_path):
+        os.makedirs(pkg_path)
+    if not os.path.exists(workspace_path):
+        os.makedirs(workspace_path)
+    os.chdir(workspace_path)
+    cmd = 'git init'
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+    if ret:
+        Logger().log(out, False)
+        return out
+
+    cmd = 'git config remote.origin.url %s' % release_git_url
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+    if ret:
+        Logger().log(out, False)
+        return out
+
+    cmd = 'git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1' % release_git_url
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+    if ret:
+        Logger().log(out, False)
+        return out
+
+    cmd = 'git rev-parse origin/%s' % release_branch
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+    if ret:
+        Logger().log(out, False)
+        return out
+
+    cmd = 'git checkout -f %s > /dev/null 2>&1' % out
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+
+    cmd = "find ./ -name 'pom.xml' | xargs -I {} sh -c 'pom_dir=`dirname {}` && cd $pom_dir && /usr/local/maven/bin/mvn " \
+          "clean package -Dmaven.test.skip=true -Pstage -U>> %s'" % run_log_file
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+    if ret:
+        Logger().log(out, False)
+        return out
+
+    os.chdir(workspace_path)
+
+    cmd = "find ./ -name '*.war' -exec cp {} %s \;" % pkg_path
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+    if ret:
+        Logger().log(out, False)
+        return out
+
+    ret = uploadMd5(pkg_name, task_id)
+    if ret:
+        Logger().log('create md5 failed...', True)
+        return ret
+
+    return retCode
 
 if __name__ == '__main__':
     if len(sys.argv) == 3:
         # Jenkins端打包完毕后上传MD5值
         retCode = uploadMd5(sys.argv[1], sys.argv[2])
+        sys.exit(retCode)
+    if len(sys.argv) == 7:
+        retCode = JenkinsModify(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5],sys.argv[6])
         sys.exit(retCode)
     if len(sys.argv) != 5:
         print "Miss arguments."
@@ -691,3 +909,5 @@ if __name__ == '__main__':
     retCode = run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     exit(retCode)
     # exit(0)
+
+

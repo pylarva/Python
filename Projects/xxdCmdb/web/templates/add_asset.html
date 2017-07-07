@@ -264,7 +264,11 @@
     </div>
 
         <div role="tabpanel" class="tab-pane" id="nic">
-            <label>交换机型号</label>
+            <label>交换机品牌</label>
+            <div class="form-group">
+              <input id="nic_brand" type="text" class="form-control" placeholder="">
+            </div>
+            <label>型号</label>
             <div class="form-group">
               <input id="nic_model" type="text" class="form-control" placeholder="">
             </div>
@@ -298,7 +302,11 @@
 
         <!-- 添加防火墙 -->
         <div role="tabpanel" class="tab-pane" id="firewall">
-            <label>防火墙型号</label>
+            <label>防火墙品牌</label>
+            <div class="form-group">
+              <input id="fire_brand" type="text" class="form-control" placeholder="">
+            </div>
+            <label>型号</label>
             <div class="form-group">
               <input id="fire_model" type="text" class="form-control" placeholder="">
             </div>
@@ -412,6 +420,7 @@
             });
 
             $('#add_nic_save').click(function () {
+                var nic_brand = $('#nic_brand').val();
                 var nic_model = $('#nic_model').val();
                 var nic_ip = $('#nic_ip').val();
                 var nic_sn = $('#nic_sn').val();
@@ -419,7 +428,7 @@
                 var nic_cabinet = $('#nic_cabinet').val();
                 var nic_putaway = $('#nic_putaway').val();
                 var nic_service = $('#nic_service').val();
-                if(nic_model == ''|| nic_ip ==''|| nic_cabinet=='' || nic_putaway=='' || nic_service=='' || nic_sn==''){
+                if(nic_model == ''|| nic_ip ==''|| nic_cabinet=='' || nic_putaway=='' || nic_service=='' || nic_sn=='' || nic_brand == ''){
                     alert('输入不能为空...');
                     return false
                 }else {
@@ -427,7 +436,7 @@
                         url: '/add-asset.html',
                         type: 'POST',
                         data: {'nic_model': nic_model, 'nic_ip': nic_ip, 'nic_idc': nic_idc,'nic_cabinet': nic_cabinet,
-                               'nic_putaway': nic_putaway, 'nic_service': nic_service, 'nic_sn': nic_sn},
+                               'nic_putaway': nic_putaway, 'nic_service': nic_service, 'nic_sn': nic_sn, 'nic_brand': nic_brand},
                         dataType: 'JSON',
                         traditional: true,
                         success: function (response) {
@@ -443,6 +452,7 @@
             });
 
             $('#add_firewall_save').click(function () {
+                var fire_brand = $('#fire_brand').val();
                 var fire_model = $('#fire_model').val();
                 var fire_ip = $('#fire_ip').val();
                 var fire_sn = $('#fire_sn').val();
@@ -450,14 +460,14 @@
                 var fire_cabinet = $('#fire_cabinet').val();
                 var fire_putaway = $('#fire_putaway').val();
                 var fire_service = $('#fire_service').val();
-                if(fire_model == ''|| fire_ip ==''|| fire_cabinet=='' || fire_putaway=='' || fire_service=='' || fire_sn==''){
+                if(fire_model == ''|| fire_ip ==''|| fire_cabinet=='' || fire_putaway=='' || fire_service=='' || fire_sn=='' || fire_brand == ''){
                     alert('输入不能为空...');
                     return false
                 }else {
                     $.ajax({
                         url: '/add-asset.html',
                         type: 'POST',
-                        data: {'fire_model': fire_model, 'fire_ip': fire_ip, 'fire_idc': fire_idc,'fire_cabinet': fire_cabinet,
+                        data: {'fire_model': fire_model, 'fire_ip': fire_ip, 'fire_idc': fire_idc,'fire_cabinet': fire_cabinet, 'fire_brand': fire_brand,
                                'fire_putaway': fire_putaway, 'fire_service': fire_service, 'fire_sn': fire_sn, 'isfirewall': 1},
                         dataType: 'JSON',
                         traditional: true,
