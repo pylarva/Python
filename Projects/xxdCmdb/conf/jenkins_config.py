@@ -14,4 +14,5 @@ api_token = '9e235779d590f7c63d45201bb8c969be'
 
 pkgUrl = 'http://build.xxd.com'
 
-
+# source_script_path = '/application/xxdCmdb/scr/autopublishing.py'
+source_script_path = '/Users/pylarva/github/Python/Projects/xxdCmdb/scr/autopublishing.py'

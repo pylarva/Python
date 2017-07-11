@@ -24,13 +24,13 @@ class ProjectListView(View):
         release_type = request.POST.get('obj_type')
         jdk_version = request.POST.get('jdk_version')
         git_url = request.POST.get('git_url')
+        pack_cmd = request.POST.get('pack_cmd')
         username = request.POST.get('user_name')
 
         # obj = models.ProjectTask.objects.filter(id=release_id).first()
         # release_name = obj.name
 
         # print(release_id, release_env, release_branch, release_name)
-
 
         # t = time.strftime('%Y%m%d')[3:]
         # n = models.ProjectTask.objects.filter(release_id__icontains=t).count() + 1
@@ -40,7 +40,7 @@ class ProjectListView(View):
         #     release_id = str(t) + str(n)
 
         models.ProjectTask.objects.create(business_2_id=release_env, project_type_id=release_type, jdk_version=jdk_version,
-                                          git_url=git_url, release_user=username)
+                                          git_url=git_url, release_user=username, pack_cmd=pack_cmd)
         response.status = True
         return JsonResponse(response.__dict__)
 

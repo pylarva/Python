@@ -268,6 +268,7 @@ class ProjectTask(models.Model):
     release_last_time = models.CharField(max_length=32, null=True, blank=True, default='-')
     release_user = models.CharField(max_length=32, null=True, blank=True)
     git_url = models.CharField(max_length=108, null=True, blank=True)
+    pack_cmd = models.CharField(max_length=108, null=True, blank=True)
     git_branch = models.CharField(max_length=108, null=True, blank=True)
     status = models.IntegerField(choices=project_status_choice, null=True, blank=True, default=1)
     ctime = models.DateTimeField(auto_now_add=True, null=True, blank=True)

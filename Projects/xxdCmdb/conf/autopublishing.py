@@ -28,11 +28,11 @@ import shutil
 import traceback
 import subprocess
 from threading import Timer
-from urllib import request
+# from urllib import request
 
 
 API_HOST = 'cmdb.xxd.com'
-API_URL = 'http://172.16.18.215:8005/api/release'
+API_URL = 'http://172.16.18.149:8005/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -42,7 +42,7 @@ AUTH_KEY = 'vLCzbZjGVNKWPxqd'
 CMDB_WORKSPACE = '/root/.cmdb/workspace/'
 run_log_file = '/home/admin/logs/run.log'
 error_log_file = '/home/admin/logs/err.log'
-CHECK_SERVICE_TIMEOUT = 120
+CHECK_SERVICE_TIMEOUT = 60
 
 # define return code
 RET_OK = 0
@@ -335,6 +335,7 @@ def moveFile(path, filename, destPath, matchPrefix=False):
                 backupPath = os.path.join(destPath, file) + '.orig'
                 shutil.move(os.path.join(path, file), backupPath)
                 LOGGER.debug("Clean files: %s -> %s" %(os.path.join(path, file), backupPath))
+                Logger().log('Clean files: %s -> %s' %(os.path.join(path, file), backupPath))
             except Exception, e:
                 LOGGER.info(str(e))
                 return RET_ERROR_CLEAN_ORIGINAL_FILE_FAILED
@@ -350,6 +351,7 @@ def removeFile(path, filename, matchPrefix=False):
         if re.match(regex, file):
             try:
                 shutil.remove(os.path.join(path, file))
+                Logger().log('shutil.remove: %s' % os.path.join(path, file))
             except Exception, e:
                 LOGGER.info(str(e))
                 return RET_ERROR_CLEAN_ORIGINAL_FILE_FAILED
@@ -440,11 +442,12 @@ def recordStageLog(taskId, stage, retCode, output=None):
 def checkApiService(ip):
     # retCode = RET_ERROR_CHECK_SERVICE_FAILED
     cmd = 'ps -ef | grep java | wc -l'
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
-    out, err = p.communicate()
-    out = str(out, encoding='utf-8')
-    if out.split()[0] == '2':
-        Logger().log('check services --> Java process not start....', False)
+    retCode, output = execSystemCommandRunAs(cmd, 'admin')
+    # p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
+    # out, err = p.communicate()
+    # out = str(out, encoding='utf-8')
+    if output.split()[0] == '2':
+        Logger().log('check services --> Java process not start....', True)
         return RET_ERROR_CHECK_SERVICE_FAILED
     else:
         # curl 检查服务是否正常
@@ -452,13 +455,13 @@ def checkApiService(ip):
         while total_time > 0:
             total_time -= 1
             time.sleep(1)
-            try:
-                cmd = 'curl -I http://%s:8080' % ip
-                p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
-                                     preexec_fn=os.setsid)
-                out, err = p.communicate()
+            cmd = "curl -I -m 2 %s:8080" % ip
+            ret = os.system(cmd)
+            if ret == 0:
+                Logger().log('check services --> Java start success....', True)
                 return 0
-            except Exception, e:
+            else:
+                Logger().log('check services --> try to start....%s' % total_time, True)
                 continue
         return RET_ERROR_CHECK_SERVICE_FAILED
 
@@ -516,21 +519,40 @@ def publishTomcatService(config, runas):
 
     # stop service
     if os.path.exists(config['stopServiceCommand']):
-        retCode, output = execSystemCommandRunAs(config['stopServiceCommand'], runas)
-        recordStageLog(config['taskId'], 'stopService', retCode, output)
+        cmd = 'ps -ef | grep java | wc -l'
+        retCode, output = execSystemCommandRunAs(cmd, runas)
+        # p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
+        # out, err = p.communicate()
+        # out = str(out, encoding='utf-8')
+        # Logger().log('%s --> %s....' % (cmd, out.split()[0]), True)
+        out = output
+        if out.split()[0] == '2':
+            Logger().log('stop services --> Java process not start....', True)
+        else:
+            retCode, output = execSystemCommandRunAs(config['stopServiceCommand'], runas)
+            Logger().log('stop service --> %s %s' % (retCode, output))
+            recordStageLog(config['taskId'], 'stopService', retCode, output)
+            time.sleep(3)
 
-        # 如果java进程无法关闭 kill进程
-        p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
-        out, err = p.communicate()
-        s = bytes('java', encoding='utf-8')
-        for line in out.splitlines():
-            if s in line:
-                pid = line.split()[0]
-                os.kill(int(pid), signal.SIGKILL)
-        if retCode != RET_OK: return retCode
+            # 如果java进程无法关闭 kill进程
+            # p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
+            cmd = "ps -A"
+            retCode, output = execSystemCommandRunAs(cmd, runas)
+            # Logger().log('stop pid --> %s %s' % (config['stopServiceCommand'], output))
+
+            # out, err = p.communicate()
+            # s = bytes('java', encoding='utf-8')
+            s = 'java'
+            for line in output.splitlines():
+                if s in line:
+                    pid = line.split()[0]
+                    os.kill(int(pid), signal.SIGKILL)
+                    Logger().log('kill pid --> %s' % pid)
+        # if retCode != RET_OK: return retCode
 
     # clean old files
     needCleanPath = os.path.join(config['publishPath'], config['appFilePrefix'])
+    Logger().log('needcleanPath-->%s' % needCleanPath)
     if os.path.exists(needCleanPath):
         retCode = moveFile(config['publishPath'], config['appFilePrefix'], config['tempDir'], matchPrefix=True)
         recordStageLog(config['taskId'], 'cleanOldFiles', retCode)
@@ -544,6 +566,7 @@ def publishTomcatService(config, runas):
     # cmd = '/bin/cp %s %s/%s.war' %(config['destFile'], config['publishPath'], config['appFilePrefix'])
     cmd = '/bin/cp %s %s%s' %(config['destFile'], config['publishPath'], config['appFilePrefix'])
     retCode, output = execSystemCommandRunAs(cmd, runas)
+    Logger().log(cmd, True)
     recordStageLog(config['taskId'], 'publishFiles', retCode, output)
     if retCode != RET_OK: return retCode
 
@@ -561,6 +584,9 @@ def publishTomcatService(config, runas):
     if config['appFilePrefix'] == 'api':
         retCode = checkApiService()
         recordStageLog(config['taskId'], 'checkService', retCode, '')
+
+    retCode = checkApiService('0.0.0.0')
+    if retCode != RET_OK: return retCode
 
     return retCode
 
@@ -595,16 +621,18 @@ def publishApijarService(config, runas):
     # start service
     retCode, output = execSystemCommandRunAs(config['startServiceCommand'], runas, timeout=300)
     recordStageLog(config['taskId'], 'startService', retCode, output)
-    if retCode != RET_OK: return retCode
+    # if retCode != RET_OK: return retCode
+    time.sleep(3)
 
     #start tengine
-    if os.path.exists(config['startTengineCommand']):
-        retCode, output = execSystemCommandRunAs(config['startTengineCommand'], runas)
-        recordStageLog(config['taskId'], 'startTengineService', retCode, output)
-        if retCode != RET_OK: return retCode
+    # if os.path.exists(config['startTengineCommand']):
+    #     retCode, output = execSystemCommandRunAs(config['startTengineCommand'], runas)
+    #     recordStageLog(config['taskId'], 'startTengineService', retCode, output)
+    #     if retCode != RET_OK: return retCode
 
+    print 5555
     # check service
-    retCode = checkApiService()
+    retCode = checkApiService(ip='0.0.0.0')
     recordStageLog(config['taskId'], 'checkService', retCode, '')
 
     return retCode
@@ -790,8 +818,11 @@ def uploadLog(taskId, msg):
             headers={'key': AUTH_KEY},
             json=msg,
         )
+        Logger().log('[%s]-[%s]日志上传成功...' % (taskId, msg), True)
 
     except Exception, e:
+        Logger().log('[%s]-[%s]日志上传失败...' % (taskId, msg), True)
+        Logger().log('[%s]-[%s]日志上传失败...' % (taskId, msg), False)
         recordStageLog(taskId, 'uploadLog', 'failed', e)
 
     return retCode
@@ -813,13 +844,14 @@ def ExecCmd(cmd):
         return 0, out
 
 
-def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env):
+def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env, pack_cmd):
     """
     模拟Jenkins功能 拉代码 + 打包
     :return:
     """
     Logger()
     retCode = 0
+    uploadLog(task_id, '连接成功......开始拉取代码')
     # 拉去代码
     # ('/data/packages/infra/cmdb/107/infra_cmdb_107.war', '107', 'http://gitlab.xxd.com/service/v6_batch.git', 'master', 'cmdb', 'infra')
     # print(pkg_name, task_id, release_git_url, release_branch, name, env)
@@ -867,8 +899,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env)
     Logger().log(cmd, True)
     Logger().log(out, True)
 
-    cmd = "find ./ -name 'pom.xml' | xargs -I {} sh -c 'pom_dir=`dirname {}` && cd $pom_dir && /usr/local/maven/bin/mvn " \
-          "clean package -Dmaven.test.skip=true -Pstage -U>> %s'" % run_log_file
+    cmd = "find ./ -name 'pom.xml' | xargs -I {} sh -c 'pom_dir=`dirname {}` && cd $pom_dir && %s>> %s'" % (env, pack_cmd,run_log_file)
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)
@@ -898,8 +929,9 @@ if __name__ == '__main__':
         # Jenkins端打包完毕后上传MD5值
         retCode = uploadMd5(sys.argv[1], sys.argv[2])
         sys.exit(retCode)
-    if len(sys.argv) == 7:
-        retCode = JenkinsModify(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5],sys.argv[6])
+    # 集成Jenkins功能
+    if len(sys.argv) == 8:
+        retCode = JenkinsModify(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5],sys.argv[6],sys.argv[7])
         sys.exit(retCode)
     if len(sys.argv) != 5:
         print "Miss arguments."

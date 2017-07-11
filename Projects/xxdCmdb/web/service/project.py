@@ -5,6 +5,7 @@ import re
 import os
 import time
 import threading
+import paramiko
 import subprocess
 from multiprocessing import Process
 from django.db.models import Q
@@ -398,6 +399,7 @@ class Project(BaseServiceList):
 
         obj = models.ProjectTask.objects.filter(id=release_id).first()
         release_name = obj.business_2
+        pack_cmd = obj.pack_cmd
         obj_env = models.BusinessOne.objects.filter(id=release_env).first()
         release_env_name = obj_env.name
 
@@ -430,13 +432,13 @@ class Project(BaseServiceList):
 
         # 多线程
         t = threading.Thread(target=self.jenkins_tasks, args=(pkg_name, release_git_url, release_branch, task_id,
-                                                              release_name, release_env_name))
+                                                              release_name, release_env_name, pack_cmd))
         t.start()
 
         response.status = True
         return response
 
-    def jenkins_task(self, pkg_name, release_git_url, release_branch, task_id):
+    def jenkins_task(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env_name, pack_cmd):
         """
         连接Jenkins开始执行job
         :param pkg_name:
@@ -527,14 +529,37 @@ class Project(BaseServiceList):
 
         return True
 
-    def jenkins_tasks(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env):
+    def jenkins_tasks(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd):
+        self.log(task_id, '尝试连接Jenkins...')
+        cmd = "scp %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_config.host)
+        os.system(cmd)
+        pack_cmd = '"' + pack_cmd + '"'
+        cmd = "python2.6 {0} {1} {2} {3} {4} {5} {6} {7}".format(*[jenkins_config.script_path, pkg_name, task_id,
+                                                                   release_git_url, release_branch, release_name,
+                                                                   release_env, pack_cmd])
+        print(cmd)
         # python /opt/autopublishing.py /data/packages/infra/cmdb/107/v6_batch.war 107 http://gitlab.xxd.com/service/v6_batch.git master cmdb infra"
-        cmd = "ssh root@%s 'python %s %s %s %s %s %s %s'" % (jenkins_config.host, jenkins_config.script_path,
-                                                             pkg_name, task_id, release_git_url, release_branch,
-                                                             release_name, release_env)
-        ret = os.system(cmd)
-        print(ret)
-        if ret == 0:
+        # cmd = "ssh root@%s python2.6 %s %s %s %s %s %s %s %s" % (jenkins_config.host, jenkins_config.script_path,
+        #                                                          pkg_name, task_id, release_git_url, release_branch,
+
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(jenkins_config.host, port=22, username='root', password='xinxindai318', timeout=3)
+        stdin, stdout, stderr = ssh.exec_command(cmd)
+        result = stdout.read()
+
+        print(result)
+        ret = result
+        obj = models.ReleaseTask.objects.filter(id=task_id).first()
+        md5 = obj.release_md5
+        # cmd_s = "ssh root@{0} {1}".format(*[jenkins_config.host, cmd])
+        # ret = subprocess.Popen(cmd_s, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
+        # out, err = ret.communicate()
+        # print(cmd_s)
+        # print(out, err)
+        # ret = os.system(cmd_s)
+        print(md5)
+        if md5:
             self.log(task_id, '生成md5...【完成】')
             # 打包成功后查找业务线节点机器 环境 + 业务线
             release_obj = models.ReleaseTask.objects.filter(id=task_id).first()
@@ -550,7 +575,7 @@ class Project(BaseServiceList):
                 print(item.host_ip)
                 self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
                 # 目标机开始执行发布脚本
-                ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type)
+                ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type, business_2)
                 if not ret:
                     self.log(task_id, '当前发布第%s台%s...【失败】' % (num, item.host_ip))
                     self.log(task_id, '终止发布...')
@@ -583,19 +608,19 @@ class Project(BaseServiceList):
         """
         models.ReleaseLog.objects.create(release_id=task_id, release_msg=msg)
 
-    def shell_task(self, ip, pkgUrl, md5sum, taskId, serviceType):
+    def shell_task(self, ip, pkgUrl, md5sum, taskId, serviceType, name):
         """
         连接发布目标机开始执行发布脚本
         :return:
         """
         pkgUrl = pkgUrl.replace('/data/packages', jenkins_config.pkgUrl)
-        cmd = "scp %s root@%s:/opt/" % ('/Users/pylarva/github/Python/Projects/xxdCmdb/test/autopublishing.py', ip)
+        cmd = "scp %s root@%s:/opt/" % (jenkins_config.source_script_path, ip)
         os.system(cmd)
 
         cmd = "ssh root@%s 'pip install requests'" % ip
         os.system(cmd)
 
-        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId, serviceType)
+        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId, serviceType, name)
         print(cmd)
         # ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
         #                        preexec_fn=os.setsid)

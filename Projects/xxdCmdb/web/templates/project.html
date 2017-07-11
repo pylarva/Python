@@ -69,6 +69,8 @@
                   <span class="label label-success">GIT地址</span>
                     <input type="text" class="form-control" id="git_url" style="width: 600px; border-radius: 1px;">
                                 <br>
+                  <span class="label label-success">打包参数</span>
+                    <input type="text" class="form-control" id="pack_cmd" style="width: 600px; border-radius: 1px; " value="/usr/local/maven/bin/mvn clean package -Dmaven.test.skip=true">
 {#                                  <span class="label label-success">GIT分支</span>#}
 {#                    <input type="text" class="form-control" id="git_branch" style="width: 600px; border-radius: 1px;">#}
               </div>
@@ -97,11 +99,13 @@
                 var obj_type = $('#obj_type').selectpicker('val');
                 var jdk_version = $("input[name='optionsRadios']:checked").val();
                 var git_url = $('#git_url').val();
+                var pack_cmd = $('#pack_cmd').val();
                 var user_name = $.cookie('username');
                 $.ajax({
                     url: '_project.html',
                     type: 'POST',
-                    data: {'obj_env': obj_business, 'obj_type': obj_type, 'jdk_version': jdk_version, 'git_url': git_url,'user_name': user_name},
+                    data: {'obj_env': obj_business, 'obj_type': obj_type, 'jdk_version': jdk_version, 'git_url': git_url,
+                           'user_name': user_name, 'pack_cmd': pack_cmd},
                     dataType: 'JSON',
                     success: function (response) {
                         if (response.status){
