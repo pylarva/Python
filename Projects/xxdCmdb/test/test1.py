@@ -88,17 +88,22 @@ import paramiko
 # pack_cmd = 'hhehehehe'
 # pack_cmd = '"' + pack_cmd + '"'
 # print(pack_cmd)
-pack_cmd = '/usr/local/maven/bin/mvn clean package -Dmaven.test.skip=true'
-pack_cmd = '"' + pack_cmd + '"'
-cmd = "python2.6 {0} {1} {2} {3} {4} {5} {6} {7}".format('/opt/autopublishing.py', '/data/packages/test2/v6_batch/145/v6_batch.war', '145', 'http://gitlab.xxd.com/service/v6_batch.git', '170615N', 'v6_batch', 'test2', pack_cmd)
+# pack_cmd = '/usr/local/maven/bin/mvn clean package -Dmaven.test.skip=true'
+# pack_cmd = '"' + pack_cmd + '"'
+# cmd = "python2.6 {0} {1} {2} {3} {4} {5} {6} {7}".format('/opt/autopublishing.py', '/data/packages/test2/v6_batch/145/v6_batch.war', '145', 'http://gitlab.xxd.com/service/v6_batch.git', '170615N', 'v6_batch', 'test2', pack_cmd)
+#
+# ssh = paramiko.SSHClient()
+# ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+# ssh.connect('192.168.31.80', port=22, username='root', password='xinxindai318', timeout=3)
+# stdin, stdout, stderr = ssh.exec_command(cmd)
+# result_1 = stdin
+# result_2 = stdout.read()
+# result_3 = stderr.read()
+#
+# print(result_1, result_2, result_3)
 
-ssh = paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect('192.168.31.80', port=22, username='root', password='xinxindai318', timeout=3)
-stdin, stdout, stderr = ssh.exec_command(cmd)
-result_1 = stdin
-result_2 = stdout.read()
-result_3 = stderr.read()
+a = '/data/aa/bb/1.log'
 
-print(result_1, result_2, result_3)
+b = os.path.dirname(a)
+print(b)
 

@@ -42,7 +42,10 @@ AUTH_KEY = 'vLCzbZjGVNKWPxqd'
 CMDB_WORKSPACE = '/root/.cmdb/workspace/'
 run_log_file = '/home/admin/logs/run.log'
 error_log_file = '/home/admin/logs/err.log'
-CHECK_SERVICE_TIMEOUT = 60
+CHECK_SERVICE_TIMEOUT = 30
+
+# 需要向nginx上发布静态资源的项目列表和默认发布目录
+static_nginx_dict = {'front': '/static/front/', 'webapp': '/static/webapp/'}
 
 # 需要ROOT目录的项目列表
 ROOT_obj = ['front', 'seo']
@@ -50,9 +53,6 @@ ROOT_obj = ['front', 'seo']
 # 新建软链项目列表
 soft_link_list = {'front':'ROOT', 'admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm'}
 
-# 新建软链命令
-# front
-soft_link_front = 'ln -s /opt/webapps/front/image'
 
 # define return code
 RET_OK = 0
@@ -337,7 +337,7 @@ def initLogger(logfile):
 def moveFile(path, filename, destPath, matchPrefix=False):
     # matchPrefix表示匹配filename开头的所有文件
     for file in os.listdir(path):
-        regex = '^%s' %filename
+        regex = '^%s' % filename
         if not matchPrefix:
             regex = '%s$' %regex
         if re.match(regex, file):
@@ -449,7 +449,7 @@ def recordStageLog(taskId, stage, retCode, output=None):
     commitTaskStatus(taskId, dbMessage, retCode)
 
 
-def checkApiService(ip):
+def checkApiService(ip, taskId):
     # retCode = RET_ERROR_CHECK_SERVICE_FAILED
     cmd = 'ps -ef | grep java | wc -l'
     retCode, output = execSystemCommandRunAs(cmd, 'admin')
@@ -465,7 +465,7 @@ def checkApiService(ip):
         while total_time > 0:
             total_time -= 1
             time.sleep(1)
-            cmd = "curl -I -m 2 %s:8080" % ip
+            cmd = "curl -I -m 5 %s:8080" % ip
             ret = os.system(cmd)
             if ret == 0:
                 Logger().log('check services --> Java start success....', True)
@@ -473,6 +473,9 @@ def checkApiService(ip):
             else:
                 Logger().log('check services --> try to start....%s' % total_time, True)
                 continue
+        Logger().log('check services --> Java start timeout....', True)
+        Logger().log('check services --> Java start timeout....', False)
+        uploadLog('chechk service --> Java start timeout...', taskId)
         return RET_ERROR_CHECK_SERVICE_FAILED
 
 
@@ -524,34 +527,71 @@ def createSoftLink(name):
         Logger().log('%s need create soft link...' % name, True)
         try:
             if name in ROOT_obj:
-                if os.path.exists('/usr/local/tomcat/webapps/ROOT/%s/static/image/' % name):
-                    os.system('rm -fr /usr/local/tomcat/webapps/ROOT/%s/static/image/*' % name)
-                    os.system('ln -s /opt/webapps/front/image/ /usr/local/tomcat/webapps/ROOT/%s/static/image/' % name)
-                if os.path.exists('/usr/local/tomcat/webapps/ROOT/%s/static/admin/image/' % name):
-                    os.system('rm -fr /usr/local/tomcat/webapps/ROOT/%s/static/admin/image/*' % name)
-                    os.system('ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/ROOT/%s/static/admin/image/' % name)
+                if os.path.exists('/usr/local/tomcat/webapps/ROOT/static/image/'):
+                    os.system('rm -fr /usr/local/tomcat/webapps/ROOT/static/image')
+                    os.system('ln -s /opt/webapps/front/image/ /usr/local/tomcat/webapps/ROOT/static/')
+                else:
+                    os.system('ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/ROOT/static/')
+
+                if os.path.exists('/usr/local/tomcat/webapps/ROOT/static/admin/image/'):
+                    os.system('rm -fr /usr/local/tomcat/webapps/ROOT/static/admin/image')
+                    os.system('ln -s /opt/webapps/admin/image /usr/local/tomcat/webapps/ROOT/static/admin/')
+                else:
+                    os.system('ln -s /opt/webapps/admin/image /usr/local/tomcat/webapps/ROOT/static/admin/')
+
             elif name == 'admin':
-                if os.path.exists('/usr/local/tomcat/webapps/%s/static/image/' % name):
-                    os.system('rm -fr /usr/local/tomcat/webapps/%s/static/image/*' % name)
-                    os.system('ln -s /opt/webapps/front/image/ /usr/local/tomcat/webapps/%s/static/image/' % name)
-                if os.path.exists('/usr/local/tomcat/webapps/%s/static/admin/image/' % name):
-                    os.system('rm -fr /usr/local/tomcat/webapps/%s/static/admin/image/*' % name)
-                    os.system('ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/%s/static/admin/image/' % name)
-            elif name == 'admin':
-                if os.path.exists('/usr/local/tomcat/webapps/%s/static/image/' % name):
-                    os.system('rm -fr /usr/local/tomcat/webapps/%s/static/image/*' % name)
-                    os.system('ln -s /opt/webapps/front/image/ /usr/local/tomcat/webapps/%s/static/image/' % name)
-                if os.path.exists('/usr/local/tomcat/webapps/%s/static/admin/image/' % name):
-                    os.system('rm -fr /usr/local/tomcat/webapps/%s/static/admin/image/*' % name)
-                    os.system('ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/%s/static/admin/image/' % name)
+                if os.path.exists('/usr/local/tomcat/webapps/xxdai_sys_admin/image/'):
+                    os.system('rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/image')
+                    os.system('ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/xxdai_sys_admin/')
+                else:
+                    os.system('ln -s /opt/webapps/admin/image /usr/local/tomcat/webapps/xxdai_sys_admin/')
+
+                if os.path.exists('/usr/local/tomcat/webapps/xxdai_sys_admin/images/'):
+                    os.system('rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/images')
+                    os.system('ln -s /opt/webapps/admin/images /usr/local/tomcat/webapps/xxdai_sys_admin/')
+                else:
+                    os.system('ln -s /opt/webapps/admin/images /usr/local/tomcat/webapps/xxdai_sys_admin/')
+
+                if os.path.exists('/usr/local/tomcat/webapps/xxdai_sys_admin/frontimg/'):
+                    os.system('rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/frontimg/')
+                    os.system('ln -s /opt/webapps/front/frontimg /usr/local/tomcat/webapps/xxdai_sys_admin/')
+                else:
+                    os.system('ln -s /opt/webapps/front/frontimg /usr/local/tomcat/webapps/xxdai_sys_admin/')
+
+
+            elif name == 'webapp':
+                if os.path.exists('/usr/local/tomcat/webapps/m/static/image/'):
+                    os.system('rm -fr /usr/local/tomcat/webapps/m/static/image/*')
+                    os.system('ln -s /opt/webapps/front/image/ /usr/local/tomcat/webapps/m/static/image/')
+                else:
+                    os.makedirs('/usr/local/tomcat/webapps/m/static/image/')
+                    os.system('ln -s /opt/webapps/front/image/ /usr/local/tomcat/webapps/m/static/image/')
+
+            elif name == 'mobile':
+                if os.path.exists('/usr/local/tomcat/webapps/v5_mobile/static/image/'):
+                    os.system('rm -fr /usr/local/tomcat/webapps/v5_mobile/static/image/*')
+                    os.system('ln -s /opt/webapps/front/image/ /usr/local/tomcat/webapps/v5_mobile/static/image/')
+                else:
+                    os.makedirs('/usr/local/tomcat/webapps/v5_mobile/static/image/')
+                    os.system('ln -s /opt/webapps/front/image/ /usr/local/tomcat/webapps/v5_mobile/static/image/')
+
+                if os.path.exists('/usr/local/tomcat/webapps/v5_mobile/static/admin/image/'):
+                    os.system('rm -fr /usr/local/tomcat/webapps/v5_mobile/static/admin/image/*')
+                    os.system('ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/v5_mobile/static/admin/image/')
+                else:
+                    os.makedirs('/usr/local/tomcat/webapps/v5_mobile/static/admin/image/')
+                    os.system('ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/v5_mobile/static/admin/image/')
+
         except Exception, e:
-            Logger().log('create soft link failed...', True)
-            Logger().log('create soft link failed...', False)
-            return False
-    return True
+            Logger().log('create soft link failed...%s' % e, True)
+            Logger().log('create soft link failed...%s' % e, False)
+            return 1
+    return 0
 
 
-def publishTomcatService(config, name, runas):
+
+
+def publishTomcatService(config, name, taskId, runas):
     retCode = RET_OK
 
     # if config['appFilePrefix'] == 'api':
@@ -595,7 +635,6 @@ def publishTomcatService(config, name, runas):
         retCode = moveFile(config['publishPath'], config['appFilePrefix'], config['tempDir'], matchPrefix=True)
         recordStageLog(config['taskId'], 'cleanOldFiles', retCode)
         if retCode != RET_OK: return retCode
-        # cmd = '/bin/rm -rf %s/ROOT' % (config['publishPath'])
         if os.path.exists('/opt/webapps_bak/'):
             cmd = '/bin/rm -fr /opt/webapps_bak/*'
             os.system(cmd)
@@ -611,24 +650,36 @@ def publishTomcatService(config, name, runas):
     # publish files
     # cmd = '/bin/cp %s %s/%s.war' %(config['destFile'], config['publishPath'], config['appFilePrefix'])
     # 解压
-    os.system('unzip %s -d %s/%s' % (config['destFile'], config['temDir'], name))
-    source_dir = '%s/%s' % (config['temDir'], name)
-
+    # os.system('unzip %s -d %s/%s' % (config['destFile'], config['tempDir'], name))
+    # source_dir = '%s/%s' % (config['tempDir'], name)
+    #
     # 需要将代码放入ROOT文件夹的项目 ➡️ 新建ROOT目录
     if name in ROOT_obj:
         if not os.path.exists('/usr/local/tomcat/webapps/ROOT/'):
             os.makedirs('/usr/local/tomcat/webapps/ROOT/')
             os.system('chown -R admin.admin /usr/local/tomcat/')
-        cmd = '/bin/cp %s %sROOT/' % (source_dir, config['publishPath'])
+        else:
+            cmd = 'rm -fr /usr/local/tomcat/webapps/ROOT/*'
+            os.system(cmd)
+        cmd = 'unzip -o %s -d %sROOT/' % (config['destFile'], config['publishPath'])
+        # cmd = '/bin/cp -rf %s/* %sROOT/' % (source_dir, config['publishPath'])
     else:
-        cmd = '/bin/cp %s %s' %(source_dir, config['publishPath'])
-    retCode, output = execSystemCommandRunAs(cmd, runas)
+        cmd = 'unzip -o %s -d %s/%s/' %(config['destFile'], config['publishPath'], name)
+    # retCode, output = execSystemCommandRunAs(cmd, runas)
+    os.system(cmd)
     Logger().log(cmd, True)
-    recordStageLog(config['taskId'], 'publishFiles', retCode, output)
-    if retCode != RET_OK: return retCode
+    # recordStageLog(config['taskId'], 'publishFiles', retCode, output)
+    # if retCode != RET_OK: return retCode
+
+    # front webapp 项目需要向nginx上发布静态资源
+    if name in static_nginx_dict:
+        pass
+
 
     # 启动服务之前 新建软链
-    createSoftLink(name)
+    if name in soft_link_list:
+        ret = createSoftLink(name)
+        if ret != RET_OK: return ret
 
     # start service
     retCode, output = execSystemCommandRunAs(config['startServiceCommand'], runas, timeout=300)
@@ -645,7 +696,7 @@ def publishTomcatService(config, name, runas):
         retCode = checkApiService()
         recordStageLog(config['taskId'], 'checkService', retCode, '')
 
-    retCode = checkApiService('0.0.0.0')
+    retCode = checkApiService('0.0.0.0', taskId)
     if retCode != RET_OK: return retCode
 
     return retCode
@@ -785,7 +836,7 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, name, runas):
         config['startTengineCommand'] = 'sudo /etc/init.d/tengine start'
         config['publishPath'] = '/usr/local/tomcat/webapps/'
         Logger().log(config, True)
-        retCode = publishTomcatService(config, name,runas)
+        retCode = publishTomcatService(config, name, taskId,runas)
     elif serviceType == 'apijar':
         config['stopServiceCommand'] = '/usr/local/tomcat/bin/shutdown.sh'
         config['startServiceCommand'] = '/usr/local/tomcat/bin/startup.sh'
@@ -921,6 +972,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     if not os.path.exists(workspace_path):
         os.makedirs(workspace_path)
     os.chdir(workspace_path)
+
     cmd = 'git init'
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
@@ -958,7 +1010,37 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     Logger().log(cmd, True)
     Logger().log(out, True)
 
+    uploadLog(task_id, '正在进行代码打包......')
+
     cmd = "find ./ -name 'pom.xml' | xargs -I {} sh -c 'pom_dir=`dirname {}` && cd $pom_dir && %s -P%s>> %s'" % (pack_cmd,env,run_log_file)
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+    if ret:
+        Logger().log(out, False)
+        return out
+
+    # 需要发布静态资源到nginx上的项目 v6_front写死了 后面改
+    try:
+        if name in static_nginx_dict:
+            Logger().log('zip static --> %s/%s/'%(workspace_path,'target/v6_front／'), True)
+            if name == 'front':
+                os.chdir('%s/%s/'%(workspace_path,'target/v6_front/'))
+            if name == 'webapp':
+                os.chdir('%s/%s/'%(workspace_path,'target/v6_webapp/'))
+            cmd = "jar -cf static.zip static/"
+            ret, out = ExecCmd(cmd)
+            Logger().log(cmd, True)
+            Logger().log(out, True)
+            if ret:
+                Logger().log(out, False)
+                return out
+    except Exception,e:
+        Logger().log(e, True)
+
+    os.chdir(workspace_path)
+
+    cmd = "find ./ -name '*.war' -exec cp {} %s \;" % pkg_name
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)
@@ -968,13 +1050,17 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
 
     os.chdir(workspace_path)
 
-    cmd = "find ./ -name '*.war' -exec cp {} %s \;" % pkg_path
-    ret, out = ExecCmd(cmd)
-    Logger().log(cmd, True)
-    Logger().log(out, True)
-    if ret:
-        Logger().log(out, False)
-        return out
+    try:
+        if name in static_nginx_dict:
+            cmd = "find ./ -name 'static.zip' -exec cp {} %s \; " % pkg_path
+            ret, out = ExecCmd(cmd)
+            Logger().log(cmd, True)
+            Logger().log(out, True)
+            if ret:
+                Logger().log(out, False)
+                return out
+    except Exception,e:
+        Logger().log(e, True)
 
     ret = uploadMd5(pkg_name, task_id)
     if ret:
@@ -983,14 +1069,41 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
 
     return retCode
 
+def NginxStatic(name, pkgUrl, taskId):
+    if name == 'front':
+        dest_dir = '/static/front/'
+    if name == 'webapp':
+        dest_dir = 'static/webapp/'
+    if os.path.exists(dest_dir):
+        cmd = 'rm -fr %s*' % dest_dir
+        ret, out = ExecCmd(cmd)
+        Logger().log(cmd, True)
+        Logger().log(out, True)
+        if ret:
+            Logger().log(out, False)
+            return out
+    else:
+        os.makedirs(dest_dir)
+    downloadFile(pkgUrl, dest_dir)
+
+    cmd = 'unzip %s%s' % (dest_dir, 'static.zip')
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+    if ret:
+        Logger().log(out, False)
+        return out
+    return 0
+
 if __name__ == '__main__':
     Logger()
     Logger().log('%s' % sys.argv, True)
     Logger().log('%s' % len(sys.argv), True)
 
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 4:
         # Jenkins端打包完毕后上传MD5值
-        retCode = uploadMd5(sys.argv[1], sys.argv[2])
+        # retCode = uploadMd5(sys.argv[1], sys.argv[2])
+        retCode = NginxStatic(sys.argv[1], sys.argv[2], sys.argv[3])
         sys.exit(retCode)
     # 集成Jenkins功能
     if len(sys.argv) == 8:

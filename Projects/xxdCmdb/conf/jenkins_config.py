@@ -16,3 +16,6 @@ pkgUrl = 'http://build.xxd.com'
 
 # source_script_path = '/application/xxdCmdb/scr/autopublishing.py'
 source_script_path = '/Users/pylarva/github/Python/Projects/xxdCmdb/scr/autopublishing.py'
+
+# 需要进行两次发布的项目
+static_nginx_dict = {'front': '/static/front/', 'webapp': '/static/webapp/'}

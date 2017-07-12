@@ -559,6 +559,9 @@ class Project(BaseServiceList):
         # print(out, err)
         # ret = os.system(cmd_s)
         print(md5)
+
+        # models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+
         if md5:
             self.log(task_id, '生成md5...【完成】')
             # 打包成功后查找业务线节点机器 环境 + 业务线
@@ -569,25 +572,58 @@ class Project(BaseServiceList):
             release_type = release_obj.release_type
             count = models.Asset.objects.filter(business_1=business_1, business_2=business_2).count()
             values = models.Asset.objects.filter(business_1=business_1, business_2=business_2).only('id', 'host_ip')
-            self.log(task_id, '共需发布【%s】台节点机器...' % count)
-            num = 1
-            for item in values:
-                print(item.host_ip)
-                self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
-                # 目标机开始执行发布脚本
-                ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type, business_2)
-                if not ret:
-                    self.log(task_id, '当前发布第%s台%s...【失败】' % (num, item.host_ip))
-                    self.log(task_id, '终止发布...')
-                    models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
-                    break
-                else:
-                    self.log(task_id, '当前发布第%s台%s...【完成】' % (num, item.host_ip))
-                num += 1
 
-            self.log(task_id, '服务检查...【完成】')
-            self.log(task_id, '发布成功结束！')
-            models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+            # 发布 front和webapp 的静态资源
+            print(release_name)
+            if release_name == 'front' or release_name == 'webapp':
+                print('向Nginx发布资源....')
+                self.log(task_id, '向Nginx发布static静态资源...' % count)
+                nginx_conut = models.Asset.objects.filter(business_1=business_1, business_2='nginx').count()
+                nginx_values = models.Asset.objects.filter(business_1=business_1, business_2='nginx').only('id', 'host_ip')
+
+                num = 1
+                for item in nginx_values:
+                    print(111111111)
+                    ret = self.nginx_task(item.host_ip, release_name, pkg_name, task_id)
+                    if not ret:
+                        self.log(task_id, '当前发布第%s台Nginx服务器%s...【失败】' % (num, item.host_ip))
+                        self.log(task_id, '终止发布...')
+                        models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+                        result = False
+                        break
+                    else:
+                        self.log(task_id, '当前发布第%s台Nginx服务器%s......' % (num, item.host_ip))
+                    num += 1
+
+            print('7777777')
+            if not result:
+                self.log(task_id, '发布失败！')
+                return False
+
+
+            # self.log(task_id, '共需发布【%s】台节点机器...' % count)
+            # num = 1
+            # for item in values:
+            #     print(item.host_ip)
+            #     self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
+            #     # 目标机开始执行发布脚本
+            #     ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type, business_2)
+            #     if not ret:
+            #         self.log(task_id, '当前发布第%s台%s...【失败】' % (num, item.host_ip))
+            #         self.log(task_id, '终止发布...')
+            #         models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+            #         result = False
+            #         break
+            #     else:
+            #         self.log(task_id, '当前发布第%s台%s...【完成】' % (num, item.host_ip))
+            #     num += 1
+            #
+            # if result:
+            #     self.log(task_id, '发布成功结束！')
+            #     models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+            # else:
+            #     self.log(task_id, '发布失败！')
+
 
 
         else:
@@ -613,6 +649,7 @@ class Project(BaseServiceList):
         连接发布目标机开始执行发布脚本
         :return:
         """
+        print(2222222)
         pkgUrl = pkgUrl.replace('/data/packages', jenkins_config.pkgUrl)
         cmd = "scp %s root@%s:/opt/" % (jenkins_config.source_script_path, ip)
         os.system(cmd)
@@ -620,7 +657,7 @@ class Project(BaseServiceList):
         cmd = "ssh root@%s 'pip install requests'" % ip
         os.system(cmd)
 
-        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId, serviceType, name)
+        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId, serviceType, name)
         print(cmd)
         # ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
         #                        preexec_fn=os.setsid)
@@ -635,6 +672,27 @@ class Project(BaseServiceList):
         # print(out, err)
         print(ret)
         return True
+
+    def nginx_task(self, ip, name, pkgUrl, taskId):
+        pkgUrl = os.path.dirname(pkgUrl)
+        pkgUrl = pkgUrl.replace('/data/packages', jenkins_config.pkgUrl)
+        pkgUrl = '%s%s' % (pkgUrl, '/static.zip')
+
+        cmd = "scp %s root@%s:/opt/" % (jenkins_config.source_script_path, ip)
+        os.system(cmd)
+
+        cmd = "ssh root@%s 'pip install requests'" % ip
+        os.system(cmd)
+
+        cmd = "ssh root@%s 'python2.6 %s %s %s %s'" % (ip, jenkins_config.script_path, name, pkgUrl, taskId)
+        print(cmd)
+        ret = os.system(cmd)
+        if ret:
+            self.log(taskId, '发布静态资源错误, 代码...%s' % ret)
+            return False
+        return True
+
+
 
 
 
