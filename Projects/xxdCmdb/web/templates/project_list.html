@@ -233,14 +233,19 @@
             var s = '#status' + v;
 
             var user_name = $.cookie('username');
-            var reg = /^[0-9a-zA-Z_//./*]*$/g;
+{#            var reg = /^[0-9a-zA-Z_//./*]*$/g;#}
 
             if(release_env==1){
                 alert('项目发布【环境】不能为buffer...');
                 return false;
-            }else if(release_branch==''||reg.test(release_branch)==false){
-                alert('项目发布【分支】不能为空且分支名格式不能包含非法字符...');
+            }
+            else if(release_branch==''){
+                alert('分支不能为空...');
                 return false;
+
+{#            else if(release_branch==''||reg.test(release_branch)==false){#}
+{#                alert('项目发布【分支】不能为空且分支名格式不能包含非法字符...');#}
+{#                return false;#}
             }else {
                 $.ajax({
                     url: '/projects_list.html',

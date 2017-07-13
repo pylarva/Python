@@ -250,8 +250,9 @@ class ProjectTask(models.Model):
     发布项目表
     """
     jdk_version_choice = (
-        (1, 'jdk-7'),
-        (2, 'jdk-8')
+        (1, 'jdk-8'),
+        (2, 'jdk-7'),
+        (3, 'jdk-6')
     )
 
     project_status_choice = (

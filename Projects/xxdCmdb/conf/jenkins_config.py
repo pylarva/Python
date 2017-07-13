@@ -19,3 +19,7 @@ source_script_path = '/Users/pylarva/github/Python/Projects/xxdCmdb/scr/autopubl
 
 # 需要进行两次发布的项目
 static_nginx_dict = {'front': '/static/front/', 'webapp': '/static/webapp/'}
+
+# 配置文件存放目录
+config_path = '/opt/config/'
+# config_path = '/opt/config/'

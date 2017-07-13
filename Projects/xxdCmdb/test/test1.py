@@ -102,8 +102,14 @@ import paramiko
 #
 # print(result_1, result_2, result_3)
 
-a = '/data/aa/bb/1.log'
+config_target_path = '/usr/local/tomcat/webapps/AAA/WEB-INF/classes/'
 
-b = os.path.dirname(a)
-print(b)
+a = config_target_path.replace('AAA', 'BBB')
+print(a)
+soft_link_list = {'front':'ROOT', 'admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm'}
 
+name = 'ssss'
+if name in soft_link_list:
+    config_target_path_new = config_target_path.replace('AAA', soft_link_list[name])
+
+print(config_target_path_new)

@@ -20,14 +20,6 @@
         <div class="list-block">
             <form id="form1">
                 <div class="form-group">
-{#                <span class="label label-success">选择环境</span>#}
-{##}
-{#                <br>#}
-{#                  <select id="obj_env" class="selectpicker">#}
-{#                      {% for item in business_one_list %}#}
-{#                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>#}
-{#                      {% endfor %}#}
-{#                  </select>#}
                 <span class="label label-success">项目名称</span>
 
                 <br>
@@ -49,34 +41,61 @@
                   </select>
                     <br>
                     <br>
-                <div>
-                      <span class="label label-info">JDK版本</span>
+                <div style="display: inline-block; float: left;">
+                      <span class="label label-warning">JDK版本</span>
 
                         <div class="radio">
                           <label>
                             <input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked>
-                            JDK-7
+                            JDK-8
                           </label>
                         </div>
                         <div class="radio">
                           <label>
                             <input type="radio" name="optionsRadios" id="optionsRadios2" value="2">
-                            JDK-8
+                            JDK-7
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios3" value="3">
+                            JDK-6
                           </label>
                         </div>
                 </div>
+
+                <div style="display: inline-block; margin-left: 100px; float: left">
+                      <span class="label label-info">Maven版本</span>
+
+                        <div class="radio" onchange="pkg1()">
+                          <label>
+                            <input type="radio" name="optionsRadios1" id="optionsRadios11" value="1" checked>
+                            maven
+                          </label>
+                        </div>
+                        <div class="radio" onchange="pkg2()">
+                          <label>
+                            <input type="radio" name="optionsRadios1" id="optionsRadios12" value="2">
+                            maven339
+                          </label>
+                        </div>
+                        </div>
+                </div>
+
                 <br>
+            <div style="width: 10000px; height: 100px"></div>
+            <div style="display: inline-block; float: left">
                   <span class="label label-success">GIT地址</span>
                     <input type="text" class="form-control" id="git_url" style="width: 600px; border-radius: 1px;">
                                 <br>
                   <span class="label label-success">打包参数</span>
                     <input type="text" class="form-control" id="pack_cmd" style="width: 600px; border-radius: 1px; " value="/usr/local/maven/bin/mvn clean package -Dmaven.test.skip=true">
-{#                                  <span class="label label-success">GIT分支</span>#}
-{#                    <input type="text" class="form-control" id="git_branch" style="width: 600px; border-radius: 1px;">#}
-              </div>
+                <br>
                     <a id="obj_commit" class="btn btn-primary no-radius" style="width: 100px;">
                         <i class="fa fa-hand-o-right"></i> 提交
                     </a>
+                              </div>
+
             </form>
         </div>
         </div>
@@ -101,6 +120,15 @@
                 var git_url = $('#git_url').val();
                 var pack_cmd = $('#pack_cmd').val();
                 var user_name = $.cookie('username');
+                if(obj_business==1){
+                    alert('请选择发布项目..');
+                    return false;
+                }
+                if(git_url==''){
+                    alert('git地址不能为空..');
+                    return false;
+                }
+
                 $.ajax({
                     url: '_project.html',
                     type: 'POST',
@@ -117,6 +145,14 @@
                         })
                 })
         });
+
+        function pkg1() {
+            $('#pack_cmd').val('/usr/local/maven/bin/mvn clean package -Dmaven.test.skip=true');
+        }
+
+        function pkg2() {
+            $('#pack_cmd').val('/usr/local/maven339/bin/mvn clean package -Dmaven.test.skip=true');
+        }
 
         function authorize(ths, ip, id) {
             var user_rank = $(ths).parent().prev().children().val();

@@ -424,7 +424,6 @@ class Project(BaseServiceList):
 
         pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
                                                        release_business_2)
-                                                             # release_business_1, release_business_2, release_obj.id)
 
         # 多进程执行连接Jenkins执行
         # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
@@ -432,7 +431,8 @@ class Project(BaseServiceList):
 
         # 多线程
         t = threading.Thread(target=self.jenkins_tasks, args=(pkg_name, release_git_url, release_branch, task_id,
-                                                              release_name, release_env_name, pack_cmd))
+                                                              release_name, release_env_name, pack_cmd, release_type,
+                                                              release_jdk_version))
         t.start()
 
         response.status = True
@@ -529,18 +529,21 @@ class Project(BaseServiceList):
 
         return True
 
-    def jenkins_tasks(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd):
+    def jenkins_tasks(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd,
+                      type, jdk_version):
         self.log(task_id, '尝试连接Jenkins...')
+        # 将发布脚本发送到目标机器
         cmd = "scp %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_config.host)
         os.system(cmd)
+
+        # 将配置文件发送到目标机器
+        cmd = 'scp -r %s root@%s:/opt/' % (jenkins_config.config_path, jenkins_config.host)
+        os.system(cmd)
+
         pack_cmd = '"' + pack_cmd + '"'
-        cmd = "python2.6 {0} {1} {2} {3} {4} {5} {6} {7}".format(*[jenkins_config.script_path, pkg_name, task_id,
-                                                                   release_git_url, release_branch, release_name,
-                                                                   release_env, pack_cmd])
-        print(cmd)
-        # python /opt/autopublishing.py /data/packages/infra/cmdb/107/v6_batch.war 107 http://gitlab.xxd.com/service/v6_batch.git master cmdb infra"
-        # cmd = "ssh root@%s python2.6 %s %s %s %s %s %s %s %s" % (jenkins_config.host, jenkins_config.script_path,
-        #                                                          pkg_name, task_id, release_git_url, release_branch,
+        cmd = "python2.6 {0} {1} {2} {3} {4} {5} {6} {7} {8}".format(*[jenkins_config.script_path, pkg_name, task_id,
+                                                                       release_git_url, release_branch, release_name,
+                                                                       release_env, pack_cmd, jdk_version])
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -552,18 +555,10 @@ class Project(BaseServiceList):
         ret = result
         obj = models.ReleaseTask.objects.filter(id=task_id).first()
         md5 = obj.release_md5
-        # cmd_s = "ssh root@{0} {1}".format(*[jenkins_config.host, cmd])
-        # ret = subprocess.Popen(cmd_s, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
-        # out, err = ret.communicate()
-        # print(cmd_s)
-        # print(out, err)
-        # ret = os.system(cmd_s)
         print(md5)
 
-        # models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
-
         if md5:
-            self.log(task_id, '生成md5...【完成】')
+            self.log(task_id, '生成资源md5...检查是否需要发布静态资源')
             # 打包成功后查找业务线节点机器 环境 + 业务线
             release_obj = models.ReleaseTask.objects.filter(id=task_id).first()
             business_1 = release_obj.release_env
@@ -573,66 +568,64 @@ class Project(BaseServiceList):
             count = models.Asset.objects.filter(business_1=business_1, business_2=business_2).count()
             values = models.Asset.objects.filter(business_1=business_1, business_2=business_2).only('id', 'host_ip')
 
-            # 发布 front和webapp 的静态资源
-            print(release_name)
-            if release_name == 'front' or release_name == 'webapp':
-                print('向Nginx发布资源....')
-                self.log(task_id, '向Nginx发布static静态资源...' % count)
-                nginx_conut = models.Asset.objects.filter(business_1=business_1, business_2='nginx').count()
-                nginx_values = models.Asset.objects.filter(business_1=business_1, business_2='nginx').only('id', 'host_ip')
+            # 发布 front和 webapp 的静态资源
+            name = str(release_name)
+            nginx_obj = models.BusinessTwo.objects.filter(name='nginx').first()
+            nginx_id = nginx_obj.id
+            if name in jenkins_config.static_nginx_dict:
+                self.log(task_id, '向Nginx发布static静态资源...')
+                nginx_conut = models.Asset.objects.filter(business_1=business_1, business_2=nginx_id).count()
+                nginx_values = models.Asset.objects.filter(business_1=business_1, business_2=nginx_id).only('id', 'host_ip')
 
                 num = 1
                 for item in nginx_values:
-                    print(111111111)
+                    self.log(task_id, '当前发布第%s台Nginx服务器%s...' % (num, item.host_ip))
                     ret = self.nginx_task(item.host_ip, release_name, pkg_name, task_id)
                     if not ret:
-                        self.log(task_id, '当前发布第%s台Nginx服务器%s...【失败】' % (num, item.host_ip))
+                        self.log(task_id, '发布第%s台Nginx服务器%s...【失败】' % (num, item.host_ip))
                         self.log(task_id, '终止发布...')
                         models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
                         result = False
                         break
-                    else:
-                        self.log(task_id, '当前发布第%s台Nginx服务器%s......' % (num, item.host_ip))
                     num += 1
 
-            print('7777777')
             if not result:
                 self.log(task_id, '发布失败！')
                 return False
 
+            models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
 
-            # self.log(task_id, '共需发布【%s】台节点机器...' % count)
-            # num = 1
-            # for item in values:
-            #     print(item.host_ip)
-            #     self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
-            #     # 目标机开始执行发布脚本
-            #     ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type, business_2)
-            #     if not ret:
-            #         self.log(task_id, '当前发布第%s台%s...【失败】' % (num, item.host_ip))
-            #         self.log(task_id, '终止发布...')
-            #         models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
-            #         result = False
-            #         break
-            #     else:
-            #         self.log(task_id, '当前发布第%s台%s...【完成】' % (num, item.host_ip))
-            #     num += 1
-            #
-            # if result:
-            #     self.log(task_id, '发布成功结束！')
-            #     models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
-            # else:
-            #     self.log(task_id, '发布失败！')
+            self.log(task_id, '----- 共需发布【%s】台节点服务器 -------' % count)
+            num = 1
+            for item in values:
+                print(item.host_ip)
+                self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
+                # 目标机开始执行发布脚本
+                ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type, business_2)
+                if not ret:
+                    self.log(task_id, '当前发布第%s台%s...【失败】' % (num, item.host_ip))
+                    self.log(task_id, '终止发布...')
+                    models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+                    result = False
+                    break
+                num += 1
 
-
+            if result:
+                if type == 1:
+                    self.log(task_id, 'Java start success...')
+                self.log(task_id, '发布成功结束！')
+                models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+            else:
+                self.log(task_id, '发布失败！')
+                models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
 
         else:
             ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
                                    preexec_fn=os.setsid)
             out, err = ret.communicate()
             err = str(err, encoding='utf-8')
-            self.log(task_id, err)
-            self.log(task_id, '生成md5...【失败】')
+            # self.log(task_id, err)
+            self.log(task_id, '......拉取代码失败 检查分支名是否正确')
             models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
 
     def log(self, task_id, msg):
@@ -658,11 +651,6 @@ class Project(BaseServiceList):
         os.system(cmd)
 
         cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId, serviceType, name)
-        print(cmd)
-        # ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
-        #                        preexec_fn=os.setsid)
-        # out, err = ret.communicate()
-        # err = str(err, encoding='utf-8')
         # 脚本执行过程中 会陆续上传执行日志
         ret = os.system(cmd)
         if ret:

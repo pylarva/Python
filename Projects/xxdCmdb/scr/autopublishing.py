@@ -44,6 +44,11 @@ run_log_file = '/home/admin/logs/run.log'
 error_log_file = '/home/admin/logs/err.log'
 CHECK_SERVICE_TIMEOUT = 30
 
+# 配置文件源目录路径
+config_scource_path = '/opt/config/prod/'
+# 配置文件目标目录路径
+config_target_path = '/usr/local/tomcat/webapps/AAA/WEB-INF/classes/'
+
 # 需要向nginx上发布静态资源的项目列表和默认发布目录
 static_nginx_dict = {'front': '/static/front/', 'webapp': '/static/webapp/'}
 
@@ -401,13 +406,25 @@ def checkFileMd5sum(filepath, md5sum):
     return RET_OK
 
 def downloadFile(path, dest):
-    ul =urllib.URLopener()
+    # dir = os.path.dirname(dest)
+    # try:
+    #     cmd = 'wget %s -P %s' % (path, dir)
+    #     ret, out = ExecCmd(cmd)
+    #     Logger().log(cmd, True)
+    #     Logger().log(out, True)
+    #     if ret:
+    #         Logger().log(out, False)
+    #         return out
+    # except Exception, e:
+    #     Logger().log(e, True)
     try:
+        ul = urllib.URLopener()
         ul.retrieve(path, dest)
         Logger().log('%s->%s' % (path, dest), True)
-    except IOError, e:
-        LOGGER.info('Download file failed: %s, exception: %s' % (path, str(e)))
-        Logger().log('Download file failed: %s, exception: %s' % (path, str(e)), False)
+    except Exception, e:
+        LOGGER.info('Download file failed: %s, exception: %s' % (path, e))
+        # Logger().log('Download file failed: %s, exception: %s' % (path, str(e)), True)
+        # Logger().log('Download file failed: %s, exception: %s' % (path, str(e)), False)
         return RET_ERROR_DOWNLOAD_FILE_FAILED
 
     return RET_OK
@@ -613,13 +630,8 @@ def publishTomcatService(config, name, taskId, runas):
             time.sleep(3)
 
             # 如果java进程无法关闭 kill进程
-            # p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
             cmd = "ps -A"
             retCode, output = execSystemCommandRunAs(cmd, runas)
-            # Logger().log('stop pid --> %s %s' % (config['stopServiceCommand'], output))
-
-            # out, err = p.communicate()
-            # s = bytes('java', encoding='utf-8')
             s = 'java'
             for line in output.splitlines():
                 if s in line:
@@ -648,11 +660,6 @@ def publishTomcatService(config, name, taskId, runas):
         retCode, output = execSystemCommandRunAs(cmd, runas)
 
     # publish files
-    # cmd = '/bin/cp %s %s/%s.war' %(config['destFile'], config['publishPath'], config['appFilePrefix'])
-    # 解压
-    # os.system('unzip %s -d %s/%s' % (config['destFile'], config['tempDir'], name))
-    # source_dir = '%s/%s' % (config['tempDir'], name)
-    #
     # 需要将代码放入ROOT文件夹的项目 ➡️ 新建ROOT目录
     if name in ROOT_obj:
         if not os.path.exists('/usr/local/tomcat/webapps/ROOT/'):
@@ -662,24 +669,32 @@ def publishTomcatService(config, name, taskId, runas):
             cmd = 'rm -fr /usr/local/tomcat/webapps/ROOT/*'
             os.system(cmd)
         cmd = 'unzip -o %s -d %sROOT/' % (config['destFile'], config['publishPath'])
-        # cmd = '/bin/cp -rf %s/* %sROOT/' % (source_dir, config['publishPath'])
     else:
         cmd = 'unzip -o %s -d %s/%s/' %(config['destFile'], config['publishPath'], name)
-    # retCode, output = execSystemCommandRunAs(cmd, runas)
     os.system(cmd)
     Logger().log(cmd, True)
-    # recordStageLog(config['taskId'], 'publishFiles', retCode, output)
-    # if retCode != RET_OK: return retCode
-
-    # front webapp 项目需要向nginx上发布静态资源
-    if name in static_nginx_dict:
-        pass
-
 
     # 启动服务之前 新建软链
     if name in soft_link_list:
         ret = createSoftLink(name)
         if ret != RET_OK: return ret
+
+    # 拷贝配置文件
+    config_path_name = '%s%s/' % (config_scource_path, name)
+    try:
+        if os.path.exists(config_path_name):
+            if name in soft_link_list:
+                config_target_path_new = config_target_path.replace('AAA', soft_link_list[name])
+            else:
+                config_target_path_new = config_target_path.replace('AAA', name)
+            cmd = '/bin/cp -r %s* %s' % (config_path_name, config_target_path_new)
+            ret, out = ExecCmd(cmd)
+            Logger().log(cmd, True)
+            Logger().log('The [ %s ] had copy config files to %s...' % config_target_path_new, True)
+        else:
+            Logger().log('The [ %s ] does not need copy config files...' % name, True)
+    except Exception, e:
+        Logger().log('copy config failed...%s' % e, True)
 
     # start service
     retCode, output = execSystemCommandRunAs(config['startServiceCommand'], runas, timeout=300)
@@ -861,7 +876,7 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, name, runas):
     return RET_OK
 
 def run(pkgUrl, md5sum, taskId, serviceType, name, runas='admin'):
-    Logger()
+    # Logger()
     if not os.path.exists(run_log_file):
         os.mknod(run_log_file)
     if not os.path.exists(error_log_file):
@@ -875,7 +890,7 @@ def run(pkgUrl, md5sum, taskId, serviceType, name, runas='admin'):
         os.environ['PATH']='/usr/local/jdk/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/zabbix/bin:/usr/local/zabbix/sbin'
         #setRunningUser(RUNNING_USER)
         global LOGGER
-        LOGGER = initLogger(LOGGER_FILE)
+        # LOGGER = initLogger(LOGGER_FILE)
         LOGGER.info('uid: %s %s' % (os.getuid(),os.geteuid()))
         LOGGER.info('chdir: %s' % (os.getcwd()))
         LOGGER.info(str(os.environ))
@@ -954,7 +969,7 @@ def ExecCmd(cmd):
         return 0, out
 
 
-def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env, pack_cmd):
+def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env, pack_cmd, jdk_version):
     """
     模拟Jenkins功能 拉代码 + 打包
     :return:
@@ -962,6 +977,23 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     retCode = 0
     uploadLog(task_id, '连接成功......开始拉取代码')
     Logger().log('[%s]连接成功......开始拉取代码'% task_id, True)
+
+    # 设置环境变量
+    os.chdir(HOME_DIR)
+    if jdk_version == '1':
+        os.environ['JAVA_HOME'] = '/usr/local/jdk8'
+        cmd = 'echo /usr/local/jdk8/bin/:$PATH'
+    elif jdk_version == '2':
+        os.environ['JAVA_HOME'] = '/usr/local/jdk7'
+        cmd = 'echo /usr/local/jdk7/bin/:$PATH'
+    elif jdk_version == '3':
+        os.environ['JAVA_HOME'] = '/usr/java/jdk1.6.0_32'
+        cmd = 'echo /usr/java/jdk1.6.0_32/bin/:$PATH'
+
+    os.environ['HOME'] = HOME_DIR
+    os.system(cmd)
+    Logger().log(str(os.environ), True)
+
     # 拉去代码
     # ('/data/packages/infra/cmdb/107/infra_cmdb_107.war', '107', 'http://gitlab.xxd.com/service/v6_batch.git', 'master', 'cmdb', 'infra')
     # print(pkg_name, task_id, release_git_url, release_branch, name, env)
@@ -1073,7 +1105,7 @@ def NginxStatic(name, pkgUrl, taskId):
     if name == 'front':
         dest_dir = '/static/front/'
     if name == 'webapp':
-        dest_dir = 'static/webapp/'
+        dest_dir = '/static/webapp/'
     if os.path.exists(dest_dir):
         cmd = 'rm -fr %s*' % dest_dir
         ret, out = ExecCmd(cmd)
@@ -1084,9 +1116,16 @@ def NginxStatic(name, pkgUrl, taskId):
             return out
     else:
         os.makedirs(dest_dir)
-    downloadFile(pkgUrl, dest_dir)
 
-    cmd = 'unzip %s%s' % (dest_dir, 'static.zip')
+    dest_file = '%s%s' % (dest_dir, 'static.zip')
+
+    ret = downloadFile(pkgUrl, dest_file)
+    if not ret:
+        Logger().log('下载静态资源完成...', True)
+    else:
+        Logger().log('下载静态资源失败...', True)
+
+    cmd = 'unzip -o %s -d %s' % (dest_file, dest_dir)
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)
@@ -1096,6 +1135,8 @@ def NginxStatic(name, pkgUrl, taskId):
     return 0
 
 if __name__ == '__main__':
+    # global LOGGER
+    LOGGER = initLogger(LOGGER_FILE)
     Logger()
     Logger().log('%s' % sys.argv, True)
     Logger().log('%s' % len(sys.argv), True)
@@ -1104,10 +1145,11 @@ if __name__ == '__main__':
         # Jenkins端打包完毕后上传MD5值
         # retCode = uploadMd5(sys.argv[1], sys.argv[2])
         retCode = NginxStatic(sys.argv[1], sys.argv[2], sys.argv[3])
+        Logger().log('exit --> %s' % retCode)
         sys.exit(retCode)
     # 集成Jenkins功能
-    if len(sys.argv) == 8:
-        retCode = JenkinsModify(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5],sys.argv[6],sys.argv[7])
+    if len(sys.argv) == 9:
+        retCode = JenkinsModify(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5],sys.argv[6],sys.argv[7],sys.argv[8])
         sys.exit(retCode)
     if len(sys.argv) != 6:
         print "Miss arguments."
