@@ -34,14 +34,14 @@
                                   <span class="label label-success">发布类型</span>
 
                 <br>
-                  <select id="obj_type" class="selectpicker" style="width: 600px; border-radius: 1px;">
+                  <select id="obj_type" class="selectpicker" style="width: 600px; border-radius: 1px;" onchange="publish_type()">
                       {% for item in release_type %}
                       <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
                       {% endfor %}
                   </select>
                     <br>
                     <br>
-                <div style="display: inline-block; float: left;">
+                <div id="jdk_div" style="float: left;" >
                       <span class="label label-warning">JDK版本</span>
 
                         <div class="radio">
@@ -64,13 +64,13 @@
                         </div>
                 </div>
 
-                <div style="display: inline-block; margin-left: 100px; float: left">
+                <div id="mvn_div" style="display: inline-block; margin-left: 100px; float: left">
                       <span class="label label-info">Maven版本</span>
 
                         <div class="radio" onchange="pkg1()">
                           <label>
                             <input type="radio" name="optionsRadios1" id="optionsRadios11" value="1" checked>
-                            maven
+                            maven323
                           </label>
                         </div>
                         <div class="radio" onchange="pkg2()">
@@ -152,6 +152,17 @@
 
         function pkg2() {
             $('#pack_cmd').val('/usr/local/maven339/bin/mvn clean package -Dmaven.test.skip=true');
+        }
+
+        function publish_type() {
+            var obj_type = $('#obj_type').selectpicker('val');
+            if(obj_type=='2'){
+                $('#jdk_div').attr('style', 'display: none;');
+                $('#mvn_div').attr('style', 'display: none;')
+            }else{
+                $('#jdk_div').attr('style', 'float: left;');
+                $('#mvn_div').attr('style', 'display: inline-block; margin-left: 100px; float: left')
+            }
         }
 
         function authorize(ths, ip, id) {

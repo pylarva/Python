@@ -102,14 +102,7 @@ import paramiko
 #
 # print(result_1, result_2, result_3)
 
-config_target_path = '/usr/local/tomcat/webapps/AAA/WEB-INF/classes/'
-
-a = config_target_path.replace('AAA', 'BBB')
-print(a)
-soft_link_list = {'front':'ROOT', 'admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm'}
-
-name = 'ssss'
-if name in soft_link_list:
-    config_target_path_new = config_target_path.replace('AAA', soft_link_list[name])
-
-print(config_target_path_new)
+if os.path.exists('/usr/local/tomcat/webapps/m/static/image/'):
+    print('yes')
+else:
+    print('no')

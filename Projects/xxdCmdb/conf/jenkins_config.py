@@ -23,3 +23,13 @@ static_nginx_dict = {'front': '/static/front/', 'webapp': '/static/webapp/'}
 # 配置文件存放目录
 config_path = '/opt/config/'
 # config_path = '/opt/config/'
+
+# Nginx服务器
+# 测试环境nginx机器
+nginx_test_ip_list = ['192.168.31.110', '192.168.33.110']
+
+# 生产环境nginx机器
+nginx_prod_ip_list = ['']
+
+# 静态资源包
+static_pkg_name = {'static_m': 'dist', 'static_mobile': 'html', 'static_html': 'html', 'static_pc': 'build'}
