@@ -29,7 +29,7 @@ config_path = '/opt/config/'
 nginx_test_ip_list = ['192.168.31.110', '192.168.33.110']
 
 # 生产环境nginx机器
-nginx_prod_ip_list = ['']
+nginx_prod_ip_list = ['192.168.31.110', '192.168.33.110']
 
 # 静态资源包
 static_pkg_name = {'static_m': 'dist', 'static_mobile': 'html', 'static_html': 'html', 'static_pc': 'build'}

@@ -261,10 +261,16 @@ class ProjectTask(models.Model):
         (3, '发布失败'),
     )
 
+    static_cover_type = (
+        (1, '迭代'),
+        (2, '覆盖')
+    )
+
     business_1 = models.ForeignKey('BusinessOne', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
     business_2 = models.ForeignKey('BusinessTwo', null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
     project_type = models.ForeignKey('ReleaseType', null=True, blank=True, default=1, on_delete=models.SET_NULL)
     jdk_version = models.IntegerField(choices=jdk_version_choice, null=True, blank=True)
+    static_type = models.IntegerField(choices=static_cover_type, null=True, blank=True)
     release_last_id = models.CharField(max_length=32, null=True, blank=True, default='-')
     release_last_time = models.CharField(max_length=32, null=True, blank=True, default='-')
     release_user = models.CharField(max_length=32, null=True, blank=True)

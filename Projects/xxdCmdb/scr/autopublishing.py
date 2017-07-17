@@ -32,7 +32,7 @@ from threading import Timer
 
 
 API_HOST = 'cmdb.xxd.com'
-API_URL = 'http://172.16.18.149:8005/api/release'
+API_URL = 'http://172.16.18.41:8005/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -69,10 +69,10 @@ pkg_cmd_no_p_list = ['webapp', 'admin', 'batch', 'credit', 'finance', 'mobile', 
 java_version_path = {'1': '/usr/local/jdk8', '2': '/usr/local/jdk7', '3': '/usr/java/jdk1.6.0_32'}
 
 # 发布静态资源项目打包命令列表
-static_pkg_cmd_list = {'static_m': 'cnpm install && npm run build && tar zcvf dist.zip dist && cp dist.zip ',
-                       'static_mobile': 'cnpm install && gulp && tar zcvf html.zip html && cp html.zip ',
-                       'static_html': 'cnpm install && gulp && tar zcvf html.zip html && cp html.zip ',
-                       'static_pc': 'cnpm install && gulp && tar zcvf build.zip pages/build && cp build.zip '}
+static_pkg_cmd_list = {'static_m': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip ',
+                       'static_mobile': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
+                       'static_html': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
+                       'static_pc': 'cnpm install && gulp && /usr/bin/zip -r build.zip pages/build && /bin/cp build.zip '}
 
 static_pkg_name = {'static_m': 'dist', 'static_mobile': 'html', 'static_html': 'html', 'static_pc': 'build'}
 
@@ -440,6 +440,8 @@ def downloadFile(path, dest):
         Logger().log('%s->%s' % (path, dest), True)
     except Exception, e:
         LOGGER.info('Download file failed: %s, exception: %s' % (path, e))
+        Logger().log('Dowanload %s -> %s err --> %s' % (path, dest, e), True)
+        Logger().log('Dowanload %s -> %s err --> %s' % (path, dest, e), False)
         # Logger().log('Download file failed: %s, exception: %s' % (path, str(e)), True)
         # Logger().log('Download file failed: %s, exception: %s' % (path, str(e)), False)
         return RET_ERROR_DOWNLOAD_FILE_FAILED
@@ -1116,7 +1118,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         Logger().log(out, False)
         return out
 
-    cmd = 'git config remote.origin.url %s' % release_git_url
+    cmd = '/usr/local/git/bin/git rev-parse --is-inside-work-tree'
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)
@@ -1124,7 +1126,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         Logger().log(out, False)
         return out
 
-    cmd = 'git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1' % release_git_url
+    cmd = '/usr/local/git/bin/git config remote.origin.url %s' % release_git_url
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)
@@ -1132,7 +1134,16 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         Logger().log(out, False)
         return out
 
-    cmd = 'git rev-parse origin/%s' % release_branch
+    # cmd = 'unset SSH_ASKPASS'
+    # os.system(cmd)
+    # cmd = "echo 'unset SSH_ASKPASS' >> ~/.bashrc && source ~/.bashrc && git clone %s " % release_git_url
+    # os.system(cmd)
+
+    # cmd = 'git clone %s' % release_git_url
+    # cmd = '/usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/*' % release_git_url
+    # os.system(cmd)
+    # cmd = "ssh 127.0.0.1 'cd ~/.cmdb/workspace/ && git clone %s'" % release_git_url
+    cmd = "ssh 127.0.0.1 'cd /root/.cmdb/workspace/%s && /usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1'" % (name, release_git_url)
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)
@@ -1140,26 +1151,43 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         Logger().log(out, False)
         return out
 
-    cmd = 'git checkout -f %s > /dev/null 2>&1' % out
+    cmd = '/usr/local/git/bin/git rev-parse origin/%s' % release_branch
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+    if ret:
+        Logger().log(out, False)
+        return out
+
+    cmd = '/usr/local/git/bin/git checkout -f %s > /dev/null 2>&1' % out
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)
 
     uploadLog(task_id, '正在进行代码打包......')
 
-    cmd = 'set -e'
-    os.system(cmd)
-    Logger().log('set -e', True)
+    # cmd = 'set -e'
+    # os.system(cmd)
+    # Logger().log('set -e', True)
 
     # 项目mvn打包如果不要 -P 参数则不加
     if type == '2':
         os.chdir(workspace_path)
-        cmd = '%s%s' % (static_pkg_cmd_list[name], pkg_path)
+        cmd = '%s%s >> %s' % (static_pkg_cmd_list[name], pkg_path, run_log_file )
+        uploadLog(task_id, cmd)
         ret, out = ExecCmd(cmd)
         Logger().log(cmd, True)
         Logger().log(out, True)
-        md5 = 'md5'
-        return md5
+        pkg_url = '%s/%s%s' % (pkg_path, static_pkg_name[name], '.zip')
+        if os.path.exists(pkg_url):
+            ret = uploadMd5(pkg_url, task_id)
+            if ret:
+                Logger().log('create md5 failed...', True)
+                return ret
+            return 0
+        else:
+            Logger().log('files not exist..%s' % pkg_url, True)
+            return False
 
     else:
         if name in pkg_cmd_no_p_list:
@@ -1244,11 +1272,19 @@ def NginxStatic(name, pkgUrl, taskId, env):
     else:
         dest_file = '%s%s.zip' % (dest_dir, static_pkg_name[name])
 
+    Logger().log('down to %s...' % dest_file, True)
+
     ret = downloadFile(pkgUrl, dest_file)
     if not ret:
         Logger().log('下载静态资源完成...', True)
     else:
         Logger().log('下载静态资源失败...', True)
+
+    if os.path.exists(dest_file):
+        Logger().log('下载静态资源完成...', True)
+    else:
+        Logger().log('下载静态资源失败...', True)
+
 
     cmd = 'unzip -o %s -d %s' % (dest_file, dest_dir)
     ret, out = ExecCmd(cmd)

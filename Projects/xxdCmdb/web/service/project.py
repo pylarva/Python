@@ -421,8 +421,9 @@ class Project(BaseServiceList):
         release_business_1 = release_obj.release_env
         release_business_2 = release_obj.release_name
         task_id = release_obj.id
+        release_name = str(release_name)
 
-        if release_type == '2':
+        if release_type == 2:
             pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
                                                            jenkins_config.static_pkg_name[release_name])
         else:
@@ -465,13 +466,12 @@ class Project(BaseServiceList):
         result = stdout.read()
 
         print(result)
-        ret = result
         obj = models.ReleaseTask.objects.filter(id=task_id).first()
         md5 = obj.release_md5
         print(md5)
 
         # 发布类型为静态资源
-        if type == '2':
+        if type == 2:
             if release_env != 'prod':
                 nginx_ip_list = jenkins_config.nginx_test_ip_list
             else:
@@ -481,6 +481,7 @@ class Project(BaseServiceList):
                 self.log(task_id, '------ 开始发布静态资源 ------')
 
                 num = 1
+                self.log(task_id, nginx_ip_list)
                 for ip in nginx_ip_list:
                     self.log(task_id, '当前发布第%s台Nginx服务器%s...' % (num, ip))
                     ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env)
@@ -488,11 +489,11 @@ class Project(BaseServiceList):
                         self.log(task_id, '发布第%s台Nginx服务器%s...【失败】' % (num, ip))
                         self.log(task_id, '终止发布...')
                         models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
-                        result = False
-                        break
+                        return False
                     num += 1
 
                 models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+                self.log(task_id, '发布成功结束！')
                 return True
             else:
                 models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
@@ -512,12 +513,8 @@ class Project(BaseServiceList):
 
             # 发布 front和 webapp 的静态资源
             name = str(release_name)
-            # nginx_obj = models.BusinessTwo.objects.filter(name='nginx').first()
-            # nginx_id = nginx_obj.id
             if name in jenkins_config.static_nginx_dict:
                 self.log(task_id, '向Nginx发布static静态资源...')
-                # nginx_conut = models.Asset.objects.filter(business_1=business_1, business_2=nginx_id).count()
-                # nginx_values = models.Asset.objects.filter(business_1=business_1, business_2=nginx_id).only('id', 'host_ip')
                 num = 1
                 if release_env != 'prod':
                     nginx_ip_list = jenkins_config.nginx_test_ip_list
@@ -541,8 +538,6 @@ class Project(BaseServiceList):
             if not result:
                 self.log(task_id, '发布失败！')
                 return False
-
-            # models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
 
             self.log(task_id, '----- 共需发布【%s】台节点服务器 -------' % count)
             num = 1
@@ -610,9 +605,7 @@ class Project(BaseServiceList):
         return True
 
     def nginx_task(self, ip, name, pkgUrl, taskId, env):
-        pkgUrl = os.path.dirname(pkgUrl)
         pkgUrl = pkgUrl.replace('/data/packages', jenkins_config.pkgUrl)
-        pkgUrl = '%s%s' % (pkgUrl, '/static.zip')
 
         cmd = "scp %s root@%s:/opt/" % (jenkins_config.source_script_path, ip)
         os.system(cmd)

@@ -82,6 +82,24 @@
                         </div>
                 </div>
 
+                <div id="static_div" style="display: none">
+                      <span class="label label-info">静态资源发布方式</span>
+
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios2" id="optionsRadios21" value="1" checked>
+                            迭代
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios2" id="optionsRadios22" value="2">
+                            覆盖
+                          </label>
+                        </div>
+                        </div>
+                </div>
+
                 <br>
             <div style="width: 10000px; height: 100px"></div>
             <div style="display: inline-block; float: left">
@@ -117,6 +135,7 @@
                 var obj_business = $('#business_2').selectpicker('val');
                 var obj_type = $('#obj_type').selectpicker('val');
                 var jdk_version = $("input[name='optionsRadios']:checked").val();
+                var static_cover_type = $("input[name='optionsRadios2']:checked").val();
                 var git_url = $('#git_url').val();
                 var pack_cmd = $('#pack_cmd').val();
                 var user_name = $.cookie('username');
@@ -133,7 +152,7 @@
                     url: '_project.html',
                     type: 'POST',
                     data: {'obj_env': obj_business, 'obj_type': obj_type, 'jdk_version': jdk_version, 'git_url': git_url,
-                           'user_name': user_name, 'pack_cmd': pack_cmd},
+                           'user_name': user_name, 'pack_cmd': pack_cmd, 'static_cover_type': static_cover_type},
                     dataType: 'JSON',
                     success: function (response) {
                         if (response.status){
@@ -158,7 +177,8 @@
             var obj_type = $('#obj_type').selectpicker('val');
             if(obj_type=='2'){
                 $('#jdk_div').attr('style', 'display: none;');
-                $('#mvn_div').attr('style', 'display: none;')
+                $('#mvn_div').attr('style', 'display: none;');
+                $('#static_div').attr('style', 'display:margin-left: 100px; float: left')
             }else{
                 $('#jdk_div').attr('style', 'float: left;');
                 $('#mvn_div').attr('style', 'display: inline-block; margin-left: 100px; float: left')
