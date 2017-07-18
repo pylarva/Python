@@ -32,8 +32,8 @@ from threading import Timer
 
 
 API_HOST = 'cmdb.xxd.com'
-# API_URL = 'http://172.16.18.41:8005/api/release'
-API_URL = 'http://cmdb.xinxindai.com/api/release'
+API_URL = 'http://172.16.18.41:8005/api/release'
+# API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -54,14 +54,15 @@ config_target_path = '/usr/local/tomcat/webapps/AAA/WEB-INF/classes/'
 static_nginx_dict = ['front', 'webapp']
 
 # 需要ROOT目录的项目列表
-ROOT_obj = ['front', 'seo', 'webapi', 'sso', 'shorturl']
+ROOT_obj = ['front', 'seo', 'webapi', 'sso', 'shorturl', 'fk']
 
 # 项目名与路径不一致项目列表
 Diff_obj = {'front': 'ROOT', 'seo': 'ROOT', 'webapi': 'ROOT', 'sso': 'ROOT', 'shorturl': 'ROOT', 'admin': 'xxdai_sys_admin',
-            'webapp': 'm'}
+            'webapp': 'm', 'fk': 'ROOT'}
 
 # 新建软链项目列表
-soft_link_list = {'front':'ROOT', 'xxdai_sys_admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm', 'mobile': 'v5_mobile'}
+soft_link_list = {'front':'ROOT', 'xxdai_sys_admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm', 'mobile': 'v5_mobile',
+                  'fk': 'ROOT'}
 
 # 打包不需要 -P 参数的项目列表
 pkg_cmd_no_p_list = ['webapp', 'admin', 'batch', 'credit', 'finance', 'mobile', 'seo', 'tradews', 'webservice', 'front']
@@ -569,11 +570,14 @@ def createSoftLink(name):
         try:
             if name in ROOT_obj:
 
+                cmd = 'mkdir -p /usr/local/tomcat/webapps/ROOT/static/admin/'
+                ret, out = ExecCmd(cmd)
+
                 cmd = 'rm -fr /usr/local/tomcat/webapps/ROOT/static/image'
-                # ret, out = ExecCmd(cmd)
-                os.system(cmd)
-                Logger().log(cmd, True)
-                # Logger().log('%s --> %s' % (cmd, out), True)
+                ret, out = ExecCmd(cmd)
+                # os.system(cmd)
+                # Logger().log(cmd, True)
+                Logger().log('%s --> %s' % (cmd, out), True)
 
                 cmd = 'ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/ROOT/static/'
                 ret, out = ExecCmd(cmd)
@@ -1152,7 +1156,8 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         else:
             Logger().log('files not exist..%s' % pkg_url, True)
             return False
-
+    elif name == 'fk':
+        pass
     else:
         if name in pkg_cmd_no_p_list:
             cmd = "find ./ -name 'pom.xml' | xargs -I {} sh -c 'pom_dir=`dirname {}` && cd $pom_dir && %s >> %s'" % (pack_cmd,run_log_file)
@@ -1187,12 +1192,23 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     os.chdir(workspace_path)
 
     cmd = "find ./ -name '*.war' -exec cp {} %s \;" % pkg_name
+
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)
     if ret:
         Logger().log(out, False)
         return out
+
+    # if name == 'fk':
+    #     pkg_fk_name = pkg_name.replace('%s' % os.path.basename(pkg_name), 'fk.war')
+    #     cmd = 'mv %s %s' % (pkg_name, pkg_fk_name)
+    #     ret, out = ExecCmd(cmd)
+    #     Logger().log(cmd, True)
+    #     Logger().log(out, True)
+    #     if ret:
+    #         Logger().log(out, False)
+    #         return out
 
     os.chdir(workspace_path)
 

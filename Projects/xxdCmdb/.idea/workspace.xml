@@ -96,38 +96,38 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="jenkins_config.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="jenkins_config.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="30" column="13" lean-forward="true" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
+            <state relative-caret-position="408">
+              <caret line="24" column="30" lean-forward="true" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="autopublishing.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="autopublishing.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scr/autopublishing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="36" column="16" lean-forward="true" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="16" />
+            <state relative-caret-position="-442">
+              <caret line="577" column="32" lean-forward="true" selection-start-line="577" selection-start-column="32" selection-end-line="577" selection-end-column="32" />
               <folding>
                 <element signature="e#293#302#0" expanded="true" />
-                <element signature="e#8041#8166#0" expanded="false" />
-                <element signature="e#9298#9490#0" expanded="false" />
-                <element signature="e#9553#9955#0" expanded="false" />
-                <element signature="e#10016#10436#0" expanded="false" />
-                <element signature="e#10499#10920#0" expanded="false" />
-                <element signature="e#11437#12118#0" expanded="false" />
-                <element signature="e#12175#12666#0" expanded="false" />
-                <element signature="e#12689#12717#0" expanded="false" />
-                <element signature="e#12742#12883#0" expanded="false" />
-                <element signature="e#12910#13176#0" expanded="false" />
-                <element signature="e#13221#13567#0" expanded="false" />
-                <element signature="e#14608#15250#0" expanded="false" />
-                <element signature="e#15313#15735#0" expanded="false" />
-                <element signature="e#27053#28915#0" expanded="false" />
-                <element signature="e#28960#30473#0" expanded="false" />
+                <element signature="e#8093#8218#0" expanded="false" />
+                <element signature="e#9350#9542#0" expanded="false" />
+                <element signature="e#9605#10007#0" expanded="false" />
+                <element signature="e#10068#10488#0" expanded="false" />
+                <element signature="e#10551#10972#0" expanded="false" />
+                <element signature="e#11489#12170#0" expanded="false" />
+                <element signature="e#12227#12718#0" expanded="false" />
+                <element signature="e#12741#12769#0" expanded="false" />
+                <element signature="e#12794#12935#0" expanded="false" />
+                <element signature="e#12962#13228#0" expanded="false" />
+                <element signature="e#13273#13619#0" expanded="false" />
+                <element signature="e#14660#15302#0" expanded="false" />
+                <element signature="e#15365#15787#0" expanded="false" />
+                <element signature="e#27224#29086#0" expanded="false" />
+                <element signature="e#29131#30644#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -243,8 +243,8 @@
         <option value="$PROJECT_DIR$/web/templates/project.html" />
         <option value="$PROJECT_DIR$/conf/ldap_acount.py" />
         <option value="$PROJECT_DIR$/test/test1.py" />
-        <option value="$PROJECT_DIR$/scr/autopublishing.py" />
         <option value="$PROJECT_DIR$/conf/jenkins_config.py" />
+        <option value="$PROJECT_DIR$/scr/autopublishing.py" />
       </list>
     </option>
   </component>
@@ -829,7 +829,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="13" />
+      <option name="time" value="14" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1220,36 +1220,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scr/autopublishing.py">
+    <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
-          <caret line="36" column="16" lean-forward="true" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="16" />
-          <folding>
-            <element signature="e#293#302#0" expanded="true" />
-            <element signature="e#8041#8166#0" expanded="false" />
-            <element signature="e#9298#9490#0" expanded="false" />
-            <element signature="e#9553#9955#0" expanded="false" />
-            <element signature="e#10016#10436#0" expanded="false" />
-            <element signature="e#10499#10920#0" expanded="false" />
-            <element signature="e#11437#12118#0" expanded="false" />
-            <element signature="e#12175#12666#0" expanded="false" />
-            <element signature="e#12689#12717#0" expanded="false" />
-            <element signature="e#12742#12883#0" expanded="false" />
-            <element signature="e#12910#13176#0" expanded="false" />
-            <element signature="e#13221#13567#0" expanded="false" />
-            <element signature="e#14608#15250#0" expanded="false" />
-            <element signature="e#15313#15735#0" expanded="false" />
-            <element signature="e#27053#28915#0" expanded="false" />
-            <element signature="e#28960#30473#0" expanded="false" />
-          </folding>
+          <caret line="24" column="30" lean-forward="true" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
+    <entry file="file://$PROJECT_DIR$/scr/autopublishing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="30" column="13" lean-forward="true" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
-          <folding />
+        <state relative-caret-position="-442">
+          <caret line="577" column="32" lean-forward="true" selection-start-line="577" selection-start-column="32" selection-end-line="577" selection-end-column="32" />
+          <folding>
+            <element signature="e#293#302#0" expanded="true" />
+            <element signature="e#8093#8218#0" expanded="false" />
+            <element signature="e#9350#9542#0" expanded="false" />
+            <element signature="e#9605#10007#0" expanded="false" />
+            <element signature="e#10068#10488#0" expanded="false" />
+            <element signature="e#10551#10972#0" expanded="false" />
+            <element signature="e#11489#12170#0" expanded="false" />
+            <element signature="e#12227#12718#0" expanded="false" />
+            <element signature="e#12741#12769#0" expanded="false" />
+            <element signature="e#12794#12935#0" expanded="false" />
+            <element signature="e#12962#13228#0" expanded="false" />
+            <element signature="e#13273#13619#0" expanded="false" />
+            <element signature="e#14660#15302#0" expanded="false" />
+            <element signature="e#15365#15787#0" expanded="false" />
+            <element signature="e#27224#29086#0" expanded="false" />
+            <element signature="e#29131#30644#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
