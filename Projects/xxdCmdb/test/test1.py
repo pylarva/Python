@@ -102,7 +102,6 @@ import paramiko
 #
 # print(result_1, result_2, result_3)
 
-if os.path.exists('/usr/local/tomcat/webapps/m/static/image/'):
-    print('yes')
-else:
-    print('no')
+s = 'tag/1.1.1'
+if 'tag' in s:
+    print('ok')

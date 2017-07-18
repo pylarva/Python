@@ -14,8 +14,8 @@ api_token = '9e235779d590f7c63d45201bb8c969be'
 
 pkgUrl = 'http://build.xxd.com'
 
-# source_script_path = '/application/xxdCmdb/scr/autopublishing.py'
-source_script_path = '/Users/pylarva/github/Python/Projects/xxdCmdb/scr/autopublishing.py'
+source_script_path = '/application/xxdCmdb/scr/autopublishing.py'
+# source_script_path = '/Users/pylarva/github/Python/Projects/xxdCmdb/scr/autopublishing.py'
 
 # 需要进行两次发布的项目
 static_nginx_dict = {'front': '/static/front/', 'webapp': '/static/webapp/'}
@@ -32,4 +32,4 @@ nginx_test_ip_list = ['192.168.31.110', '192.168.33.110']
 nginx_prod_ip_list = ['192.168.31.110', '192.168.33.110']
 
 # 静态资源包
-static_pkg_name = {'static_m': 'dist', 'static_mobile': 'html', 'static_html': 'html', 'static_pc': 'build'}
+static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build'}

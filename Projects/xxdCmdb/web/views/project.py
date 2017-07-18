@@ -26,6 +26,7 @@ class ProjectListView(View):
         git_url = request.POST.get('git_url')
         pack_cmd = request.POST.get('pack_cmd')
         username = request.POST.get('user_name')
+        static_type = request.POST.get('static_cover_type')
 
         # obj = models.ProjectTask.objects.filter(id=release_id).first()
         # release_name = obj.name
@@ -40,7 +41,7 @@ class ProjectListView(View):
         #     release_id = str(t) + str(n)
 
         models.ProjectTask.objects.create(business_2_id=release_env, project_type_id=release_type, jdk_version=jdk_version,
-                                          git_url=git_url, release_user=username, pack_cmd=pack_cmd)
+                                          git_url=git_url, release_user=username, pack_cmd=pack_cmd, static_type=static_type)
         response.status = True
         return JsonResponse(response.__dict__)
 

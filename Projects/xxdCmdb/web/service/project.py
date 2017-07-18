@@ -400,6 +400,8 @@ class Project(BaseServiceList):
         obj = models.ProjectTask.objects.filter(id=release_id).first()
         release_name = obj.business_2
         pack_cmd = obj.pack_cmd
+        static_type = obj.static_type
+
         obj_env = models.BusinessOne.objects.filter(id=release_env).first()
         release_env_name = obj_env.name
 
@@ -424,11 +426,18 @@ class Project(BaseServiceList):
         release_name = str(release_name)
 
         if release_type == 2:
+            # if static_type == 2:
+                # version_name = release_branch.split('/')[-1]
+                # self.log(task_id, 'version_name --> %s' % version_name)
+                # pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
+                #                                                version_name)
+            # else:
             pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
                                                            jenkins_config.static_pkg_name[release_name])
         else:
             pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
                                                            release_business_2)
+        print('==========',pkg_name, static_type, type(static_type))
 
         # 多进程执行连接Jenkins执行
         # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
@@ -437,14 +446,14 @@ class Project(BaseServiceList):
         # 多线程
         t = threading.Thread(target=self.jenkins_tasks, args=(pkg_name, release_git_url, release_branch, task_id,
                                                               release_name, release_env_name, pack_cmd, release_type,
-                                                              release_jdk_version))
+                                                              release_jdk_version, static_type))
         t.start()
 
         response.status = True
         return response
 
     def jenkins_tasks(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd,
-                      type, jdk_version):
+                      type, jdk_version, static_type):
         self.log(task_id, '尝试连接Jenkins...')
         # 将发布脚本发送到目标机器
         cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_config.host)
@@ -455,9 +464,9 @@ class Project(BaseServiceList):
         os.system(cmd)
 
         pack_cmd = '"' + pack_cmd + '"'
-        cmd = "python2.6 {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}".format(*[jenkins_config.script_path, pkg_name, task_id,
-                                                                         release_git_url, release_branch, release_name,
-                                                                         release_env, pack_cmd, jdk_version, type])
+        cmd = "python2.6 {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10}".format(*[jenkins_config.script_path, pkg_name, task_id,
+                                                                              release_git_url, release_branch, release_name,
+                                                                              release_env, pack_cmd, jdk_version, type, static_type])
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -484,7 +493,7 @@ class Project(BaseServiceList):
                 self.log(task_id, nginx_ip_list)
                 for ip in nginx_ip_list:
                     self.log(task_id, '当前发布第%s台Nginx服务器%s...' % (num, ip))
-                    ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env)
+                    ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env, static_type, release_branch)
                     if not ret:
                         self.log(task_id, '发布第%s台Nginx服务器%s...【失败】' % (num, ip))
                         self.log(task_id, '终止发布...')
@@ -524,7 +533,7 @@ class Project(BaseServiceList):
                 if nginx_ip_list:
                     for ip in nginx_ip_list:
                         self.log(task_id, '当前发布第%s台Nginx服务器%s...' % (num, ip))
-                        ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env)
+                        ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env, static_type, release_branch)
                         if not ret:
                             self.log(task_id, '发布第%s台Nginx服务器%s...【失败】' % (num, ip))
                             self.log(task_id, '终止发布...')
@@ -569,7 +578,7 @@ class Project(BaseServiceList):
             out, err = ret.communicate()
             err = str(err, encoding='utf-8')
             # self.log(task_id, err)
-            self.log(task_id, '......拉取代码失败 检查分支名是否正确')
+            self.log(task_id, '......拉取代码失败')
             models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
 
     def log(self, task_id, msg):
@@ -590,6 +599,10 @@ class Project(BaseServiceList):
         cmd = "scp %s root@%s:/opt/" % (jenkins_config.source_script_path, ip)
         os.system(cmd)
 
+        # 将配置文件发送到目标机器
+        cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, ip)
+        os.system(cmd)
+
         cmd = "ssh root@%s 'pip install requests'" % ip
         os.system(cmd)
 
@@ -604,8 +617,11 @@ class Project(BaseServiceList):
         print(ret)
         return True
 
-    def nginx_task(self, ip, name, pkgUrl, taskId, env):
+    def nginx_task(self, ip, name, pkgUrl, taskId, env, static_type, branch):
         pkgUrl = pkgUrl.replace('/data/packages', jenkins_config.pkgUrl)
+
+        if name in jenkins_config.static_nginx_dict:
+            pkgUrl = '%s/%s' % (os.path.dirname(pkgUrl), 'static.zip')
 
         cmd = "scp %s root@%s:/opt/" % (jenkins_config.source_script_path, ip)
         os.system(cmd)
@@ -613,7 +629,9 @@ class Project(BaseServiceList):
         cmd = "ssh root@%s 'pip install requests'" % ip
         os.system(cmd)
 
-        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s'" % (ip, jenkins_config.script_path, name, pkgUrl, taskId, env)
+        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, name, pkgUrl, taskId, env,
+                                                                static_type, branch)
+        self.log(taskId, '%s' % cmd)
         print(cmd)
         ret = os.system(cmd)
         if ret:

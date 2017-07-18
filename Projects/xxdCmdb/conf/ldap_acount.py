@@ -2,7 +2,8 @@
 # -*- coding:utf-8 -*-
 
 # ldap地址
-ldap_ip = '192.168.39.21'
+ldap_ip = '192.168.39.22'
+# ldap_ip = '192.168.39.21'
 
 # ldap端口
 ldap_port = 389

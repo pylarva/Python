@@ -88,13 +88,13 @@
                         <div class="radio">
                           <label>
                             <input type="radio" name="optionsRadios2" id="optionsRadios21" value="1" checked>
-                            迭代
+                            覆盖
                           </label>
                         </div>
                         <div class="radio">
                           <label>
                             <input type="radio" name="optionsRadios2" id="optionsRadios22" value="2">
-                            覆盖
+                            迭代
                           </label>
                         </div>
                         </div>
@@ -184,6 +184,10 @@
                 $('#mvn_div').attr('style', 'display: inline-block; margin-left: 100px; float: left')
             }
         }
+
+        function ChangePage(id) {
+                $.nbDataLists(id);
+            }
 
         function authorize(ths, ip, id) {
             var user_rank = $(ths).parent().prev().children().val();

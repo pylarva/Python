@@ -32,7 +32,8 @@ from threading import Timer
 
 
 API_HOST = 'cmdb.xxd.com'
-API_URL = 'http://172.16.18.41:8005/api/release'
+# API_URL = 'http://172.16.18.41:8005/api/release'
+API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -60,21 +61,25 @@ Diff_obj = {'front': 'ROOT', 'seo': 'ROOT', 'webapi': 'ROOT', 'sso': 'ROOT', 'sh
             'webapp': 'm'}
 
 # 新建软链项目列表
-soft_link_list = {'front':'ROOT', 'admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm'}
+soft_link_list = {'front':'ROOT', 'xxdai_sys_admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm', 'mobile': 'v5_mobile'}
 
 # 打包不需要 -P 参数的项目列表
-pkg_cmd_no_p_list = ['webapp', 'admin', 'batch', 'credit', 'finance', 'mobile', 'seo', 'tradews', 'webservice']
+pkg_cmd_no_p_list = ['webapp', 'admin', 'batch', 'credit', 'finance', 'mobile', 'seo', 'tradews', 'webservice', 'front']
 
 # Java环境变量
 java_version_path = {'1': '/usr/local/jdk8', '2': '/usr/local/jdk7', '3': '/usr/java/jdk1.6.0_32'}
 
 # 发布静态资源项目打包命令列表
-static_pkg_cmd_list = {'static_m': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip ',
-                       'static_mobile': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
-                       'static_html': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
-                       'static_pc': 'cnpm install && gulp && /usr/bin/zip -r build.zip pages/build && /bin/cp build.zip '}
+static_pkg_cmd_list = {'mui': 'cnpm install && gulp && cd pages/ && /usr/bin/zip -r build.zip build && /bin/cp build.zip ',
+                       'mobile': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
+                       'html': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
+                       'pc': 'cnpm install && gulp && cp pages/ &&/usr/bin/zip -r build.zip build && /bin/cp build.zip ',
+                       'heidai': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp build.zip ',
+                       'digital': 'mv pages digital && /usr/bin/zip -r digital.zip digital && /bin/cp digital.zip '}
 
-static_pkg_name = {'static_m': 'dist', 'static_mobile': 'html', 'static_html': 'html', 'static_pc': 'build'}
+# 'static_m': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip
+
+static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build'}
 
 # define return code
 RET_OK = 0
@@ -563,73 +568,41 @@ def createSoftLink(name):
         Logger().log('%s need create soft link...' % name, True)
         try:
             if name in ROOT_obj:
-                # if os.path.exists('/usr/local/tomcat/webapps/ROOT/static/image/'):
-                #     os.system('rm -fr /usr/local/tomcat/webapps/ROOT/static/image')
-                #     os.system('ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/ROOT/static/')
-                # else:
-                #     os.system('ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/ROOT/static/')
-                #
-                # if os.path.exists('/usr/local/tomcat/webapps/ROOT/static/admin/image/'):
-                #     os.system('rm -fr /usr/local/tomcat/webapps/ROOT/static/admin/image')
-                #     os.system('ln -s /opt/webapps/admin/image /usr/local/tomcat/webapps/ROOT/static/admin/')
-                # else:
-                #     os.system('ln -s /opt/webapps/admin/image /usr/local/tomcat/webapps/ROOT/static/admin/')
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/ROOT/static/image'
-                ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
+                # ret, out = ExecCmd(cmd)
+                os.system(cmd)
+                Logger().log(cmd, True)
+                # Logger().log('%s --> %s' % (cmd, out), True)
 
                 cmd = 'ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/ROOT/static/'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/ROOT/static/admin/image'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
+
+                cmd = 'mkdir -p /usr/local/tomcat/webapps/ROOT/static/admin/'
+                ret, out = ExecCmd(cmd)
 
                 cmd = 'ln -s /opt/webapps/admin/image /usr/local/tomcat/webapps/ROOT/static/admin/'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
 
-            elif name == 'admin':
-                # if os.path.exists('/usr/local/tomcat/webapps/xxdai_sys_admin/image/'):
-                #     os.system('rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/image')
-                #     os.system('ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/xxdai_sys_admin/')
-                # else:
-                #     os.system('ln -s /opt/webapps/admin/image /usr/local/tomcat/webapps/xxdai_sys_admin/')
-                #
-                # if os.path.exists('/usr/local/tomcat/webapps/xxdai_sys_admin/images/'):
-                #     os.system('rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/images')
-                #     os.system('ln -s /opt/webapps/admin/images /usr/local/tomcat/webapps/xxdai_sys_admin/')
-                # else:
-                #     os.system('ln -s /opt/webapps/admin/images /usr/local/tomcat/webapps/xxdai_sys_admin/')
-                #
-                # if os.path.exists('/usr/local/tomcat/webapps/xxdai_sys_admin/frontimg/'):
-                #     os.system('rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/frontimg/')
-                #     os.system('ln -s /opt/webapps/front/frontimg /usr/local/tomcat/webapps/xxdai_sys_admin/')
-                # else:
-                #     os.system('ln -s /opt/webapps/front/frontimg /usr/local/tomcat/webapps/xxdai_sys_admin/')
+            elif name == 'xxdai_sys_admin':
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/image'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
                 cmd = 'ln -s ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/xxdai_sys_admin/'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/images'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
                 cmd = 'ln -s /opt/webapps/admin/images /usr/local/tomcat/webapps/xxdai_sys_admin/'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/frontimg/'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
                 cmd = 'ln -s /opt/webapps/front/frontimg /usr/local/tomcat/webapps/xxdai_sys_admin/'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
 
 
 
@@ -642,56 +615,21 @@ def createSoftLink(name):
                 ret, out = ExecCmd(cmd)
                 Logger().log('%s --> %s' % (cmd, out), True)
 
-                # os.system('rm -fr /usr/local/tomcat/webapps/m/static/image')
-                # Logger().log('rm -fr /usr/local/tomcat/webapps/m/static/image', True)
-                # os.system('ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/m/static/')
-                # Logger().log('ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/m/static/', True)
-
-                # if os.path.exists('/usr/local/tomcat/webapps/m/static/image'):
-                #     print('11111111111')
-                # else:
-                #     print('22222222222')
-                #
-                # if os.path.exists('/usr/local/tomcat/webapps/m/static/image/'):
-                #     Logger().log('777777777', True)
-                #     os.system('rm -fr /usr/local/tomcat/webapps/m/static/image')
-                #     Logger().log('rm -fr /usr/local/tomcat/webapps/m/static/image', True)
-                #     os.system('ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/m/static/')
-                #     Logger().log('ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/m/static/', True)
-                #
-                # else:
-                #     os.makedirs('/usr/local/tomcat/webapps/m/static/image/')
-                #     os.system('ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/m/static/')
-                #     Logger().log('no iamge --> ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/m/static/', True)
-
             elif name == 'mobile':
-                # if os.path.exists('/usr/local/tomcat/webapps/v5_mobile/static/image/'):
-                #     os.system('rm -fr /usr/local/tomcat/webapps/v5_mobile/static/image')
-                #     os.system('ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/v5_mobile/static/')
-                # else:
-                #     os.makedirs('/usr/local/tomcat/webapps/v5_mobile/static/image/')
-                #     os.system('ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/v5_mobile/static/')
-                #
-                # if os.path.exists('/usr/local/tomcat/webapps/v5_mobile/static/admin/image/'):
-                #     os.system('rm -fr /usr/local/tomcat/webapps/v5_mobile/static/admin/image')
-                #     os.system('ln -s /opt/webapps/admin/image /usr/local/tomcat/webapps/v5_mobile/static/admin/')
-                # else:
-                #     os.makedirs('/usr/local/tomcat/webapps/v5_mobile/static/admin/image/')
-                #     os.system('ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/v5_mobile/static/admin/')
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/v5_mobile/static/image'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
                 cmd = 'ln -s /opt/webapps/front/image /usr/local/tomcat/webapps/v5_mobile/static/'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/v5_mobile/static/admin/image'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
+
+                cmd = 'mkdir -p /usr/local/tomcat/webapps/v5_mobile/static/admin/'
+                ret, out = ExecCmd(cmd)
+
                 cmd = 'ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/v5_mobile/static/admin/'
                 ret, out = ExecCmd(cmd)
-                Logger().log('%s --> %s' % (cmd, out), True)
 
         except Exception, e:
             Logger().log('create soft link failed...%s' % e, True)
@@ -1074,7 +1012,7 @@ def ExecCmd(cmd):
         return 0, out
 
 
-def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env, pack_cmd, jdk_version, type):
+def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env, pack_cmd, jdk_version, type, static_type):
     """
     模拟Jenkins功能 拉代码 + 打包
     :return:
@@ -1108,6 +1046,16 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         os.makedirs(pkg_path)
     if not os.path.exists(workspace_path):
         os.makedirs(workspace_path)
+    os.chdir(workspace_path)
+
+    cmd = 'rm -fr /root/.cmdb/workspace/%s/*' % name
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
+    if ret:
+        Logger().log(out, False)
+        return out
+
     os.chdir(workspace_path)
 
     cmd = 'git init'
@@ -1151,7 +1099,11 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         Logger().log(out, False)
         return out
 
-    cmd = '/usr/local/git/bin/git rev-parse origin/%s' % release_branch
+    if 'tag' in release_branch:
+        cmd = '/usr/local/git/bin/git rev-parse %s' % release_branch
+    else:
+        cmd = '/usr/local/git/bin/git rev-parse origin/%s' % release_branch
+
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)
@@ -1178,8 +1130,20 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         ret, out = ExecCmd(cmd)
         Logger().log(cmd, True)
         Logger().log(out, True)
+
         pkg_url = '%s/%s%s' % (pkg_path, static_pkg_name[name], '.zip')
+
         if os.path.exists(pkg_url):
+            # 如果静态资源是迭代式发布 则需要更改发布的包名为版本好 如 1.1.8.zip
+            # if static_type == '2':
+            #     pkg_base = pkg_url.split('/')[-1]
+            #     pkg_base_new = pkg_name.split('/')[-1]
+            #     pkg_url_new = pkg_url.replace(pkg_base, pkg_base_new)
+
+                # cmd = 'mv %s %s' % (pkg_url, pkg_url_new)
+                # os.system(cmd)
+                # Logger().log(cmd, True)
+
             ret = uploadMd5(pkg_url, task_id)
             if ret:
                 Logger().log('create md5 failed...', True)
@@ -1206,7 +1170,11 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         if name in static_nginx_dict:
             Logger().log('zip static --> %s/static.zip'% pkg_path, True)
             os.chdir(workspace_path)
-            cmd = "find ./ -type d -name 'static' -exec jar -cf %s/static.zip {} \;" % pkg_path
+            if name == 'front':
+                # cmd = "find ./ -type d -name 'static' -exec jar -cf %s/static.zip {} \;" % pkg_path
+                cmd = "cd /root/.cmdb/workspace/front/src/main/webapp/ && zip -r static.zip static && /bin/cp -r static.zip %s" % pkg_path
+            if name == 'webapp':
+                cmd = "cd /root/.cmdb/workspace/webapp/v6_webapp/trunk/target/v6_webapp/ && zip -r static.zip static && /bin/cp -r static.zip %s" % pkg_path
             ret, out = ExecCmd(cmd)
             Logger().log(cmd, True)
             Logger().log(out, True)
@@ -1240,7 +1208,6 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     except Exception,e:
         Logger().log(e, True)
 
-
     ret = uploadMd5(pkg_name, task_id)
     if ret:
         Logger().log('create md5 failed...', True)
@@ -1248,7 +1215,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
 
     return retCode
 
-def NginxStatic(name, pkgUrl, taskId, env):
+def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
     # if name == 'front':
     #     dest_dir = '/static/%s/front/' % env
     # if name == 'webapp':
@@ -1256,14 +1223,39 @@ def NginxStatic(name, pkgUrl, taskId, env):
 
     dest_dir = '/static/%s/%s/' % (env, name)
 
+
     if os.path.exists(dest_dir):
-        cmd = 'rm -fr %s*' % dest_dir
-        ret, out = ExecCmd(cmd)
-        Logger().log(cmd, True)
-        Logger().log(out, True)
-        if ret:
-            Logger().log(out, False)
-            return out
+        Logger().log('static_type ------ %s %s' % (static_type, type(static_type)))
+        if static_type == '2':
+            version_name = branch.split('/')[-1]
+            dest_dir = '%s%s' % (dest_dir, version_name)
+            cmd = 'mkdir -p %s' % dest_dir
+            os.system(cmd)
+            Logger().log(cmd, True)
+            dest_file = '%s/%s' % (dest_dir, os.path.basename(pkgUrl))
+            ret = downloadFile(pkgUrl, '%s' % dest_file)
+            if not ret:
+                Logger().log('下载静态资源完成...', True)
+            else:
+                Logger().log('下载静态资源失败...', True)
+
+            cmd = 'unzip -o %s -d %s' % (dest_file, dest_dir)
+            ret, out = ExecCmd(cmd)
+            Logger().log(cmd, True)
+            Logger().log(out, True)
+            if ret:
+                Logger().log(out, False)
+                return out
+            return 0
+
+        else:
+            cmd = 'rm -fr %s*' % dest_dir
+            ret, out = ExecCmd(cmd)
+            Logger().log(cmd, True)
+            Logger().log(out, True)
+            if ret:
+                Logger().log(out, False)
+                return out
     else:
         os.makedirs(dest_dir)
 
@@ -1298,18 +1290,22 @@ def NginxStatic(name, pkgUrl, taskId, env):
 if __name__ == '__main__':
     # global LOGGER
     LOGGER = initLogger(LOGGER_FILE)
+    cmd  = 'cd /home/admin/logs/ && touch %s %s %s' % (run_log_file, error_log_file, 'autopublishing.log')
     Logger()
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
     Logger().log('%s' % sys.argv, True)
     Logger().log('%s' % len(sys.argv), True)
 
-    if len(sys.argv) == 5:
+    if len(sys.argv) == 7:
         # 向Nginx发布静态资源
-        retCode = NginxStatic(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+        retCode = NginxStatic(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
         Logger().log('exit --> %s' % retCode)
         sys.exit(retCode)
     # 集成Jenkins功能
-    if len(sys.argv) == 10:
-        retCode = JenkinsModify(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5],sys.argv[6],sys.argv[7],sys.argv[8],sys.argv[9])
+    if len(sys.argv) == 11:
+        retCode = JenkinsModify(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5],sys.argv[6],sys.argv[7],sys.argv[8],sys.argv[9],sys.argv[10])
         sys.exit(retCode)
     if len(sys.argv) != 6:
         print "Miss arguments."
