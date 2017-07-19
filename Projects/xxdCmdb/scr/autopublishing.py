@@ -57,12 +57,10 @@ static_nginx_dict = ['front', 'webapp']
 ROOT_obj = ['front', 'seo', 'webapi', 'sso', 'shorturl', 'fk']
 
 # 项目名与路径不一致项目列表
-Diff_obj = {'front': 'ROOT', 'seo': 'ROOT', 'webapi': 'ROOT', 'sso': 'ROOT', 'shorturl': 'ROOT', 'admin': 'xxdai_sys_admin',
-            'webapp': 'm', 'fk': 'ROOT'}
+Diff_obj = {'front': 'ROOT', 'seo': 'ROOT', 'webapi': 'ROOT', 'sso': 'ROOT', 'shorturl': 'ROOT', 'webapp': 'm', 'fk': 'ROOT'}
 
 # 新建软链项目列表
-soft_link_list = {'front':'ROOT', 'xxdai_sys_admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm', 'mobile': 'v5_mobile',
-                  'fk': 'ROOT'}
+soft_link_list = {'front':'ROOT', 'xxdai_sys_admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm', 'mobile': 'v5_mobile'}
 
 # 打包不需要 -P 参数的项目列表
 pkg_cmd_no_p_list = ['webapp', 'admin', 'batch', 'credit', 'finance', 'mobile', 'seo', 'tradews', 'webservice', 'front']
@@ -74,7 +72,7 @@ java_version_path = {'1': '/usr/local/jdk8', '2': '/usr/local/jdk7', '3': '/usr/
 static_pkg_cmd_list = {'mui': 'cnpm install && gulp && cd pages/ && /usr/bin/zip -r build.zip build && /bin/cp build.zip ',
                        'mobile': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
                        'html': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
-                       'pc': 'cnpm install && gulp && cp pages/ &&/usr/bin/zip -r build.zip build && /bin/cp build.zip ',
+                       'pc': 'cnpm install && gulp && cd pages/ && /usr/bin/zip -r build.zip build && /bin/cp build.zip ',
                        'heidai': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp build.zip ',
                        'digital': 'mv pages digital && /usr/bin/zip -r digital.zip digital && /bin/cp digital.zip '}
 
@@ -595,7 +593,7 @@ def createSoftLink(name):
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/image'
                 ret, out = ExecCmd(cmd)
-                cmd = 'ln -s ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/xxdai_sys_admin/'
+                cmd = 'ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/xxdai_sys_admin/'
                 ret, out = ExecCmd(cmd)
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/xxdai_sys_admin/images'
@@ -620,6 +618,8 @@ def createSoftLink(name):
                 Logger().log('%s --> %s' % (cmd, out), True)
 
             elif name == 'mobile':
+                cmd = 'mkdir -p /usr/local/tomcat/webapps/v5_mobile/static/admin/'
+                ret, out = ExecCmd(cmd)
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/v5_mobile/static/image'
                 ret, out = ExecCmd(cmd)
@@ -627,9 +627,6 @@ def createSoftLink(name):
                 ret, out = ExecCmd(cmd)
 
                 cmd = 'rm -fr /usr/local/tomcat/webapps/v5_mobile/static/admin/image'
-                ret, out = ExecCmd(cmd)
-
-                cmd = 'mkdir -p /usr/local/tomcat/webapps/v5_mobile/static/admin/'
                 ret, out = ExecCmd(cmd)
 
                 cmd = 'ln -s /opt/webapps/admin/image/ /usr/local/tomcat/webapps/v5_mobile/static/admin/'
@@ -993,7 +990,6 @@ def uploadLog(taskId, msg):
     except Exception, e:
         Logger().log('[%s]-[%s]日志上传失败...' % (taskId, msg), True)
         Logger().log('[%s]-[%s]日志上传失败...' % (taskId, msg), False)
-        recordStageLog(taskId, 'uploadLog', 'failed', e)
 
     return retCode
 
@@ -1158,6 +1154,18 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
             return False
     elif name == 'fk':
         pass
+        # cmd = 'cd /root/.cmdb/Release && /bin/cp YX.war %sYX.war' % pkg_path
+        # ret, out = ExecCmd(cmd)
+        # Logger().log(cmd, True)
+        # Logger().log(out, True)
+        # if ret:
+        #     Logger().log(out, False)
+        #     return out
+        # ret = uploadMd5(pkg_name, task_id)
+        # if ret:
+        #     Logger().log('create md5 failed...', True)
+        #     return ret
+        # return 0
     else:
         if name in pkg_cmd_no_p_list:
             cmd = "find ./ -name 'pom.xml' | xargs -I {} sh -c 'pom_dir=`dirname {}` && cd $pom_dir && %s >> %s'" % (pack_cmd,run_log_file)

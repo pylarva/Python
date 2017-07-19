@@ -971,6 +971,10 @@
             bindMenuFunction();
             bindMultiSelect();
             bindSearchCondition();
+        },
+
+        'nbDataLists': function (page_num) {
+            initialize(page_num);
         }
 
     });

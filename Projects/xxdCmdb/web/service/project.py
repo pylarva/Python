@@ -437,7 +437,7 @@ class Project(BaseServiceList):
         else:
             pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
                                                            release_business_2)
-        print('==========',pkg_name, static_type, type(static_type))
+        print('==========', pkg_name, static_type, type(static_type))
 
         # 多进程执行连接Jenkins执行
         # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
@@ -468,13 +468,15 @@ class Project(BaseServiceList):
                                                                               release_git_url, release_branch, release_name,
                                                                               release_env, pack_cmd, jdk_version, type, static_type])
 
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(jenkins_config.host, port=22, username='root', password='xinxindai318', timeout=3)
-        stdin, stdout, stderr = ssh.exec_command(cmd)
-        result = stdout.read()
+        cmd = "ssh root@192.168.31.80 '%s'" % cmd
+        os.system(cmd)
 
-        print(result)
+        # ssh = paramiko.SSHClient()
+        # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # ssh.connect(jenkins_config.host, port=22, username='root', password='xinxindai318', timeout=3)
+        # stdin, stdout, stderr = ssh.exec_command(cmd)
+        # result = stdout.read()
+
         obj = models.ReleaseTask.objects.filter(id=task_id).first()
         md5 = obj.release_md5
         print(md5)
@@ -530,6 +532,7 @@ class Project(BaseServiceList):
                 else:
                     nginx_ip_list = jenkins_config.nginx_prod_ip_list
 
+                result = True
                 if nginx_ip_list:
                     for ip in nginx_ip_list:
                         self.log(task_id, '当前发布第%s台Nginx服务器%s...' % (num, ip))
@@ -544,12 +547,13 @@ class Project(BaseServiceList):
                 else:
                     self.log(task_id, '未配置nginx服务器地址..')
 
-            if not result:
-                self.log(task_id, '发布失败！')
-                return False
+                if not result:
+                    self.log(task_id, '发布失败！')
+                    return False
 
             self.log(task_id, '----- 共需发布【%s】台节点服务器 -------' % count)
             num = 1
+            result = True
             for item in values:
                 print(item.host_ip)
                 self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
