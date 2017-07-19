@@ -213,9 +213,6 @@ class Asset(BaseServiceList):
             for item in v:
                 temp.children.append((k, item))
             con_q.add(temp, 'AND')
-
-        print(con_q)
-
         return con_q
 
     def fetch_assets(self, request):

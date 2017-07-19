@@ -274,6 +274,7 @@ class Project(BaseServiceList):
             for item in v:
                 temp.children.append((k, item))
             con_q.add(temp, 'AND')
+
         return con_q
 
     def fetch_assets(self, request):
@@ -469,6 +470,7 @@ class Project(BaseServiceList):
                                                                               release_env, pack_cmd, jdk_version, type, static_type])
 
         cmd = "ssh root@192.168.31.80 '%s'" % cmd
+        print(cmd)
         os.system(cmd)
 
         # ssh = paramiko.SSHClient()

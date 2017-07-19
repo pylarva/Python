@@ -171,18 +171,6 @@
 
 
     <script>
-        $(function () {
-            $.initMenu('#menu_list');
-            $.nbDataList('/projects_list.html', '1');
-            $('#table_body').attr('edit-mode', 'true');
-
-            // 项目列表刷新数据定时器
-            var t1 = window.setInterval(do_reload, 100);
-        });
-        function ChangePage(id) {
-                $.nbDataLists(id);
-            }
-
         // 进入项目列表页面 定时刷新检查后台发布任务状态
         function do_reload() {
             var i = 0;
@@ -203,6 +191,7 @@
                         dataType: 'JSON',
                         success: function (response) {
                             if (response.status){
+{#                                alert(response.data.data_list[0]);#}
                                 if(response.data['status']==1){
                                     $(jquery_id).text('发布中 ');
                                     $(jquery_id).attr('style', 'color: green');
@@ -225,6 +214,90 @@
                 }
             })
         }
+
+        $(function () {
+            $.initMenu('#menu_list');
+            $.nbDataList('/projects_list.html', '1');
+            $('#table_body').attr('edit-mode', 'true');
+
+            // 项目列表刷新数据定时器
+{#            var t1 = window.setTimeout(do_reload, 100);#}
+            var t1 = window.setTimeout(do_ajax, 100);
+
+        });
+
+        function do_ajax() {
+            var i = 0;
+            var list_v = [];
+            $('#table_body').children().each(function () {
+                i = i + 1;
+                var str_id = 'status' + i;
+                var jquery_id = '#status' + i;
+                var v = $(this).children().next().next().next().next().next().next().next().html();
+                var obj_id = $(this).children().next().html();
+                var s = 'do_release(this,' + obj_id + ')';
+                if(v!='-'){
+{#                    $(this).children().next().next().next().next().next().next().next().next().next().attr('id', str_id);#}
+{#                    $(this).children().next().next().next().next().next().next().next().next().next().next().attr('id', '');#}
+                    list_v.push(v)
+                }
+            });
+
+            $.ajax({
+                url: '/project_list.html',
+                type: 'POST',
+                data: {'task_id': list_v},
+                dataType: 'JSON',
+                traditional: true,
+                success: function (response) {
+                    if (response.status){
+                        var i;
+                        $('#table_body').children().each(function () {
+                            i = i + 1;
+                            var str_id = 'status' + i;
+                            var jquery_id = '#status' + i;
+                            var v = $(this).children().next().next().next().next().next().next().next().html();
+                            var obj_id = $(this).children().next().html();
+                            var s = 'do_release(this,' + obj_id + ')';
+                            if(v!='-'){
+                                alert(v);
+                                $(this).children().next().next().next().next().next().next().next().next().next().attr('id', str_id);
+                                $(this).children().next().next().next().next().next().next().next().next().next().next().attr('id', '');
+                                for(i in response.data.data_list){
+                                    if(v==response.data.data_list[i]['id']){
+                                        alert(response.data.data_list[i]['id']);
+                                        alert(response.data.data_list[i]['release_status']);
+                                        if(response.data.data_list[i]['release_status']=='1'){
+                                        $(jquery_id).text('发布中 ');
+                                        $(jquery_id).attr('style', 'color: green');
+                                        $(jquery_id).next().children(' :first-child').next().attr('onclick', '');
+                                        $(jquery_id).append("<img src='/static/imgs/avatar/reload.gif'>");
+                                    }else if(response.data.data_list[i]['release_status']=='2'){
+                                        $(jquery_id).text('发布成功');
+                                        $(jquery_id).attr('style', 'color: green');
+                                        $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
+                                    }else if(response.data.data_list[i]['release_status']=='3'){
+                                        $(jquery_id).text('发布失败');
+                                        $(jquery_id).attr('style', 'color: red');
+                                        $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
+                                    }
+                                }
+                                }
+                            }
+                        });
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            })
+        }
+
+        function ChangePage(id) {
+                $.nbDataLists(id);
+                var t1 = window.setTimeout(do_ajax, 100);
+
+            }
+
 
         // 点击发布按钮 进行数据校验 + 后台创建发布任务 + 前端更新该行数据发布ID和发布时间
         function do_release(ths, id) {
@@ -310,7 +383,7 @@
             if(timeout=='1') return;
             do_log(id);
             var t2 = window.setTimeout(s, 3000);
-            var t1 = window.setInterval(do_reload, 2000);
+            var t1 = window.setInterval(do_ajax, 2000);
         }
 
 {#        function gets_log(id, timeout) {#}

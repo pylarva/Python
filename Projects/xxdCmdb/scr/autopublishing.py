@@ -1046,6 +1046,18 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         os.makedirs(pkg_path)
     if not os.path.exists(workspace_path):
         os.makedirs(workspace_path)
+
+    # Html项目不能在html文件路径下gulp
+    if name == 'html':
+        workspace_path = '%sxxd_html/' % CMDB_WORKSPACE
+        if os.path.exists(workspace_path):
+            cmd = 'rm -fr /root/.cmdb/workspace/xxd_html/*'
+            os.system(cmd)
+        else:
+            cmd = 'mkdir -p %s' % workspace_path
+            os.system(cmd)
+        Logger().log(cmd, True)
+
     os.chdir(workspace_path)
 
     cmd = 'rm -fr /root/.cmdb/workspace/%s/*' % name
@@ -1091,7 +1103,10 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     # cmd = '/usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/*' % release_git_url
     # os.system(cmd)
     # cmd = "ssh 127.0.0.1 'cd ~/.cmdb/workspace/ && git clone %s'" % release_git_url
-    cmd = "ssh 127.0.0.1 'cd /root/.cmdb/workspace/%s && /usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1'" % (name, release_git_url)
+    if name == 'html':
+        cmd = "ssh 127.0.0.1 'cd /root/.cmdb/workspace/xxd_html && /usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1'" % release_git_url
+    else:
+        cmd = "ssh 127.0.0.1 'cd /root/.cmdb/workspace/%s && /usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1'" % (name, release_git_url)
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)
