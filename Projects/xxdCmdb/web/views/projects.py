@@ -25,9 +25,6 @@ class ProjectsListView(View):
         """
         response = BaseResponse()
         task_id = request.POST.getlist('task_id')
-
-        # print(task_id)
-
         # task_id_list = ['310', '311']
         task_id_list = task_id
         con_q = Q()
@@ -36,7 +33,7 @@ class ProjectsListView(View):
             con_q.children.append(('id', item))
         # print(con_q)
         obj_list = models.ReleaseTask.objects.filter(con_q).values('id', 'release_status')
-        print(obj_list)
+        # print(obj_list)
         # <QuerySet [{'id': 310, 'release_status': 2}, {'id': 311, 'release_status': 2}]>
 
         # obj = models.ReleaseTask.objects.filter(id=task_id).first()

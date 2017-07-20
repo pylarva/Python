@@ -6,10 +6,10 @@ from django.utils import timezone
 import datetime
 from pytz import timezone
 
-utc_zone = timezone("utc")
-my_zone = timezone("Asia/Shanghai")
-my_time = datetime.datetime.utcnow().replace(tzinfo=utc_zone)
-out_time = my_time.astimezone(my_zone)
+# utc_zone = timezone("utc")
+# my_zone = timezone("Asia/Shanghai")
+# my_time = datetime.datetime.utcnow().replace(tzinfo=utc_zone)
+# out_time = my_time.astimezone(my_zone)
 
 
 class AuthInfo(models.Model):
@@ -325,8 +325,9 @@ class ReleaseLog(models.Model):
     发布任务日志
     """
     release_id = models.IntegerField(null=True, blank=True)
-    release_time = models.DateTimeField('时间', default=my_time)
+    # release_time = models.DateTimeField('时间', default=my_time)
     release_msg = models.CharField('日志', max_length=1000, null=True, blank=True)
+    release_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "发布任务日志"

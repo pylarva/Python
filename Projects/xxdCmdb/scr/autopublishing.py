@@ -60,7 +60,7 @@ ROOT_obj = ['front', 'seo', 'webapi', 'sso', 'shorturl', 'fk']
 Diff_obj = {'front': 'ROOT', 'seo': 'ROOT', 'webapi': 'ROOT', 'sso': 'ROOT', 'shorturl': 'ROOT', 'webapp': 'm', 'fk': 'ROOT'}
 
 # 新建软链项目列表
-soft_link_list = {'front':'ROOT', 'xxdai_sys_admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm', 'mobile': 'v5_mobile'}
+soft_link_list = {'front':'ROOT', 'xxdai_sys_admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm', 'v5_mobile': 'v5_mobile'}
 
 # 打包不需要 -P 参数的项目列表
 pkg_cmd_no_p_list = ['webapp', 'admin', 'batch', 'credit', 'finance', 'mobile', 'seo', 'tradews', 'webservice', 'front']
@@ -617,7 +617,7 @@ def createSoftLink(name):
                 ret, out = ExecCmd(cmd)
                 Logger().log('%s --> %s' % (cmd, out), True)
 
-            elif name == 'mobile':
+            elif name == 'v5_mobile':
                 cmd = 'mkdir -p /usr/local/tomcat/webapps/v5_mobile/static/admin/'
                 ret, out = ExecCmd(cmd)
 
@@ -739,9 +739,12 @@ def publishTomcatService(config, name, taskId, runas):
     os.system('chown -R admin.admin /usr/local/tomcat')
 
     # start service
+    uploadLog(taskId, '正在重启tomcat...')
     retCode, output = execSystemCommandRunAs(config['startServiceCommand'], runas, timeout=300)
     recordStageLog(config['taskId'], 'startService', retCode, output)
-    if retCode != RET_OK: return retCode
+    if retCode != RET_OK:
+        uploadLog(taskId, 'Tomcat start timeout...')
+        return retCode
 
     if config['appFilePrefix'] == 'api':
         retCode, output = execSystemCommandRunAs(config['startTengineCommand'], runas)
@@ -1094,15 +1097,6 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         Logger().log(out, False)
         return out
 
-    # cmd = 'unset SSH_ASKPASS'
-    # os.system(cmd)
-    # cmd = "echo 'unset SSH_ASKPASS' >> ~/.bashrc && source ~/.bashrc && git clone %s " % release_git_url
-    # os.system(cmd)
-
-    # cmd = 'git clone %s' % release_git_url
-    # cmd = '/usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/*' % release_git_url
-    # os.system(cmd)
-    # cmd = "ssh 127.0.0.1 'cd ~/.cmdb/workspace/ && git clone %s'" % release_git_url
     if name == 'html':
         cmd = "ssh 127.0.0.1 'cd /root/.cmdb/workspace/xxd_html && /usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1'" % release_git_url
     else:
@@ -1124,6 +1118,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     Logger().log(out, True)
     if ret:
         Logger().log(out, False)
+        uploadLog(task_id, '拉取代码失败...%s' % out)
         return out
 
     cmd = '/usr/local/git/bin/git checkout -f %s > /dev/null 2>&1' % out
@@ -1131,17 +1126,17 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     Logger().log(cmd, True)
     Logger().log(out, True)
 
-    uploadLog(task_id, '正在进行代码打包......')
-
     # cmd = 'set -e'
     # os.system(cmd)
     # Logger().log('set -e', True)
 
-    # 项目mvn打包如果不要 -P 参数则不加
+    # 如果是发布静态资源 打包命令在配置文件里
     if type == '2':
         os.chdir(workspace_path)
         cmd = '%s%s >> %s' % (static_pkg_cmd_list[name], pkg_path, run_log_file )
         uploadLog(task_id, cmd)
+        uploadLog(task_id, '正在进行代码打包......')
+
         ret, out = ExecCmd(cmd)
         Logger().log(cmd, True)
         Logger().log(out, True)
@@ -1165,10 +1160,11 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
                 return ret
             return 0
         else:
+            uploadLog(task_id, '代码打包失败......')
             Logger().log('files not exist..%s' % pkg_url, True)
             return False
-    elif name == 'fk':
-        pass
+    # elif name == 'fk':
+    #     pass
         # cmd = 'cd /root/.cmdb/Release && /bin/cp YX.war %sYX.war' % pkg_path
         # ret, out = ExecCmd(cmd)
         # Logger().log(cmd, True)
@@ -1182,10 +1178,13 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         #     return ret
         # return 0
     else:
+        # 项目mvn打包如果不要 -P 参数则不加
         if name in pkg_cmd_no_p_list:
             cmd = "find ./ -name 'pom.xml' | xargs -I {} sh -c 'pom_dir=`dirname {}` && cd $pom_dir && %s >> %s'" % (pack_cmd,run_log_file)
         else:
             cmd = "find ./ -name 'pom.xml' | xargs -I {} sh -c 'pom_dir=`dirname {}` && cd $pom_dir && %s -P%s>> %s'" % (pack_cmd,env,run_log_file)
+        uploadLog(task_id, cmd)
+        uploadLog(task_id, '正在进行代码打包......')
         ret, out = ExecCmd(cmd)
         Logger().log(cmd, True)
         Logger().log(out, True)
@@ -1223,16 +1222,6 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         Logger().log(out, False)
         return out
 
-    # if name == 'fk':
-    #     pkg_fk_name = pkg_name.replace('%s' % os.path.basename(pkg_name), 'fk.war')
-    #     cmd = 'mv %s %s' % (pkg_name, pkg_fk_name)
-    #     ret, out = ExecCmd(cmd)
-    #     Logger().log(cmd, True)
-    #     Logger().log(out, True)
-    #     if ret:
-    #         Logger().log(out, False)
-    #         return out
-
     os.chdir(workspace_path)
 
     try:
@@ -1255,13 +1244,8 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     return retCode
 
 def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
-    # if name == 'front':
-    #     dest_dir = '/static/%s/front/' % env
-    # if name == 'webapp':
-    #     dest_dir = '/static/%s/webapp/' % env
 
     dest_dir = '/static/%s/%s/' % (env, name)
-
 
     if os.path.exists(dest_dir):
         Logger().log('static_type ------ %s %s' % (static_type, type(static_type)))
@@ -1274,9 +1258,9 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
             dest_file = '%s/%s' % (dest_dir, os.path.basename(pkgUrl))
             ret = downloadFile(pkgUrl, '%s' % dest_file)
             if not ret:
-                Logger().log('下载静态资源完成...', True)
+                Logger().log('download files success...', True)
             else:
-                Logger().log('下载静态资源失败...', True)
+                Logger().log('download files failed...', True)
 
             cmd = 'unzip -o %s -d %s' % (dest_file, dest_dir)
             ret, out = ExecCmd(cmd)
@@ -1307,15 +1291,14 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
 
     ret = downloadFile(pkgUrl, dest_file)
     if not ret:
-        Logger().log('下载静态资源完成...', True)
+        Logger().log('download files success...', True)
     else:
-        Logger().log('下载静态资源失败...', True)
+        Logger().log('download files failed...', True)
 
     if os.path.exists(dest_file):
-        Logger().log('下载静态资源完成...', True)
+        Logger().log('download files success...', True)
     else:
-        Logger().log('下载静态资源失败...', True)
-
+        Logger().log('download files failed...', True)
 
     cmd = 'unzip -o %s -d %s' % (dest_file, dest_dir)
     ret, out = ExecCmd(cmd)

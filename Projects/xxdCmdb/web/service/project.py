@@ -10,7 +10,8 @@ import subprocess
 from multiprocessing import Process
 from django.db.models import Q
 from repository import models
-from utils.pager import PageInfo
+# from utils.pager import PageInfo
+from utils.pagerm import PageInfo
 from utils.response import BaseResponse
 from django.http.request import QueryDict
 from utils.hostname import change_host_name
@@ -447,15 +448,27 @@ class Project(BaseServiceList):
         # 多线程
         t = threading.Thread(target=self.jenkins_tasks, args=(pkg_name, release_git_url, release_branch, task_id,
                                                               release_name, release_env_name, pack_cmd, release_type,
-                                                              release_jdk_version, static_type))
+                                                              release_jdk_version, static_type, release_user))
         t.start()
 
         response.status = True
         return response
 
     def jenkins_tasks(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd,
-                      type, jdk_version, static_type):
+                      type, jdk_version, static_type, release_user):
+
+        self.log(task_id, '------- 开始创建发布任务 -------')
+
+        self.log(task_id, '项目名称:%s 发布环境:%s 发布分支:%s Java版本:%s 静态资源类型:%s 发布用户:%s' %
+                 (release_name, release_env, release_branch, jdk_version, static_type, release_user))
+
+        self.log(task_id, 'git地址:%s 资源地址:%s' % (release_git_url, pkg_name))
+
         self.log(task_id, '尝试连接Jenkins...')
+        models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+
+        return True
+
         # 将发布脚本发送到目标机器
         cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_config.host)
         os.system(cmd)
@@ -527,7 +540,7 @@ class Project(BaseServiceList):
             # 发布 front和 webapp 的静态资源
             name = str(release_name)
             if name in jenkins_config.static_nginx_dict:
-                self.log(task_id, '向Nginx发布static静态资源...')
+                self.log(task_id, '----- 向Nginx发布static静态资源 -----')
                 num = 1
                 if release_env != 'prod':
                     nginx_ip_list = jenkins_config.nginx_test_ip_list

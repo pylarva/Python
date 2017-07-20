@@ -231,8 +231,8 @@
             var list_v = [];
             $('#table_body').children().each(function () {
                 i = i + 1;
-                var str_id = 'status' + i;
-                var jquery_id = '#status' + i;
+{#                var str_id = 'status' + i;#}
+{#                var jquery_id = '#status' + i;#}
                 var v = $(this).children().next().next().next().next().next().next().next().html();
                 var obj_id = $(this).children().next().html();
                 var s = 'do_release(this,' + obj_id + ')';
@@ -251,22 +251,20 @@
                 traditional: true,
                 success: function (response) {
                     if (response.status){
-                        var i;
+                        var ii=0;
                         $('#table_body').children().each(function () {
-                            i = i + 1;
+                            ii = ii + 1;
+                            var i = ii.toString();
                             var str_id = 'status' + i;
                             var jquery_id = '#status' + i;
                             var v = $(this).children().next().next().next().next().next().next().next().html();
                             var obj_id = $(this).children().next().html();
                             var s = 'do_release(this,' + obj_id + ')';
                             if(v!='-'){
-                                alert(v);
                                 $(this).children().next().next().next().next().next().next().next().next().next().attr('id', str_id);
                                 $(this).children().next().next().next().next().next().next().next().next().next().next().attr('id', '');
-                                for(i in response.data.data_list){
+                                   for(i in response.data.data_list){
                                     if(v==response.data.data_list[i]['id']){
-                                        alert(response.data.data_list[i]['id']);
-                                        alert(response.data.data_list[i]['release_status']);
                                         if(response.data.data_list[i]['release_status']=='1'){
                                         $(jquery_id).text('发布中 ');
                                         $(jquery_id).attr('style', 'color: green');
@@ -360,9 +358,10 @@
                             $.each(response.data['data_list'], function (k,v) {
                                 var reg = /^http*/;
                                 if(reg.test(v['msg'])==false){
-                                    var s = '<p style="display: inline-block">' + '[' + v['time'] + ']' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none">' + v['msg'] +'</a><br>';}
+                                    var ft_time = fmTime(v['time']);
+                                    var s = '<p style="display: inline-block">' + '[' + ft_time + ']' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none">' + v['msg'] +'</a><br>';}
                                 else{
-                                    var s = '<p style="display: inline-block">' + '[' + v['time'] + ']' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none" href="' + v['msg'] + '" target="_blank">' + v['msg'] +'</a><br>';
+                                    var s = '<p style="display: inline-block">' + '[' + ft_time + ']' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none" href="' + v['msg'] + '" target="_blank">' + v['msg'] +'</a><br>';
                                 }
                                 $('#release_log').append(s);
                             })
@@ -376,22 +375,40 @@
         // 回调函数内部使用setTimeout 防止可能阻塞代码
         function get_log(id, timeout) {
             // 暴力清除所有定时器
-            for(var i = 1; i < 1000; i++) {
+            for(var i = 1; i < 2000; i++) {
                 clearTimeout(i);
             }
             var s = 'get_log(' + id + ')';
             if(timeout=='1') return;
             do_log(id);
+            do_ajax();
             var t2 = window.setTimeout(s, 3000);
-            var t1 = window.setInterval(do_ajax, 2000);
+{#            var t1 = window.setInterval(do_ajax, 2000);#}
         }
 
-{#        function gets_log(id, timeout) {#}
-{#            var s = 'get_log(' + id + ')';#}
-{#            if(timeout=='1') return;#}
-{#            do_log(id);#}
-{#            var t2 = window.setTimeout(s, 3000);#}
-{#        }#}
+        function dateFtt(fmt,date)
+            { //author: meizz
+              var o = {
+                "M+" : date.getMonth()+1,                 //月份
+                "d+" : date.getDate(),                    //日
+                "h+" : date.getHours(),                   //小时
+                "m+" : date.getMinutes(),                 //分
+                "s+" : date.getSeconds(),                 //秒
+                "q+" : Math.floor((date.getMonth()+3)/3), //季度
+                "S"  : date.getMilliseconds()             //毫秒
+              };
+              if(/(y+)/.test(fmt))
+                fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+              for(var k in o)
+                if(new RegExp("("+ k +")").test(fmt))
+              fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+              return fmt;
+            }
+
+        function fmTime(value,row,index){
+            var crtTime = new Date(value);
+            return top.dateFtt("yyyy-MM-dd hh:mm:ss",crtTime);
+        }
 
     </script>
 {% endblock %}
