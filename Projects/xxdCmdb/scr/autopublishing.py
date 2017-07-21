@@ -1272,16 +1272,18 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
             return 0
 
         else:
-            cmd = 'rm -fr %s*' % dest_dir
-            ret, out = ExecCmd(cmd)
-            Logger().log(cmd, True)
-            Logger().log(out, True)
-            if ret:
-                Logger().log(out, False)
-                return out
+            pass
+            # cmd = 'rm -fr %s*' % dest_dir
+            # ret, out = ExecCmd(cmd)
+            # Logger().log(cmd, True)
+            # Logger().log(out, True)
+            # if ret:
+            #     Logger().log(out, False)
+            #     return out
     else:
         os.makedirs(dest_dir)
 
+    # 发布静态资源顺序 下载zip包 ➡️ 删除原有文件夹 ➡️ 解压 ➡️ 删除新zip包
     if name in static_nginx_dict:
         dest_file = '%s%s' % (dest_dir, 'static.zip')
     else:
@@ -1289,16 +1291,20 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
 
     Logger().log('down to %s...' % dest_file, True)
 
+    if os.path.isfile(dest_file):
+        cmd = 'rm -fr %s' % dest_file
+        ExecCmd(cmd)
+
     ret = downloadFile(pkgUrl, dest_file)
     if not ret:
         Logger().log('download files success...', True)
     else:
         Logger().log('download files failed...', True)
 
-    if os.path.exists(dest_file):
-        Logger().log('download files success...', True)
-    else:
-        Logger().log('download files failed...', True)
+    cmd = "find %s. ! -name '*.zip' -exec rm -fr {} \;" % dest_dir
+    Logger().log(cmd, True)
+    os.system(cmd)
+    time.sleep(1)
 
     cmd = 'unzip -o %s -d %s' % (dest_file, dest_dir)
     ret, out = ExecCmd(cmd)
@@ -1307,6 +1313,11 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
     if ret:
         Logger().log(out, False)
         return out
+
+    if os.path.isfile(dest_file):
+        cmd = 'rm -fr %s' % dest_file
+        ExecCmd(cmd)
+
     return 0
 
 if __name__ == '__main__':

@@ -102,11 +102,12 @@ class Project(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<i class='fa fa-edge' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'>发布</a> | "
+                    'content': "<i class='fa fa-paper-plane-o' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'> 发布</a> | "
+                               "<i class='fa fa-recycle' aria-hidden='true'></i><a href='#' onclick='roll_back(this,{nid})'>回滚</a> | "
+                               "<i class='fa fa-hand-paper-o' aria-hidden='true'></i><a href='#' onclick='do_break(this,{nid})'>中断</a> | "
                                "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='get_log({nid},false)'>详细</a>",
-                    # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
-                'attr': {}
+                'attr': {'style': 'font-size: 13px; width:220px;'}
             },
         ]
         # 额外搜索条件
@@ -455,19 +456,26 @@ class Project(BaseServiceList):
         return response
 
     def jenkins_tasks(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd,
-                      type, jdk_version, static_type, release_user):
+                      release_type, jdk_version, static_type, release_user):
 
-        self.log(task_id, '------- 开始创建发布任务 -------')
+        jdk = {'1': '/usr/local/jdk8', '2': '/usr/local/jdk7', '3': '/usr/java/jdk1.6.0_32'}
+        static = {'1': '覆盖式', '2': '迭代式'}
+        release_types = {'1': 'Tomcat', '2': 'Static'}
 
-        self.log(task_id, '项目名称:%s 发布环境:%s 发布分支:%s Java版本:%s 静态资源类型:%s 发布用户:%s' %
-                 (release_name, release_env, release_branch, jdk_version, static_type, release_user))
-
-        self.log(task_id, 'git地址:%s 资源地址:%s' % (release_git_url, pkg_name))
+        self.log(task_id, '------------------- 开始创建发布任务 -------------------')
+        self.log(task_id, '项目名称: %s' % release_name)
+        self.log(task_id, '发布类型: %s' % release_types[str(release_type)])
+        self.log(task_id, '发布环境: %s 发布分支: %s 发布用户: %s' % (release_env, release_branch, release_user))
+        self.log(task_id, 'Java版本: %s 静态资源类型: %s' % (jdk[str(jdk_version)], static[str(static_type)]))
+        # self.log(task_id, 'git地址:%s' % release_git_url)
+        self.log(task_id, '资源地址: %s' % pkg_name.replace('/data/packages', jenkins_config.pkgUrl))
+        self.log(task_id, '-----------------------------------------------------------')
 
         self.log(task_id, '尝试连接Jenkins...')
-        models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
 
-        return True
+        # time.sleep(10)
+        # models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+        # return True
 
         # 将发布脚本发送到目标机器
         cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_config.host)
@@ -480,7 +488,7 @@ class Project(BaseServiceList):
         pack_cmd = '"' + pack_cmd + '"'
         cmd = "python2.6 {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10}".format(*[jenkins_config.script_path, pkg_name, task_id,
                                                                               release_git_url, release_branch, release_name,
-                                                                              release_env, pack_cmd, jdk_version, type, static_type])
+                                                                              release_env, pack_cmd, jdk_version, release_type, static_type])
 
         cmd = "ssh root@192.168.31.80 '%s'" % cmd
         print(cmd)
@@ -497,7 +505,7 @@ class Project(BaseServiceList):
         print(md5)
 
         # 发布类型为静态资源
-        if type == 2:
+        if release_type == 2:
             if release_env != 'prod':
                 nginx_ip_list = jenkins_config.nginx_test_ip_list
             else:
@@ -583,7 +591,7 @@ class Project(BaseServiceList):
                 num += 1
 
             if result:
-                if type == 1:
+                if release_type == 1:
                     self.log(task_id, 'Java start success...')
                 self.log(task_id, '发布成功结束！')
                 models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
@@ -592,12 +600,13 @@ class Project(BaseServiceList):
                 models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
 
         else:
-            ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
-                                   preexec_fn=os.setsid)
-            out, err = ret.communicate()
-            err = str(err, encoding='utf-8')
+            # ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+            #                        preexec_fn=os.setsid)
+            # out, err = ret.communicate()
+            # err = str(err, encoding='utf-8')
             # self.log(task_id, err)
-            self.log(task_id, '......拉取代码失败')
+            # self.log(task_id, '......拉取代码失败')
+            self.log(task_id, '发布终止！')
             models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
 
     def log(self, task_id, msg):

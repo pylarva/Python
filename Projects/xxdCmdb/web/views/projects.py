@@ -24,6 +24,36 @@ class ProjectsListView(View):
         :return:
         """
         response = BaseResponse()
+
+        break_id = request.POST.get('break_id', None)
+        # 中断发布任务
+        if break_id:
+            models.ReleaseTask.objects.filter(id=break_id).update(release_status=3)
+            response.status = True
+            return JsonResponse(response.__dict__)
+
+        roll_back_id = request.POST.get('roll_back', None)
+        # 回滚任务ID
+        if roll_back_id:
+            release_env = request.POST.get('release_env', None)
+            release_env_obj = models.BusinessOne.objects.filter(id=release_env).first()
+            release_env_name = release_env_obj.name
+            obj = models.ProjectTask.objects.filter(id=roll_back_id).first()
+            business_2_id = obj.business_2_id
+            # 查询最近一次提交的分支名
+            try:
+                release_obj = models.ReleaseTask.objects.filter(release_name_id=business_2_id, release_status='2',
+                                                                release_env_id=release_env).last()
+                success_branch = release_obj.release_git_branch
+                success_time = release_obj.release_time
+                response.data = {'branch': success_branch, 'time': success_time, 'env': release_env_name}
+                response.status = True
+            except Exception as e:
+                print(e)
+                response.status = False
+            return JsonResponse(response.__dict__)
+
+        # 前端页面请求任务状态
         task_id = request.POST.getlist('task_id')
         # task_id_list = ['310', '311']
         task_id_list = task_id
