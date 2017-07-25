@@ -14,22 +14,10 @@ from web.service import business2
 from web.service import business3
 from repository import models
 from utils.response import BaseResponse
+from web.service.login import auth_admin
 
 
-
-def auth(func):
-    def inner(request, *args, **kwargs):
-        v = request.session.get('is_login', None)
-        # print(v)
-        if not v:
-            return redirect('login.html')
-        global USER_NAME
-        USER_NAME['name'] = v
-        return func(request, *args, **kwargs)
-    return inner
-
-
-# @method_decorator(auth, name='dispatch')
+@method_decorator(auth_admin, name='dispatch')
 class Business1ListView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(Business1ListView, self).dispatch(request, *args, **kwargs)
@@ -81,6 +69,7 @@ class AddAssetView(View):
         return render(request, 'add_asset.html')
 
 
+@method_decorator(auth_admin, name='dispatch')
 class Business2ListView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(Business2ListView, self).dispatch(request, *args, **kwargs)
@@ -108,6 +97,7 @@ class Business2JsonView(View):
         return JsonResponse(response.__dict__)
 
 
+@method_decorator(auth_admin, name='dispatch')
 class Business3ListView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(Business3ListView, self).dispatch(request, *args, **kwargs)

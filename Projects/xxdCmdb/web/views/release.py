@@ -6,23 +6,10 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from web.service import release
-
-USER_NAME = {}
-
-
-def auth(func):
-    def inner(request, *args, **kwargs):
-        # v = request.COOKIES.get('user_cookie')
-        v = request.session.get('is_login', None)
-        if not v:
-            return redirect('login.html')
-        global USER_NAME
-        USER_NAME['name'] = v
-        return func(request, *args, **kwargs)
-    return inner
+from web.service.login import auth_admin
 
 
-# @method_decorator(auth, name='dispatch')
+@method_decorator(auth_admin, name='dispatch')
 class ReleaseListView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(ReleaseListView, self).dispatch(request, *args, **kwargs)

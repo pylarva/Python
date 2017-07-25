@@ -14,6 +14,7 @@ from .base import BaseServiceList
 class Asset(BaseServiceList):
     def __init__(self):
         condition_config = [
+            {'name': 'id', 'text': '发布ID', 'condition_type': 'input'},
             {'name': 'release_name', 'text': '项目名', 'condition_type': 'select', 'global_name': 'business_2_list'},
         ]
         table_config = [
@@ -22,6 +23,13 @@ class Asset(BaseServiceList):
                 'title': "发布ID",
                 'display': 1,
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
+                'attr': {}
+            },
+            {
+                'q': 'release_id',
+                'title': "项目ID",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@release_id'}},
                 'attr': {}
             },
             {
@@ -39,10 +47,17 @@ class Asset(BaseServiceList):
                 'attr': {}
             },
             {
-                'q': 'release_time',
-                'title': "发布时间",
+                'q': 'release_type_id',
+                'title': "发布类型",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@release_time'}},
+                'text': {'content': "{n}", 'kwargs': {'n': '@@release_type_list'}},
+                'attr': {}
+            },
+            {
+                'q': 'release_git_branch',
+                'title': "分支",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@release_git_branch'}},
                 'attr': {}
             },
             {
@@ -53,24 +68,31 @@ class Asset(BaseServiceList):
                 'attr': {}
             },
             {
+                'q': 'release_jdk_version',
+                'title': "JDK版本",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@release_jdk_list'}},
+                'attr': {}
+            },
+            {
                 'q': 'release_git_url',
-                'title': "GIT",
+                'title': "GIT地址",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@release_git_url'}},
                 'attr': {}
             },
             {
-                'q': 'release_git_branch',
-                'title': "版本号",
+                'q': 'release_status',
+                'title': "状态",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@release_git_branch'}},
+                'text': {'content': "{n}", 'kwargs': {'n': '@@release_status_list'}},
                 'attr': {}
             },
             {
-                'q': 'release_type_id',
-                'title': "发布类型",
+                'q': 'release_time',
+                'title': "发布时间",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@@release_type_list'}},
+                'text': {'content': "{n}", 'kwargs': {'n': '@release_time'}},
                 'attr': {}
             },
             {
@@ -78,9 +100,9 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='#'>查看详细</a>",
+                    'content': "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='do_log({nid},false)'> 查看详细</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
-                    'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
+                    'kwargs': {'device_type_id': '@device_type_id', 'nid': '@release_id'}},
                 'attr': {}
             },
         ]
@@ -92,6 +114,11 @@ class Asset(BaseServiceList):
         super(Asset, self).__init__(condition_config, table_config, extra_select)
 
     @property
+    def release_status_list(self):
+        result = map(lambda x: {'id': x[0], 'name': x[1]}, models.ReleaseTask.release_status_choices)
+        return list(result)
+
+    @property
     def device_status_list(self):
         result = map(lambda x: {'id': x[0], 'name': x[1]}, models.Asset.device_status_choices)
         return list(result)
@@ -99,6 +126,11 @@ class Asset(BaseServiceList):
     @property
     def release_type_list(self):
         result = map(lambda x: {'id': x[0], 'name': x[1]}, models.ReleaseTask.release_status_choices)
+        return list(result)
+
+    @property
+    def release_jdk_list(self):
+        result = map(lambda x: {'id': x[0], 'name': x[1]}, models.ReleaseTask.jdk_version_choice)
         return list(result)
 
     @property
@@ -130,15 +162,18 @@ class Asset(BaseServiceList):
         values = models.BusinessUnit.objects.values('id', 'name')
         return list(values)
 
+    @property
+    def release_type_list(self):
+        values = models.ReleaseType.objects.values('id', 'name')
+        return list(values)
+
     @staticmethod
     def assets_condition(request):
         con_str = request.GET.get('condition', None)
-        print(con_str)
         if not con_str:
             con_dict = {}
         else:
             con_dict = json.loads(con_str)
-
         con_q = Q()
         for k, v in con_dict.items():
             temp = Q()
@@ -146,9 +181,6 @@ class Asset(BaseServiceList):
             for item in v:
                 temp.children.append((k, item))
             con_q.add(temp, 'AND')
-
-        print(con_q)
-
         return con_q
 
     def fetch_assets(self, request):
@@ -158,7 +190,7 @@ class Asset(BaseServiceList):
             conditions = self.assets_condition(request)
             asset_count = models.ReleaseTask.objects.filter(conditions).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
-            asset_list = models.ReleaseTask.objects.filter(conditions).extra(select=self.extra_select).values(
+            asset_list = models.ReleaseTask.objects.filter(conditions).order_by('-id').extra(select=self.extra_select).values(
                 *self.values_list)[page_info.start:page_info.end]
 
             ret['table_config'] = self.table_config
@@ -171,11 +203,13 @@ class Asset(BaseServiceList):
             ret['global_dict'] = {
                 'device_status_list': self.device_status_list,
                 'release_type_list': self.release_type_list,
+                'release_status_list': self.release_status_list,
                 'idc_list': self.idc_list,
                 'business_unit_list': self.business_unit_list,
                 'business_1_list': self.business_1_list,
                 'business_2_list': self.business_2_list,
-                'business_3_list': self.business_3_list
+                'business_3_list': self.business_3_list,
+                'release_jdk_list': self.release_jdk_list
             }
             response.data = ret
             response.message = '获取成功'

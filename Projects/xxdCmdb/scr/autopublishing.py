@@ -32,7 +32,7 @@ from threading import Timer
 
 
 API_HOST = 'cmdb.xxd.com'
-API_URL = 'http://172.16.18.41:8005/api/release'
+API_URL = 'http://172.16.19.15:8005/api/release'
 # API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'

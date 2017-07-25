@@ -298,10 +298,12 @@ class ReleaseTask(models.Model):
     )
 
     jdk_version_choice = (
-        (1, 'jdk-7'),
-        (2, 'jdk-8')
+        (1, 'JDK-8'),
+        (2, 'JDK-7'),
+        (3, 'JDK-6')
     )
 
+    release_id = models.IntegerField(null=True, blank=True)
     release_name = models.ForeignKey('BusinessTwo', null=True, blank=True, default=1, on_delete=models.SET_NULL)
     release_env = models.ForeignKey('BusinessOne', null=True, blank=True, default=1, on_delete=models.SET_NULL)
     release_time = models.CharField(max_length=32, null=True, blank=True)

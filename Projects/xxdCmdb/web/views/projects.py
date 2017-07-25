@@ -8,8 +8,11 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from utils.response import BaseResponse
 from web.service import project
+from django.utils.decorators import method_decorator
+from web.service.login import auth_admin
 
 
+@method_decorator(auth_admin, name='dispatch')
 class ProjectsListView(View):
     def get(self, request, *args, **kwargs):
         data_list = models.ProjectTask.objects.all()

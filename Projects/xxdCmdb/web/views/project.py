@@ -7,16 +7,19 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from utils.response import BaseResponse
 from web.service import group
+from django.utils.decorators import method_decorator
+from web.service.login import auth_admin
 
 
+@method_decorator(auth_admin, name='dispatch')
 class ProjectListView(View):
     def get(self, request, *args, **kwargs):
         release_type = models.ReleaseType.objects.all()
         business_one_list = models.BusinessOne.objects.all()
         business_two_list = models.BusinessTwo.objects.all()
         business_three_list = models.BusinessThree.objects.all()
-        return render(request, 'project.html', {'release_type': release_type, 'business_one_list': business_one_list
-                                                    , 'business_two_list': business_two_list, 'business_three_list': business_three_list})
+        return render(request, 'project.html', {'release_type': release_type, 'business_one_list': business_one_list,
+                                                'business_two_list': business_two_list, 'business_three_list': business_three_list})
 
     def post(self, request, *args, **kwargs):
         response = BaseResponse()
@@ -30,9 +33,7 @@ class ProjectListView(View):
 
         # obj = models.ProjectTask.objects.filter(id=release_id).first()
         # release_name = obj.name
-
         # print(release_id, release_env, release_branch, release_name)
-
         # t = time.strftime('%Y%m%d')[3:]
         # n = models.ProjectTask.objects.filter(release_id__icontains=t).count() + 1
         # if len(str(n)) < 2:
@@ -65,7 +66,7 @@ class ProjectJsonView(View):
         return JsonResponse(response.__dict__)
 
 
-from django.contrib.auth import authenticate, login as auth_login,logout as auth_logout
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
 from django.shortcuts import HttpResponse
 import json

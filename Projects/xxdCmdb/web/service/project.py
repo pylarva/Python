@@ -413,7 +413,7 @@ class Project(BaseServiceList):
         release_type = obj.project_type_id
 
         release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
-                                         release_git_branch=release_branch,
+                                         release_git_branch=release_branch, release_id=release_id,
                                          release_user=release_user, release_git_url=release_git_url,
                                          release_jdk_version=release_jdk_version, release_type_id=release_type)
         release_obj.save()
@@ -440,22 +440,21 @@ class Project(BaseServiceList):
         else:
             pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
                                                            release_business_2)
-        print('==========', pkg_name, static_type, type(static_type))
 
         # 多进程执行连接Jenkins执行
         # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
         # p.start()
 
         # 多线程
-        t = threading.Thread(target=self.jenkins_tasks, args=(pkg_name, release_git_url, release_branch, task_id,
-                                                              release_name, release_env_name, pack_cmd, release_type,
-                                                              release_jdk_version, static_type, release_user))
+        t = threading.Thread(target=self.jenkins_task, args=(pkg_name, release_git_url, release_branch, task_id,
+                                                             release_name, release_env_name, pack_cmd, release_type,
+                                                             release_jdk_version, static_type, release_user))
         t.start()
 
         response.status = True
         return response
 
-    def jenkins_tasks(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd,
+    def jenkins_task(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd,
                       release_type, jdk_version, static_type, release_user):
 
         jdk = {'1': '/usr/local/jdk8', '2': '/usr/local/jdk7', '3': '/usr/java/jdk1.6.0_32'}

@@ -43,7 +43,12 @@ class ReleaseLogJsonView(View):
         response = BaseResponse()
 
         ret = {}
-        release_id = request.GET.get('id')
+        release_id = request.GET.get('id', None)
+        if not release_id:
+            response.status = False
+            response.data = ret
+            return JsonResponse(response.__dict__)
+
         # print(release_id)
         obj = models.ProjectTask.objects.filter(id=release_id).first()
 
@@ -58,16 +63,6 @@ class ReleaseLogJsonView(View):
             result = list(result)
 
             ret['data_list'] = result
-
-            # for item in ret['data_list']:
-            #     print(item)
-
-            # print(list(ret))
-            # for item in ret[0]:
-            #     print(item.release_time)
-            # ret = list(ret)
-
-            # return HttpResponse(json.dumps(ret))
             response.status = True
             response.data = ret
             # response.data = json.dumps(ret)

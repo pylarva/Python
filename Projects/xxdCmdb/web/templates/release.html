@@ -65,7 +65,8 @@
 {#                </div>#}
 {#            </div>#}
 
-            <div class="table-responsive table-area">
+
+            <div id="ss" class="table-responsive table-area">
                 <table class="table table-striped table-bordered">
                     <!-- 表格标题开始 -->
                     <thead id="table_head">
@@ -91,6 +92,17 @@
             </div>
         </div>
 
+        <div id="release_div" style="display: none;">
+            <span class="label label-primary">发布日志</span>
+            <div style="border: solid rgb(47,114,171) 1px; height: auto"></div>
+            <div id="release_log"></div>
+{#            {% for item in response.data.data_list %}#}
+{#                <a href="#">{{ item.msg }}</a>#}
+{#            {% endfor %}#}
+        </div>
+
+
+
     </div>
 
     <!-- 删除层开始 -->
@@ -99,7 +111,7 @@
         </button>
         <h4>确定删除资产？</h4>
 
-        <p>与该资产相关联数据将全部被删除！<br/> &nbsp;</p>
+        <p>与该资产相关联数据将全部被删除！<br/> </p>
 
         <p style="text-align: right">
             <button type="button" class="btn btn-danger" id="do_delete_confirm">确定删除</button>
@@ -130,7 +142,59 @@
         });
 
         function ChangePage(id) {
-                $.nbDataList('/assets.html', id);
+            $.nbDataLists(id);
+        }
+
+        // 查询日志函数
+        function do_log(id) {
+            $('#release_div').attr('style', '');
+            $.ajax({
+                    url: '/release_log.html',
+                    type: 'GET',
+                    data: {'id': id},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if (response.status){
+                            $('#release_log').empty();
+                            $.each(response.data['data_list'], function (k,v) {
+                                var reg = /^http*/;
+                                if(reg.test(v['msg'])==false){
+                                    var ft_time = fmTime(v['time']);
+                                    var s = '<p style="display: inline-block">' + '[ ' + ft_time + ' ]' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none">' + v['msg'] +'</a><br>';}
+                                else{
+                                    var s = '<p style="display: inline-block">' + '[ ' + ft_time + ' ]' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none" href="' + v['msg'] + '" target="_blank">' + v['msg'] +'</a><br>';
+                                }
+                                $('#release_log').append(s);
+                            })
+                        } else {
+                            $('#release_log').html('<a>未查询到日志</a>');
+                        }
+                    }
+            })
+        }
+
+        function dateFtt(fmt,date)
+            { //author: meizz
+              var o = {
+                "M+" : date.getMonth()+1,                 //月份
+                "d+" : date.getDate(),                    //日
+                "h+" : date.getHours(),                   //小时
+                "m+" : date.getMinutes(),                 //分
+                "s+" : date.getSeconds(),                 //秒
+                "q+" : Math.floor((date.getMonth()+3)/3), //季度
+                "S"  : date.getMilliseconds()             //毫秒
+              };
+              if(/(y+)/.test(fmt))
+                fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+              for(var k in o)
+                if(new RegExp("("+ k +")").test(fmt))
+              fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+              return fmt;
             }
+
+        function fmTime(value,row,index){
+            var crtTime = new Date(value);
+            return top.dateFtt("yyyy-MM-dd hh:mm:ss",crtTime);
+        }
     </script>
 {% endblock %}
