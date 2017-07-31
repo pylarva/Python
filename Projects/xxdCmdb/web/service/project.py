@@ -523,6 +523,35 @@ class Project(BaseServiceList):
                         self.log(task_id, '终止发布...')
                         models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
                         return False
+                    if release_name == 'apk':
+                        self.log(task_id, 'apk项目仅需发布一台nginx服务器...')
+                        self.log(task_id, '正在刷新cdn..')
+
+                        cmd = 'cd %s && python2.6 cdn.py Action=RefreshObjectCaches ObjectType=File ObjectPath=%s' % \
+                              (os.path.dirname(jenkins_config.source_script_path), jenkins_config.cdn_url_1)
+                        self.log(task_id, cmd)
+                        ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                               preexec_fn=os.setsid)
+                        out, err = ret.communicate()
+                        url = str(out, encoding='utf-8')
+                        cmd = 'curl -I %s' % url
+                        ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                               preexec_fn=os.setsid)
+                        out, err = ret.communicate()
+
+                        cmd = 'cd %s && python2.6 cdn.py Action=RefreshObjectCaches ObjectType=File ObjectPath=%s' % \
+                              (os.path.dirname(jenkins_config.source_script_path), jenkins_config.cdn_url_2)
+                        self.log(task_id, cmd)
+                        ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                               preexec_fn=os.setsid)
+                        out, err = ret.communicate()
+                        url = str(out, encoding='utf-8')
+                        cmd = 'curl -I %s' % url
+                        ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                               preexec_fn=os.setsid)
+                        out, err = ret.communicate()
+
+                        break
                     num += 1
 
                 models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)

@@ -99,7 +99,7 @@ class AssetView(View):
                                 condition.add(con_business_2, 'AND')
                                 condition.add(con_business_3, 'AND')
 
-                                result = models.Asset.objects.filter(condition).values('host_ip')
+                                result = models.Asset.objects.filter(condition).values('host_ip', 'host_name', 'business_2__name')
                                 response.data = list(result)
                                 response.status = True
                                 return JsonResponse(response.__dict__)
@@ -117,7 +117,7 @@ class AssetView(View):
                         condition.add(con_business_1, 'AND')
                         condition.add(con_business_2, 'AND')
 
-                        result = models.Asset.objects.filter(condition).values('host_ip')
+                        result = models.Asset.objects.filter(condition).values('host_ip', 'host_name', 'business_2__name')
                         response.data = list(result)
                         response.status = True
                         return JsonResponse(response.__dict__)

@@ -32,8 +32,8 @@ from threading import Timer
 
 
 API_HOST = 'cmdb.xxd.com'
-API_URL = 'http://172.16.19.15:8005/api/release'
-# API_URL = 'http://cmdb.xinxindai.com/api/release'
+# API_URL = 'http://172.16.18.172:8005/api/release'
+API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -78,7 +78,10 @@ static_pkg_cmd_list = {'mui': 'cnpm install && gulp && cd pages/ && /usr/bin/zip
 
 # 'static_m': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip
 
-static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build'}
+static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk'}
+
+# apk 放置目录
+apk_path = '/opt/static/download/'
 
 # define return code
 RET_OK = 0
@@ -1132,6 +1135,26 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
 
     # 如果是发布静态资源 打包命令在配置文件里
     if type == '2':
+        if name == 'apk':
+            # 如果是apk项目 只需拉取文件 打包就行
+            os.chdir(workspace_path)
+            cmd = 'zip -r apk.zip apk'
+            uploadLog(task_id, cmd)
+            ret, out = ExecCmd(cmd)
+            Logger().log(cmd, True)
+            Logger().log(out, True)
+            if ret:
+                Logger().log(out, False)
+                return out
+            cmd = '/bin/cp -fr apk.zip %s' % pkg_path
+            uploadLog(task_id, cmd)
+            ret, out = ExecCmd(cmd)
+            Logger().log(cmd, True)
+            Logger().log(out, True)
+            if ret:
+                Logger().log(out, False)
+                return out
+            return 0
         os.chdir(workspace_path)
         cmd = '%s%s >> %s' % (static_pkg_cmd_list[name], pkg_path, run_log_file )
         uploadLog(task_id, cmd)
@@ -1305,6 +1328,18 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
     Logger().log(cmd, True)
     os.system(cmd)
     time.sleep(1)
+
+    if name == 'apk':
+        if not os.path.exists(apk_path):
+            os.system('mkdir -p %s' % apk_path)
+        cmd = 'unzip -o %s -d %s' % (dest_file, apk_path)
+        ret, out = ExecCmd(cmd)
+        Logger().log(cmd, True)
+        Logger().log(out, True)
+        if ret:
+            Logger().log(out, False)
+            return out
+        return 0
 
     cmd = 'unzip -o %s -d %s' % (dest_file, dest_dir)
     ret, out = ExecCmd(cmd)
