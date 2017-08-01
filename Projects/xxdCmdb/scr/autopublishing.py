@@ -32,8 +32,8 @@ from threading import Timer
 
 
 API_HOST = 'cmdb.xxd.com'
-# API_URL = 'http://172.16.18.172:8005/api/release'
-API_URL = 'http://cmdb.xinxindai.com/api/release'
+API_URL = 'http://172.16.18.172:8005/api/release'
+# API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -1138,7 +1138,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         if name == 'apk':
             # 如果是apk项目 只需拉取文件 打包就行
             os.chdir(workspace_path)
-            cmd = 'zip -r apk.zip apk'
+            cmd = 'cd apk && zip apk.zip *'
             uploadLog(task_id, cmd)
             ret, out = ExecCmd(cmd)
             Logger().log(cmd, True)
@@ -1146,7 +1146,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
             if ret:
                 Logger().log(out, False)
                 return out
-            cmd = '/bin/cp -fr apk.zip %s' % pkg_path
+            cmd = 'cd apk && /bin/cp -fr apk.zip %s' % pkg_path
             uploadLog(task_id, cmd)
             ret, out = ExecCmd(cmd)
             Logger().log(cmd, True)

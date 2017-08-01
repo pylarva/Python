@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from web.service import asset
 from repository import models
+from web.service.login import auth_admin
 
 USER_NAME = {}
 
@@ -23,7 +24,7 @@ def auth(func):
     return inner
 
 
-@method_decorator(auth, name='dispatch')
+@method_decorator(auth_admin, name='dispatch')
 class AssetListView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(AssetListView, self).dispatch(request, *args, **kwargs)

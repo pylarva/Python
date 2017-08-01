@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 from django.db import models
+from django import forms
 from pytz import timezone
 from django.utils import timezone
 import datetime
@@ -204,13 +205,14 @@ class UserProfile(models.Model):
         return self.name
 
 
-class AdminInfo(models.Model):
+class AdminInfo(forms.ModelForm):
     """
     用户登陆相关信息
     """
-    # user_info = models.OneToOneField("UserProfile")
+    user_info = models.OneToOneField("UserProfile")
     username = models.CharField(u'用户名', max_length=64)
-    password = models.CharField(u'密码', max_length=64)
+    # password = models.CharField(u'密码', max_length=64)
+    password = forms.CharField(max_length=32, widget=forms.PasswordInput)
 
     class Meta:
         verbose_name_plural = "管理员表"

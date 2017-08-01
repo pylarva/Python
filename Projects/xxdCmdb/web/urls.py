@@ -4,6 +4,7 @@ from django.contrib import admin
 from web.views import account
 from web.views import home
 from web.views import asset
+from web.views import config
 from web.views import user
 from web.views import group
 from web.views import authorize
@@ -31,6 +32,8 @@ urlpatterns = [
     # url(r'^asset-(?P<device_type_id>\d+)-(?P<asset_nid>\d+).html$', asset.AssetDetailView.as_view()),
     url(r'^asset-(?P<nid>\d+).html$', asset.AssetDetailView.as_view()),
     url(r'^add-asset.html$', asset.AddAssetView.as_view()),
+
+    url(r'^config.html$', config.AssetListView.as_view()),
 
     url(r'^read.html$', read.ReadListView.as_view()),
     url(r'^reads.html$', read.ReadJsonView.as_view()),

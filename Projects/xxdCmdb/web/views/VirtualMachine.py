@@ -16,6 +16,7 @@ from django.shortcuts import HttpResponse
 from django.utils.decorators import method_decorator
 from xml.etree import ElementTree as ET
 from utils import pagination
+from web.service.login import auth_admin
 
 from conf import kvm_config
 from web.service import asset
@@ -38,7 +39,7 @@ def auth(func):
     return inner
 
 
-@method_decorator(auth, name='dispatch')
+@method_decorator(auth_admin, name='dispatch')
 class VirtualListView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(VirtualListView, self).dispatch(request, *args, **kwargs)
