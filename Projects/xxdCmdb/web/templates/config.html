@@ -59,6 +59,10 @@
                 var business_id = $('#business_2').selectpicker('val');
                 var file_content = $('#config_text').val();
                 var file_name = $('#file_name').text();
+                if(file_content == ''){
+                    alert('未选择配置文件');
+                    return false;
+                }
                 $.ajax({
                     url: '/config.html',
                     type: 'POST',
@@ -66,7 +70,7 @@
                     dataType: 'JSON',
                     success: function (response) {
                         if(response.status){
-                            alert(666)
+                            alert('更新配置文件成功！')
                         }
                     }
                 })
@@ -82,11 +86,13 @@
                 success: function (response) {
                     if(response.status){
                         $.each(response.data, function (k,v) {
-                            var s = '<p onclick=get_config("'+ v + '")>' + v + '</p>';
+                            var s = '<a style="text-decoration: none; display: block; cursor:pointer; font-size: 15px; margin-bottom:15px" onclick=get_config("'+ v + '")>' + v + '</a>';
                             $('#config_files').append(s)
                         })
                     }else {
-                        alert('no...')
+                        $('#config_files').empty();
+                        $('#config_text').empty();
+                        alert('未检索到配置文件')
                     }
                 }
             })
@@ -103,23 +109,10 @@
                 success: function (response) {
                     if(response.status){
                         $('#config_text').text(response.data);
-                    }
-                }
-            })
-        }
-
-        function file_commit() {
-            var business_id = $('#business_2').selectpicker('val');
-            var file_content = $('#config_text').text();
-            var file_name = $('#file_name').text();
-            $.ajax({
-                url: '/config.html',
-                type: 'POST',
-                data: {'file_content': file_content, 'file_name': file_name, 'business_id': business_id},
-                dataType: 'JSON',
-                success: function (response) {
-                    if(response.status){
-                        alert(666)
+                    }else {
+                        $('#config_files').empty();
+                        $('#config_text').empty();
+                        alert('未检索到配置文件')
                     }
                 }
             })
