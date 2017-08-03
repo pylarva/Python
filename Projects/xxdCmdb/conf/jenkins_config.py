@@ -32,7 +32,7 @@ nginx_test_ip_list = ['192.168.31.110', '192.168.33.110']
 nginx_prod_ip_list = ['192.168.31.110', '192.168.33.110']
 
 # 静态资源包
-static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk'}
+static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk', 'm': 'dist'}
 
 # 刷新cdn地址
 cdn_url_1 = 'http://download-cdn.xinxindai.com/'

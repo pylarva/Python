@@ -36,6 +36,32 @@
 
     </div>
 
+    <!-- 添加配置文件开始 -->
+    <div class="modal fade" id="add_config" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加配置文件</h4>
+              </div>
+              <form id="form1">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">配置文件名称</label>
+                    <input type="text" class="form-control" id="new_file">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <span id="error_message" style="color: red;"></span>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button id="confirm_add" type="button" class="btn btn-primary">添加</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+    <!-- 添加配置文件结束 -->
+
     <!-- 遮罩层开始 -->
     <div id='shade' class='shade hide'></div>
     <!-- 遮罩层结束 -->
@@ -71,12 +97,16 @@
                     success: function (response) {
                         if(response.status){
                             alert('更新配置文件成功！')
+                        }else {
+                            alert('服务端文件权限未设置可写')
                         }
                     }
                 })
             })
         });
+
         function get_files() {
+            $('#config_files').empty();
             var business = $('#business_2').selectpicker('val');
             $.ajax({
                 url: '/config.html',
@@ -84,14 +114,17 @@
                 data: {'business': business},
                 dataType: 'JSON',
                 success: function (response) {
+                    var s_add = '<a style="text-decoration: none; display: block; cursor:pointer; font-size: 15px; margin-bottom:15px" onclick=add_config()> + add </a>';
                     if(response.status){
                         $.each(response.data, function (k,v) {
                             var s = '<a style="text-decoration: none; display: block; cursor:pointer; font-size: 15px; margin-bottom:15px" onclick=get_config("'+ v + '")>' + v + '</a>';
                             $('#config_files').append(s)
-                        })
+                        });
+                        $('#config_files').append(s_add);
                     }else {
                         $('#config_files').empty();
                         $('#config_text').empty();
+                        $('#config_files').append(s_add);
                         alert('未检索到配置文件')
                     }
                 }
@@ -108,13 +141,35 @@
                 dataType: 'JSON',
                 success: function (response) {
                     if(response.status){
-                        $('#config_text').text(response.data);
+                        $('#config_text').val(response.data);
                     }else {
                         $('#config_files').empty();
                         $('#config_text').empty();
                         alert('未检索到配置文件')
                     }
                 }
+            })
+        }
+
+        function add_config() {
+            $('#add_config').modal();
+            $('#confirm_add').click(function () {
+                var new_file = $('#new_file').val();
+                var business_id = $('#business_2').selectpicker('val');
+                $.ajax({
+                    url: '/config.html',
+                    type: 'POST',
+                    data: {'new_file': new_file, 'business_id': business_id},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if(response.status){
+                            $('#add_config').modal('hide');
+                            get_files();
+                            alert('创建配置文件成功');
+                        }
+                    }
+                })
+
             })
         }
     </script>

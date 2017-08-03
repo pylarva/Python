@@ -31,18 +31,14 @@ class ProjectListView(View):
         username = request.POST.get('user_name')
         static_type = request.POST.get('static_cover_type')
 
-        # obj = models.ProjectTask.objects.filter(id=release_id).first()
-        # release_name = obj.name
-        # print(release_id, release_env, release_branch, release_name)
-        # t = time.strftime('%Y%m%d')[3:]
-        # n = models.ProjectTask.objects.filter(release_id__icontains=t).count() + 1
-        # if len(str(n)) < 2:
-        #     release_id = str(t) + '0' + str(n)
-        # else:
-        #     release_id = str(t) + str(n)
+        try:
+            project_obj = models.ProjectTask(business_2_id=release_env, project_type_id=release_type,
+                                             jdk_version=jdk_version, git_url=git_url, release_user=username,
+                                             pack_cmd=pack_cmd, static_type=static_type)
+            project_obj.save()
+        except Exception as e:
+            print(e)
 
-        models.ProjectTask.objects.create(business_2_id=release_env, project_type_id=release_type, jdk_version=jdk_version,
-                                          git_url=git_url, release_user=username, pack_cmd=pack_cmd, static_type=static_type)
         response.status = True
         return JsonResponse(response.__dict__)
 

@@ -74,11 +74,12 @@ static_pkg_cmd_list = {'mui': 'cnpm install && gulp && cd pages/ && /usr/bin/zip
                        'html': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
                        'pc': 'cnpm install && gulp && cd pages/ && /usr/bin/zip -r build.zip build && /bin/cp build.zip ',
                        'heidai': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp build.zip ',
-                       'digital': 'mv pages digital && /usr/bin/zip -r digital.zip digital && /bin/cp digital.zip '}
+                       'digital': 'mv pages digital && /usr/bin/zip -r digital.zip digital && /bin/cp digital.zip ',
+                       'm': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip '}
 
 # 'static_m': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip
 
-static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk'}
+static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk', 'm': 'dist'}
 
 # apk 放置目录
 apk_path = '/opt/static/download/'
@@ -1271,7 +1272,6 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
     dest_dir = '/static/%s/%s/' % (env, name)
 
     if os.path.exists(dest_dir):
-        Logger().log('static_type ------ %s %s' % (static_type, type(static_type)))
         if static_type == '2':
             version_name = branch.split('/')[-1]
             dest_dir = '%s%s' % (dest_dir, version_name)
@@ -1293,16 +1293,6 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
                 Logger().log(out, False)
                 return out
             return 0
-
-        else:
-            pass
-            # cmd = 'rm -fr %s*' % dest_dir
-            # ret, out = ExecCmd(cmd)
-            # Logger().log(cmd, True)
-            # Logger().log(out, True)
-            # if ret:
-            #     Logger().log(out, False)
-            #     return out
     else:
         os.makedirs(dest_dir)
 
@@ -1366,8 +1356,8 @@ if __name__ == '__main__':
     Logger().log('%s' % sys.argv, True)
     Logger().log('%s' % len(sys.argv), True)
 
+    # 向Nginx发布静态资源
     if len(sys.argv) == 7:
-        # 向Nginx发布静态资源
         retCode = NginxStatic(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
         Logger().log('exit --> %s' % retCode)
         sys.exit(retCode)
@@ -1375,10 +1365,10 @@ if __name__ == '__main__':
     if len(sys.argv) == 11:
         retCode = JenkinsModify(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5],sys.argv[6],sys.argv[7],sys.argv[8],sys.argv[9],sys.argv[10])
         sys.exit(retCode)
+    # Tomcat项目发布
     if len(sys.argv) != 6:
         print "Miss arguments."
         sys.exit(1)
-    # build.xxd.com/infra/cmdb/97/infra_cmdb_97.war 6d200fd40a846900c72574e0521b7e26 97 tomcat
     retCode = run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     exit(retCode)
     # exit(0)

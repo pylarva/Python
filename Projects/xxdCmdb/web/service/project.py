@@ -412,50 +412,47 @@ class Project(BaseServiceList):
         release_jdk_version = obj.jdk_version
         release_type = obj.project_type_id
 
-        release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
-                                         release_git_branch=release_branch, release_id=release_id,
-                                         release_user=release_user, release_git_url=release_git_url,
-                                         release_jdk_version=release_jdk_version, release_type_id=release_type)
-        release_obj.save()
+        try:
+            release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
+                                             release_git_branch=release_branch, release_id=release_id,
+                                             release_user=release_user, release_git_url=release_git_url,
+                                             release_jdk_version=release_jdk_version, release_type_id=release_type)
+            release_obj.save()
 
-        models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id, release_last_time=release_time)
+            models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id,
+                                                                    release_last_time=release_time)
 
-        # 返回给页面新的发布ID和时间
-        response.data = {'id': release_obj.id, 'time': release_time}
+            response.data = {'id': release_obj.id, 'time': release_time}
+            release_business_1 = release_obj.release_env
+            release_business_2 = release_obj.release_name
+            task_id = release_obj.id
 
-        release_business_1 = release_obj.release_env
-        release_business_2 = release_obj.release_name
-        task_id = release_obj.id
-        release_name = str(release_name)
+            # 返回给页面新的发布ID和时间
+            release_name = str(release_name)
 
-        if release_type == 2:
-            # if static_type == 2:
-                # version_name = release_branch.split('/')[-1]
-                # self.log(task_id, 'version_name --> %s' % version_name)
-                # pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
-                #                                                version_name)
-            # else:
-            pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
-                                                           jenkins_config.static_pkg_name[release_name])
-        else:
-            pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
-                                                           release_business_2)
+            if release_type == 2:
+                pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
+                                                               jenkins_config.static_pkg_name[release_name])
+            else:
+                pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
+                                                               release_business_2)
 
-        # 多进程执行连接Jenkins执行
-        # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
-        # p.start()
+            # 多进程执行连接Jenkins执行
+            # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
+            # p.start()
 
-        # 多线程
-        t = threading.Thread(target=self.jenkins_task, args=(pkg_name, release_git_url, release_branch, task_id,
-                                                             release_name, release_env_name, pack_cmd, release_type,
-                                                             release_jdk_version, static_type, release_user))
-        t.start()
-
+            # 多线程
+            t = threading.Thread(target=self.jenkins_task, args=(pkg_name, release_git_url, release_branch, task_id,
+                                                                 release_name, release_env_name, pack_cmd, release_type,
+                                                                 release_jdk_version, static_type, release_user))
+            t.start()
+        except Exception as e:
+            print(e)
         response.status = True
         return response
 
     def jenkins_task(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd,
-                      release_type, jdk_version, static_type, release_user):
+                     release_type, jdk_version, static_type, release_user):
 
         jdk = {'1': '/usr/local/jdk8', '2': '/usr/local/jdk7', '3': '/usr/java/jdk1.6.0_32'}
         static = {'1': '覆盖式', '2': '迭代式'}

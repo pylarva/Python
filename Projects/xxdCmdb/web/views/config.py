@@ -26,10 +26,16 @@ class AssetListView(View):
             business_obj = models.BusinessTwo.objects.filter(id=business_id).first()
             business_name = business_obj.name
             file_path = '%sprod/%s/%s' % (jenkins_config.config_path, business_name, file)
-            with open(file_path) as f:
-                response.data = f.read()
-            f.close()
-            response.status = True
+            try:
+                with open(file_path, "r") as f:
+                    response.data = f.read()
+                f.close()
+                response.status = True
+            except Exception as e:
+                with open(file_path, "r", encoding='gb2312') as f:
+                    response.data = f.read()
+                f.close()
+                response.status = True
             return JsonResponse(response.__dict__)
 
         business = request.GET.get('business', None)
@@ -55,6 +61,22 @@ class AssetListView(View):
         :return:
         """
         response = BaseResponse()
+
+        # 新增配置文件
+        new_file = request.POST.get('new_file', None)
+        if new_file:
+                business_id = request.POST.get('business_id', None)
+                business_obj = models.BusinessTwo.objects.filter(id=business_id).first()
+                business_name = business_obj.name
+                file = '%sprod/%s/%s' % (jenkins_config.config_path, business_name, new_file)
+                file_dir = os.path.dirname(file)
+                if not os.path.exists(file_dir):
+                    os.system('mkdir -p %s' % file_dir)
+                cmd = 'touch %s' % file
+                os.system(cmd)
+                response.status = True
+
+        # 修改配置文件
         business_id = request.POST.get('business_id', None)
         file_name = request.POST.get('file_name', None)
         file_content = request.POST.get('file_content', None)
@@ -64,12 +86,12 @@ class AssetListView(View):
             business_name = business_obj.name
             file = '%sprod/%s/%s' % (jenkins_config.config_path, business_name, file_name)
             if os.path.isfile(file):
+                os.system('chmod 777 %s' % file)
                 with open(file, "w+") as f:
                     f.write(file_content)
                 f.close()
                 response.status = True
-        else:
-            response.status = False
+
         return JsonResponse(response.__dict__)
 
 
