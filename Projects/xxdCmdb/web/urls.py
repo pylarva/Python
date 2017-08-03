@@ -4,6 +4,7 @@ from django.contrib import admin
 from web.views import account
 from web.views import home
 from web.views import asset
+from web.views import config
 from web.views import user
 from web.views import group
 from web.views import authorize
@@ -12,6 +13,10 @@ from web.views import read
 from web.views import business
 from web.views import PhysicalMachine
 from web.views import VirtualMachine
+from web.views import project
+from web.views import projects
+from web.views import release
+from web.views import logs
 
 urlpatterns = [
     url(r'^login.html$', account.LoginView.as_view()),
@@ -24,8 +29,11 @@ urlpatterns = [
     url(r'^virtual_list.html', VirtualMachine.VirtualListView.as_view()),
     url(r'^asset.html$', asset.AssetListView.as_view()),
     url(r'^assets.html$', asset.AssetJsonView.as_view()),
-    url(r'^asset-(?P<device_type_id>\d+)-(?P<asset_nid>\d+).html$', asset.AssetDetailView.as_view()),
+    # url(r'^asset-(?P<device_type_id>\d+)-(?P<asset_nid>\d+).html$', asset.AssetDetailView.as_view()),
+    url(r'^asset-(?P<nid>\d+).html$', asset.AssetDetailView.as_view()),
     url(r'^add-asset.html$', asset.AddAssetView.as_view()),
+
+    url(r'^config.html$', config.AssetListView.as_view()),
 
     url(r'^read.html$', read.ReadListView.as_view()),
     url(r'^reads.html$', read.ReadJsonView.as_view()),
@@ -50,6 +58,21 @@ urlpatterns = [
 
     url(r'^group.html$', group.GroupListView.as_view()),
     url(r'^groups.html$', group.GroupJsonView.as_view()),
+
+    url(r'^_project.html$', project.ProjectListView.as_view()),
+    url(r'^project_list.html$', projects.ProjectsListView.as_view()),
+    url(r'^projects_list.html$', projects.ProjectsJsonView.as_view()),
+
+    url(r'^project_list_r.html$', projects.ProjectsReadListView.as_view()),
+    url(r'^projects_list_r.html$', projects.ProjectsJsonView.as_view()),
+
+    url(r'^release.html$', release.ReleaseListView.as_view()),
+    url(r'^releases.html$', release.ReleaseJsonView.as_view()),
+
+    url(r'^release_r.html$', release.ReleaseReadListView.as_view()),
+    url(r'^releases_r.html$', release.ReleaseJsonView.as_view()),
+
+    url(r'^release_log.html$', logs.ReleaseLogJsonView.as_view()),
 
     url(r'^ldap.html$', user.LdapListView.as_view()),
 

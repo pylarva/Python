@@ -94,6 +94,7 @@ class User(BaseServiceList):
             ret['table_config'] = self.table_config
             ret['condition_config'] = self.condition_config
             ret['data_list'] = list(asset_list)
+            # ret['data_list'] = asset_list
             ret['page_info'] = {
                 "page_str": page_info.pager(),
                 "page_start": page_info.start,

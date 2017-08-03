@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import HttpResponse
 from utils import ldap
+from django.contrib.auth import authenticate
 
 data_dict = {}
 
@@ -20,18 +21,23 @@ class LoginView(View):
         p1 = request.POST.get('pwd1', None)
 
         if u1 == 'admin':
-            user_num = models.AdminInfo.objects.filter(username=u1, password=p1).count()
-            if user_num > 0:
-                data_dict['status'] = True
-                data_dict['message'] = 'ok'
+            user = authenticate(username=u1, password=p1)
+            if user is not None:
+                if user.is_active:
+                    print("User is valid, active and authenticated")
 
-                # 设置session
-                request.session['username'] = u1
-                request.session['is_login'] = True
+                    data_dict['status'] = True
+                    data_dict['message'] = 'ok'
 
-                ret = HttpResponse(json.dumps(data_dict))
-                ret.set_cookie('username', u1)
-                return ret
+                    # 设置session
+                    request.session['username'] = u1
+                    request.session['is_login'] = True
+
+                    ret = HttpResponse(json.dumps(data_dict))
+                    ret.set_cookie('username', u1)
+                    return ret
+                else:
+                    print("The password is valid, but the account has been disabled!")
             else:
                 data_dict['status'] = False
                 data_dict['message'] = '用户名或者密码错误...'
@@ -52,6 +58,7 @@ class LoginView(View):
                 # 设置session
                 request.session['username'] = u1
                 request.session['is_login'] = True
+                request.session.set_expiry(0)
 
                 ret = HttpResponse(json.dumps(data_dict))
                 ret.set_cookie('username', u1)

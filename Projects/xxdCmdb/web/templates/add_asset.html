@@ -1,6 +1,52 @@
 {% extends 'layout/_laybusiness.html' %}
 
 {% block css %}
+<style>
+    .guige {
+
+    }
+
+    .guige-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .guige-table .title {
+        background: #f5fafe;
+        text-align: left;
+        font-weight: bold;
+        line-height: 32px;
+        height: 32px;
+        font-family: "微软雅黑";
+        border-right: 1px solid #dcdcdc;
+        border-left: 2px solid #0488cd;
+    }
+
+    .guige-table td, .content .guige-table th {
+        border: 1px solid #dcdcdc;
+        line-height: 30px;
+        height: 30px;
+        padding: 0 10px;
+        border-top: 0;
+    }
+
+    .guige-table .body-left {
+        width: 126px;
+        font-weight: normal;
+        text-align: right;
+        color: #666;
+    }
+
+    .guige-table .body-right {
+        color: #333;
+    }
+
+    .bootstrap-select {
+        width: 100px;
+    }
+
+</style>
 
 
 {% endblock %}
@@ -11,11 +57,289 @@
         <li><a href="/asset.html">资产列表</a></li>
         <li class="active">添加资产</li>
     </ol>
+    <ul class="nav nav-tabs">
+        <li class="active"><a aria-controls="hardware" role="tab" data-toggle="tab" href="#hardware">物理服务器</a></li>
+        <li><a aria-controls="nic" role="tab" data-toggle="tab" href="#nic">交换机</a></li>
+        <li><a aria-controls="nic" role="tab" data-toggle="tab" href="#firewall">防火墙</a></li>
+    </ul>
     <div style="padding: 5px 8px;">
 
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="hardware">
+        <div style="width: 600px; float: left">
+            <div class="guige">
+                <table class="guige-table">
+                   <tbody>
+                    <tr>
+                        <th colspan="5" class="title f14 th" style="border-left:2px solid #0488cd;"><span class="padding-l-8">基本信息</span></th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <form role="form">
+                <label>主机名</label>
+                <div class="form-group">
+                  <input id="host" type="text" class="form-control" placeholder="">
+                </div>
+                <label>管理IP</label>
+                <div class="form-group">
+                  <input id="ip" type="text" class="form-control" placeholder="">
+                </div>
+                <label>机房</label>
+                <div class="form-group">
+                  <input id="idc" type="text" class="form-control" placeholder="">
+                </div>
+                <label>机柜</label>
+                <div class="form-group">
+                  <input id="cabinet" type="text" class="form-control" placeholder="">
+                </div>
+                                <label>上架日期</label>
+                <div class="form-group">
+                  <input id="putaway" type="text" class="form-control" placeholder="">
+                </div>
+{#                <label>型号</label>#}
+{#                <div class="form-group">#}
+{#                  <input type="text" class="form-control" placeholder="">#}
+{#                </div>#}
+            </form>
+        </div>
 
+        <div style="width: 600px; float: right">
+            <div class="guige" >
+                <table class="guige-table">
+                   <tbody>
+                    <tr>
+                        <th colspan="5" class="title f14 th" style="border-left:2px solid #0488cd;"><span class="padding-l-8">硬件信息</span></th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <form role="form">
+                <label>机器型号</label>
+                <div class="form-group">
+                  <input id="machine" type="text" class="form-control" placeholder="">
+                </div>
+                <label>序列号</label>
+                <div class="form-group">
+                  <input id="sn" type="text" class="form-control" placeholder="">
+                </div>
+
+                <label>操作系统</label>
+                    <div class="form-group" style="display: inline-block">
+                        <div id="wd_3">
+                            <select class="selectpicker" id="os">
+                                  <option value='CentOS_6.9'>CentOS_6.9</option>
+                                  <option value='CentOS_7.2'>CentOS_7.2</option>
+                            </select>
+                        </div>
+                    </div>
+                <label>CPU型号</label>
+                    <div class="form-group" >
+                        <div id="wd">
+                            <select id="cpu" class="selectpicker">
+                                  {% for item in response.data %}
+                                  <option value={{ item.id }}>{{ item.name }}</option>
+                                  {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+            <br>
+
+            <div>
+                <label>CPU颗数</label>
+                    <div class="form-group" style="display: inline-block">
+                        <div id="wd_1">
+                            <select class="selectpicker" id="cpu_num">
+                                  <option id="cpu" value='1'>1</option>
+                                  <option id="cpu" value='2'>2</option>
+                                  <option id="cpu" value='3'>3</option>
+                                  <option id="cpu" value='4'>4</option>
+                            </select>
+                        </div>
+                    </div>
+
+                <label>逻辑核心数</label>
+                    <div class="form-group" style="display: inline-block">
+                        <div id="wd_2">
+                            <select class="selectpicker" id="core_num">
+                                  <option id="cpu" value='4'>4</option>
+                                  <option id="cpu" value='8'>8</option>
+                                  <option id="cpu" value='12'>12</option>
+                                  <option id="cpu" value='16'>16</option>
+                                  <option id="cpu" value='32'>32</option>
+                                  <option id="cpu" value='64'>64</option>
+                            </select>
+                        </div>
+                    </div>
+            </div>
+                <label>内存</label>
+                <div class="form-group">
+                  <input id="memory" type="text" class="form-control" placeholder="">
+                </div>
+                <label>RAID</label>
+                    <div class="form-group" style="display: inline-block">
+                        <div id="wd_4">
+                            <select class="selectpicker" id="raid">
+                                  <option id="cpu" value='10'>RAID10</option>
+                                  <option id="cpu" value='5'>RAID5</option>
+                                  <option id="cpu" value='1'>RAID1</option>
+                                  <option id="cpu" value='0'>RAID0</option>
+                            </select>
+                        </div>
+                    </div>
+                                <label>保修日期</label>
+                <div class="form-group">
+                  <input id="service" type="text" class="form-control" placeholder="">
+                </div>
+            </form>
+        <br>
+        </div>
+
+
+        <div class="guige">
+            <table class="guige-table">
+                <tbody id="disk_all">
+                    <tr>
+                        <th colspan="6" class="title f14 th" style="border-left:2px solid #0488cd;">
+                            <span class="padding-l-8">硬盘信息 </span>
+                            <i class="fa fa-plus-square-o" aria-hidden="true" onclick="add_disk(this);"></i>
+                        </th>
+
+                    </tr>
+                     <tr>
+                       <th>选择</th>
+                       <th>插槽</th>
+                       <th>容量(GB)</th>
+                       <th>接口类型</th>
+                       <th>转速(RPM)</th>
+                       <th>型号</th>
+                     </tr>
+                    <tr id="eth">
+                       <td></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="1"></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 120px" value="500"></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="SAS"></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="7200"></td>
+                       <td><input type="text" style="border: none; margin-right: -77px; width: 200px" value="SEAGATE ST300MM0006"></td>
+                     </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+
+        <div class="guige">
+            <table class="guige-table">
+                <tbody id="eth_all">
+                    <tr>
+                        <th colspan="6" class="title f14 th" style="border-left:2px solid #0488cd;">
+                            <span class="padding-l-8">网卡信息 </span>
+                            <i class="fa fa-plus-square-o" aria-hidden="true" onclick="add_eth(this);"></i>
+                        </th>
+
+                    </tr>
+                     <tr>
+                       <th>选择</th>
+                       <th>网卡</th>
+                       <th>Mac地址</th>
+                       <th>IP地址</th>
+                       <th>上联交换机</th>
+                       <th>交换机端口</th>
+                     </tr>
+                    <tr id="eth">
+                       <td></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="eth0"></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 120px" value="00:1c:42:a5:57:7a"></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="192.168.1.1"></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 100px" value="192.168.1.254"></td>
+                       <td><input type="text" style="border: none; margin-right: -84px; width: 80px" value="8"></td>
+                     </tr>
+                </tbody>
+            </table>
+        </div>
+    <br>
+    <button id="add_host_save" class="btn btn-primary" type="button" style="float: right; margin-right: 20px; width: 150px">提交保存</button>
     </div>
 
+        <div role="tabpanel" class="tab-pane" id="nic">
+            <label>交换机品牌</label>
+            <div class="form-group">
+              <input id="nic_brand" type="text" class="form-control" placeholder="">
+            </div>
+            <label>型号</label>
+            <div class="form-group">
+              <input id="nic_model" type="text" class="form-control" placeholder="">
+            </div>
+            <label>管理IP</label>
+            <div class="form-group">
+              <input id="nic_ip" type="text" class="form-control" placeholder="">
+            </div>
+            <label>序列号</label>
+            <div class="form-group">
+              <input id="nic_sn" type="text" class="form-control" placeholder="">
+            </div>
+            <label>机房</label>
+            <div class="form-group">
+              <input id="nic_idc" type="text" class="form-control" placeholder="">
+            </div>
+            <label>机柜</label>
+            <div class="form-group">
+              <input id="nic_cabinet" type="text" class="form-control" placeholder="">
+            </div>
+            <label>上架日期</label>
+            <div class="form-group">
+              <input id="nic_putaway" type="text" class="form-control" placeholder="">
+            </div>
+            <label>保修日期</label>
+            <div class="form-group">
+              <input id="nic_service" type="text" class="form-control" placeholder="">
+            </div>
+
+            <button id="add_nic_save" class="btn btn-primary" type="button" style="float: right; margin-right: 20px; width: 150px">提交保存</button>
+        </div>
+
+        <!-- 添加防火墙 -->
+        <div role="tabpanel" class="tab-pane" id="firewall">
+            <label>防火墙品牌</label>
+            <div class="form-group">
+              <input id="fire_brand" type="text" class="form-control" placeholder="">
+            </div>
+            <label>型号</label>
+            <div class="form-group">
+              <input id="fire_model" type="text" class="form-control" placeholder="">
+            </div>
+            <label>管理IP</label>
+            <div class="form-group">
+              <input id="fire_ip" type="text" class="form-control" placeholder="">
+            </div>
+            <label>序列号</label>
+            <div class="form-group">
+              <input id="fire_sn" type="text" class="form-control" placeholder="">
+            </div>
+            <label>机房</label>
+            <div class="form-group">
+              <input id="fire_idc" type="text" class="form-control" placeholder="">
+            </div>
+            <label>机柜</label>
+            <div class="form-group">
+              <input id="fire_cabinet" type="text" class="form-control" placeholder="">
+            </div>
+            <label>上架日期</label>
+            <div class="form-group">
+              <input id="fire_putaway" type="text" class="form-control" placeholder="">
+            </div>
+            <label>保修日期</label>
+            <div class="form-group">
+              <input id="fire_service" type="text" class="form-control" placeholder="">
+            </div>
+
+            <button id="add_firewall_save" class="btn btn-primary" type="button" style="float: right; margin-right: 20px; width: 150px">提交保存</button>
+        </div>
+
+    </div>
+    </div>
 
 
 {% endblock %}
@@ -24,12 +348,168 @@
     <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="/static/js/nb-list.js"></script>
+    <script src="/static/js/bootstrap-select.js"></script>
+
+
 
     <script>
         $(function () {
             $.initMenu('#menu_asset');
+            window.setTimeout(add_width, 100);
+
+            $('#add_host_save').click(function () {
+                var host = $('#host').val();
+                var ip = $('#ip').val();
+                var idc = $('#idc').val();
+                var cabinet = $('#cabinet').val();
+                var putaway = $('#putaway').val();
+                var machine = $('#machine').val();
+                var sn = $('#sn').val();
+                var cpu = $('#cpu').val();
+                var memory = $('#memory').val();
+                var raid = $('#raid').val();
+                var service = $('#service').val();
+                var cpu_num = $('#cpu_num').val();
+                var core_num = $('#core_num').val();
+                var os = $('#os').val();
+                if(host == '' || ip == '' || idc == '' || cabinet == '' || putaway == '' || machine == '' || sn == '' ||
+                memory == '' || raid == '' || service == ''){
+{#                if(host == '' || ip == ''){#}
+                    alert('输入不能为空...')
+                }else{
+                    // 循环取硬盘值
+                    var disk_list = new Array();
+                    $('#disk_all').find('tr').each(function () {
+                        var list_s = new Array();
+                        $(this).find('td').each(function () {
+                            var v = $(this).children().val();
+                            list_s.push(v);
+                        });
+                        disk_list.push(list_s);
+                    });
+
+                    // 循环取网卡值
+                    var nic_list = new Array();
+                    $('#eth_all').find('tr').each(function () {
+                        var list_s = new Array();
+                        $(this).find('td').each(function () {
+                            var v = $(this).children().val();
+                            list_s.push(v);
+                        });
+                        nic_list.push(list_s);
+                    });
+
+                    $.ajax({
+                        url: '/add-asset.html',
+                        type: 'POST',
+                        data: {'host': host, 'ip': ip, 'memory': memory,
+                            'idc': idc, 'cabinet': cabinet, 'putaway': putaway, 'machine': machine, 'sn': sn,
+                            'cpu_num': cpu_num, 'core_num': core_num, 'os':os,
+                            'cpu': cpu, 'service': service, 'raid': raid, 'disk_list': disk_list, 'nic_list': nic_list},
+                        dataType: 'JSON',
+                        traditional: true,
+                        success: function (response) {
+                            if(response.status){
+                                alert('新资产添加成功！');
+                            }else {
+                                alert(response.message);
+                            }
+                        }
+                    })
+                }
+            });
+
+            $('#add_nic_save').click(function () {
+                var nic_brand = $('#nic_brand').val();
+                var nic_model = $('#nic_model').val();
+                var nic_ip = $('#nic_ip').val();
+                var nic_sn = $('#nic_sn').val();
+                var nic_idc = $('#nic_idc').val();
+                var nic_cabinet = $('#nic_cabinet').val();
+                var nic_putaway = $('#nic_putaway').val();
+                var nic_service = $('#nic_service').val();
+                if(nic_model == ''|| nic_ip ==''|| nic_cabinet=='' || nic_putaway=='' || nic_service=='' || nic_sn=='' || nic_brand == ''){
+                    alert('输入不能为空...');
+                    return false
+                }else {
+                    $.ajax({
+                        url: '/add-asset.html',
+                        type: 'POST',
+                        data: {'nic_model': nic_model, 'nic_ip': nic_ip, 'nic_idc': nic_idc,'nic_cabinet': nic_cabinet,
+                               'nic_putaway': nic_putaway, 'nic_service': nic_service, 'nic_sn': nic_sn, 'nic_brand': nic_brand},
+                        dataType: 'JSON',
+                        traditional: true,
+                        success: function (response) {
+                            if(response.status){
+                                alert('新资产添加成功！');
+
+                            }else {
+                                alert(response.message);
+                            }
+                        }
+                    })
+                }
+            });
+
+            $('#add_firewall_save').click(function () {
+                var fire_brand = $('#fire_brand').val();
+                var fire_model = $('#fire_model').val();
+                var fire_ip = $('#fire_ip').val();
+                var fire_sn = $('#fire_sn').val();
+                var fire_idc = $('#fire_idc').val();
+                var fire_cabinet = $('#fire_cabinet').val();
+                var fire_putaway = $('#fire_putaway').val();
+                var fire_service = $('#fire_service').val();
+                if(fire_model == ''|| fire_ip ==''|| fire_cabinet=='' || fire_putaway=='' || fire_service=='' || fire_sn=='' || fire_brand == ''){
+                    alert('输入不能为空...');
+                    return false
+                }else {
+                    $.ajax({
+                        url: '/add-asset.html',
+                        type: 'POST',
+                        data: {'fire_model': fire_model, 'fire_ip': fire_ip, 'fire_idc': fire_idc,'fire_cabinet': fire_cabinet, 'fire_brand': fire_brand,
+                               'fire_putaway': fire_putaway, 'fire_service': fire_service, 'fire_sn': fire_sn, 'isfirewall': 1},
+                        dataType: 'JSON',
+                        traditional: true,
+                        success: function (response) {
+                            if(response.status){
+                                alert('新资产添加成功！');
+
+                            }else {
+                                alert(response.message);
+                            }
+                        }
+                    })
+                }
+            })
+
         });
+
+        function add_eth(ths) {
+            var p = $(ths).parent().parent().next().next().clone();
+            $('#eth_all').append(p);
+            $('#eth_all tr:last td:eq(0)').append("<i class='fa fa-minus-square-o' aria-hidden='true' onclick='remove(this);'></i>");
+        }
+
+        function add_disk(ths) {
+            var p = $(ths).parent().parent().next().next().clone();
+            $('#disk_all').append(p);
+            $('#disk_all tr:last td:eq(0)').append("<i class='fa fa-minus-square-o' aria-hidden='true' onclick='remove(this);'></i>");
+        }
+
+        function remove(ths) {
+            $(ths).parent().parent().remove();
+        }
+
+        function add_width() {
+            $('#wd').children().prop('style', 'width: 600px');
+            $('#wd_3').children().prop('style', 'width: 600px');
+            $('#wd_4').children().prop('style', 'width: 600px');
+            $('#wd_1').children().prop('style', 'width: 230px');
+            $('#wd_2').children().prop('style', 'width: 230px');
+        }
 
 
     </script>
+
 {% endblock %}

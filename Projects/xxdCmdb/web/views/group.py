@@ -4,10 +4,12 @@ from django.views import View
 from repository import models
 from django.shortcuts import render
 from django.http import JsonResponse
-
+from django.utils.decorators import method_decorator
 from web.service import group
+from web.service.login import auth_admin
 
 
+@method_decorator(auth_admin, name='dispatch')
 class GroupListView(View):
     def get(self, request, *args, **kwargs):
         group_list = models.UserGroup.objects.all()

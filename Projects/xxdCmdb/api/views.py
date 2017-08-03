@@ -54,7 +54,8 @@ class AssetView(View):
         :param kwargs:
         :return:
         """
-
+        # appid = request.META.get(['HTTP_APPID'], None)
+        # print(appid)
         # test = {'user': '用户名', 'pwd': '密码'}
         # result = json.dumps(test,ensure_ascii=True)
         # result = json.dumps(test,ensure_ascii=False)
@@ -98,7 +99,7 @@ class AssetView(View):
                                 condition.add(con_business_2, 'AND')
                                 condition.add(con_business_3, 'AND')
 
-                                result = models.Asset.objects.filter(condition).values('host_ip')
+                                result = models.Asset.objects.filter(condition).values('host_ip', 'host_name', 'business_2__name')
                                 response.data = list(result)
                                 response.status = True
                                 return JsonResponse(response.__dict__)
@@ -116,7 +117,7 @@ class AssetView(View):
                         condition.add(con_business_1, 'AND')
                         condition.add(con_business_2, 'AND')
 
-                        result = models.Asset.objects.filter(condition).values('host_ip')
+                        result = models.Asset.objects.filter(condition).values('host_ip', 'host_name', 'business_2__name')
                         response.data = list(result)
                         response.status = True
                         return JsonResponse(response.__dict__)
@@ -159,24 +160,81 @@ class AssetView(View):
 
         server_info = json.loads(request.body.decode('utf-8'))
         server_info = json.loads(server_info)
-        hostname = server_info['hostname']
-
+        hostname = server_info['k1']
+        #
         ret = {'code': 1000, 'message': '[%s]更新完成' % hostname}
-
-        server_obj = models.Server.objects.filter(hostname=hostname).select_related('asset').first()
-        if not server_obj:
-            ret['code'] = 1002
-            ret['message'] = '[%s]资产不存在' % hostname
-            return JsonResponse(ret)
-
-        for k, v in config.PLUGINS_DICT.items():
-            module_path, cls_name = v.rsplit('.', 1)
-            cls = getattr(importlib.import_module(module_path), cls_name)
-            response = cls.process(server_obj, server_info, None)
-            if not response.status:
-                ret['code'] = 1003
-                ret['message'] = "[%s]资产更新异常" % hostname
-            if hasattr(cls, 'update_last_time'):
-                cls.update_last_time(server_obj, None)
+        #
+        # server_obj = models.Server.objects.filter(hostname=hostname).select_related('asset').first()
+        # if not server_obj:
+        #     ret['code'] = 1002
+        #     ret['message'] = '[%s]资产不存在' % hostname
+        #     return JsonResponse(ret)
+        #
+        # for k, v in config.PLUGINS_DICT.items():
+        #     module_path, cls_name = v.rsplit('.', 1)
+        #     cls = getattr(importlib.import_module(module_path), cls_name)
+        #     response = cls.process(server_obj, server_info, None)
+        #     if not response.status:
+        #         ret['code'] = 1003
+        #         ret['message'] = "[%s]资产更新异常" % hostname
+        #     if hasattr(cls, 'update_last_time'):
+        #         cls.update_last_time(server_obj, None)
 
         return JsonResponse(ret)
+
+
+class ReleaseView(View):
+    def dispatch(self, request, *args, **kwargs):
+        return super(ReleaseView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        response = BaseResponse()
+
+        name = kwargs.get('n1', None)
+        if name:
+            try:
+                result = models.AuthInfo.objects.filter(username=name, status=2).values('username', 'ip', 'hostname', 'rank')
+                response.data = list(result)
+                response.status = True
+                return JsonResponse(response.__dict__)
+            except Exception as e:
+                response.error = "Didn't find %s" % name
+                response.status = False
+                return JsonResponse(response.__dict__)
+
+        result = models.ReleaseTask.objects.all().values('username', 'ip', 'hostname', 'rank', 'status')
+        # result = models.AuthInfo.objects.all()
+        response.data = list(result)
+        response.status = True
+        return JsonResponse(response.__dict__)
+
+    def post(self, request, *args, **kwargs):
+        response = BaseResponse()
+
+        n1 = json.loads(request.body.decode('utf-8'))
+        n1 = json.loads(n1)
+
+        r_id = n1.get('id', None)
+        msg = n1.get('msg', None)
+
+        # 上传包md5值
+        md5 = n1.get('md5', None)
+        if md5:
+            print(md5)
+            models.ReleaseTask.objects.filter(id=r_id).update(release_md5=md5)
+            models.ReleaseLog.objects.create(release_id=r_id, release_msg=md5)
+            # 发布任务成功上传
+            response.status = True
+            return JsonResponse(response.__dict__)
+
+        print(r_id, msg)
+        try:
+            models.ReleaseLog.objects.create(release_id=r_id, release_msg=msg)
+            response.status = True
+        except Exception as e:
+            response.status = False
+
+        obj = models.ReleaseLog.objects.filter(release_time__gt='2017-05-19 05:00').first()
+        print(obj.release_time)
+
+        return JsonResponse(response.__dict__)

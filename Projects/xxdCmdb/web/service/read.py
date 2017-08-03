@@ -299,6 +299,7 @@ class Asset(BaseServiceList):
 
         # 使用Q进行条件格式化
         con_dict = condition_dict
+        print(con_dict)
         con_q = Q()
         for k, v in con_dict.items():
             temp = Q()
@@ -306,6 +307,7 @@ class Asset(BaseServiceList):
             for item in v:
                 temp.children.append((k, item))
             con_q.add(temp, 'AND')
+        print(con_q)
         return con_q
 
     def fetch_assets(self, request):

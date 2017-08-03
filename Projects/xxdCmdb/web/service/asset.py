@@ -18,6 +18,7 @@ class Asset(BaseServiceList):
             {'name': 'business_1', 'text': '环境', 'condition_type': 'select', 'global_name': 'business_1_list'},
             {'name': 'business_2', 'text': '二级业务线', 'condition_type': 'select', 'global_name': 'business_2_list'},
             {'name': 'business_3', 'text': '三级业务线', 'condition_type': 'select', 'global_name': 'business_3_list'},
+            {'name': 'host_type', 'text': '资产类型', 'condition_type': 'select', 'global_name': 'device_type_list'},
             {'name': 'host_status', 'text': '资产状态', 'condition_type': 'select',
              'global_name': 'device_status_list'},
         ]
@@ -91,7 +92,8 @@ class Asset(BaseServiceList):
                 'text': {'content': "{n}", 'kwargs': {'n': '@host_machine'}},
                 'attr': {'name': 'host_machine', 'id': '@host_machine', 'original': '@host_machine',
                          'edit-enable': 'true',
-                         'edit-type': 'input'}
+                         'edit-type': 'input',
+                         }
             },
             {
                 'q': 'host_cpu',
@@ -122,7 +124,7 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='#'>查看详细</a>",
+                    'content': "<a href='/asset-{nid}.html'>查看详细</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}
@@ -211,9 +213,6 @@ class Asset(BaseServiceList):
             for item in v:
                 temp.children.append((k, item))
             con_q.add(temp, 'AND')
-
-        print(con_q)
-
         return con_q
 
     def fetch_assets(self, request):
@@ -311,17 +310,169 @@ class Asset(BaseServiceList):
         return response
 
     @staticmethod
-    def assets_detail(device_type_id, asset_id):
+    def assets_detail(nid, device_type_id):
 
         response = BaseResponse()
+        print(device_type_id, nid)
         try:
-            if device_type_id == '1':
-                response.data = models.Server.objects.filter(asset_id=asset_id).select_related('asset').first()
+            if device_type_id == 1:
+                response.data = models.DellServer.objects.filter(asset_id=nid).first()
             else:
-                response.data = models.NetworkDevice.objects.filter(asset_id=asset_id).select_related('asset').first()
+                response.data = models.NetWork.objects.filter(asset=nid).first()
 
         except Exception as e:
             response.status = False
             response.message = str(e)
+        response.status = True
+
         return response
+
+    @staticmethod
+    def assets_info():
+        response = BaseResponse()
+        response.data = models.Cpu.objects.all()
+        response.status = True
+        return response
+
+    @staticmethod
+    def post_assets(request):
+        """
+        添加资产信息
+        :param request:
+        :return:
+        """
+
+        response = BaseResponse()
+
+        # 添加防火墙
+        isfirewall = request.POST.get('isfirewall', None)
+
+        if isfirewall:
+            nic_brand = request.POST.get('fire_brand')
+            nic_model = request.POST.get('fire_model')
+            nic_ip = request.POST.get('fire_ip')
+            nic_sn = request.POST.get('fire_sn')
+            nic_idc = request.POST.get('fire_idc')
+            nic_cabinet = request.POST.get('fire_cabinet')
+            nic_putaway = request.POST.get('fire_putaway')
+            nic_service = request.POST.get('fire_service')
+
+            num = models.NetWork.objects.filter(sn=nic_sn).count()
+            if num != 0:
+                response.status = False
+                response.message = '相同的sn资产已经存在！--%s' % nic_sn
+                return response
+
+            try:
+                asset_obj = models.Asset(host_ip=nic_ip, host_name=nic_model, host_status=1, host_type=4, host_cpu=2,
+                                         host_memory=2)
+                asset_obj.save()
+
+                models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet, sn=nic_sn,
+                                              putaway=nic_putaway, service=nic_service, asset=asset_obj.id, brand=nic_brand)
+
+            except Exception as e:
+                response.status = False
+                response.message = '添加资产错误'
+                return response
+
+            response.status = True
+            return response
+
+        # 添加网卡设备
+        nic_model = request.POST.get('nic_model', None)
+        if nic_model:
+            nic_brand = request.POST.get('nic_brand')
+            nic_ip = request.POST.get('nic_ip')
+            nic_sn = request.POST.get('nic_sn')
+            nic_idc = request.POST.get('nic_idc')
+            nic_cabinet = request.POST.get('nic_cabinet')
+            nic_putaway = request.POST.get('nic_putaway')
+            nic_service = request.POST.get('nic_service')
+
+            num = models.NetWork.objects.filter(sn=nic_sn).count()
+            if num != 0:
+                response.status = False
+                response.message = '相同的sn资产已经存在！--%s' % nic_sn
+                return response
+
+            try:
+                asset_obj = models.Asset(host_ip=nic_ip, host_name=nic_model, host_status=1, host_type=3, host_cpu=2,
+                                         host_memory=2)
+                asset_obj.save()
+
+                models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet, sn=nic_sn,
+                                              putaway=nic_putaway, service=nic_service, asset=asset_obj.id, brand=nic_brand)
+
+            except Exception as e:
+                response.status = False
+                response.message = '添加资产错误'
+                return response
+
+            response.status = True
+            return response
+
+        host = request.POST.get('host')
+        ip = request.POST.get('ip')
+        memory = request.POST.get('memory')
+        idc = request.POST.get('idc')
+        cabinet = request.POST.get('cabinet')
+        putaway = request.POST.get('putaway')
+        machine = request.POST.get('machine')
+        sn = request.POST.get('sn')
+        cpu = request.POST.get('cpu')
+        cpu_num = request.POST.get('cpu_num')
+        core_num = request.POST.get('core_num')
+        raid = request.POST.get('raid')
+        service = request.POST.get('service')
+        disk_list = request.POST.getlist('disk_list')
+        nic_list = request.POST.getlist('nic_list')
+        os = request.POST.get('os')
+
+        for item in nic_list[2:]:
+            item_list = item.split(',')
+            ippaddrs = item_list[3]
+
+        # 检查重复IP
+        num = models.Asset.objects.filter(host_ip=ippaddrs).count()
+        if num != 0:
+            response.status = False
+            response.message = '资产IP地址已经存在！'
+            return response
+
+        # 首先创建 Assets资产表 ➡️ 创建Server表关联Asset ➡️ 创建Disk表关联Server表 ➡️ 创建Memory表关联Server表
+        asset_obj = models.Asset(host_ip=ippaddrs, host_name=host, host_status=1, host_type=1, host_cpu=int(cpu_num)*int(core_num), host_memory=memory)
+        asset_obj.save()
+
+        server_obj = models.DellServer(asset_id=asset_obj.id, hostname=host, manage_ip=ip, idc=idc, cabinet=cabinet,
+                                       putaway=putaway, model=machine, sn=sn, cpu_id=cpu, raid=raid, service=service,
+                                       cpu_num=cpu_num, core_num=core_num, os=os)
+        server_obj.save()
+
+        # ['', '', ',1,500G,SAS,7200,SEAGATE ST300MM0006 LS08S0K2B5NV']
+        for item in disk_list[2:]:
+            item_list = item.split(',')
+            slot = item_list[1]
+            capacity = item_list[2]
+            model = item_list[3]
+            rpm = item_list[4]
+            pd_type = item_list[5]
+            disk_obj = models.HardDisk(slot=slot, capacity=capacity, model=model, rpm=rpm, pd_type=pd_type, server_obj_id=server_obj.id)
+            disk_obj.save()
+
+        # ['', '', ',eth0,00:1c:42:a5:57:7a,192.168.1.1,192.168.1.254,8']
+        for item in nic_list[2:]:
+            item_list = item.split(',')
+            name = item_list[1]
+            hwaddr = item_list[2]
+            ippaddrs = item_list[3]
+            switch_ip = item_list[4]
+            switch_port = item_list[5]
+            nic_obj = models.NIC(name=name, hwaddr=hwaddr, ipaddrs=ippaddrs, switch_ip=switch_ip,
+                                 switch_port=switch_port, server_obj_id=server_obj.id)
+            nic_obj.save()
+
+        response.status = True
+        return response
+
 

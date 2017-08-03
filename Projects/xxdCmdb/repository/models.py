@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 from django.db import models
+from django import forms
+from pytz import timezone
+from django.utils import timezone
+import datetime
+from pytz import timezone
+
+# utc_zone = timezone("utc")
+# my_zone = timezone("Asia/Shanghai")
+# my_time = datetime.datetime.utcnow().replace(tzinfo=utc_zone)
+# out_time = my_time.astimezone(my_zone)
 
 
 class AuthInfo(models.Model):
@@ -37,6 +47,10 @@ class MachineType(models.Model):
     虚拟机配置类型表
     """
     machine_type = models.CharField(max_length=32)
+    machine_ip = models.CharField(max_length=32, null=True, blank=True)
+    machine_host = models.CharField(max_length=32, null=True, blank=True)
+    machine_name = models.CharField(max_length=32, null=True, blank=True)
+    machine_xml_name = models.CharField(max_length=32, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "虚拟机配置类型表"
@@ -99,7 +113,8 @@ class Asset(models.Model):
     device_type_choices = (
         (1, '物理服务器'),
         (2, '虚拟机'),
-        (3, '网络设备'),
+        (3, '交换机'),
+        (4, '防火墙'),
     )
     device_status_choices = (
         (1, '在线'),
@@ -190,13 +205,14 @@ class UserProfile(models.Model):
         return self.name
 
 
-class AdminInfo(models.Model):
+class AdminInfo(forms.ModelForm):
     """
     用户登陆相关信息
     """
-    # user_info = models.OneToOneField("UserProfile")
+    user_info = models.OneToOneField("UserProfile")
     username = models.CharField(u'用户名', max_length=64)
-    password = models.CharField(u'密码', max_length=64)
+    # password = models.CharField(u'密码', max_length=64)
+    password = forms.CharField(max_length=32, widget=forms.PasswordInput)
 
     class Meta:
         verbose_name_plural = "管理员表"
@@ -219,6 +235,109 @@ class UserGroup(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ReleaseType(models.Model):
+    name = models.CharField(max_length=32, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "发布类型表"
+
+    def __str__(self):
+        return self.name
+
+
+class ProjectTask(models.Model):
+    """
+    发布项目表
+    """
+    jdk_version_choice = (
+        (1, 'jdk-8'),
+        (2, 'jdk-7'),
+        (3, 'jdk-6')
+    )
+
+    project_status_choice = (
+        (1, '新提交'),
+        (2, '发布成功'),
+        (3, '发布失败'),
+    )
+
+    static_cover_type = (
+        (1, '迭代'),
+        (2, '覆盖')
+    )
+
+    business_1 = models.ForeignKey(BusinessOne, null=True, blank=True, default=1, on_delete=models.SET_DEFAULT)
+    business_2 = models.ForeignKey(BusinessTwo, null=True, blank=True, default=2, on_delete=models.SET_DEFAULT)
+    project_type = models.ForeignKey(ReleaseType, null=True, blank=True, default=1, on_delete=models.SET_NULL)
+    jdk_version = models.IntegerField(choices=jdk_version_choice, null=True, blank=True)
+    static_type = models.IntegerField(choices=static_cover_type, null=True, blank=True)
+    release_last_id = models.CharField(max_length=32, null=True, blank=True, default='-')
+    release_last_time = models.CharField(max_length=32, null=True, blank=True, default='-')
+    release_user = models.CharField(max_length=32, null=True, blank=True)
+    git_url = models.CharField(max_length=108, null=True, blank=True)
+    pack_cmd = models.CharField(max_length=108, null=True, blank=True)
+    git_branch = models.CharField(max_length=108, null=True, blank=True)
+    status = models.IntegerField(choices=project_status_choice, null=True, blank=True, default=1)
+    ctime = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "项目表"
+
+    def __str__(self):
+        return self.business_2
+
+
+class ReleaseTask(models.Model):
+    """
+    发布任务记录表
+    """
+    release_status_choices = (
+        (1, '发布中'),
+        (2, '发布成功'),
+        (3, '发布失败'),
+    )
+
+    jdk_version_choice = (
+        (1, 'JDK-8'),
+        (2, 'JDK-7'),
+        (3, 'JDK-6')
+    )
+
+    release_id = models.IntegerField(null=True, blank=True)
+    release_name = models.ForeignKey(BusinessTwo, null=True, blank=True, default=1, on_delete=models.SET_NULL)
+    release_env = models.ForeignKey(BusinessOne, null=True, blank=True, default=2, on_delete=models.SET_NULL)
+    release_time = models.CharField(max_length=32, null=True, blank=True)
+    release_status = models.IntegerField(choices=release_status_choices, null=True, blank=True, default=1)
+    release_user = models.CharField(max_length=32, null=True, blank=True)
+    release_git_url = models.CharField(max_length=64, null=True, blank=True)
+    release_git_branch = models.CharField(max_length=32, null=True, blank=True)
+    release_type = models.ForeignKey(ReleaseType, null=True, blank=True, on_delete=models.SET_NULL)
+    release_jdk_version = models.IntegerField(choices=jdk_version_choice, null=True, blank=True)
+    release_md5 = models.CharField(max_length=64, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "发布任务记录表"
+
+    def __str__(self):
+        return self.release_name
+
+
+class ReleaseLog(models.Model):
+    """
+    发布任务日志
+    """
+    release_id = models.IntegerField(null=True, blank=True)
+    # release_time = models.DateTimeField('时间', default=my_time)
+    release_msg = models.CharField('日志', max_length=1000, null=True, blank=True)
+    release_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "发布任务日志"
+
+    def __str__(self):
+        return self.release_id
 
 
 class BusinessUnit(models.Model):
@@ -245,19 +364,6 @@ class IDC(models.Model):
 
     class Meta:
         verbose_name_plural = "机房表"
-
-    def __str__(self):
-        return self.name
-
-
-class Tag(models.Model):
-    """
-    资产标签
-    """
-    name = models.CharField('标签', max_length=32, unique=True)
-
-    class Meta:
-        verbose_name_plural = "标签表"
 
     def __str__(self):
         return self.name
@@ -300,27 +406,35 @@ class Assets(models.Model):
         return "%s-%s-%s" % (self.idc.name, self.cabinet_num, self.cabinet_order)
 
 
-class Server(models.Model):
+class Tag(models.Model):
+    """
+    资产标签
+    """
+    name = models.CharField('标签', max_length=32, unique=True)
+
+    class Meta:
+        verbose_name_plural = "标签表"
+
+    def __str__(self):
+        return self.name
+
+
+class Physical(models.Model):
     """
     服务器信息
     """
-    asset = models.OneToOneField('Asset')
+    # asset = models.OneToOneField('Asset')
 
-    hostname = models.CharField(max_length=128, unique=True)
-    sn = models.CharField('SN号', max_length=64, db_index=True)
-    manufacturer = models.CharField(verbose_name='制造商', max_length=64, null=True, blank=True)
+    hostname = models.CharField('主机名', max_length=128, unique=True)
+    manage_ip = models.CharField('管理IP', max_length=32, null=True, blank=True)
+    idc = models.CharField('IDC', max_length=32, null=True, blank=True)
+    cabinet = models.CharField('机柜', max_length=32, null=True, blank=True)
+    putaway = models.CharField('上架时间', max_length=32, null=True, blank=True)
     model = models.CharField('型号', max_length=64, null=True, blank=True)
-
-    manage_ip = models.GenericIPAddressField('管理IP', null=True, blank=True)
-
-    os_platform = models.CharField('系统', max_length=16, null=True, blank=True)
-    os_version = models.CharField('系统版本', max_length=16, null=True, blank=True)
-
-    cpu_count = models.IntegerField('CPU个数', null=True, blank=True)
-    cpu_physical_count = models.IntegerField('CPU物理个数', null=True, blank=True)
-    cpu_model = models.CharField('CPU型号', max_length=128, null=True, blank=True)
-
-    create_at = models.DateTimeField(auto_now_add=True, blank=True)
+    sn = models.CharField('SN号', max_length=64, db_index=True)
+    cpu = models.ForeignKey('Cpu', verbose_name='CPU型号', null=True, blank=True, on_delete=models.SET_NULL)
+    raid = models.CharField('Raid', max_length=8, null=True, blank=True)
+    service = models.CharField('保修期', max_length=32, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "服务器表"
@@ -344,34 +458,50 @@ class NetworkDevice(models.Model):
         verbose_name_plural = "网络设备"
 
 
-class Disk(models.Model):
+class Cpu(models.Model):
     """
-    硬盘信息
+    CPU类型
     """
-    slot = models.CharField('插槽位', max_length=8)
-    model = models.CharField('磁盘型号', max_length=32)
-    capacity = models.FloatField('磁盘容量GB')
-    pd_type = models.CharField('磁盘类型', max_length=32)
-    server_obj = models.ForeignKey('Server',related_name='disk')
+    name = models.CharField('类型',  max_length=64, null=True, blank=True)
 
     class Meta:
-        verbose_name_plural = "硬盘表"
+        verbose_name_plural = "CPU表"
 
     def __str__(self):
-        return self.slot
+        return self.name
 
 
 class NIC(models.Model):
     """
     网卡信息
     """
-    name = models.CharField('网卡名称', max_length=128)
-    hwaddr = models.CharField('网卡mac地址', max_length=64)
-    netmask = models.CharField(max_length=64)
-    ipaddrs = models.CharField('ip地址', max_length=256)
-    up = models.BooleanField(default=False)
-    server_obj = models.ForeignKey('Server',related_name='nic')
+    name = models.CharField('网卡名称', max_length=128, null=True, blank=True)
+    hwaddr = models.CharField('网卡mac地址', max_length=64, null=True, blank=True)
+    ipaddrs = models.CharField('ip地址', max_length=256, null=True, blank=True)
+    switch_ip = models.CharField('上联交换机IP', max_length=64, null=True, blank=True)
+    switch_port = models.CharField('上联交换机端口', max_length=64, null=True, blank=True)
+    server_obj = models.ForeignKey('DellServer', related_name='nic', null=True, blank=True)
 
+    class Meta:
+        verbose_name_plural = "网卡表"
+
+    def __str__(self):
+        return self.name
+
+
+class NetWork(models.Model):
+    """
+    网络设备
+    """
+    brand = models.CharField('品牌', max_length=32, null=True, blank=True)
+    model = models.CharField('设备型号', max_length=32, null=True, blank=True)
+    ip = models.CharField('管理IP', max_length=32, null=True, blank=True)
+    sn = models.CharField('sn', max_length=32, null=True, blank=True)
+    idc = models.CharField('机房', max_length=32, null=True, blank=True)
+    cabinet = models.CharField('机柜', max_length=32, null=True, blank=True)
+    putaway = models.CharField('上架日期', max_length=32, null=True, blank=True)
+    service = models.CharField('保修日期', max_length=32, null=True, blank=True)
+    asset = models.IntegerField('关联资产', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "网卡表"
@@ -390,9 +520,7 @@ class Memory(models.Model):
     capacity = models.FloatField('容量', null=True, blank=True)
     sn = models.CharField('内存SN号', max_length=64, null=True, blank=True)
     speed = models.CharField('速度', max_length=16, null=True, blank=True)
-
-    server_obj = models.ForeignKey('Server',related_name='memory')
-
+    # server_obj = models.ForeignKey('Servers',related_name='memory')
 
     class Meta:
         verbose_name_plural = "内存表"
@@ -409,7 +537,6 @@ class AssetRecord(models.Model):
     content = models.TextField(null=True)
     creator = models.ForeignKey('UserProfile', null=True, blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
-
 
     class Meta:
         verbose_name_plural = "资产记录表"
@@ -433,6 +560,50 @@ class ErrorLog(models.Model):
     def __str__(self):
         return self.title
 
+
+class DellServer(models.Model):
+    """
+    服务器信息
+    """
+    asset_id = models.IntegerField('资产', null=True, blank=True)
+
+    hostname = models.CharField('主机名', max_length=128, null=True, blank=True)
+    manage_ip = models.CharField('管理IP', max_length=32, null=True, blank=True)
+    idc = models.CharField('IDC', max_length=32, null=True, blank=True)
+    cabinet = models.CharField('机柜', max_length=32, null=True, blank=True)
+    putaway = models.CharField('上架时间', max_length=32, null=True, blank=True)
+    cpu_num = models.IntegerField('cpu核数', null=True, blank=True)
+    core_num = models.IntegerField('cpu核数', null=True, blank=True)
+    os = models.CharField('操作系统', max_length=32, null=True, blank=True)
+    model = models.CharField('型号', max_length=64, null=True, blank=True)
+    sn = models.CharField('SN号', max_length=64, db_index=True)
+    cpu = models.ForeignKey('Cpu', verbose_name='CPU型号', null=True, blank=True, on_delete=models.SET_NULL)
+    raid = models.CharField('Raid', max_length=8, null=True, blank=True)
+    service = models.CharField('保修期', max_length=32, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "服务器表"
+
+    def __str__(self):
+        return self.hostname
+
+
+class HardDisk(models.Model):
+    """
+    硬盘信息
+    """
+    slot = models.CharField('插槽位', max_length=8, null=True, blank=True)
+    model = models.CharField('磁盘型号', max_length=32, null=True, blank=True)
+    capacity = models.FloatField('磁盘容量GB', null=True, blank=True)
+    rpm = models.IntegerField('磁盘转速', null=True, blank=True)
+    pd_type = models.CharField('磁盘类型', max_length=32, null=True, blank=True)
+    server_obj = models.ForeignKey('DellServer', related_name='disk', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "硬盘表"
+
+    def __str__(self):
+        return self.slot
 
 
 

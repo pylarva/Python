@@ -4,10 +4,12 @@ from django.views import View
 from django.shortcuts import render
 from django.http import JsonResponse
 from repository import models
-
+from web.service.login import auth_admin
 from web.service import user
+from django.utils.decorators import method_decorator
 
 
+@method_decorator(auth_admin, name='dispatch')
 class UserListView(View):
     def get(self, request, *args, **kwargs):
         user_list = models.UserProfile.objects.all()
@@ -15,8 +17,9 @@ class UserListView(View):
         business_one_list = models.BusinessOne.objects.all()
         business_two_list = models.BusinessTwo.objects.all()
         business_three_list = models.BusinessThree.objects.all()
-        return render(request, 'users_list.html', {'user_list': user_list, 'group_list': group_list, 'business_one_list': business_one_list
-            , 'business_two_list': business_two_list, 'business_three_list': business_three_list})
+        return render(request, 'users_list.html', {'user_list': user_list, 'group_list': group_list,
+                                                   'business_one_list': business_one_list, 'business_two_list': business_two_list,
+                                                   'business_three_list': business_three_list})
 
 
 class UserJsonView(View):
@@ -24,6 +27,7 @@ class UserJsonView(View):
         obj = user.User()
         response = obj.fetch_users(request)
         return JsonResponse(response.__dict__)
+        # return render(request, 'users_list.html', {'user_list': response.data['data_list']})
 
     def delete(self, request):
         response = user.User.delete_users(request)

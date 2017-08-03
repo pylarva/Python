@@ -67,5 +67,8 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
     </memballoon>
   </devices>
+  <memoryBacking>
+    <hugepages/>
+  </memoryBacking>
 </domain>
 

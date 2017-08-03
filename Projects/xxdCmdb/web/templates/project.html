@@ -1,0 +1,213 @@
+{% extends 'layout/_laybusiness.html' %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/bootstrap-select.css">
+    <style>
+        .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+            width: 598px;
+            border-radius: 1px; !important;
+        }
+    </style>
+{% endblock %}
+
+{% block conent %}
+    <ol class="breadcrumb" style="margin-bottom: 0;">
+        <li><a href="/cmdb.html">首页</a></li>
+        <li class="active">新建项目</li>
+    </ol>
+
+    <div style="padding: 5px 8px;">
+        <div class="list-block">
+            <form id="form1">
+                <div class="form-group">
+                <span class="label label-success">项目名称</span>
+
+                <br>
+                  <select id="business_2" class="selectpicker">
+                      {% for item in business_two_list %}
+                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
+                      {% endfor %}
+                  </select>
+                <br>
+                <br>
+
+                                  <span class="label label-success">发布类型</span>
+
+                <br>
+                  <select id="obj_type" class="selectpicker" style="width: 600px; border-radius: 1px;" onchange="publish_type()">
+                      {% for item in release_type %}
+                      <option id="recipient-name23" value={{ item.id }}>{{ item.name }}</option>
+                      {% endfor %}
+                  </select>
+                    <br>
+                    <br>
+                <div id="jdk_div" style="float: left;" >
+                      <span class="label label-warning">JDK版本</span>
+
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked>
+                            JDK-8
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios2" value="2">
+                            JDK-7
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios3" value="3">
+                            JDK-6
+                          </label>
+                        </div>
+                </div>
+
+                <div id="mvn_div" style="display: inline-block; margin-left: 100px; float: left">
+                      <span class="label label-info">Maven版本</span>
+
+                        <div class="radio" onchange="pkg1()">
+                          <label>
+                            <input type="radio" name="optionsRadios1" id="optionsRadios11" value="1" checked>
+                            maven323
+                          </label>
+                        </div>
+                        <div class="radio" onchange="pkg2()">
+                          <label>
+                            <input type="radio" name="optionsRadios1" id="optionsRadios12" value="2">
+                            maven339
+                          </label>
+                        </div>
+                        </div>
+                </div>
+
+                <div id="static_div" style="display: none">
+                      <span class="label label-info">静态资源发布方式</span>
+
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios2" id="optionsRadios21" value="1" checked>
+                            覆盖
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios2" id="optionsRadios22" value="2">
+                            迭代
+                          </label>
+                        </div>
+                        </div>
+                </div>
+
+                <br>
+            <div style="width: 10000px; height: 100px"></div>
+            <div style="display: inline-block; float: left">
+                  <span class="label label-success">GIT地址</span>
+                    <input type="text" class="form-control" id="git_url" style="width: 600px; border-radius: 1px;">
+                                <br>
+                  <span class="label label-success">打包参数</span>
+                    <input type="text" class="form-control" id="pack_cmd" style="width: 600px; border-radius: 1px; " value="/usr/local/maven/bin/mvn clean package -Dmaven.test.skip=true">
+                <br>
+                    <a id="obj_commit" class="btn btn-primary no-radius" style="width: 100px;">
+                        <i class="fa fa-hand-o-right"></i> 提交
+                    </a>
+                              </div>
+
+            </form>
+        </div>
+        </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/js/nb-list.js"></script>
+    <script src="/static/js/bootstrap-select.js"></script>
+
+
+    <script>
+        $(function () {
+            $.initMenu('#menu_create');
+
+            $('#obj_commit').click(function () {
+                var obj_business = $('#business_2').selectpicker('val');
+                var obj_type = $('#obj_type').selectpicker('val');
+                var jdk_version = $("input[name='optionsRadios']:checked").val();
+                var static_cover_type = $("input[name='optionsRadios2']:checked").val();
+                var git_url = $('#git_url').val();
+                var pack_cmd = $('#pack_cmd').val();
+                var user_name = $.cookie('username');
+                if(obj_business==1){
+                    alert('请选择发布项目..');
+                    return false;
+                }
+                if(git_url==''){
+                    alert('git地址不能为空..');
+                    return false;
+                }
+
+                $.ajax({
+                    url: '_project.html',
+                    type: 'POST',
+                    data: {'obj_env': obj_business, 'obj_type': obj_type, 'jdk_version': jdk_version, 'git_url': git_url,
+                           'user_name': user_name, 'pack_cmd': pack_cmd, 'static_cover_type': static_cover_type},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if (response.status){
+                            location.href = '/project_list.html'
+                        } else {
+                            alert(response.message);
+                        }
+                            }
+                        })
+                })
+        });
+
+        function pkg1() {
+            $('#pack_cmd').val('/usr/local/maven/bin/mvn clean package -Dmaven.test.skip=true');
+        }
+
+        function pkg2() {
+            $('#pack_cmd').val('/usr/local/maven339/bin/mvn clean package -Dmaven.test.skip=true');
+        }
+
+        function publish_type() {
+            var obj_type = $('#obj_type').selectpicker('val');
+            if(obj_type=='2'){
+                $('#jdk_div').attr('style', 'display: none;');
+                $('#mvn_div').attr('style', 'display: none;');
+                $('#static_div').attr('style', 'display:margin-left: 100px; float: left')
+            }else{
+                $('#jdk_div').attr('style', 'float: left;');
+                $('#mvn_div').attr('style', 'display: inline-block; margin-left: 100px; float: left')
+            }
+        }
+
+        function ChangePage(id) {
+                $.nbDataLists(id);
+            }
+
+        function authorize(ths, ip, id) {
+            var user_rank = $(ths).parent().prev().children().val();
+            var host_name = $(ths).parent().prev().prev().prev().prev().prev().prev().text();
+            var username = $.cookie('username');
+            var email = $.cookie('email');
+            $.ajax({
+			url: 'authorizes.html',
+            type: 'POST',
+            data: {'username': username, 'ip': ip, 'user_rank': user_rank, 'email': email, 'hostname': host_name},
+            dataType: 'JSON',
+            success: function (response) {
+			    var s = '#host_' + id;
+                if (response.status){
+                    $(s).text('申请中...')
+                } else {
+                    alert(response.message);
+                }
+            }
+		})
+        }
+    </script>
+{% endblock %}

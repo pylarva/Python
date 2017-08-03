@@ -1,0 +1,176 @@
+{% extends 'layout/_laybusiness.html' %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/bootstrap-select.css">
+
+
+{% endblock %}
+
+{% block conent %}
+    <ol class="breadcrumb" style="margin-bottom: 0;">
+        <li><a href="/cmdb.html">首页</a></li>
+        <li class="active">配置文件管理</li>
+    </ol>
+    <div style="padding: 5px 8px;">
+        <h2>修改配置文件</h2>
+        <div style="width: 100%; height: 50px;">
+            <h4 style="display: inline-block">配置</h4>
+            <h4 id="file_name" style="display: inline-block"></h4>
+            <div style="float: right; margin-right: 28px">
+                <select id="business_2" class="selectpicker" onchange="get_files()">
+                    {% for item in business_two_list %}
+                        <option id="recipient-name" value={{ item.id }}>{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <h4 style="display: inline-block; float: right">选择要编辑的业务线：</h4>
+        </div>
+        <div>
+            <textarea id="config_text" style="width: 80%; height: 600px"></textarea>
+            <div id="config_files" style="width: 19%; height: 600px; float: right"></div>
+        </div>
+        <a id="file_commit" class="btn btn-group no-radius" style="width: 100px;">
+            <i class="fa fa-hand-o-right"></i>
+            保存修改
+        </a>
+
+    </div>
+
+    <!-- 添加配置文件开始 -->
+    <div class="modal fade" id="add_config" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加配置文件</h4>
+              </div>
+              <form id="form1">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">配置文件名称</label>
+                    <input type="text" class="form-control" id="new_file">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <span id="error_message" style="color: red;"></span>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button id="confirm_add" type="button" class="btn btn-primary">添加</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+    <!-- 添加配置文件结束 -->
+
+    <!-- 遮罩层开始 -->
+    <div id='shade' class='shade hide'></div>
+    <!-- 遮罩层结束 -->
+
+    <!-- 加载层开始 -->
+    <div id='loading' class='loading hide'></div>
+    <!-- 加载层结束 -->
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/js/nb-list.js"></script>
+    <script src="/static/js/bootstrap-select.js"></script>
+
+    <script>
+        $(function () {
+            $.initMenu('#menu_config');
+            $('#file_commit').click(function () {
+                var business_id = $('#business_2').selectpicker('val');
+                var file_content = $('#config_text').val();
+                var file_name = $('#file_name').text();
+                if(file_content == ''){
+                    alert('未选择配置文件');
+                    return false;
+                }
+                $.ajax({
+                    url: '/config.html',
+                    type: 'POST',
+                    data: {'file_content': file_content, 'file_name': file_name, 'business_id': business_id},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if(response.status){
+                            alert('更新配置文件成功！')
+                        }else {
+                            alert('服务端文件权限未设置可写')
+                        }
+                    }
+                })
+            })
+        });
+
+        function get_files() {
+            $('#config_files').empty();
+            var business = $('#business_2').selectpicker('val');
+            $.ajax({
+                url: '/config.html',
+                type: 'GET',
+                data: {'business': business},
+                dataType: 'JSON',
+                success: function (response) {
+                    var s_add = '<a style="text-decoration: none; display: block; cursor:pointer; font-size: 15px; margin-bottom:15px" onclick=add_config()> + add </a>';
+                    if(response.status){
+                        $.each(response.data, function (k,v) {
+                            var s = '<a style="text-decoration: none; display: block; cursor:pointer; font-size: 15px; margin-bottom:15px" onclick=get_config("'+ v + '")>' + v + '</a>';
+                            $('#config_files').append(s)
+                        });
+                        $('#config_files').append(s_add);
+                    }else {
+                        $('#config_files').empty();
+                        $('#config_text').empty();
+                        $('#config_files').append(s_add);
+                        alert('未检索到配置文件')
+                    }
+                }
+            })
+        }
+
+        function get_config(file) {
+            var business_id = $('#business_2').selectpicker('val');
+            $('#file_name').text(file);
+            $.ajax({
+                url: '/config.html',
+                type: 'GET',
+                data: {'file': file, 'business_id': business_id},
+                dataType: 'JSON',
+                success: function (response) {
+                    if(response.status){
+                        $('#config_text').val(response.data);
+                    }else {
+                        $('#config_files').empty();
+                        $('#config_text').empty();
+                        alert('未检索到配置文件')
+                    }
+                }
+            })
+        }
+
+        function add_config() {
+            $('#add_config').modal();
+            $('#confirm_add').click(function () {
+                var new_file = $('#new_file').val();
+                var business_id = $('#business_2').selectpicker('val');
+                $.ajax({
+                    url: '/config.html',
+                    type: 'POST',
+                    data: {'new_file': new_file, 'business_id': business_id},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if(response.status){
+                            $('#add_config').modal('hide');
+                            get_files();
+                            alert('创建配置文件成功');
+                        }
+                    }
+                })
+
+            })
+        }
+    </script>
+{% endblock %}

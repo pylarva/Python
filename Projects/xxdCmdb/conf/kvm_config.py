@@ -4,20 +4,22 @@
 # 虚拟机镜像存放目录
 kvm_qcow_dir = '/opt/mv/'
 
+# 模版镜像存放目录
+kvm_template_dir = '/opt/mvs/'
+
 # 虚拟机xml目录
 kvm_xml_dir = '/opt/xml/'
 
-# CentOS镜像版本
-# key对应MachineType表
-CentOS_6 = {
-    '1': '/opt/mvs/kvm-template-centos-6.4-20G-31-130.qcow2',
-    '2': '/opt/mvs/kvm-template-centos-6.4-100G-31-130.qcow2',
-    '3': '/opt/mvs/kvm-template-centos-6.4-300G-31-130.qcow2',
+# idc地址
+kvm_addr = 'a0'
 
-    '4': '/opt/mvs/kvm-template-centos-7.2-20G-31-130.qcow2',
-    '5': '/opt/mvs/kvm-template-centos-7.2-100G-31-130.qcow2',
-    '6': '/opt/mvs/kvm-template-centos-7.2-300G-31-130.qcow2',
-}
+kvm_str = 'yh'
+
+# 自定义网关地址
+kvm_last_gateway = '253'
+
+# 自动获取IP地址范围
+kvm_range_ip = [51, 200]
 
 # 模版镜像统一IP
 kvm_template_ip = '192.168.31.130'
@@ -39,3 +41,5 @@ ssh_key_file = '/Users/pylarva/.ssh/id_rsa'
 
 # ssh超时时间
 ssh_timeout = 3
+
+# 静态资源发布目录

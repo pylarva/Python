@@ -12,38 +12,37 @@
     <div style="padding: 5px 8px;">
 
         <div class="list-block">
-{#            <div class="clearfix search-area">#}
-{##}
-{#                <div class="col-md-offset-10 do-submit">#}
-{#                    <a id="search_condition_submit" class="btn btn-primary no-radius">#}
-{#                        <i class="fa fa-search"></i> 搜索#}
-{#                    </a>#}
-{#                </div>#}
-{##}
-{#                <div id="search_conditions" class="col-md-offset-2 col-md-8">#}
-{#                    <div class="condition">#}
-{#                        <div class="icons">#}
-{#                            <a class="btn btn-default no-radius" onclick="$.AddSearchCondition(this)"><i#}
-{#                                    class="fa fa-plus-square"></i></a>#}
-{#                        </div>#}
-{#                        <div class="inputs">#}
-{#                            <div class="input-group">#}
-{#                                <div id="search_condition" init="false" class="input-group-btn">#}
-{#                                    <label type="button" class="btn btn-default no-radius" style="width: 100px;">&nbsp;</label>#}
-{#                                    <button type="button" class="btn btn-default dropdown-toggle no-border-r" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>#}
-{#                                    <ul class="change-search-condition dropdown-menu">#}
-{##}
-{#                                    </ul>#}
-{#                                </div>#}
-{##}
-{##}
-{#                            </div>#}
-{##}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#            </div>#}
+            <div class="clearfix search-area">
+
+                <div class="col-md-offset-10 do-submit">
+                    <a id="search_condition_submit" class="btn btn-primary no-radius">
+                        <i class="fa fa-search"></i> 搜索
+                    </a>
+                </div>
+
+                <div id="search_conditions" class="col-md-offset-2 col-md-8">
+                    <div class="condition">
+                        <div class="icons">
+                            <a class="btn btn-default no-radius" onclick="$.AddSearchCondition(this)"><i
+                                    class="fa fa-plus-square"></i></a>
+                        </div>
+                        <div class="inputs">
+                            <div class="input-group">
+                                <div id="search_condition" init="false" class="input-group-btn">
+                                    <label type="button" class="btn btn-default no-radius" style="width: 100px;">&nbsp;</label>
+                                    <button type="button" class="btn btn-default dropdown-toggle no-border-r" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                                    <ul class="change-search-condition dropdown-menu">
+
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
 {#            <div class="clearfix function-area">#}
 {#                <div class="btn-group btn-group-sm custom-btn-group">#}
@@ -95,6 +94,7 @@
                     </tr>
                     </thead>
                 {% for obj in user_list %}
+{#                {% for obj in response.data.data_list %}#}
                     <tr>
                         <th>{{ forloop.counter }}</th>
                         <td>

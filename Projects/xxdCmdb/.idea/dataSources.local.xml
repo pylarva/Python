@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal">
-    <data-source name="db02" uuid="901411a3-be55-449a-8a1a-410c3bff24b1">
+    <data-source name="db03.sqlite3" uuid="515c2ff9-72fd-4282-ad55-e229250a5261">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <secret-storage>master_key</secret-storage>
+      <auth-required>false</auth-required>
+      <first-sync>true</first-sync>
     </data-source>
-    <data-source name="db02 [2]" uuid="8af940fe-740d-4155-9e40-b55c00ebb6d9">
+    <data-source name="db03" uuid="4088af22-db15-46e0-8fbe-aaebba8326af">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
     </data-source>
   </component>
