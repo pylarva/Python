@@ -8,9 +8,24 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from web.service import asset
 from repository import models
-from web.service.login import auth_admin
+# from web.service.login import auth_admin
 from utils.response import BaseResponse
 from conf import jenkins_config
+
+user_list = ['admin', 'xuguohua', 'yanyunfei']
+
+
+def auth_admin(func):
+    def inner(request, *args, **kwargs):
+        user = request.COOKIES.get('username')
+        v = request.session.get('is_login', None)
+        # print(v)
+        if user not in user_list:
+            return redirect('read.html')
+        if not v:
+            return redirect('login.html')
+        return func(request, *args, **kwargs)
+    return inner
 
 
 @method_decorator(auth_admin, name='dispatch')

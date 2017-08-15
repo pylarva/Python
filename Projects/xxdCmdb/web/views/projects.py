@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from utils.response import BaseResponse
 from web.service import project
+from web.service import project_r
 from django.utils.decorators import method_decorator
 from web.service.login import auth_admin
 
@@ -95,6 +96,13 @@ class ProjectsJsonView(View):
     def post(self, request):
         obj = project.Project()
         response = obj.post_task(request)
+        return JsonResponse(response.__dict__)
+
+
+class ProjectsJsonReadView(View):
+    def get(self, request):
+        obj = project_r.ProjectRead()
+        response = obj.fetch_assets(request)
         return JsonResponse(response.__dict__)
 
 

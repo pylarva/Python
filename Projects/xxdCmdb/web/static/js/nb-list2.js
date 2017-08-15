@@ -299,6 +299,10 @@
                         // setTimeout("do_bbb()", 100);
                         setTimeout("$.TableEditMode(this, '#table_body', null, null)", 100);
                     }
+                    else if(requestUrl=='/projects_list_r.html'){
+                        // setTimeout("do_bbb()", 100);
+                        setTimeout("$.TableEditMode(this, '#table_body', null, null)", 100);
+                    }
                 } else {
                     alert(response.message);
                 }

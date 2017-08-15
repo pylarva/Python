@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/static/css/backend.css"/>
     <link rel="stylesheet" href="/static/css/commons.css"/>
     <link rel="stylesheet" href="/static/css/jquery.treemenu.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-select.css">
 
     {% block css %} {% endblock %}
 </head>
@@ -24,6 +25,26 @@
         <a id="menu_search" class="menu-item" href="/authorizer.html">
             <i class="fa fa-user-o" aria-hidden="true" style="width: 14px; margin-left: 1px"></i>
             <span>权限查询</span>
+        </a>
+        <a id="menu_create" class="menu-item" href="/_project.html">
+            <i class="fa fa-gitlab" aria-hidden="true" style="width: 14px; margin-left: 1px"></i>
+            <span>项目创建</span>
+        </a>
+        <a id="menu_list" class="menu-item" href="/project_list_r.html">
+            <i class="fa fa-th-list" aria-hidden="true" style="width: 14px; margin-left: 1px"></i>
+            <span>项目列表</span>
+        </a>
+        <a id="menu_online" class="menu-item" href="/release.html">
+            <i class="fa fa-ioxhost" aria-hidden="true" style="width: 14px; margin-left: 1px"></i>
+            <span>申请记录</span>
+        </a>
+        <a id="menu_online" class="menu-item" href="/release.html">
+            <i class="fa fa-cloud-upload" aria-hidden="true" style="width: 14px; margin-left: 1px"></i>
+            <span>上线记录</span>
+        </a>
+        <a id="menu_config" class="menu-item" href="/config.html">
+            <i class="fa fa-cog" aria-hidden="true" style="width: 14px; margin-left: 1px"></i>
+            <span>配置修改</span>
         </a>
 {#        <a id="menu_list" class="menu-item" href="/project_list_r.html">#}
 {#            <i class="fa fa-th-list" aria-hidden="true" style="width: 14px; margin-left: 1px"></i>#}
@@ -46,8 +67,18 @@
 <script type="text/javascript" src="/static/js/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="/static/js/jquery.treemenu.js"></script>
 <script>
-$(function(){
-        $(".tree").treemenu({delay:300}).openActive();
+    $(function(){
+        $("#business").click(function () {
+            if ($('#show_bussiness').attr('style')) {
+                $('#show_bussiness').removeAttr('style');
+                $('#business_icn').removeClass('fa fa-chevron-down');
+                $('#business_icn').addClass('fa fa-chevron-up');
+            }else {
+                $('#show_bussiness').attr('style','display:none');
+                $('#business_icn').removeClass('fa fa-chevron-up');
+                $('#business_icn').addClass('fa fa-chevron-down');
+            }
+        })
     });
 </script>
 {% block js %}{% endblock %}

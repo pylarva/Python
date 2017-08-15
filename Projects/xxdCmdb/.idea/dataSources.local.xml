@@ -10,5 +10,11 @@
     <data-source name="db03" uuid="4088af22-db15-46e0-8fbe-aaebba8326af">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
     </data-source>
+    <data-source name="Django default" uuid="f241c562-6eda-4758-86d4-df4634f46dde">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <first-sync>true</first-sync>
+      <user-name>cmdb</user-name>
+      <user-password>dfc9dfc7dfcedfc8</user-password>
+    </data-source>
   </component>
 </project>

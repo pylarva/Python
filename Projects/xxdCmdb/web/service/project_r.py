@@ -10,8 +10,8 @@ import subprocess
 from multiprocessing import Process
 from django.db.models import Q
 from repository import models
-# from utils.pager import PageInfo
-from utils.pagerm import PageInfo
+from utils.pager import PageInfo
+# from utils.pagerm import PageInfo
 from utils.response import BaseResponse
 from django.http.request import QueryDict
 from utils.hostname import change_host_name
@@ -20,7 +20,7 @@ import jenkins
 from conf import jenkins_config
 
 
-class Project(BaseServiceList):
+class ProjectRead(BaseServiceList):
     def __init__(self):
         condition_config = [
             {'name': 'business_2', 'text': '项目名', 'condition_type': 'input', 'condition_type': 'select', 'global_name': 'business_2_list'},
@@ -77,6 +77,28 @@ class Project(BaseServiceList):
                          'style': 'padding: 3px;'}
             },
             {
+                'q': 'git_branch',
+                'title': "发布说明",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@git_branch'}},
+                'attr': {'name': 'git_branch', 'id': '@git_branch', 'original': '@git_branch',
+                         'edit-enable': 'true',
+                         'edit-type': 'input',
+                         'placeholder': '111',
+                         'style': 'padding: 3px;'}
+            },
+            {
+                'q': 'git_branch',
+                'title': "DB(可选)",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@git_branch'}},
+                'attr': {'name': 'git_branch', 'id': '@git_branch', 'original': '@git_branch',
+                         'edit-enable': 'true',
+                         'edit-type': 'input',
+                         'placeholder': '111',
+                         'style': 'padding: 3px;'}
+            },
+            {
                 'q': 'release_last_id',
                 'title': "最新发布ID",
                 'display': 1,
@@ -102,10 +124,8 @@ class Project(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<i class='fa fa-paper-plane-o' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'> 发布</a> | "
-                               "<i class='fa fa-recycle' aria-hidden='true'></i><a href='#' onclick='roll_back(this,{nid})'>回滚</a> | "
-                               "<i class='fa fa-hand-paper-o' aria-hidden='true'></i><a href='#' onclick='do_break(this,{nid})'>中断</a> | "
-                               "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='get_log({nid},false)'>详细</a>",
+                    'content': "<i class='fa fa-paper-plane-o' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'> 申请发布</a>",
+                               # "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='get_log({nid},false)'>详细</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {'style': 'font-size: 13px; width:220px;'}
             },
@@ -115,7 +135,7 @@ class Project(BaseServiceList):
             'server_title': 'select hostname from repository_server where repository_server.ProjectTask_id=repository_ProjectTask.id and repository_ProjectTask.device_type_id=1',
             'network_title': 'select management_ip from repository_networkdevice where repository_networkdevice.ProjectTask_id=repository_ProjectTask.id and repository_ProjectTask.device_type_id=2',
         }
-        super(Project, self).__init__(condition_config, table_config, extra_select)
+        super(ProjectRead, self).__init__(condition_config, table_config, extra_select)
 
     @property
     def device_status_list(self):
@@ -691,9 +711,3 @@ class Project(BaseServiceList):
             self.log(taskId, '发布静态资源错误, 代码...%s' % ret)
             return False
         return True
-
-
-
-
-
-

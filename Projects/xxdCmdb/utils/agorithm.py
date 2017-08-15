@@ -13,7 +13,7 @@ def get_intersection(*args):
     return list(result)
 
 
-def get_exclude(total,part):
+def get_exclude(total, part):
     result = []
     for item in total:
         if item in part:

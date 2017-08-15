@@ -849,7 +849,6 @@ def publishHtmlService(config, runas):
 
 
     # check service
-
     return retCode
 
 def runTask(pkgUrl, md5sum, taskId, serviceType, name, runas):
@@ -944,7 +943,7 @@ def run(pkgUrl, md5sum, taskId, serviceType, name, runas='admin'):
         LOGGER.info('chdir: %s' % (os.getcwd()))
         LOGGER.info(str(os.environ))
         Logger().log(str(os.environ), True)
-        retCode = runTask(pkgUrl, md5sum, taskId, serviceType, name,runas=RUNNING_USER)
+        retCode = runTask(pkgUrl, md5sum, taskId, serviceType, name, runas=RUNNING_USER)
     except Exception, e:
         retCode = RET_ERROR_RUN_EXCEPTION
         tb = traceback.format_exc()
