@@ -217,6 +217,14 @@
                                         $(jquery_id).text('发布失败');
                                         $(jquery_id).attr('style', 'color: red');
                                         $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
+                                    }else if(response.data.data_list[i]['release_status']=='4') {
+                                            $(jquery_id).text('待审核');
+                                            $(jquery_id).attr('style', 'color: blue');
+                                            $(jquery_id).next().children(' :first-child').next().attr('onclick', '');
+                                    }else if(response.data.data_list[i]['release_status']=='5') {
+                                            $(jquery_id).text('待发布');
+                                            $(jquery_id).attr('style', 'color: red');
+                                            $(jquery_id).next().children(' :first-child').next().attr('onclick', '');
                                     }
                                 }
                                 }
@@ -235,78 +243,13 @@
 
             }
 
-        // 中断发布
-        function do_break(ths, id) {
-            var bread_id = $(ths).parent().prev().prev().prev().html();
-            $.ajax({
-                url: '/project_list.html',
-                type: 'POST',
-                data: {'break_id': bread_id},
-                dataType: 'JSON',
-                success: function (response) {
-                    if(response.status){
-                        alert('发布任务中断成功！');
-                        var t1 = window.setTimeout(do_ajax, 200);
-                    }
-                }
-            })
-        }
-
-        function roll_back(ths, id) {
-            var release_env = $(ths).parent().prev().prev().prev().prev().prev().children().val();
-            if(release_env=='1'){
-                alert('未选择回滚环境');
-                return false
-            }else{
-                $('#confirm_env_id').text(release_env)
-            }
-            $.ajax({
-                url: '/project_list.html',
-                type: 'POST',
-                data: {'roll_back': id, 'release_env': release_env},
-                dataType: 'JSON',
-                success: function (response) {
-                    if(response.status){
-                        $('#confirm_branch').text(response.data.branch);
-                        $('#confirm_time').text(response.data.time);
-                        $('#confirm_env').text(response.data.env);
-                        $('#confirm_id').text(id);
-                        $('#release_roll_back').modal();
-                    }else {
-                        alert('未查询到可用回滚分支')
-                    }
-                }
-            })
-        }
-        
-        // 确认回滚
-        function roll_confirm() {
-            $('#release_roll_back').hide();
-            var id = $('#confirm_id').text();
-            var release_env = $('#confirm_env_id').text();
-            var release_branch = $('#confirm_branch').text();
-            var user_name = $.cookie('username');
-
-            $.ajax({
-                    url: '/projects_list.html',
-                    type: 'POST',
-                    data: {'id': id, 'release_env': release_env, 'release_branch': release_branch, 'user_name': user_name},
-                    dataType: 'JSON',
-                    success: function (response) {
-                        if (response.status){
-                            location.reload()
-                        } else {
-                            alert(response.message);
-                        }
-                    }
-                })
-        }
 
         // 点击发布按钮 进行数据校验 + 后台创建发布任务 + 前端更新该行数据发布ID和发布时间
         function do_release(ths, id) {
-            var release_env = $(ths).parent().prev().prev().prev().prev().prev().children().val();
-            var release_branch = $(ths).parent().prev().prev().prev().prev().prev().children().val();
-            var release_reason = $(ths).parent().prev().prev().prev().prev().children().val();
+            var release_env = $(ths).parent().prev().prev().prev().prev().prev().prev().prev().children().val();
+            var release_branch = $(ths).parent().prev().prev().prev().prev().prev().prev().children().val();
+            var release_reason = $(ths).parent().prev().prev().prev().prev().prev().children().val();
+            var release_db = $(ths).parent().prev().prev().prev().prev().children().val();
             var v = $(ths).parent().prev().prev().prev().prev().prev().prev().prev().prev().prev().prev().html();
             var s = '#status' + v;
             var user_name = $.cookie('username');
@@ -330,52 +273,18 @@
                     url: '/projects_list_r.html',
                     type: 'POST',
                     data: {'id': id, 'release_env': release_env, 'release_branch': release_branch,
-                           'user_name': user_name, 'release_reason': release_reason},
+                           'user_name': user_name, 'release_reason': release_reason, 'release_db':release_db },
                     dataType: 'JSON',
                     success: function (response) {
                         if (response.status){
-                            $(ths).parent().prev().prev().prev().html(response.data['id']);
-                            $(ths).parent().prev().prev().html(response.data['time']);
-                            $(s).text('发布中 ');
-                            $(s).attr('style', 'color: green');
-                            $(s).next().children(' :first-child').next().attr('onclick', '');
-                            $(s).append("<img src='/static/imgs/avatar/reload.gif'>");
-                            // 刷新日志
-{#                            get_log(id, false);#}
+                            alert('申请成功！');
+                            window.location.href = "/apply.html";
                         } else {
                             alert(response.message);
                         }
                     }
                 })
             }
-        }
-
-        // 查询日志函数
-        function do_log(id) {
-            $('#release_div').attr('style', '');
-            $.ajax({
-                    url: '/release_log.html',
-                    type: 'GET',
-                    data: {'id': id},
-                    dataType: 'JSON',
-                    success: function (response) {
-                        if (response.status){
-                            $('#release_log').empty();
-                            $.each(response.data['data_list'], function (k,v) {
-                                var reg = /^http*/;
-                                if(reg.test(v['msg'])==false){
-                                    var ft_time = fmTime(v['time']);
-                                    var s = '<p style="display: inline-block">' + '[ ' + ft_time + ' ]' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none">' + v['msg'] +'</a><br>';}
-                                else{
-                                    var s = '<p style="display: inline-block">' + '[ ' + ft_time + ' ]' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none" href="' + v['msg'] + '" target="_blank">' + v['msg'] +'</a><br>';
-                                }
-                                $('#release_log').append(s);
-                            })
-                        } else {
-                            $('#release_log').html('<a>未查询到日志</a>');
-                        }
-                    }
-            })
         }
 
         // 回调函数内部使用setTimeout 防止可能阻塞代码

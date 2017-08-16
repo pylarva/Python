@@ -105,6 +105,11 @@ class ProjectsJsonReadView(View):
         response = obj.fetch_assets(request)
         return JsonResponse(response.__dict__)
 
+    def post(self, request):
+        obj = project_r.ProjectRead()
+        response = obj.post_task(request)
+        return JsonResponse(response.__dict__)
+
 
 class ProjectsReadListView(View):
     def get(self, request, *args, **kwargs):

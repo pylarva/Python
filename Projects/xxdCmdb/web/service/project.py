@@ -415,7 +415,7 @@ class Project(BaseServiceList):
         try:
             release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
                                              release_git_branch=release_branch, release_id=release_id,
-                                             release_user=release_user, release_git_url=release_git_url,
+                                             apply_user=release_user, release_git_url=release_git_url,
                                              release_jdk_version=release_jdk_version, release_type_id=release_type)
             release_obj.save()
 

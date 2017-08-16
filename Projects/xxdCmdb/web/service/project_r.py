@@ -4,6 +4,7 @@ import json
 import re
 import os
 import time
+import datetime
 import threading
 import paramiko
 import subprocess
@@ -417,8 +418,40 @@ class ProjectRead(BaseServiceList):
         release_id = request.POST.get('id')
         release_env = request.POST.get('release_env')
         release_branch = request.POST.get('release_branch')
-        release_time = time.strftime('%Y-%m-%d %H:%M')
+        release_reason = request.POST.get('release_reason')
+        release_db = request.POST.get('release_db')
+        t = datetime.datetime.now() + datetime.timedelta(hours=8)
+        release_time = t.strftime('%Y-%m-%d %H:%M')
         release_user = request.POST.get('user_name')
+
+        print(release_id, release_env, release_branch, release_reason, release_db, release_time, release_user)
+
+        obj = models.ProjectTask.objects.filter(id=release_id).first()
+        release_name = obj.business_2
+        pack_cmd = obj.pack_cmd
+        static_type = obj.static_type
+
+        obj_env = models.BusinessOne.objects.filter(id=release_env).first()
+        release_env_name = obj_env.name
+
+        release_git_url = obj.git_url
+        release_jdk_version = obj.jdk_version
+        release_type = obj.project_type_id
+
+        release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
+                                         apply_user=release_user, apply_time=release_time, release_git_branch=release_branch,
+                                         release_id=release_id, release_user=release_user, release_git_url=release_git_url,
+                                         release_jdk_version=release_jdk_version, release_type_id=release_type,
+                                         release_reason=release_reason, release_db=release_db)
+        release_obj.save()
+
+        models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id,
+                                                                release_last_time=release_time)
+
+        models.ReleaseTask.objects.filter(id=release_obj.id).update(release_status=4)
+
+        response.status = True
+        return response
 
         obj = models.ProjectTask.objects.filter(id=release_id).first()
         release_name = obj.business_2
@@ -436,7 +469,8 @@ class ProjectRead(BaseServiceList):
             release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
                                              release_git_branch=release_branch, release_id=release_id,
                                              release_user=release_user, release_git_url=release_git_url,
-                                             release_jdk_version=release_jdk_version, release_type_id=release_type)
+                                             release_jdk_version=release_jdk_version, release_type_id=release_type,
+                                             release_status=4)
             release_obj.save()
 
             models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id,

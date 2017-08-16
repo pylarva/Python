@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from web.service import asset
 from repository import models
+from utils.response import BaseResponse
 from web.service.login import auth_admin
 
 USER_NAME = {}
@@ -54,6 +55,16 @@ class AssetDetailView(View):
         device_type_id = asset_obj.host_type
         response = asset.Asset.assets_detail(nid, device_type_id)
         return render(request, 'asset_detail.html', {'response': response, 'device_type_id': device_type_id})
+
+
+class ReleaseDetailView(View):
+    def get(self, request, nid):
+        response = BaseResponse()
+        asset_obj = models.ReleaseTask.objects.filter(id=nid).first()
+        response.data = asset_obj
+        # device_type_id = asset_obj.host_type
+        # response = asset.Asset.assets_detail(nid, device_type_id)
+        return render(request, 'release_detail.html', {'response': response})
 
 
 class AddAssetView(View):

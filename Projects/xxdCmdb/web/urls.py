@@ -16,6 +16,8 @@ from web.views import VirtualMachine
 from web.views import project
 from web.views import projects
 from web.views import release
+from web.views import apply
+from web.views import audit
 from web.views import logs
 
 urlpatterns = [
@@ -31,6 +33,7 @@ urlpatterns = [
     url(r'^assets.html$', asset.AssetJsonView.as_view()),
     # url(r'^asset-(?P<device_type_id>\d+)-(?P<asset_nid>\d+).html$', asset.AssetDetailView.as_view()),
     url(r'^asset-(?P<nid>\d+).html$', asset.AssetDetailView.as_view()),
+    url(r'^release-(?P<nid>\d+).html$', asset.ReleaseDetailView.as_view()),
     url(r'^add-asset.html$', asset.AddAssetView.as_view()),
 
     url(r'^config.html$', config.AssetListView.as_view()),
@@ -69,6 +72,12 @@ urlpatterns = [
 
     url(r'^release.html$', release.ReleaseListView.as_view()),
     url(r'^releases.html$', release.ReleaseJsonView.as_view()),
+
+    url(r'^apply.html$', apply.ApplyListView.as_view()),
+    url(r'^applys.html$', apply.ApplyJsonView.as_view()),
+
+    url(r'^audit.html$', audit.ApplyListView.as_view()),
+    url(r'^audits.html$', audit.ApplyJsonView.as_view()),
 
     url(r'^release_r.html$', release.ReleaseReadListView.as_view()),
     url(r'^releases_r.html$', release.ReleaseJsonView.as_view()),

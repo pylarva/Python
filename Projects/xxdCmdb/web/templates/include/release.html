@@ -1,0 +1,169 @@
+<style>
+    .guige {
+
+    }
+
+    .guige-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .guige-table .title {
+        background: #f5fafe;
+        text-align: left;
+        font-weight: bold;
+        line-height: 32px;
+        height: 32px;
+        font-family: "微软雅黑";
+        border-right: 1px solid #dcdcdc;
+        border-left: 2px solid #0488cd;
+    }
+
+    .guige-table td, .content .guige-table th {
+        border: 1px solid #dcdcdc;
+        line-height: 30px;
+        height: 30px;
+        padding: 0 10px;
+        border-top: 0;
+    }
+
+    .guige-table .body-left {
+        width: 126px;
+        font-weight: normal;
+        text-align: right;
+        color: #666;
+    }
+
+    .guige-table .body-right {
+        color: #333;
+    }
+
+</style>
+<div class="guige">
+    <table class="guige-table">
+        <tbody>
+
+        <tr>
+            <th colspan="5" class="title f14 th" style="border-left:2px solid #0488cd;"><span class="padding-l-8">发布任务信息</span></th>
+        </tr>
+        <tr>
+            <td>名称</td>
+            <td colspan="4">值</td>
+        </tr>
+        <tr>
+            <td>项目名</td>
+            <td colspan="4">{{ response.data.release_user }}</td>
+        </tr>
+        <tr>
+            <td>发布ID</td>
+            <td colspan="4">{{ response.data.id }}</td>
+        </tr>
+        <tr>
+            <td>发布环境</td>
+            <td colspan="4">{{ response.data.os }}</td>
+        </tr>
+        <tr>
+            <td>发布类型</td>
+            <td colspan="4">{{ response.data.sn }}</td>
+        </tr>
+        <tr>
+            <td>分支</td>
+            <td colspan="4">{{ response.data.model }}</td>
+        </tr>
+        <tr>
+            <td>JDK版本</td>
+            <td colspan="4">{{ response.data.cpu }}</td>
+        </tr>
+        <tr>
+            <td>申请发布</td>
+            <td colspan="4">{{ response.data.cpu_num }}</td>
+        </tr>
+        <tr>
+            <td>申请时间</td>
+            <td colspan="4">{{ response.data.core_num }}</td>
+        </tr>
+        <tr>
+            <td>发布说明</td>
+            <td colspan="4">{{ response.data.idc }}</td>
+        </tr>
+        <tr>
+            <td>GIT地址</td>
+            <td colspan="4">{{ response.data.cabinet }}</td>
+        </tr>
+
+
+        <!-- 网卡信息开始 -->
+        <tr>
+            <th colspan="5" class="title f14 th" style="border-left:2px solid #0488cd;"><span class="padding-l-8">发布任务流程</span></th>
+        </tr>
+        <tr>
+            <td>名称</td>
+            <td>MAC地址</td>
+            <td>IP地址</td>
+            <td>上联交换机</td>
+            <td>上联交换机端口</td>
+        </tr>
+        {% for item in response.data.nic.all %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.hwaddr }}</td>
+                <td>{{ item.ipaddrs }}</td>
+                <td>{{ item.switch_ip }}</td>
+                <td>{{ item.switch_port }}</td>
+            </tr>
+        {% endfor %}
+        <!-- 网卡信息结束 -->
+
+        <!-- 硬盘信息开始 -->
+        <tr>
+            <th colspan="5" class="title f14" style="border-left:2px solid #0488cd;">
+                <span class="padding-l-8">发布信息日志</span>
+            </th>
+        </tr>
+        <tr>
+            <td>插槽</td>
+            <td>容量GB</td>
+            <td >接口类型</td>
+            <td >转速(rpm)</td>
+            <td>型号</td>
+        </tr>
+
+        {% for item in response.data.disk.all %}
+            <tr>
+                <td>{{ item.slot }}</td>
+                <td>{{ item.capacity }}</td>
+                <td >{{ item.model }}</td>
+                <td >{{ item.rpm }}</td>
+                <td>{{ item.pd_type }}</td>
+            </tr>
+        {% endfor %}
+        <!-- 硬盘信息结束 -->
+
+        <!-- 内存信息开始 -->
+{#        <tr>#}
+{#            <th colspan="5" class="title f14" style="border-left:2px solid #0488cd;">#}
+{#                <span class="padding-l-8">内存信息</span>#}
+{#            </th>#}
+{#        </tr>#}
+{#        <tr>#}
+{#            <td>插槽</td>#}
+{#            <td>容量</td>#}
+{#            <td>频率</td>#}
+{#            <td colspan="2">型号</td>#}
+{#        </tr>#}
+{##}
+{#        {% for item in response.data.memory.all %}#}
+{#            <tr>#}
+{#                <td>{{ item.slot }}</td>#}
+{#                <td>{{ item.capacity }}</td>#}
+{#                <td>{{ item.speed }}</td>#}
+{#                <td colspan="2">{{ item.model }}</td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+        <!-- 内存信息结束 -->
+
+
+        </tbody>
+    </table>
+</div>

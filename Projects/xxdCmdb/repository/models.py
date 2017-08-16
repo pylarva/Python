@@ -297,6 +297,9 @@ class ReleaseTask(models.Model):
         (1, '发布中'),
         (2, '发布成功'),
         (3, '发布失败'),
+        (4, 'PM审核'),
+        (5, 'DB审核'),
+        (6, 'SA审核'),
     )
 
     jdk_version_choice = (
@@ -316,6 +319,12 @@ class ReleaseTask(models.Model):
     release_type = models.ForeignKey(ReleaseType, null=True, blank=True, on_delete=models.SET_NULL)
     release_jdk_version = models.IntegerField(choices=jdk_version_choice, null=True, blank=True)
     release_md5 = models.CharField(max_length=64, null=True, blank=True)
+    apply_user = models.CharField(max_length=32, null=True, blank=True)
+    apply_time = models.CharField(max_length=32, null=True, blank=True)
+    check_user = models.CharField(max_length=32, null=True, blank=True)
+    check_time = models.CharField(max_length=32, null=True, blank=True)
+    release_reason = models.CharField(max_length=1080, null=True, blank=True)
+    release_db = models.CharField(max_length=64, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "发布任务记录表"

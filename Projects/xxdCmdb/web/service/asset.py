@@ -11,6 +11,7 @@ from utils.hostname import change_host_name
 from .base import BaseServiceList
 
 
+
 class Asset(BaseServiceList):
     def __init__(self):
         condition_config = [
