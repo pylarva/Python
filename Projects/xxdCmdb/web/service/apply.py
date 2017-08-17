@@ -107,7 +107,8 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<i class='fa fa-exclamation-triangle' aria-hidden='true'></i><a href='#' onclick='cancle_apply({id})'> 取消申请</a>",
+                    'content': "<i class='fa fa-exclamation-triangle' aria-hidden='true'></i><a href='#' onclick='cancle_apply({id})'> 取消申请 |</a>"
+                               "<a href='/release-{id}.html' target='_blank'> 发布详细</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'id': '@id'}},
                 'attr': {}

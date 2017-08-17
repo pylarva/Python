@@ -17,7 +17,6 @@ class Asset(BaseServiceList):
         condition_config = [
             {'name': 'id', 'text': '发布ID', 'condition_type': 'input'},
             {'name': 'release_name', 'text': '项目名', 'condition_type': 'select', 'global_name': 'business_2_list'},
-            {'name': 'release_status', 'text': '发布状态', 'condition_type': 'select', 'global_name': 'release_status_list'},
         ]
         table_config = [
             {
@@ -187,7 +186,7 @@ class Asset(BaseServiceList):
         username = request.GET.get('username')
         # 查看申请列表时用户只允许查看自己的申请记录
         # condition_dict['apply_user'].append(username)
-        condition_dict['release_status'].append('4')
+        condition_dict['release_status'].append('5')
 
         # 如果用户属于管理员组 则不限制查询条件
         obj = models.UserProfile.objects.filter(name=username).first()
@@ -336,9 +335,9 @@ class Asset(BaseServiceList):
         release_id = request.POST.get('audit_id', None)
         user = request.session['username']
 
-        models.ReleaseTask.objects.filter(id=release_id).update(release_status=5)
-        audit_log(release_id, '[ %s ] 项目经理审核通过' % user)
-        audit_log(release_id, '[ 系统 ] 等待DB审核..')
+        models.ReleaseTask.objects.filter(id=release_id).update(release_status=6)
+        audit_log(release_id, '[ %s ] DB审核通过' % user)
+        audit_log(release_id, '[ 系统 ] 等待SA审核..')
 
         response.status = True
         return response

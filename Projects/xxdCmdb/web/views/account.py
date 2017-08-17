@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import HttpResponse
 from utils import ldap
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 
 data_dict = {}
 
@@ -24,6 +24,8 @@ class LoginView(View):
             user = authenticate(username=u1, password=p1)
             if user is not None:
                 if user.is_active:
+                    print(user, type(user))
+                    login(request, user)
                     print("User is valid, active and authenticated")
 
                     data_dict['status'] = True
@@ -60,12 +62,16 @@ class LoginView(View):
                 request.session['is_login'] = True
                 request.session.set_expiry(0)
 
+                # django的用户认证
+                # login(request, u1)
+
                 ret = HttpResponse(json.dumps(data_dict))
                 ret.set_cookie('username', u1)
                 ret.set_cookie('email', email)
                 return ret
 
             except Exception as e:
+                print(e)
                 data_dict['status'] = False
                 data_dict['message'] = '用户名或者密码错误...'
                 return HttpResponse(json.dumps(data_dict))

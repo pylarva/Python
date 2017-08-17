@@ -98,6 +98,8 @@
     <div id='loading' class='loading hide'></div>
     <!-- 加载层结束 -->
 
+    <div><a href="" id="msg">{{ response }}</a></div>
+
 {% endblock %}
 
 {% block js %}
@@ -112,6 +114,12 @@
 
             $('#menu_item').addClass('active');
 {#            $('#menu_auth').addClass('active');#}
+
+            var m = $('#msg').text();
+            if(m==''){
+            }else{
+                alert(m);
+            }
         });
         function ChangePage(id) {
                 $.nbDataList('/reads.html', id);

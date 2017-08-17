@@ -18,6 +18,8 @@ from web.views import projects
 from web.views import release
 from web.views import apply
 from web.views import audit
+from web.views import audit_db
+from web.views import audit_sa
 from web.views import logs
 
 urlpatterns = [
@@ -78,6 +80,12 @@ urlpatterns = [
 
     url(r'^audit.html$', audit.ApplyListView.as_view()),
     url(r'^audits.html$', audit.ApplyJsonView.as_view()),
+
+    url(r'^audit_db.html$', audit_db.ApplyListView.as_view()),
+    url(r'^audits_db.html$', audit_db.ApplyJsonView.as_view()),
+
+    url(r'^audit_sa.html$', audit_sa.ApplyListView.as_view()),
+    url(r'^audits_sa.html$', audit_sa.ApplyJsonView.as_view()),
 
     url(r'^release_r.html$', release.ReleaseReadListView.as_view()),
     url(r'^releases_r.html$', release.ReleaseJsonView.as_view()),

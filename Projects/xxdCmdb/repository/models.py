@@ -297,9 +297,10 @@ class ReleaseTask(models.Model):
         (1, '发布中'),
         (2, '发布成功'),
         (3, '发布失败'),
-        (4, 'PM审核'),
-        (5, 'DB审核'),
-        (6, 'SA审核'),
+        (4, 'PM待审'),
+        (5, 'DB待审'),
+        (6, 'SA待审'),
+        (7, '待发布'),
     )
 
     jdk_version_choice = (
@@ -347,6 +348,21 @@ class ReleaseLog(models.Model):
 
     def __str__(self):
         return self.release_id
+
+
+class AuditLog(models.Model):
+    """
+    发布审核流程日志
+    """
+    audit_id = models.IntegerField(null=True, blank=True)
+    audit_msg = models.CharField('日志', max_length=1000, null=True, blank=True)
+    audit_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "发布审核流程日志"
+
+    def __str__(self):
+        return self.audit_id
 
 
 class BusinessUnit(models.Model):

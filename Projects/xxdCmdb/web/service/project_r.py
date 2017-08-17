@@ -19,6 +19,7 @@ from utils.hostname import change_host_name
 from .base import BaseServiceList
 import jenkins
 from conf import jenkins_config
+from utils.auditlog import audit_log
 
 
 class ProjectRead(BaseServiceList):
@@ -90,7 +91,7 @@ class ProjectRead(BaseServiceList):
             },
             {
                 'q': 'git_branch',
-                'title': "DB(可选)",
+                'title': "数据库脚本(可选)",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@git_branch'}},
                 'attr': {'name': 'git_branch', 'id': '@git_branch', 'original': '@git_branch',
@@ -422,7 +423,8 @@ class ProjectRead(BaseServiceList):
         release_db = request.POST.get('release_db')
         t = datetime.datetime.now() + datetime.timedelta(hours=8)
         release_time = t.strftime('%Y-%m-%d %H:%M')
-        release_user = request.POST.get('user_name')
+        # release_user = request.POST.get('user_name')
+        release_user = request.session['username']
 
         print(release_id, release_env, release_branch, release_reason, release_db, release_time, release_user)
 
@@ -449,6 +451,14 @@ class ProjectRead(BaseServiceList):
                                                                 release_last_time=release_time)
 
         models.ReleaseTask.objects.filter(id=release_obj.id).update(release_status=4)
+
+        # 项目审核日志
+        # models.AuditLog.objects.create(audit_id=release_obj.id, audit_msg='[ %s ] 上线申请提交..' % release_user)
+        # models.AuditLog.objects.create(audit_id=release_obj.id, audit_msg='[ %s ] 上线说明: %s' % (release_user, release_reason))
+        # models.AuditLog.objects.create(audit_id=release_obj.id, audit_msg='[ 系统 ] 等待项目经理审核..')
+        audit_log(release_obj.id, '[ %s ] 上线申请提交..' % release_user)
+        audit_log(release_obj.id, '[ %s ] 上线说明: %s' % (release_user, release_reason))
+        audit_log(release_obj.id, '[ 系统 ] 等待项目经理审核..')
 
         response.status = True
         return response

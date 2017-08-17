@@ -164,8 +164,8 @@
 
     <script>
         $(function () {
-            $.initMenu('#menu_audit');
-            $.nbDataList('/audits.html', '1');
+            $.initMenu('#menu_audit_sa');
+            $.nbDataList('/audits_sa.html', '1');
         });
 
         function ChangePage(id) {
@@ -176,7 +176,7 @@
             $('#exampleModal').modal();
             $('#pass_confirm').click(function () {
                 $.ajax({
-                    url: '/audits.html',
+                    url: '/audits_sa.html',
                     type: 'POST',
                     data: {'audit_id': id},
                     dataType: 'JSON',

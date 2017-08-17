@@ -64,7 +64,17 @@ class ReleaseDetailView(View):
         response.data = asset_obj
         # device_type_id = asset_obj.host_type
         # response = asset.Asset.assets_detail(nid, device_type_id)
-        return render(request, 'release_detail.html', {'response': response})
+
+        ret = {}
+        values = models.AuditLog.objects.filter(audit_id=nid).only('audit_time', 'audit_msg')
+        result = map(lambda x: {'time': x.audit_time, 'msg': "%s" % x.audit_msg}, values)
+        result = list(result)
+
+        ret['data_list'] = result
+        print(ret)
+        response.status = True
+
+        return render(request, 'release_detail.html', {'response': response, 'log': ret})
 
 
 class AddAssetView(View):
