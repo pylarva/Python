@@ -17,6 +17,7 @@ from web.views import project
 from web.views import projects
 from web.views import release
 from web.views import apply
+from web.views import apply_read
 from web.views import audit
 from web.views import audit_db
 from web.views import audit_sa
@@ -69,6 +70,9 @@ urlpatterns = [
     url(r'^projects_list.html$', projects.ProjectsJsonView.as_view()),
     url(r'^projects_list_r.html$', projects.ProjectsJsonReadView.as_view()),
 
+    url(r'^projects_read.html$', projects.ProjectListView.as_view()),
+    url(r'^projects_reads.html$', projects.ProjectJsonReadView.as_view()),
+
     url(r'^project_list_r.html$', projects.ProjectsReadListView.as_view()),
     url(r'^projects_list_r.html$', projects.ProjectsJsonView.as_view()),
 
@@ -77,6 +81,9 @@ urlpatterns = [
 
     url(r'^apply.html$', apply.ApplyListView.as_view()),
     url(r'^applys.html$', apply.ApplyJsonView.as_view()),
+
+    url(r'^apply_read.html$', apply_read.ApplyListView.as_view()),
+    url(r'^apply_reads.html$', apply_read.ApplyJsonView.as_view()),
 
     url(r'^audit.html$', audit.ApplyListView.as_view()),
     url(r'^audits.html$', audit.ApplyJsonView.as_view()),

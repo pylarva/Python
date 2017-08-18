@@ -160,20 +160,14 @@
         }
 
         $(function () {
-            $.nbDataList('/projects_list_r.html', '1');
+            $.initMenu('#menu_list');
+            $.nbDataList('/projects_reads.html', '1');
             $('#table_body').attr('edit-mode', 'true');
             $("select").find("option[value=" + 8 + "]").prop("selected", true);
 
             // 项目列表刷新数据定时器
             var t1 = window.setTimeout(do_ajax, 200);
-            var t2 = window.setTimeout(do_menu, 200);
-
         });
-
-        function do_menu() {
-            $('#menu_apply').addClass('active');
-
-        }
 
         function do_ajax() {
             var i = 0;
@@ -189,7 +183,7 @@
             });
 
             $.ajax({
-                url: '/project_list.html',
+                url: '/project_read.html',
                 type: 'POST',
                 data: {'task_id': list_v},
                 dataType: 'JSON',

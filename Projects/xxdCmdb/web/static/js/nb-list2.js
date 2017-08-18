@@ -287,6 +287,7 @@
                 $.Hide('#shade,#loading');
                 if (response.status) {
                     initGlobal(response.data.global_dict);
+                    initMenu(response.data.menu);
                     initTableHeader(response.data.table_config);
                     initTableBody(response.data.page_info.page_start, response.data.data_list, response.data.table_config);
                     initPager(response.data.page_info.page_str);
@@ -329,6 +330,13 @@
         $.each(globalDict, function (k, v) {
             NB_GLOBAL_DICT[k] = v;
         })
+    }
+
+    /*
+     自定义用户菜单栏
+     */
+    function initMenu(str) {
+        $('#user_menu').append(str);
     }
 
     /*

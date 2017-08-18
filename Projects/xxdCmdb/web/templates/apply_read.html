@@ -137,14 +137,9 @@
 
     <script>
         $(function () {
-{#            $.initMenu('#menu_online');#}
-            $.nbDataList('/applys.html', '1');
-            var t2 = window.setTimeout(do_menu, 200);
+            $.initMenu('#menu_record');
+            $.nbDataList('/apply_reads.html', '1');
         });
-
-        function do_menu() {
-            $('#menu_online').addClass('active');
-        }
 
         function ChangePage(id) {
             $.nbDataLists(id);

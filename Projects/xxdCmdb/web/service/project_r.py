@@ -20,6 +20,7 @@ from .base import BaseServiceList
 import jenkins
 from conf import jenkins_config
 from utils.auditlog import audit_log
+from utils.menu import menu
 
 
 class ProjectRead(BaseServiceList):
@@ -330,6 +331,7 @@ class ProjectRead(BaseServiceList):
                 'business_2_list': business_2_lists,
                 'business_3_list': business_3_lists
             }
+            ret['menu'] = menu(request)
             response.data = ret
             response.message = '获取成功'
         except Exception as e:

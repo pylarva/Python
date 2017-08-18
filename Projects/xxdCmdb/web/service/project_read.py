@@ -4,24 +4,26 @@ import json
 import re
 import os
 import time
+import datetime
 import threading
 import paramiko
 import subprocess
 from multiprocessing import Process
 from django.db.models import Q
 from repository import models
-# from utils.pager import PageInfo
-from utils.pagerm import PageInfo
+from utils.pager import PageInfo
+# from utils.pagerm import PageInfo
 from utils.response import BaseResponse
 from django.http.request import QueryDict
 from utils.hostname import change_host_name
 from .base import BaseServiceList
 import jenkins
 from conf import jenkins_config
+from utils.auditlog import audit_log
 from utils.menu import menu
 
 
-class Project(BaseServiceList):
+class ProjectRead(BaseServiceList):
     def __init__(self):
         condition_config = [
             {'name': 'business_2', 'text': '项目名', 'condition_type': 'input', 'condition_type': 'select', 'global_name': 'business_2_list'},
@@ -30,14 +32,14 @@ class Project(BaseServiceList):
             {
                 'q': 'id',
                 'title': "项目ID",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
                 'attr': {}
             },
             {
                 'q': 'release_user',
                 'title': "发起人",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@release_user'}},
                 'attr': {}
             },
@@ -56,9 +58,30 @@ class Project(BaseServiceList):
                 'attr': {}
             },
             {
+                'q': 'project_type__name',
+                'title': "发布类型",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@project_type__name'}},
+                'attr': {}
+            },
+            {
+                'q': 'jdk_version',
+                'title': "JDK版本",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@jdk_version_list'}},
+                'attr': {}
+            },
+            {
+                'q': 'static_type',
+                'title': "静态资源",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@static_type_list'}},
+                'attr': {}
+            },
+            {
                 'q': 'business_1',
                 'title': "环境",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@business_1_list'}},
                 'attr': {'name': 'business_1', 'id': '@business_1', 'original': '@business_1',
                          'edit-enable': 'true',
@@ -69,7 +92,29 @@ class Project(BaseServiceList):
             {
                 'q': 'git_branch',
                 'title': "分支",
-                'display': 1,
+                'display': 0,
+                'text': {'content': "{n}", 'kwargs': {'n': '@git_branch'}},
+                'attr': {'name': 'git_branch', 'id': '@git_branch', 'original': '@git_branch',
+                         'edit-enable': 'true',
+                         'edit-type': 'input',
+                         'placeholder': '111',
+                         'style': 'padding: 3px;'}
+            },
+            {
+                'q': 'git_branch',
+                'title': "发布说明",
+                'display': 0,
+                'text': {'content': "{n}", 'kwargs': {'n': '@git_branch'}},
+                'attr': {'name': 'git_branch', 'id': '@git_branch', 'original': '@git_branch',
+                         'edit-enable': 'true',
+                         'edit-type': 'input',
+                         'placeholder': '111',
+                         'style': 'padding: 3px;'}
+            },
+            {
+                'q': 'git_branch',
+                'title': "数据库脚本(可选)",
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@git_branch'}},
                 'attr': {'name': 'git_branch', 'id': '@git_branch', 'original': '@git_branch',
                          'edit-enable': 'true',
@@ -101,12 +146,10 @@ class Project(BaseServiceList):
             {
                 'q': None,
                 'title': "选项",
-                'display': 1,
+                'display': 0,
                 'text': {
-                    'content': "<i class='fa fa-paper-plane-o' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'> 发布</a> | "
-                               "<i class='fa fa-recycle' aria-hidden='true'></i><a href='#' onclick='roll_back(this,{nid})'>回滚</a> | "
-                               "<i class='fa fa-hand-paper-o' aria-hidden='true'></i><a href='#' onclick='do_break(this,{nid})'>中断</a> | "
-                               "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='get_log({nid},false)'>详细</a>",
+                    'content': "<i class='fa fa-paper-plane-o' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'> 申请发布</a>",
+                               # "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='get_log({nid},false)'>详细</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {'style': 'font-size: 13px; width:220px;'}
             },
@@ -116,11 +159,21 @@ class Project(BaseServiceList):
             'server_title': 'select hostname from repository_server where repository_server.ProjectTask_id=repository_ProjectTask.id and repository_ProjectTask.device_type_id=1',
             'network_title': 'select management_ip from repository_networkdevice where repository_networkdevice.ProjectTask_id=repository_ProjectTask.id and repository_ProjectTask.device_type_id=2',
         }
-        super(Project, self).__init__(condition_config, table_config, extra_select)
+        super(ProjectRead, self).__init__(condition_config, table_config, extra_select)
 
     @property
     def device_status_list(self):
         result = map(lambda x: {'id': x[0], 'name': x[1]}, models.ProjectTask.project_status_choice)
+        return list(result)
+
+    @property
+    def jdk_version_list(self):
+        result = map(lambda x: {'id': x[0], 'name': x[1]}, models.ProjectTask.jdk_version_choice)
+        return list(result)
+
+    @property
+    def static_type_list(self):
+        result = map(lambda x: {'id': x[0], 'name': x[1]}, models.ProjectTask.static_cover_type)
         return list(result)
 
     @property
@@ -303,6 +356,8 @@ class Project(BaseServiceList):
             ret['global_dict'] = {
                 'device_status_list': self.device_status_list,
                 'device_type_list': self.device_type_list,
+                'jdk_version_list': self.jdk_version_list,
+                'static_type_list': self.static_type_list,
                 'idc_list': self.idc_list,
                 'business_unit_list': self.business_unit_list,
                 'business_1_list': business_1_lists,
@@ -399,8 +454,49 @@ class Project(BaseServiceList):
         release_id = request.POST.get('id')
         release_env = request.POST.get('release_env')
         release_branch = request.POST.get('release_branch')
-        release_time = time.strftime('%Y-%m-%d %H:%M')
-        release_user = request.POST.get('user_name')
+        release_reason = request.POST.get('release_reason')
+        release_db = request.POST.get('release_db')
+        t = datetime.datetime.now() + datetime.timedelta(hours=8)
+        release_time = t.strftime('%Y-%m-%d %H:%M')
+        # release_user = request.POST.get('user_name')
+        release_user = request.session['username']
+
+        print(release_id, release_env, release_branch, release_reason, release_db, release_time, release_user)
+
+        obj = models.ProjectTask.objects.filter(id=release_id).first()
+        release_name = obj.business_2
+        pack_cmd = obj.pack_cmd
+        static_type = obj.static_type
+
+        obj_env = models.BusinessOne.objects.filter(id=release_env).first()
+        release_env_name = obj_env.name
+
+        release_git_url = obj.git_url
+        release_jdk_version = obj.jdk_version
+        release_type = obj.project_type_id
+
+        release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
+                                         apply_user=release_user, apply_time=release_time, release_git_branch=release_branch,
+                                         release_id=release_id, release_user=release_user, release_git_url=release_git_url,
+                                         release_jdk_version=release_jdk_version, release_type_id=release_type,
+                                         release_reason=release_reason, release_db=release_db)
+        release_obj.save()
+
+        models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id,
+                                                                release_last_time=release_time)
+
+        models.ReleaseTask.objects.filter(id=release_obj.id).update(release_status=4)
+
+        # 项目审核日志
+        # models.AuditLog.objects.create(audit_id=release_obj.id, audit_msg='[ %s ] 上线申请提交..' % release_user)
+        # models.AuditLog.objects.create(audit_id=release_obj.id, audit_msg='[ %s ] 上线说明: %s' % (release_user, release_reason))
+        # models.AuditLog.objects.create(audit_id=release_obj.id, audit_msg='[ 系统 ] 等待项目经理审核..')
+        audit_log(release_obj.id, '[ %s ] 上线申请提交..' % release_user)
+        audit_log(release_obj.id, '[ %s ] 上线说明: %s' % (release_user, release_reason))
+        audit_log(release_obj.id, '[ 系统 ] 等待项目经理审核..')
+
+        response.status = True
+        return response
 
         obj = models.ProjectTask.objects.filter(id=release_id).first()
         release_name = obj.business_2
@@ -417,8 +513,9 @@ class Project(BaseServiceList):
         try:
             release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
                                              release_git_branch=release_branch, release_id=release_id,
-                                             apply_user=release_user, release_git_url=release_git_url,
-                                             release_jdk_version=release_jdk_version, release_type_id=release_type)
+                                             release_user=release_user, release_git_url=release_git_url,
+                                             release_jdk_version=release_jdk_version, release_type_id=release_type,
+                                             release_status=4)
             release_obj.save()
 
             models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id,
@@ -693,9 +790,3 @@ class Project(BaseServiceList):
             self.log(taskId, '发布静态资源错误, 代码...%s' % ret)
             return False
         return True
-
-
-
-
-
-

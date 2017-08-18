@@ -9,6 +9,7 @@ from utils.response import BaseResponse
 from django.http.request import QueryDict
 from utils.hostname import change_host_name
 from .base import BaseServiceList
+from utils.menu import menu
 
 
 class Asset(BaseServiceList):
@@ -172,6 +173,7 @@ class Asset(BaseServiceList):
                 'business_2_list': self.business_2_list,
                 'business_3_list': self.business_3_list
             }
+            ret['menu'] = menu(request)
             response.data = ret
             response.message = '获取成功'
         except Exception as e:

@@ -78,7 +78,7 @@ class Asset(BaseServiceList):
             {
                 'q': 'release_reason',
                 'title': "发布说明",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@release_reason'}},
                 'attr': {}
             },
@@ -108,8 +108,7 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<i class='fa fa-exclamation-triangle' aria-hidden='true'></i><a href='#' onclick='cancle_apply({id})'> 取消申请 |</a>"
-                               "<a href='/release-{id}.html' target='_blank'> 发布详细</a>",
+                    'content': "<i class='fa fa-television' aria-hidden='true'></i><a href='/release-{id}.html' target='_blank'> 发布详细</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'id': '@id'}},
                 'attr': {}
@@ -185,7 +184,7 @@ class Asset(BaseServiceList):
         # 开始根据用户名查权限
         username = request.GET.get('username')
         # 查看申请列表时用户只允许查看自己的申请记录
-        condition_dict['apply_user'].append(username)
+        # condition_dict['apply_user'].append(username)
 
         # 如果用户属于管理员组 则不限制查询条件
         obj = models.UserProfile.objects.filter(name=username).first()

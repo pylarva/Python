@@ -9,15 +9,16 @@ from django.http import JsonResponse
 from utils.response import BaseResponse
 from web.service import project
 from web.service import project_r
+from web.service import project_read
 from django.utils.decorators import method_decorator
 from web.service.login import auth_admin
 
 
-@method_decorator(auth_admin, name='dispatch')
+# @method_decorator(auth_admin, name='dispatch')
 class ProjectsListView(View):
     def get(self, request, *args, **kwargs):
         data_list = models.ProjectTask.objects.all()
-        return render(request, 'project_list.html', {'data_list': data_list})
+        return render(request, 'project_list_r.html', {'data_list': data_list})
 
     def post(self, request, *args, **kwargs):
         """
@@ -100,8 +101,33 @@ class ProjectsJsonView(View):
 
 
 class ProjectsJsonReadView(View):
+    """
+    开发用户读取的项目列表页面 支持发布申请
+    """
     def get(self, request):
         obj = project_r.ProjectRead()
+        response = obj.fetch_assets(request)
+        return JsonResponse(response.__dict__)
+
+    def post(self, request):
+        obj = project_r.ProjectRead()
+        response = obj.post_task(request)
+        return JsonResponse(response.__dict__)
+
+
+class ProjectListView(View):
+    def get(self, request, *args, **kwargs):
+        data_list = models.ProjectTask.objects.all()
+        return render(request, 'project_read.html', {'data_list': data_list})
+
+
+class ProjectJsonReadView(View):
+    """
+    普通用户读取的项目列表页面
+    """
+
+    def get(self, request):
+        obj = project_read.ProjectRead()
         response = obj.fetch_assets(request)
         return JsonResponse(response.__dict__)
 

@@ -6,6 +6,7 @@ from repository import models
 from utils.pager import PageInfo
 from utils.response import BaseResponse
 from django.http.request import QueryDict
+from utils.menu import menu
 
 from .base import BaseServiceList
 
@@ -339,6 +340,11 @@ class Asset(BaseServiceList):
                 'business_2_list': business_2_lists,
                 'business_3_list': business_3_lists
             }
+            # ret['menu'] = '''<a id="menu_create" class="menu-item" href="/_project.html"><i class="fa fa-gitlab"
+            # aria-hidden="true" style="width: 14px; margin-left: 1px"></i><span>项目创建</span></a>
+            #                '''
+            ret['menu'] = menu(request)
+            print('-----', ret['menu'])
             response.data = ret
             response.message = '获取成功'
         except Exception as e:
