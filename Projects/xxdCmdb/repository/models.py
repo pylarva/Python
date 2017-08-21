@@ -301,6 +301,7 @@ class ReleaseTask(models.Model):
         (5, 'DB待审'),
         (6, 'SA待审'),
         (7, '待发布'),
+        (8, '已撤销'),
     )
 
     jdk_version_choice = (

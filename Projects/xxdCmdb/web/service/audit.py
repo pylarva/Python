@@ -10,6 +10,7 @@ from django.http.request import QueryDict
 from utils.hostname import change_host_name
 from .base import BaseServiceList
 from utils.auditlog import audit_log
+from utils.menu import menu
 
 
 class Asset(BaseServiceList):
@@ -282,6 +283,7 @@ class Asset(BaseServiceList):
                 'business_3_list': self.business_3_list,
                 'release_jdk_list': self.release_jdk_list
             }
+            ret['menu'] = menu(request)
             response.data = ret
             response.message = '获取成功'
         except Exception as e:
@@ -336,9 +338,16 @@ class Asset(BaseServiceList):
         release_id = request.POST.get('audit_id', None)
         user = request.session['username']
 
-        models.ReleaseTask.objects.filter(id=release_id).update(release_status=5)
-        audit_log(release_id, '[ %s ] 项目经理审核通过' % user)
-        audit_log(release_id, '[ 系统 ] 等待DB审核..')
+        have_db_script = models.ReleaseTask.objects.filter(id=release_id).first().release_db
+        if have_db_script:
+            models.ReleaseTask.objects.filter(id=release_id).update(release_status=5)
+            audit_log(release_id, '[ %s ] 项目经理审核通过' % user)
+            audit_log(release_id, '[ 系统 ] 等待DBA审核..')
+        else:
+            models.ReleaseTask.objects.filter(id=release_id).update(release_status=6)
+            audit_log(release_id, '[ %s ] 项目经理审核通过' % user)
+            audit_log(release_id, '[ 系统 ] 未检测到数据库执行脚本')
+            audit_log(release_id, '[ 系统 ] 等待SA审核..')
 
         response.status = True
         return response

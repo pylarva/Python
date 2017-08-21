@@ -216,6 +216,10 @@
                                         $(jquery_id).text('发布失败');
                                         $(jquery_id).attr('style', 'color: red');
                                         $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
+                                    }else if(response.data.data_list[i]['release_status']=='7'){
+                                        $(jquery_id).text('待发布');
+                                        $(jquery_id).attr('style', 'c   olor: red');
+                                        $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
                                     }
                                 }
                                 }

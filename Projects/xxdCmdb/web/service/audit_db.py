@@ -10,6 +10,7 @@ from django.http.request import QueryDict
 from utils.hostname import change_host_name
 from .base import BaseServiceList
 from utils.auditlog import audit_log
+from utils.menu import menu
 
 
 class Asset(BaseServiceList):
@@ -281,6 +282,7 @@ class Asset(BaseServiceList):
                 'business_3_list': self.business_3_list,
                 'release_jdk_list': self.release_jdk_list
             }
+            ret['menu'] = menu(request)
             response.data = ret
             response.message = '获取成功'
         except Exception as e:

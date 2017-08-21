@@ -88,6 +88,14 @@
             <td colspan="4">{{ response.data.release_reason }}</td>
         </tr>
         <tr>
+            <td>数据库脚本</td>
+            {% if response.data.release_db == '' %}
+                <td colspan="4">无</td>
+            {% else %}
+                <td colspan="4">{{ response.data.release_db }}</td>
+            {% endif %}
+        </tr>
+        <tr>
             <td>GIT地址</td>
             <td colspan="4">{{ response.data.release_git_url }}</td>
         </tr>
@@ -98,9 +106,28 @@
             <th colspan="5" class="title f14 th" style="border-left:2px solid #0488cd;"><span class="padding-l-8">发布任务流程</span></th>
         </tr>
         <tr>
-            <th colspan="5">
-                <img src="/static/imgs/release_1.png" style="display: inline-block">
-            </th>
+            <!--  -->
+            {% if response.data.release_status == 4 %}
+                <th colspan="5">
+                    <img src="/static/imgs/release_1.png" style="display: inline-block">
+                </th>
+            {% elif response.data.release_status == 5 %}
+                <th colspan="5">
+                    <img src="/static/imgs/release_2.png" style="display: inline-block">
+                </th>
+            {% elif response.data.release_status == 6 %}
+                <th colspan="5">
+                    <img src="/static/imgs/release_3.png" style="display: inline-block">
+                </th>
+            {% elif response.data.release_status == 7 %}
+                <th colspan="5">
+                    <img src="/static/imgs/release_4.png" style="display: inline-block">
+                </th>
+            {% elif response.data.release_status == 2 %}
+                <th colspan="5">
+                    <img src="/static/imgs/release_5.png" style="display: inline-block">
+                </th>
+            {% endif %}
         </tr>
         <!-- 项目流程结束 -->
 

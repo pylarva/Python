@@ -15,6 +15,7 @@ from web.views import PhysicalMachine
 from web.views import VirtualMachine
 from web.views import project
 from web.views import projects
+from web.views import project_admin
 from web.views import release
 from web.views import apply
 from web.views import apply_read
@@ -66,10 +67,16 @@ urlpatterns = [
     url(r'^groups.html$', group.GroupJsonView.as_view()),
 
     url(r'^_project.html$', project.ProjectListView.as_view()),
+    # 开发-项目列表
     url(r'^project_list.html$', projects.ProjectsListView.as_view()),
     url(r'^projects_list.html$', projects.ProjectsJsonView.as_view()),
     url(r'^projects_list_r.html$', projects.ProjectsJsonReadView.as_view()),
 
+    # admin-项目列表
+    url(r'^project_admin.html$', project_admin.ProjectAdminListView.as_view()),
+    url(r'^project_admins.html$', project_admin.ProjectAdminJsonView.as_view()),
+
+    # 普通用户-项目列表
     url(r'^projects_read.html$', projects.ProjectListView.as_view()),
     url(r'^projects_reads.html$', projects.ProjectJsonReadView.as_view()),
 

@@ -10,6 +10,7 @@ from django.http.request import QueryDict
 from utils.hostname import change_host_name
 from .base import BaseServiceList
 from utils.auditlog import audit_log
+from utils.menu import menu
 
 
 class Asset(BaseServiceList):
@@ -78,7 +79,7 @@ class Asset(BaseServiceList):
             {
                 'q': 'release_reason',
                 'title': "发布说明",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@release_reason'}},
                 'attr': {}
             },
@@ -108,8 +109,10 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<i class='fa fa-exclamation-triangle' aria-hidden='true'></i><a href='#' style='text-decoration: none;' onclick='audit_pass({id})'> 审核通过 |</a>"
-                               "<a href='/release-{id}.html' target='_blank'> 发布详细</a>",
+                    'content': "<i class='fa fa-exclamation-triangle' aria-hidden='true'></i><a href='#' style='text-decoration: none;' onclick='audit_pass({id})'> 审核通过</a> | "
+                               "<i class='fa fa-paper-plane' aria-hidden='true'></i><a href='#' onclick='do_release(this, {id})'> 执行发布</a> |"
+                               "<a href='#' onclick='get_log({id}, false)'> 日志</a> |"
+                               "<a href='/release-{id}.html' target='_blank'> 详细</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'id': '@id'}},
                 'attr': {}
@@ -187,6 +190,10 @@ class Asset(BaseServiceList):
         # 查看申请列表时用户只允许查看自己的申请记录
         # condition_dict['apply_user'].append(username)
         condition_dict['release_status'].append('6')
+        condition_dict['release_status'].append('7')
+        condition_dict['release_status'].append('1')
+        condition_dict['release_status'].append('2')
+        condition_dict['release_status'].append('3')
 
         # 如果用户属于管理员组 则不限制查询条件
         obj = models.UserProfile.objects.filter(name=username).first()
@@ -281,6 +288,7 @@ class Asset(BaseServiceList):
                 'business_3_list': self.business_3_list,
                 'release_jdk_list': self.release_jdk_list
             }
+            ret['menu'] = menu(request)
             response.data = ret
             response.message = '获取成功'
         except Exception as e:
@@ -332,12 +340,40 @@ class Asset(BaseServiceList):
     def post_assets(request):
         response = BaseResponse()
 
-        release_id = request.POST.get('audit_id', None)
-        user = request.session['username']
+        release_id = request.POST.get('release_id', None)
+        if release_id:
+            status = models.ReleaseTask.objects.filter(id=release_id).first().release_status
+            if status != 7:
+                response.status = False
+                response.message = '待审任务或完成状态不允许执行发布..'
+                return response
+            else:
+                models.ReleaseTask.objects.filter(id=release_id).update(release_status=1)
+                response.status = True
+                return response
 
-        models.ReleaseTask.objects.filter(id=release_id).update(release_status=7)
-        audit_log(release_id, '[ %s ] SA审核通过' % user)
-        audit_log(release_id, '[ 系统 ] 等待发布..')
+        audit_id = request.POST.get('audit_id', None)
+        if audit_id:
+            user = request.session['username']
+
+            models.ReleaseTask.objects.filter(id=audit_id).update(release_status=7)
+            audit_log(audit_id, '[ %s ] SA审核通过' % user)
+            audit_log(audit_id, '[ 系统 ] 等待发布..')
+
+            response.status = True
+            return response
+
+        # 前端页面请求任务状态
+        task_id = request.POST.getlist('task_id', None)
+        print(task_id)
+        if task_id:
+            task_id_list = task_id
+            con_q = Q()
+            con_q.connector = 'OR'
+            for item in task_id_list:
+                con_q.children.append(('id', item))
+            obj_list = models.ReleaseTask.objects.filter(con_q).values('id', 'release_status')
+            response.data = {'data_list': list(obj_list)}
 
         response.status = True
         return response

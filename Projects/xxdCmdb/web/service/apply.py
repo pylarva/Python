@@ -10,6 +10,7 @@ from django.http.request import QueryDict
 from utils.hostname import change_host_name
 from .base import BaseServiceList
 from utils.menu import menu
+from utils.auditlog import audit_log
 
 
 class Asset(BaseServiceList):
@@ -296,12 +297,16 @@ class Asset(BaseServiceList):
             delete_dict = QueryDict(request.body, encoding='utf-8')
             id_list = delete_dict.getlist('id_list')
             status = models.ReleaseTask.objects.filter(id=id_list[0]).first().release_status
-            if status != 4:
-                response.status = False
-                response.message = '非待审核状态不能删除'
-            else:
-                models.ReleaseTask.objects.filter(id__in=id_list).delete()
-                response.message = '删除成功'
+            # if status != 4:
+            #     response.status = False
+            #     response.message = '非待审核状态不能删除'
+            # else:
+                # 不删除 标记为取消状态
+                # models.ReleaseTask.objects.filter(id__in=id_list).delete()
+            models.ReleaseTask.objects.filter(id__in=id_list).update(release_status=8)
+            user = request.session['username']
+            audit_log(id_list, '[ %s ] 撤销发布申请' % user)
+            response.message = '删除成功'
         except Exception as e:
             response.status = True
             # response.message = str(e)

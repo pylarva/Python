@@ -166,7 +166,12 @@
         $(function () {
             $.initMenu('#menu_audit');
             $.nbDataList('/audits.html', '1');
+            var t2 = window.setTimeout(do_menu, 200);
         });
+
+        function do_menu() {
+            $('#menu_audit').addClass('active');
+        }
 
         function ChangePage(id) {
             $.nbDataLists(id);

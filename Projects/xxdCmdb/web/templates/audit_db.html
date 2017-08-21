@@ -166,10 +166,15 @@
         $(function () {
             $.initMenu('#menu_audit_db');
             $.nbDataList('/audits_db.html', '1');
+            var t2 = window.setTimeout(do_menu, 200);
         });
 
         function ChangePage(id) {
             $.nbDataLists(id);
+        }
+
+        function do_menu() {
+            $('#menu_audit_db').addClass('active');
         }
 
         function audit_pass(id) {

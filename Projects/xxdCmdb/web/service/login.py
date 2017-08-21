@@ -49,7 +49,7 @@ def auth_db(func):
             return redirect('login.html')
         group_obj = models.UserProfile.objects.filter(name=user).first()
         group_name = group_obj.group.name
-        if group_name != 'db':
+        if group_name != 'dba':
             return render(request, 'read_list.html', {'response': '暂无DB审核权限..'})
         return func(request, *args, **kwargs)
     return inner

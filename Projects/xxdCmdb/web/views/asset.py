@@ -9,6 +9,7 @@ from web.service import asset
 from repository import models
 from utils.response import BaseResponse
 from web.service.login import auth_admin
+from utils.menu import menu
 
 USER_NAME = {}
 
@@ -71,6 +72,7 @@ class ReleaseDetailView(View):
         result = list(result)
 
         ret['data_list'] = result
+        ret['menu'] = menu(request)
         print(ret)
         response.status = True
 

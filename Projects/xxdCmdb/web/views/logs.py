@@ -43,6 +43,19 @@ class ReleaseLogJsonView(View):
         response = BaseResponse()
 
         ret = {}
+        # 从audit_sa.html 页面发送过来的日志请求
+        release_last_id = request.GET.get('release_last_id', None)
+        if release_last_id:
+            release_id = int(release_last_id)
+            values = models.ReleaseLog.objects.filter(release_id=release_id).only('release_time', 'release_msg')
+            result = map(lambda x: {'time': x.release_time, 'msg': "%s" % x.release_msg}, values)
+            result = list(result)
+            ret['data_list'] = result
+            response.status = True
+            response.data = ret
+            # response.data = json.dumps(ret)
+            return JsonResponse(response.__dict__)
+
         release_id = request.GET.get('id', None)
         if not release_id:
             response.status = False

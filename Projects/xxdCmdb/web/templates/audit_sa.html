@@ -166,10 +166,84 @@
         $(function () {
             $.initMenu('#menu_audit_sa');
             $.nbDataList('/audits_sa.html', '1');
+            var t2 = window.setTimeout(do_menu, 200);
+            // 项目列表刷新数据定时器
+            var t1 = window.setTimeout(do_ajax, 200);
         });
+
+        function do_ajax() {
+            var i = 0;
+            var list_v = [];
+            $('#table_body').children().each(function () {
+                i = i + 1;
+                var obj_id = $(this).children().next().next().html();
+                var obj_status = $(this).children().next().next().next().next().next().next().next().next().html();
+                var new_s = '发布中<img src=' + '/static/imgs/avatar/reload.gif>';
+                if(obj_status == '发布中' || obj_status == new_s){
+                    list_v.push(obj_id)
+                }
+            });
+
+            $.ajax({
+                url: '/audits_sa.html',
+                type: 'POST',
+                data: {'task_id': list_v},
+                dataType: 'JSON',
+                traditional: true,
+                success: function (response) {
+                    if (response.status){
+                        var ii=0;
+                        $('#table_body').children().each(function () {
+                            ii = ii + 1;
+                            var i = ii.toString();
+                            var str_id = 'status' + i;
+                            var jquery_id = '#status' + i;
+                            var v = $(this).children().next().next().next().next().next().next().next().next().html();
+                            var obj_id = $(this).children().next().next().html();
+                            var s = 'do_release(this,' + obj_id + ')';
+                            if(v=='发布中'){
+                                alert('111');
+                                $(this).children().next().next().next().next().next().next().next().next().attr('id', str_id);
+                                $(this).children().next().next().next().next().next().next().next().next().next().next().attr('id', '');
+                                   for(i in response.data.data_list){
+                                    if(obj_id==response.data.data_list[i]['id']){
+                                        if(response.data.data_list[i]['release_status']=='1'){
+                                            alert('555');
+                                        $(jquery_id).text('发布中 ');
+                                        $(jquery_id).attr('style', 'color: green');
+                                        $(jquery_id).next().children(' :first-child').next().attr('onclick', '');
+                                        $(jquery_id).append("<img src='/static/imgs/avatar/reload.gif'>");
+                                    }else if(response.data.data_list[i]['release_status']=='2'){
+                                            alert('666');
+                                        $(jquery_id).text('发布成功');
+                                        $(jquery_id).attr('style', 'color: green');
+                                        $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
+                                    }else if(response.data.data_list[i]['release_status']=='3'){
+                                        $(jquery_id).text('发布失败');
+                                        $(jquery_id).attr('style', 'color: red');
+                                        $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
+                                    }else if(response.data.data_list[i]['release_status']=='7'){
+                                        $(jquery_id).text('待发布');
+                                        $(jquery_id).attr('style', 'c   olor: red');
+                                        $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
+                                    }
+                                }
+                                }
+                            }
+                        });
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            })
+        }
 
         function ChangePage(id) {
             $.nbDataLists(id);
+        }
+
+        function do_menu() {
+            $('#menu_audit_sa').addClass('active');
         }
 
         function audit_pass(id) {
@@ -189,5 +263,92 @@
                 })
             })
         }
+
+        function do_release(ths,id) {
+            $.ajax({
+                url: '/audits_sa.html',
+                type: 'POST',
+                data: {'release_id': id},
+                dataType: 'JSON',
+                success: function (response) {
+                    if(response.status){
+                        $(ths).parent().prev().prev().html('发布中');
+                        $(ths).parent().prev().prev().attr('style', 'color: green');
+                        $(ths).parent().prev().prev().append("<img src='/static/imgs/avatar/reload.gif'>");
+                        // 刷新日志
+                        get_log(id, false);
+                    }else {
+                        alert(response.message)
+                    }
+                }
+            })
+        }
+
+        // 回调函数内部使用setTimeout 防止可能阻塞代码
+        function get_log(id, timeout) {
+            // 暴力清除所有定时器
+            for(var i = 1; i < 2000; i++) {
+                clearTimeout(i);
+            }
+            var s = 'get_log(' + id + ')';
+            if(timeout=='1') return;
+            do_log(id);
+            do_ajax();
+            var t3 = window.setTimeout(s, 3000);
+{#            var t1 = window.setInterval(do_ajax, 2000);#}
+        }
+
+        // 查询日志函数
+        function do_log(id) {
+            $('#release_div').attr('style', '');
+            $.ajax({
+                    url: '/release_log.html',
+                    type: 'GET',
+                    data: {'release_last_id': id},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if (response.status){
+                            $('#release_log').empty();
+                            $.each(response.data['data_list'], function (k,v) {
+                                var reg = /^http*/;
+                                if(reg.test(v['msg'])==false){
+                                    var ft_time = fmTime(v['time']);
+                                    var s = '<p style="display: inline-block">' + '[ ' + ft_time + ' ]' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none">' + v['msg'] +'</a><br>';}
+                                else{
+                                    var s = '<p style="display: inline-block">' + '[ ' + ft_time + ' ]' + '&nbsp&nbsp' + '</p>' + '<a style="text-decoration: none" href="' + v['msg'] + '" target="_blank">' + v['msg'] +'</a><br>';
+                                }
+                                $('#release_log').append(s);
+                            })
+                        } else {
+                            $('#release_log').html('<a>未查询到日志</a>');
+                        }
+                    }
+            })
+        }
+
+        function dateFtt(fmt,date)
+            { //author: meizz
+              var o = {
+                "M+" : date.getMonth()+1,                 //月份
+                "d+" : date.getDate(),                    //日
+                "h+" : date.getHours(),                   //小时
+                "m+" : date.getMinutes(),                 //分
+                "s+" : date.getSeconds(),                 //秒
+                "q+" : Math.floor((date.getMonth()+3)/3), //季度
+                "S"  : date.getMilliseconds()             //毫秒
+              };
+              if(/(y+)/.test(fmt))
+                fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+              for(var k in o)
+                if(new RegExp("("+ k +")").test(fmt))
+              fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+              return fmt;
+            }
+
+        function fmTime(value,row,index){
+            var crtTime = new Date(value);
+            return top.dateFtt("yyyy-MM-dd hh:mm:ss",crtTime);
+        }
+
     </script>
 {% endblock %}
