@@ -377,7 +377,6 @@ class Asset(BaseServiceList):
 
         # 前端页面请求任务状态
         task_id = request.POST.getlist('task_id', None)
-        print(task_id)
         if task_id:
             task_id_list = task_id
             con_q = Q()
