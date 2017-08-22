@@ -174,12 +174,14 @@
         function do_ajax() {
             var i = 0;
             var list_v = [];
+            var reg = /发布中/g;
+
             $('#table_body').children().each(function () {
                 i = i + 1;
                 var obj_id = $(this).children().next().next().html();
                 var obj_status = $(this).children().next().next().next().next().next().next().next().next().html();
-                var new_s = '发布中<img src=' + '/static/imgs/avatar/reload.gif>';
-                if(obj_status == '发布中' || obj_status == new_s){
+{#                var new_s = '发布中<img src=' + '/static/imgs/avatar/reload.gif>';#}
+                if(reg.test(obj_status)==true){
                     list_v.push(obj_id)
                 }
             });
@@ -201,20 +203,17 @@
                             var v = $(this).children().next().next().next().next().next().next().next().next().html();
                             var obj_id = $(this).children().next().next().html();
                             var s = 'do_release(this,' + obj_id + ')';
-                            if(v=='发布中'){
-                                alert('111');
+                            if(reg.test(v)==true){
                                 $(this).children().next().next().next().next().next().next().next().next().attr('id', str_id);
                                 $(this).children().next().next().next().next().next().next().next().next().next().next().attr('id', '');
                                    for(i in response.data.data_list){
                                     if(obj_id==response.data.data_list[i]['id']){
                                         if(response.data.data_list[i]['release_status']=='1'){
-                                            alert('555');
                                         $(jquery_id).text('发布中 ');
                                         $(jquery_id).attr('style', 'color: green');
                                         $(jquery_id).next().children(' :first-child').next().attr('onclick', '');
                                         $(jquery_id).append("<img src='/static/imgs/avatar/reload.gif'>");
                                     }else if(response.data.data_list[i]['release_status']=='2'){
-                                            alert('666');
                                         $(jquery_id).text('发布成功');
                                         $(jquery_id).attr('style', 'color: green');
                                         $(jquery_id).next().children(' :first-child').next().attr('onclick', s);

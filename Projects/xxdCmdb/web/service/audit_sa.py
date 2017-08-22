@@ -2,6 +2,9 @@
 # -*- coding:utf-8 -*-
 import json
 import re
+import time
+import os
+import threading
 from django.db.models import Q
 from repository import models
 from utils.pager import PageInfo
@@ -11,6 +14,9 @@ from utils.hostname import change_host_name
 from .base import BaseServiceList
 from utils.auditlog import audit_log
 from utils.menu import menu
+from conf import jenkins_config
+import subprocess
+
 
 
 class Asset(BaseServiceList):
@@ -336,22 +342,28 @@ class Asset(BaseServiceList):
             response.message = str(e)
         return response
 
-    @staticmethod
-    def post_assets(request):
+    # @staticmethod
+    def post_assets(self, request):
         response = BaseResponse()
 
+        # 运维审核完成后-开始发布
         release_id = request.POST.get('release_id', None)
         if release_id:
             status = models.ReleaseTask.objects.filter(id=release_id).first().release_status
-            if status != 7:
+            # 发布任务状态不是 待发布 不允许进行发布
+            if status not in [3, 7]:
                 response.status = False
                 response.message = '待审任务或完成状态不允许执行发布..'
                 return response
+            # 开始创建发布任务
             else:
                 models.ReleaseTask.objects.filter(id=release_id).update(release_status=1)
+                self.post_task(release_id)
+                audit_log(release_id, '[ %s ] 开始执行发布' % request.session['username'])
                 response.status = True
                 return response
 
+        # 运维审核流程
         audit_id = request.POST.get('audit_id', None)
         if audit_id:
             user = request.session['username']
@@ -377,4 +389,291 @@ class Asset(BaseServiceList):
 
         response.status = True
         return response
+
+    def post_task(self, release_id):
+        """
+        审核完成后的发布任务不需要再填写分支 直接发布
+        :param release_id:
+        :return:
+        """
+
+        release_obj = models.ReleaseTask.objects.filter(id=release_id).first()
+        # release_type = release_obj.release_type
+        release_env_name = release_obj.release_env.name
+        release_branch = release_obj.release_git_branch
+        release_user = release_obj.apply_user
+        project_id = release_obj.release_id
+
+        obj = models.ProjectTask.objects.filter(id=project_id).first()
+        release_name = obj.business_2
+        pack_cmd = obj.pack_cmd
+        static_type = obj.static_type
+
+        release_git_url = obj.git_url
+        release_jdk_version = obj.jdk_version
+        release_type = obj.project_type_id
+
+        release_business_1 = release_obj.release_env
+        release_business_2 = release_obj.release_name
+        task_id = release_obj.id
+
+        if release_type == 2:
+            pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
+                                                           jenkins_config.static_pkg_name[release_name])
+        else:
+            pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
+                                                           release_business_2)
+
+        # 多进程执行连接Jenkins执行
+        # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
+        # p.start()
+
+        # 多线程
+        t = threading.Thread(target=self.jenkins_task, args=(pkg_name, release_git_url, release_branch, task_id,
+                                                             release_name, release_env_name, pack_cmd, release_type,
+                                                             release_jdk_version, static_type, release_user))
+        t.start()
+        return True
+
+    def jenkins_task(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd,
+                     release_type, jdk_version, static_type, release_user):
+
+        jdk = {'1': '/usr/local/jdk8', '2': '/usr/local/jdk7', '3': '/usr/java/jdk1.6.0_32'}
+        static = {'1': '覆盖式', '2': '迭代式'}
+        release_types = {'1': 'Tomcat', '2': 'Static'}
+
+        self.log(task_id, '------------------- 开始创建发布任务 -------------------')
+        self.log(task_id, '项目名称: %s' % release_name)
+        self.log(task_id, '发布类型: %s' % release_types[str(release_type)])
+        self.log(task_id, '发布环境: %s 发布分支: %s 发布用户: %s' % (release_env, release_branch, release_user))
+        self.log(task_id, 'Java版本: %s 静态资源类型: %s' % (jdk[str(jdk_version)], static[str(static_type)]))
+        # self.log(task_id, 'git地址:%s' % release_git_url)
+        self.log(task_id, '资源地址: %s' % pkg_name.replace('/data/packages', jenkins_config.pkgUrl))
+        self.log(task_id, '-----------------------------------------------------------')
+
+        self.log(task_id, '尝试连接Jenkins...')
+
+        # time.sleep(10)
+        # models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+        # return True
+
+        # 将发布脚本发送到目标机器
+        cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_config.host)
+        os.system(cmd)
+
+        # 将配置文件发送到目标机器
+        cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, jenkins_config.host)
+        os.system(cmd)
+
+        pack_cmd = '"' + pack_cmd + '"'
+        cmd = "python2.6 {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10}".format(*[jenkins_config.script_path, pkg_name, task_id,
+                                                                              release_git_url, release_branch, release_name,
+                                                                              release_env, pack_cmd, jdk_version, release_type, static_type])
+
+        cmd = "ssh root@192.168.31.80 '%s'" % cmd
+        print(cmd)
+        os.system(cmd)
+
+        # ssh = paramiko.SSHClient()
+        # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # ssh.connect(jenkins_config.host, port=22, username='root', password='xinxindai318', timeout=3)
+        # stdin, stdout, stderr = ssh.exec_command(cmd)
+        # result = stdout.read()
+
+        obj = models.ReleaseTask.objects.filter(id=task_id).first()
+        md5 = obj.release_md5
+        print(md5)
+
+        # 发布类型为静态资源
+        if release_type == 2:
+            if release_env != 'prod':
+                nginx_ip_list = jenkins_config.nginx_test_ip_list
+            else:
+                nginx_ip_list = jenkins_config.nginx_prod_ip_list
+
+            if nginx_ip_list:
+                self.log(task_id, '------ 开始发布静态资源 ------')
+
+                num = 1
+                self.log(task_id, nginx_ip_list)
+                for ip in nginx_ip_list:
+                    self.log(task_id, '当前发布第%s台Nginx服务器%s...' % (num, ip))
+                    ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env, static_type, release_branch)
+                    if not ret:
+                        self.log(task_id, '发布第%s台Nginx服务器%s...【失败】' % (num, ip))
+                        self.log(task_id, '终止发布...')
+                        models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+                        return False
+                    if release_name == 'apk':
+                        self.log(task_id, 'apk项目仅需发布一台nginx服务器...')
+                        self.log(task_id, '正在刷新cdn..')
+
+                        cmd = 'cd %s && python2.6 cdn.py Action=RefreshObjectCaches ObjectType=File ObjectPath=%s' % \
+                              (os.path.dirname(jenkins_config.source_script_path), jenkins_config.cdn_url_1)
+                        self.log(task_id, cmd)
+                        ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                               preexec_fn=os.setsid)
+                        out, err = ret.communicate()
+                        url = str(out, encoding='utf-8')
+                        cmd = 'curl %s' % url
+                        ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                               preexec_fn=os.setsid)
+                        out, err = ret.communicate()
+
+                        cmd = 'cd %s && python2.6 cdn.py Action=RefreshObjectCaches ObjectType=File ObjectPath=%s' % \
+                              (os.path.dirname(jenkins_config.source_script_path), jenkins_config.cdn_url_2)
+                        self.log(task_id, cmd)
+                        ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                               preexec_fn=os.setsid)
+                        out, err = ret.communicate()
+                        url = str(out, encoding='utf-8')
+                        cmd = 'curl -I %s' % url
+                        ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                               preexec_fn=os.setsid)
+                        out, err = ret.communicate()
+
+                        break
+                    num += 1
+
+                models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+                self.log(task_id, '发布成功结束！')
+                return True
+            else:
+                models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+                self.log(task_id, '未配置nginx服务器地址..')
+                return False
+
+        if md5:
+            self.log(task_id, '生成资源md5...检查是否需要发布静态资源')
+            # 打包成功后查找业务线节点机器 环境 + 业务线
+            release_obj = models.ReleaseTask.objects.filter(id=task_id).first()
+            business_1 = release_obj.release_env
+            business_2 = release_obj.release_name
+            md5sum = release_obj.release_md5
+            release_type = release_obj.release_type
+            count = models.Asset.objects.filter(business_1=business_1, business_2=business_2).count()
+            values = models.Asset.objects.filter(business_1=business_1, business_2=business_2).only('id', 'host_ip')
+
+            # 发布 front和 webapp 的静态资源
+            name = str(release_name)
+            if name in jenkins_config.static_nginx_dict:
+                self.log(task_id, '----- 向Nginx发布static静态资源 -----')
+                num = 1
+                if release_env != 'prod':
+                    nginx_ip_list = jenkins_config.nginx_test_ip_list
+                else:
+                    nginx_ip_list = jenkins_config.nginx_prod_ip_list
+
+                result = True
+                if nginx_ip_list:
+                    for ip in nginx_ip_list:
+                        self.log(task_id, '当前发布第%s台Nginx服务器%s...' % (num, ip))
+                        ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env, static_type, release_branch)
+                        if not ret:
+                            self.log(task_id, '发布第%s台Nginx服务器%s...【失败】' % (num, ip))
+                            self.log(task_id, '终止发布...')
+                            models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+                            result = False
+                            break
+                        num += 1
+                else:
+                    self.log(task_id, '未配置nginx服务器地址..')
+
+                if not result:
+                    self.log(task_id, '发布失败！')
+                    return False
+
+            self.log(task_id, '----- 共需发布【%s】台节点服务器 -------' % count)
+            num = 1
+            result = True
+            for item in values:
+                print(item.host_ip)
+                self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
+                # 目标机开始执行发布脚本
+                ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type, business_2)
+                if not ret:
+                    self.log(task_id, '当前发布第%s台%s...【失败】' % (num, item.host_ip))
+                    self.log(task_id, '终止发布...')
+                    models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+                    result = False
+                    break
+                num += 1
+
+            if result:
+                if release_type == 1:
+                    self.log(task_id, 'Java start success...')
+                self.log(task_id, '发布成功结束！')
+                audit_log(task_id, '[ 系统 ] 发布成功结束！')
+                models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+            else:
+                self.log(task_id, '发布失败！')
+                models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+
+        else:
+            # ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+            #                        preexec_fn=os.setsid)
+            # out, err = ret.communicate()
+            # err = str(err, encoding='utf-8')
+            # self.log(task_id, err)
+            # self.log(task_id, '......拉取代码失败')
+            self.log(task_id, '发布终止！')
+            models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+
+    def log(self, task_id, msg):
+        """
+        记录日志
+        :param task_id:
+        :param msg:
+        :return:
+        """
+        models.ReleaseLog.objects.create(release_id=task_id, release_msg=msg)
+
+    def shell_task(self, ip, pkgUrl, md5sum, taskId, serviceType, name):
+        """
+        连接发布目标机开始执行发布脚本
+        :return:
+        """
+        pkgUrl = pkgUrl.replace('/data/packages', jenkins_config.pkgUrl)
+        cmd = "scp %s root@%s:/opt/" % (jenkins_config.source_script_path, ip)
+        os.system(cmd)
+
+        # 将配置文件发送到目标机器
+        cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, ip)
+        os.system(cmd)
+
+        cmd = "ssh root@%s 'pip install requests'" % ip
+        os.system(cmd)
+
+        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId, serviceType, name)
+        # 脚本执行过程中 会陆续上传执行日志
+        ret = os.system(cmd)
+        if ret:
+            self.log(taskId, '错误代码...%s' % ret)
+            print(ret)
+            return False
+        # print(out, err)
+        print(ret)
+        return True
+
+    def nginx_task(self, ip, name, pkgUrl, taskId, env, static_type, branch):
+        pkgUrl = pkgUrl.replace('/data/packages', jenkins_config.pkgUrl)
+
+        if name in jenkins_config.static_nginx_dict:
+            pkgUrl = '%s/%s' % (os.path.dirname(pkgUrl), 'static.zip')
+
+        cmd = "scp %s root@%s:/opt/" % (jenkins_config.source_script_path, ip)
+        os.system(cmd)
+
+        cmd = "ssh root@%s 'pip install requests'" % ip
+        os.system(cmd)
+
+        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, name, pkgUrl, taskId, env,
+                                                                static_type, branch)
+        self.log(taskId, '%s' % cmd)
+        print(cmd)
+        ret = os.system(cmd)
+        if ret:
+            self.log(taskId, '发布静态资源错误, 代码...%s' % ret)
+            return False
+        return True
 

@@ -25,7 +25,7 @@ def menu(request):
         menu_str = '''
                 <a id="menu_audit_db" class="menu-item" href="/audit_db.html">
                     <i class="fa fa-connectdevelop" aria-hidden="true" style="width: 14px; margin-left: 1px"></i>
-                    <span>DBA 审核</span>
+                    <span>DBA审核</span>
                 </a>
         '''
     elif group == 'sa':

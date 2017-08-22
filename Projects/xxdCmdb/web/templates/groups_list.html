@@ -259,7 +259,7 @@
                 business_one_list.push(v);
             });
             $('#business_1').selectpicker('val', business_one_list);
-            var group_name = $(ths).parents().prev().prev().prev().prev().text();
+            var group_name = $(ths).parents().prev().prev().prev().prev().html();
             $('#ap_name').val(group_name);
             $(ths).parent().prev().prev().children().each(function () {
                 var v = $(this).attr('hid');

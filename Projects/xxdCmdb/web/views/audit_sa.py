@@ -33,7 +33,8 @@ class ApplyJsonView(View):
         return JsonResponse(response.__dict__)
 
     def post(self, request):
-        response = audit_sa.Asset.post_assets(request)
+        obj = audit_sa.Asset()
+        response = obj.post_assets(request)
         return JsonResponse(response.__dict__)
 
 
