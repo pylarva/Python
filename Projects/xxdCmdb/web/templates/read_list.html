@@ -110,7 +110,7 @@
     <script>
         $(function () {
             $.initMenu('#menu_asset');
-            $.nbDataList('/reads.html');
+            $.nbDataList('/reads.html', 1);
             $('#menu_item').addClass('active');
             var m = $('#msg').text();
             if(m==''){
@@ -119,7 +119,7 @@
             }
         });
         function ChangePage(id) {
-                $.nbDataList('/reads.html', id);
+                $.nbDataLists(id);
             }
         function authorize(ths, ip, id) {
             var user_rank = $(ths).parent().prev().children().val();

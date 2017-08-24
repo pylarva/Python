@@ -400,6 +400,7 @@ class Project(BaseServiceList):
         release_env = request.POST.get('release_env')
         release_branch = request.POST.get('release_branch')
         release_time = time.strftime('%Y-%m-%d %H:%M')
+        print(release_time)
         release_user = request.POST.get('user_name')
 
         obj = models.ProjectTask.objects.filter(id=release_id).first()

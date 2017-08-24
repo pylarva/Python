@@ -316,6 +316,51 @@
     }
 
     /*
+     页面初始化（获取数据，绑定事件）(这个没有加用户自定义菜单 防止重复)
+     */
+    function initializes(pager) {
+        $.Show('#shade,#loading');
+        var conditions = JSON.stringify(aggregationSearchCondition());
+        var $body = $('#table_body');
+        var username = $.cookie('username');
+        $.ajax({
+            url: requestUrl,
+            type: 'GET',
+            traditional: true,
+            data: {'condition': conditions, 'pager': pager, 'username': username},
+            dataType: 'JSON',
+            success: function (response) {
+                $.Hide('#shade,#loading');
+                if (response.status) {
+                    initGlobal(response.data.global_dict);
+                    initTableHeader(response.data.table_config);
+                    initTableBody(response.data.page_info.page_start, response.data.data_list, response.data.table_config);
+                    initPager(response.data.page_info.page_str);
+                    initSearchCondition(response.data.condition_config);
+                    $.BindDoSingleCheck('#table_body', null, null);
+                    if(requestUrl=='/authorizes.html'){
+                        setTimeout("do_aaa()", 100);
+                    }
+                    else if(requestUrl=='/projects_list.html'){
+                        // setTimeout("do_bbb()", 100);
+                        setTimeout("$.TableEditMode(this, '#table_body', null, null)", 100);
+                    }
+                    else if(requestUrl=='/projects_list_r.html'){
+                        // setTimeout("do_bbb()", 100);
+                        setTimeout("$.TableEditMode(this, '#table_body', null, null)", 100);
+                    }
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                $.Hide('#shade,#loading');
+            }
+        })
+
+    }
+
+    /*
      检查cookie里面的用户名
      */
     function usernameCookie() {
@@ -336,6 +381,7 @@
      自定义用户菜单栏
      */
     function initMenu(str) {
+
         $('#user_menu').append(str);
     }
 
@@ -986,7 +1032,7 @@
         },
 
         'nbDataLists': function (page_num) {
-            initialize(page_num);
+            initializes(page_num);
         }
 
     });

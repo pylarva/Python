@@ -295,7 +295,42 @@
                 $.Hide('#shade,#loading');
             }
         })
+    }
 
+    /*
+     页面初始化（获取数据，绑定事件）(这个没有加用户自定义菜单 防止点分页出现重复菜单)
+     */
+    function initializes(pager) {
+        $.Show('#shade,#loading');
+        var conditions = JSON.stringify(aggregationSearchCondition());
+        var $body = $('#table_body');
+        var username = $.cookie('username');
+        $.ajax({
+            url: requestUrl,
+            type: 'GET',
+            traditional: true,
+            data: {'condition': conditions, 'pager': pager, 'username': username},
+            dataType: 'JSON',
+            success: function (response) {
+                $.Hide('#shade,#loading');
+                if (response.status) {
+                    initGlobal(response.data.global_dict);
+                    initTableHeader(response.data.table_config);
+                    initTableBody(response.data.page_info.page_start, response.data.data_list, response.data.table_config);
+                    initPager(response.data.page_info.page_str);
+                    initSearchCondition(response.data.condition_config);
+                    $.BindDoSingleCheck('#table_body', null, null);
+                    if(requestUrl=='/authorizes.html'){
+                        setTimeout("do_aaa()", 100);
+                    }
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                $.Hide('#shade,#loading');
+            }
+        })
     }
 
     /*
@@ -967,7 +1002,12 @@
         },
 
         'nbDataLists': function (page_num) {
-            initialize(page_num);
+            // requestUrl = url;
+            // usernameCookie();
+            initializes(page_num);
+            // bindMenuFunction();
+            // bindMultiSelect();
+            // bindSearchCondition();
         }
 
     });

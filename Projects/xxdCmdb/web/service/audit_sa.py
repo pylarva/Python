@@ -367,6 +367,12 @@ class Asset(BaseServiceList):
         audit_id = request.POST.get('audit_id', None)
         if audit_id:
             user = request.session['username']
+            status = models.ReleaseTask.objects.filter(id=audit_id).first().release_status
+
+            if status not in [6]:
+                response.status = False
+                response.message = '审核失败..'
+                return response
 
             models.ReleaseTask.objects.filter(id=audit_id).update(release_status=7)
             audit_log(audit_id, '[ %s ] SA审核通过' % user)
