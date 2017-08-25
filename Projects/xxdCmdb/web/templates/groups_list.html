@@ -303,7 +303,8 @@
                         if(data_dict.status){
                             location.reload();
                         }else {
-                            $('#add_error_02').text(data_dict.message)
+                            alert(data_dict.message);
+                            location.reload();
                         }
                     }
                 })

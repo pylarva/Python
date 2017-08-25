@@ -564,7 +564,7 @@
      */
     function bindSubmitSearchCondition() {
         $('#search_condition_submit').click(function () {
-            initialize(1);
+            initializes(1);
         });
     }
 

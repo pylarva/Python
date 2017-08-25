@@ -94,7 +94,7 @@ class Asset(BaseServiceList):
                 'title': "状态",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@release_status_list'}},
-                'attr': {}
+                'attr': {'style': 'font-size: 13px; width:220px;'}
             },
             {
                 'q': 'apply_time',
@@ -236,6 +236,12 @@ class Asset(BaseServiceList):
 
                 if con_dicts.get('host_ip__contains'):
                     condition_dict['host_ip__contains'] = con_dicts.get('host_ip__contains')
+
+                if con_dicts.get('id__contains'):
+                    condition_dict['id__contains'] = con_dicts.get('id__contains')
+
+                if con_dicts.get('release_name'):
+                    condition_dict['release_name'] = con_dicts.get('release_name')
         else:
             condition_dict = {}
 

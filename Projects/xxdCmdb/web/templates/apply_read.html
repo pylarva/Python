@@ -139,10 +139,32 @@
         $(function () {
             $.initMenu('#menu_record');
             $.nbDataList('/apply_reads.html', '1');
+            window.setTimeout(add_style, 200)
         });
 
         function ChangePage(id) {
             $.nbDataLists(id);
+            window.setTimeout(add_style, 200)
+        }
+
+        function add_style() {
+            $('#table_body').children().each(function () {
+                var v = $(this).children().next().next().next().next().next().next().next().next().html();
+                if(v=='发布失败'){
+                    $(this).children().next().next().next().next().next().next().next().next().first().attr('style', 'display: inline-block; padding: 3px; background-color: #ff9999; margin-top:4px; margin-left:6px; margin-right:-20px')
+                }else if(v=='发布成功'){
+                    $(this).children().next().next().next().next().next().next().next().next().first().attr('style', 'display: inline-block; padding: 3px; background-color: rgb(92,184,92); margin-top:4px; margin-left:6px; margin-right:-20px')
+                }else if(v=='待发布'){
+                    $(this).children().next().next().next().next().next().next().next().next().first().attr('style', 'display: inline-block; padding: 3px; background-color: #cc99ff; margin-top:4px; margin-left:6px; margin-right:-20px')
+                }else if(v=='已撤销'){
+                    $(this).children().next().next().next().next().next().next().next().next().first().attr('style', '')
+                }else if(v=='发布中'){
+                    $(this).children().next().next().next().next().next().next().next().next().first().attr('style', 'display: inline-block; padding: 3px; background-color: #99ccff; margin-top:4px; margin-left:6px; margin-right:-20px')
+                }
+                else {
+                    $(this).children().next().next().next().next().next().next().next().next().first().attr('style', 'display: inline-block; padding: 3px; background-color: #ffff99; margin-top:4px; margin-left:6px; margin-right:-20px')
+                }
+            })
         }
 
         // 删除申请记录

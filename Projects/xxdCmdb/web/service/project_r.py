@@ -130,7 +130,7 @@ class ProjectRead(BaseServiceList):
                     'content': "<i class='fa fa-paper-plane-o' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'> 申请发布</a>",
                                # "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='get_log({nid},false)'>详细</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
-                'attr': {'style': 'font-size: 13px; width:220px;'}
+                'attr': {'style': 'font-size: 13px; width:100px;'}
             },
         ]
         # 额外搜索条件
@@ -423,10 +423,19 @@ class ProjectRead(BaseServiceList):
         release_branch = request.POST.get('release_branch')
         release_reason = request.POST.get('release_reason')
         release_db = request.POST.get('release_db')
-        t = datetime.datetime.now() + datetime.timedelta(hours=8)
+        # t = datetime.datetime.now() + datetime.timedelta(hours=8)
+        t = datetime.datetime.now()
         release_time = t.strftime('%Y-%m-%d %H:%M')
         # release_user = request.POST.get('user_name')
         release_user = request.session['username']
+
+        release_last_id = request.POST.get('release_last_id', None)
+        if release_last_id:
+            last_status = models.ReleaseTask.objects.filter(id=release_last_id).first().release_status
+            if last_status not in [2, 3, 8]:
+                response.status = False
+                response.message = '当前项目有未执行完的上线流程、请等待上线流程完成后再申请..'
+                return response
 
         print(release_id, release_env, release_branch, release_reason, release_db, release_time, release_user)
 
@@ -455,65 +464,10 @@ class ProjectRead(BaseServiceList):
         models.ReleaseTask.objects.filter(id=release_obj.id).update(release_status=4)
 
         # 项目审核日志
-        # models.AuditLog.objects.create(audit_id=release_obj.id, audit_msg='[ %s ] 上线申请提交..' % release_user)
-        # models.AuditLog.objects.create(audit_id=release_obj.id, audit_msg='[ %s ] 上线说明: %s' % (release_user, release_reason))
-        # models.AuditLog.objects.create(audit_id=release_obj.id, audit_msg='[ 系统 ] 等待项目经理审核..')
         audit_log(release_obj.id, '[ %s ] 上线申请提交..' % release_user)
         audit_log(release_obj.id, '[ %s ] 上线说明: %s' % (release_user, release_reason))
         audit_log(release_obj.id, '[ 系统 ] 等待项目经理审核..')
 
-        response.status = True
-        return response
-
-        obj = models.ProjectTask.objects.filter(id=release_id).first()
-        release_name = obj.business_2
-        pack_cmd = obj.pack_cmd
-        static_type = obj.static_type
-
-        obj_env = models.BusinessOne.objects.filter(id=release_env).first()
-        release_env_name = obj_env.name
-
-        release_git_url = obj.git_url
-        release_jdk_version = obj.jdk_version
-        release_type = obj.project_type_id
-
-        try:
-            release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
-                                             release_git_branch=release_branch, release_id=release_id,
-                                             release_user=release_user, release_git_url=release_git_url,
-                                             release_jdk_version=release_jdk_version, release_type_id=release_type,
-                                             release_status=4)
-            release_obj.save()
-
-            models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id,
-                                                                    release_last_time=release_time)
-
-            response.data = {'id': release_obj.id, 'time': release_time}
-            release_business_1 = release_obj.release_env
-            release_business_2 = release_obj.release_name
-            task_id = release_obj.id
-
-            # 返回给页面新的发布ID和时间
-            release_name = str(release_name)
-
-            if release_type == 2:
-                pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
-                                                               jenkins_config.static_pkg_name[release_name])
-            else:
-                pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
-                                                               release_business_2)
-
-            # 多进程执行连接Jenkins执行
-            # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
-            # p.start()
-
-            # 多线程
-            t = threading.Thread(target=self.jenkins_task, args=(pkg_name, release_git_url, release_branch, task_id,
-                                                                 release_name, release_env_name, pack_cmd, release_type,
-                                                                 release_jdk_version, static_type, release_user))
-            t.start()
-        except Exception as e:
-            print(e)
         response.status = True
         return response
 

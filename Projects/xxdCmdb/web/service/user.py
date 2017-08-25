@@ -21,7 +21,7 @@ class User(BaseServiceList):
             {
                 'q': 'id',  # 用于数据库查询的字段，即Model.Tb.objects.filter(*[])
                 'title': "ID",  # 前段表格中显示的标题
-                'display': 1,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
+                'display': 0,  # 是否在前段显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
                 'attr': {}  # 自定义属性
             },
@@ -36,15 +36,21 @@ class User(BaseServiceList):
             {
                 'q': 'group',
                 'title': "用户组",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@group'}},
-                'attr': {'name': 'email', 'id': '@email', 'origin': '@email', 'edit-enable': 'true',
+            },
+            {
+                'q': 'group__name',
+                'title': "用户组",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@group__name'}},
+                'attr': {'name': 'email', 'id': '@group', 'origin': '@group', 'edit-enable': 'true', 'value': '@group',
                          'edit-type': 'input', }
             },
             {
                 'q': 'business_one',
                 'title': "环境",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@business_one'}},
                 'attr': {'name': 'email', 'id': '@email', 'origin': '@email', 'edit-enable': 'true',
                          'edit-type': 'input', }
@@ -52,7 +58,7 @@ class User(BaseServiceList):
             {
                 'q': 'business_two',
                 'title': "业务2",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@business_two'}},
                 'attr': {'name': 'email', 'id': '@email', 'origin': '@email', 'edit-enable': 'true',
                          'edit-type': 'input', }
@@ -60,7 +66,7 @@ class User(BaseServiceList):
             {
                 'q': 'business_three',
                 'title': "业务3",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@business_three'}},
                 'attr': {'name': 'email', 'id': '@email', 'origin': '@email', 'edit-enable': 'true',
                          'edit-type': 'input', }
@@ -70,9 +76,11 @@ class User(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='#'>编辑</a>",
+                    'content': "<i class='fa fa-pencil-square-o' aria-hidden='true'></i> <a href='#' onclick='edit_user(this, {id})'>编辑</a> | "
+                               "<i class='fa fa-user-plus' aria-hidden='true'></i> <a href='#' onclick='add_user(this, {id})'>添加</a> | "
+                               "<i class='fa fa-times' aria-hidden='true'></i> <a href='#' onclick='del_user(this, {id})'>删除</a>",
                     'kwargs': {'id': '@id', 'nid': '@id'}},
-                'attr': {}
+                'attr': {'style': 'font-size: 13px; width:220px;'},
             },
         ]
         # 额外搜索条件
@@ -163,7 +171,6 @@ class User(BaseServiceList):
                 response.status = True
             except Exception as e:
                 print(e)
-                print(99999)
                 response.status = False
             return response
 

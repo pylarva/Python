@@ -143,6 +143,7 @@ class Group(BaseServiceList):
                 response.status = True
             except Exception as e:
                 response.status = False
+                response.message = ' %s 组已经存在!' % new_group_name
             return response
 
         del_group_id = request.POST.get('del_group_id', None)

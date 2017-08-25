@@ -369,7 +369,7 @@ class Asset(BaseServiceList):
             user = request.session['username']
             status = models.ReleaseTask.objects.filter(id=audit_id).first().release_status
 
-            if status not in [6]:
+            if status != 6:
                 response.status = False
                 response.message = '审核失败..'
                 return response
@@ -410,7 +410,7 @@ class Asset(BaseServiceList):
         project_id = release_obj.release_id
 
         obj = models.ProjectTask.objects.filter(id=project_id).first()
-        release_name = obj.business_2
+        release_name = obj.business_2.name
         pack_cmd = obj.pack_cmd
         static_type = obj.static_type
 

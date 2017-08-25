@@ -73,7 +73,7 @@
         </tr>
         <tr>
             <td>JDK版本</td>
-            <td colspan="4">{{ response.data.release_jdk_version }}</td>
+            <td colspan="4">{{ response.data.get_release_jdk_version_display}}</td>
         </tr>
         <tr>
             <td>申请发布</td>
@@ -126,6 +126,14 @@
             {% elif response.data.release_status == 2 %}
                 <th colspan="5">
                     <img src="/static/imgs/release_5.png" style="display: inline-block">
+                </th>
+            {% elif response.data.release_status == 1 %}
+                <th colspan="5">
+                    <img src="/static/imgs/release_7.png" style="display: inline-block">
+                </th>
+            {% elif response.data.release_status == 3 %}
+                <th colspan="5">
+                    <img src="/static/imgs/release_6.png" style="display: inline-block">
                 </th>
             {% endif %}
         </tr>

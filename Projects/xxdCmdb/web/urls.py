@@ -81,7 +81,7 @@ urlpatterns = [
     url(r'^projects_reads.html$', projects.ProjectJsonReadView.as_view()),
 
     url(r'^project_list_r.html$', projects.ProjectsReadListView.as_view()),
-    url(r'^projects_list_r.html$', projects.ProjectsJsonView.as_view()),
+    url(r'^projects_list_r.html$', projects.ProjectsJsonReadView.as_view()),
 
     url(r'^release.html$', release.ReleaseListView.as_view()),
     url(r'^releases.html$', release.ReleaseJsonView.as_view()),

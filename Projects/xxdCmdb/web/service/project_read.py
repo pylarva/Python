@@ -56,6 +56,7 @@ class ProjectRead(BaseServiceList):
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@git_url'}},
                 'attr': {}
+
             },
             {
                 'q': 'project_type__name',
@@ -139,19 +140,18 @@ class ProjectRead(BaseServiceList):
             {
                 'q': 'status',
                 'title': "发布状态",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@device_status_list'}},
                 'attr': {}
             },
             {
                 'q': None,
                 'title': "选项",
-                'display': 0,
+                'display': 1,
                 'text': {
-                    'content': "<i class='fa fa-paper-plane-o' aria-hidden='true'></i><a href='#' onclick='do_release(this,{nid})'> 申请发布</a>",
-                               # "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='get_log({nid},false)'>详细</a>",
+                    'content': "<i class='fa fa-television' aria-hidden='true'></i><a href='/apply_read.html?id=461' target='_blank'> 历史发布</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
-                'attr': {'style': 'font-size: 13px; width:220px;'}
+                'attr': {'style': 'font-size: 13px; width:100px;'}
             },
         ]
         # 额外搜索条件

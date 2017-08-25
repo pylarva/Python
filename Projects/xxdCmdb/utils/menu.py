@@ -13,7 +13,6 @@ def menu(request):
     """
     user = request.session['username']
     group = models.UserProfile.objects.filter(name=user).first().group.name
-    print(group)
     if group == 'pm':
         menu_str = '''
                 <a id="menu_audit" class="menu-item" href="/audit.html">

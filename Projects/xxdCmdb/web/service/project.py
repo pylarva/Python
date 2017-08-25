@@ -19,6 +19,7 @@ from .base import BaseServiceList
 import jenkins
 from conf import jenkins_config
 from utils.menu import menu
+from utils.auditlog import audit_log
 
 
 class Project(BaseServiceList):
@@ -400,6 +401,7 @@ class Project(BaseServiceList):
         release_env = request.POST.get('release_env')
         release_branch = request.POST.get('release_branch')
         release_time = time.strftime('%Y-%m-%d %H:%M')
+        print('-----------------------')
         print(release_time)
         release_user = request.POST.get('user_name')
 
@@ -419,7 +421,8 @@ class Project(BaseServiceList):
             release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
                                              release_git_branch=release_branch, release_id=release_id,
                                              apply_user=release_user, release_git_url=release_git_url,
-                                             release_jdk_version=release_jdk_version, release_type_id=release_type)
+                                             release_jdk_version=release_jdk_version, release_type_id=release_type,
+                                             apply_time='-')
             release_obj.save()
 
             models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id,
@@ -429,6 +432,10 @@ class Project(BaseServiceList):
             release_business_1 = release_obj.release_env
             release_business_2 = release_obj.release_name
             task_id = release_obj.id
+
+            audit_log(release_obj.id, '[ %s ] 上线紧急发布任务 ' % request.session['username'])
+            audit_log(release_obj.id, '[ 系统 ] 自动完成审核任务 ')
+            audit_log(release_obj.id, '[ %s ] 开始发布..' % request.session['username'])
 
             # 返回给页面新的发布ID和时间
             release_name = str(release_name)
@@ -622,6 +629,7 @@ class Project(BaseServiceList):
                 if release_type == 1:
                     self.log(task_id, 'Java start success...')
                 self.log(task_id, '发布成功结束！')
+                audit_log(release_obj.id, '[ 系统 ] 发布成功结束！')
                 models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
             else:
                 self.log(task_id, '发布失败！')

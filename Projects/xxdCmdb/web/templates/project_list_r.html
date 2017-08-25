@@ -212,7 +212,7 @@
                                         if(response.data.data_list[i]['release_status']=='1'){
                                         $(jquery_id).text('发布中 ');
                                         $(jquery_id).attr('style', 'color: green');
-                                        $(jquery_id).next().children(' :first-child').next().attr('onclick', '');
+{#                                        $(jquery_id).next().children(' :first-child').next().attr('onclick', '');#}
                                         $(jquery_id).append("<img src='/static/imgs/avatar/reload.gif'>");
                                     }else if(response.data.data_list[i]['release_status']=='2'){
                                         $(jquery_id).text('发布成功');
@@ -222,15 +222,18 @@
                                         $(jquery_id).text('发布失败');
                                         $(jquery_id).attr('style', 'color: red');
                                         $(jquery_id).next().children(' :first-child').next().attr('onclick', s);
-                                    }else if(response.data.data_list[i]['release_status']=='4') {
-                                            $(jquery_id).text('待审核');
-                                            $(jquery_id).attr('style', 'color: blue');
-                                            $(jquery_id).next().children(' :first-child').next().attr('onclick', '');
                                     }else if(response.data.data_list[i]['release_status']=='5') {
                                             $(jquery_id).text('待发布');
-                                            $(jquery_id).attr('style', 'color: red');
-                                            $(jquery_id).next().children(' :first-child').next().attr('onclick', '');
-                                    }
+                                            $(jquery_id).attr('style', 'color: blue');
+{#                                            $(jquery_id).next().children(' :first-child').next().attr('onclick', '');#}
+                                    }else if(response.data.data_list[i]['release_status']=='8') {
+                                            $(jquery_id).text('已撤销');
+{#                                            $(jquery_id).attr('style', 'color: blue');#}
+{#                                            $(jquery_id).next().children(' :first-child').next().attr('onclick', '');#}
+                                    }else {
+                                            $(jquery_id).text('待审核');
+                                            $(jquery_id).attr('style', 'color: blue');
+                                        }
                                 }
                                 }
                             }
@@ -255,6 +258,7 @@
             var release_branch = $(ths).parent().prev().prev().prev().prev().prev().prev().children().val();
             var release_reason = $(ths).parent().prev().prev().prev().prev().prev().children().val();
             var release_db = $(ths).parent().prev().prev().prev().prev().children().val();
+            var release_last_id = $(ths).parent().prev().prev().prev().html();
             var v = $(ths).parent().prev().prev().prev().prev().prev().prev().prev().prev().prev().prev().html();
             var s = '#status' + v;
             var user_name = $.cookie('username');
@@ -277,7 +281,7 @@
                 $.ajax({
                     url: '/projects_list_r.html',
                     type: 'POST',
-                    data: {'id': id, 'release_env': release_env, 'release_branch': release_branch,
+                    data: {'id': id, 'release_env': release_env, 'release_branch': release_branch, 'release_last_id': release_last_id,
                            'user_name': user_name, 'release_reason': release_reason, 'release_db':release_db },
                     dataType: 'JSON',
                     success: function (response) {
