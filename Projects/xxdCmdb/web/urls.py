@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'^add-asset.html$', asset.AddAssetView.as_view()),
 
     url(r'^config.html$', config.AssetListView.as_view()),
+    url(r'^configs.html$', config.ConfigListView.as_view()),
 
     url(r'^read.html$', read.ReadListView.as_view()),
     url(r'^reads.html$', read.ReadJsonView.as_view()),

@@ -431,11 +431,14 @@ class ProjectRead(BaseServiceList):
 
         release_last_id = request.POST.get('release_last_id', None)
         if release_last_id:
-            last_status = models.ReleaseTask.objects.filter(id=release_last_id).first().release_status
-            if last_status not in [2, 3, 8]:
-                response.status = False
-                response.message = '当前项目有未执行完的上线流程、请等待上线流程完成后再申请..'
-                return response
+            try:
+                last_status = models.ReleaseTask.objects.filter(id=release_last_id).first().release_status
+                if last_status not in [2, 3, 8]:
+                    response.status = False
+                    response.message = '当前项目有未执行完的上线流程、请等待上线流程完成后再申请..'
+                    return response
+            except Exception as e:
+                pass
 
         print(release_id, release_env, release_branch, release_reason, release_db, release_time, release_user)
 
