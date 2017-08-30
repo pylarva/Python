@@ -64,7 +64,7 @@ Diff_obj = {'front': 'ROOT', 'seo': 'ROOT', 'webapi': 'ROOT', 'sso': 'ROOT', 'sh
 soft_link_list = {'front':'ROOT', 'xxdai_sys_admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm', 'v5_mobile': 'v5_mobile'}
 
 # 打包不需要 -P 参数的项目列表
-pkg_cmd_no_p_list = ['webapp', 'admin', 'batch', 'credit', 'finance', 'mobile', 'seo', 'tradews', 'webservice', 'front']
+pkg_cmd_no_p_list = ['webapp', 'xxdai_sys_admin', 'xxdai_batch', 'credit_app', 'finance', 'v5_mobile', 'seo', 'xxdai_tradews', 'yx_service', 'front']
 
 # Java环境变量
 java_version_path = {'1': '/usr/local/jdk8', '2': '/usr/local/jdk7', '3': '/usr/java/jdk1.6.0_32'}
