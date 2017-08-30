@@ -34,6 +34,13 @@ def menu(request):
                     <span>S A 审核</span>
                 </a>
         '''
+    elif group == 'config':
+        menu_str = '''
+                <a id="menu_config" class="menu-item" href="/configs.html">
+                    <i class="fa fa-cog" aria-hidden="true" style="width: 14px; margin-left: 1px"></i>
+                    <span>配置修改</span>
+                </a>
+        '''
     elif group == 'develop':
         menu_str = '''
                 <a id="menu_apply" class="menu-item" href="/project_list.html">

@@ -23,6 +23,7 @@ from web.views import audit
 from web.views import audit_db
 from web.views import audit_sa
 from web.views import logs
+from web.views import document
 
 urlpatterns = [
     url(r'^login.html$', account.LoginView.as_view()),
@@ -111,5 +112,5 @@ urlpatterns = [
 
     url(r'^chart-(?P<chart_type>\w+).html$', home.ChartView.as_view()),
 
-
+    url(r'^document-(?P<nid>\d+).html$', document.DocumentListView.as_view()),
 ]

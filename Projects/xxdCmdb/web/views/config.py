@@ -11,6 +11,7 @@ from repository import models
 # from web.service.login import auth_admin
 from utils.response import BaseResponse
 from conf import jenkins_config
+from utils.menu import menu
 
 user_list = ['admin', 'xuguohua', 'yanyunfei']
 
@@ -149,6 +150,8 @@ class ConfigListView(View):
 
     def get(self, request, *args, **kwargs):
         response = BaseResponse()
+        ret = {}
+
         file = request.GET.get('file', None)
         business_id = request.GET.get('business_id', None)
         if file and business_id:
@@ -181,6 +184,10 @@ class ConfigListView(View):
             return JsonResponse(response.__dict__)
 
         business_two_list = models.BusinessTwo.objects.all()
+
+        ret['menu'] = menu(request)
+        response.data = ret
+
         return render(request, 'configs.html', {'business_two_list': business_two_list})
 
     def post(self, request):
