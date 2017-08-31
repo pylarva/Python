@@ -53,11 +53,8 @@
                     <a id="check_cancel" class="btn btn-default no-radius"><i class="fa fa-minus-square-o"></i> 取消</a>
                     <a id="check_reverse" class="btn btn-default no-radius"><i
                             class="fa fa-check-square-o"></i> 反选</a>
-                    <a class="btn btn-default no-radius" href="/add-asset.html"><i class="fa fa-plus-circle"></i>添加</a>
+                    <a class="btn btn-default no-radius" href="#" onclick="add_vpn()"><i class="fa fa-plus-circle"></i>添加</a>
                     <a id="do_delete" class="btn btn-default no-radius"><i class="fa fa-trash"></i> 删除</a>
-                    <a id="edit_mode_target" class="btn btn-default no-radius"><i class="fa fa-pencil-square-o"></i>
-                        <span>进入编辑模式</span></a>
-                    <a id="do_save" class="btn btn-default no-radius"><i class="fa fa-floppy-o"></i> 保存</a>
                     <a id="do_refresh" class="btn btn-default no-radius"><i class="fa fa-refresh"></i> 刷新</a>
                     <a id="handle_status" class="btn no-radius" tabindex="0" role="button" data-toggle="manual"
                        data-trigger="focus" data-container="body" data-html="true" data-placement="bottom" title="错误详细"
@@ -109,6 +106,32 @@
     </div>
     <!-- 删除层结束 -->
 
+    <!-- 添加业务线开始 -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">新增VPN账号</h4>
+              </div>
+              <form id="form1">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">用户名</label>
+                    <input type="text" class="form-control" id="new_name">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <span id="error_message" style="color: red;"></span>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button id="commit_add" type="button" class="btn btn-primary">保存</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+    <!-- 添加业务线开始 -->
+
     <!-- 遮罩层开始 -->
     <div id='shade' class='shade hide'></div>
     <!-- 遮罩层结束 -->
@@ -131,7 +154,27 @@
         });
 
         function ChangePage(id) {
-                $.nbDataLists(id);
-            }
+            $.nbDataLists(id);
+        }
+
+        function add_vpn() {
+            $('#exampleModal').modal();
+            $('#commit_add').click(function () {
+                var new_name = $('#new_name').val();
+                $.ajax({
+                url: '/vpns.html',
+                type: 'POST',
+                data: {'new_name': new_name},
+                dataType: 'JSON',
+                success: function (response) {
+                    if (response.status){
+                        $('#exampleModal').hide();
+                    } else {
+                    }
+                }
+                })
+            })
+
+        }
     </script>
 {% endblock %}

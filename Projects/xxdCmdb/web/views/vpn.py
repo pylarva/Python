@@ -31,7 +31,7 @@ class VpnJsonView(View):
         response = vpn.Asset.delete_assets(request)
         return JsonResponse(response.__dict__)
 
-    def put(self, request):
+    def post(self, request):
         response = vpn.Asset.put_assets(request)
         return JsonResponse(response.__dict__)
 

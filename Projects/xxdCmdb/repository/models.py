@@ -370,10 +370,14 @@ class VpnAccount(models.Model):
     """
     vpn账号
     """
+    active_status = (
+        (1, '正常'),
+        (2, '注销'),
+    )
     name = models.CharField(max_length=32, null=True, blank=True)
     password = models.CharField(max_length=108, null=True, blank=True)
-    register_time = models.DateTimeField(auto_created=True, blank=True, null=True)
-    active = models.IntegerField(null=True, blank=True, default=1)
+    register_time = models.CharField(max_length=32, blank=True, null=True)
+    active = models.IntegerField(choices=active_status, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "vpn 账号表"

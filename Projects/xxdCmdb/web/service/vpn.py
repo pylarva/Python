@@ -2,6 +2,9 @@
 # -*- coding:utf-8 -*-
 import json
 import re
+import time
+import random
+import hashlib
 from django.db.models import Q
 from repository import models
 from utils.pager import PageInfo
@@ -14,7 +17,7 @@ from .base import BaseServiceList
 class Asset(BaseServiceList):
     def __init__(self):
         condition_config = [
-            {'name': 'vpn_name', 'text': '用户', 'condition_type': 'input'},
+            {'name': 'name', 'text': '用户', 'condition_type': 'input'},
         ]
         table_config = [
             {
@@ -25,15 +28,22 @@ class Asset(BaseServiceList):
                 'attr': {}
             },
             {
-                'q': 'vpn_name',
+                'q': 'name',
                 'title': "用户名",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@vpn_name'}},
+                'text': {'content': "{n}", 'kwargs': {'n': '@name'}},
+                'attr': {}
+            },
+            {
+                'q': 'active',
+                'title': "状态",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@active_status_list'}},
                 'attr': {}
             },
             {
                 'q': 'register_time',
-                'title': "主机名",
+                'title': "注册时间",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@register_time'}},
                 'attr': {'name': 'register_time', 'id': '@register_time', 'original': '@register_time',
@@ -45,8 +55,8 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='/asset-{nid}.html' target='_blank'>查看详细</a>",
-                    # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
+                    'content': "<a href='/asset-{nid}.html' target='_blank'>更改密码</a> |"
+                               "<a href='/asset-{nid}.html' target='_blank'> 注销</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}
             },
@@ -66,6 +76,11 @@ class Asset(BaseServiceList):
     @property
     def device_type_list(self):
         result = map(lambda x: {'id': x[0], 'name': x[1]}, models.Asset.device_type_choices)
+        return list(result)
+
+    @property
+    def active_status_list(self):
+        result = map(lambda x: {'id': x[0], 'name': x[1]}, models.VpnAccount.active_status)
         return list(result)
 
     @property
@@ -155,6 +170,7 @@ class Asset(BaseServiceList):
             }
             ret['global_dict'] = {
                 'device_status_list': self.device_status_list,
+                'active_status_list': self.active_status_list,
                 'device_type_list': self.device_type_list,
                 'idc_list': self.idc_list,
                 'business_unit_list': self.business_unit_list,
@@ -185,49 +201,26 @@ class Asset(BaseServiceList):
 
     @staticmethod
     def put_assets(request):
+        """
+        添加新的VPN账号
+        :param request:
+        :return:
+        """
         response = BaseResponse()
-        try:
-            response.error = []
-            put_dict = QueryDict(request.body, encoding='utf-8')
-            update_list = json.loads(put_dict.get('update_list'))
-            error_count = 0
-            for row_dict in update_list:
-                nid = row_dict.pop('nid')
-                num = row_dict.pop('num')
-                # print(row_dict)
+        new_name = request.POST.get('new_name', None)
+        seed = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+=-"
+        sa = []
+        for i in range(8):
+            sa.append(random.choice(seed))
+        salt = ''.join(sa)
+        obj = hashlib.md5()
+        obj.update(bytes(salt, encoding='utf-8'))
+        md5_pwd = obj.hexdigest()
+        print(md5_pwd)
+        r_time = time.strftime('%Y-%m-%d')
+        models.VpnAccount.objects.create(name=new_name, password=md5_pwd, active=1, register_time=r_time)
 
-                # 更新主机名
-                host_name = row_dict.get('host_name')
-                if host_name:
-                    if re.search('[》>$&()<!#*]', row_dict['host_name']):
-                        response.error.append({'num': num, 'message': '非法字符！'})
-                        response.status = False
-                        error_count += 1
-                    else:
-                        obj = models.Asset.objects.filter(id=nid)
-                        change_host_name(host_ip=obj[0].host_ip, host_name=row_dict['host_name'])
-                        try:
-                            models.Asset.objects.filter(id=nid).update(**row_dict)
-                            # 更新权限管理表中的主机名
-                            models.AuthInfo.objects.filter(ip=obj[0].host_ip).update(hostname=host_name)
-                        except Exception as e:
-                            response.error.append({'num': num, 'message': str(e)})
-                            response.status = False
-                            error_count += 1
-                else:
-                    try:
-                        models.Asset.objects.filter(id=nid).update(**row_dict)
-                    except Exception as e:
-                        response.error.append({'num': num, 'message': str(e)})
-                        response.status = False
-                        error_count += 1
-            if error_count:
-                response.message = '非法字符！共%s条,失败%s条' % (len(update_list), error_count,)
-            else:
-                response.message = '更新成功'
-        except Exception as e:
-            response.status = False
-            response.message = str(e)
+        response.status = True
         return response
 
     @staticmethod
@@ -246,154 +239,6 @@ class Asset(BaseServiceList):
             response.message = str(e)
         response.status = True
 
-        return response
-
-    @staticmethod
-    def assets_info():
-        response = BaseResponse()
-        response.data = models.Cpu.objects.all()
-        response.status = True
-        return response
-
-    @staticmethod
-    def post_assets(request):
-        """
-        添加资产信息
-        :param request:
-        :return:
-        """
-
-        response = BaseResponse()
-
-        # 添加防火墙
-        isfirewall = request.POST.get('isfirewall', None)
-
-        if isfirewall:
-            nic_brand = request.POST.get('fire_brand')
-            nic_model = request.POST.get('fire_model')
-            nic_ip = request.POST.get('fire_ip')
-            nic_sn = request.POST.get('fire_sn')
-            nic_idc = request.POST.get('fire_idc')
-            nic_cabinet = request.POST.get('fire_cabinet')
-            nic_putaway = request.POST.get('fire_putaway')
-            nic_service = request.POST.get('fire_service')
-
-            num = models.NetWork.objects.filter(sn=nic_sn).count()
-            if num != 0:
-                response.status = False
-                response.message = '相同的sn资产已经存在！--%s' % nic_sn
-                return response
-
-            try:
-                asset_obj = models.Asset(host_ip=nic_ip, host_name=nic_model, host_status=1, host_type=4, host_cpu=2,
-                                         host_memory=2)
-                asset_obj.save()
-
-                models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet, sn=nic_sn,
-                                              putaway=nic_putaway, service=nic_service, asset=asset_obj.id, brand=nic_brand)
-
-            except Exception as e:
-                response.status = False
-                response.message = '添加资产错误'
-                return response
-
-            response.status = True
-            return response
-
-        # 添加网卡设备
-        nic_model = request.POST.get('nic_model', None)
-        if nic_model:
-            nic_brand = request.POST.get('nic_brand')
-            nic_ip = request.POST.get('nic_ip')
-            nic_sn = request.POST.get('nic_sn')
-            nic_idc = request.POST.get('nic_idc')
-            nic_cabinet = request.POST.get('nic_cabinet')
-            nic_putaway = request.POST.get('nic_putaway')
-            nic_service = request.POST.get('nic_service')
-
-            num = models.NetWork.objects.filter(sn=nic_sn).count()
-            if num != 0:
-                response.status = False
-                response.message = '相同的sn资产已经存在！--%s' % nic_sn
-                return response
-
-            try:
-                asset_obj = models.Asset(host_ip=nic_ip, host_name=nic_model, host_status=1, host_type=3, host_cpu=2,
-                                         host_memory=2)
-                asset_obj.save()
-
-                models.NetWork.objects.create(model=nic_model, ip=nic_ip, idc=nic_idc, cabinet=nic_cabinet, sn=nic_sn,
-                                              putaway=nic_putaway, service=nic_service, asset=asset_obj.id, brand=nic_brand)
-
-            except Exception as e:
-                response.status = False
-                response.message = '添加资产错误'
-                return response
-
-            response.status = True
-            return response
-
-        host = request.POST.get('host')
-        ip = request.POST.get('ip')
-        memory = request.POST.get('memory')
-        idc = request.POST.get('idc')
-        cabinet = request.POST.get('cabinet')
-        putaway = request.POST.get('putaway')
-        machine = request.POST.get('machine')
-        sn = request.POST.get('sn')
-        cpu = request.POST.get('cpu')
-        cpu_num = request.POST.get('cpu_num')
-        core_num = request.POST.get('core_num')
-        raid = request.POST.get('raid')
-        service = request.POST.get('service')
-        disk_list = request.POST.getlist('disk_list')
-        nic_list = request.POST.getlist('nic_list')
-        os = request.POST.get('os')
-
-        for item in nic_list[2:]:
-            item_list = item.split(',')
-            ippaddrs = item_list[3]
-
-        # 检查重复IP
-        num = models.Asset.objects.filter(host_ip=ippaddrs).count()
-        if num != 0:
-            response.status = False
-            response.message = '资产IP地址已经存在！'
-            return response
-
-        # 首先创建 Assets资产表 ➡️ 创建Server表关联Asset ➡️ 创建Disk表关联Server表 ➡️ 创建Memory表关联Server表
-        asset_obj = models.Asset(host_ip=ippaddrs, host_name=host, host_status=1, host_type=1, host_cpu=int(cpu_num)*int(core_num), host_memory=memory)
-        asset_obj.save()
-
-        server_obj = models.DellServer(asset_id=asset_obj.id, hostname=host, manage_ip=ip, idc=idc, cabinet=cabinet,
-                                       putaway=putaway, model=machine, sn=sn, cpu_id=cpu, raid=raid, service=service,
-                                       cpu_num=cpu_num, core_num=core_num, os=os)
-        server_obj.save()
-
-        # ['', '', ',1,500G,SAS,7200,SEAGATE ST300MM0006 LS08S0K2B5NV']
-        for item in disk_list[2:]:
-            item_list = item.split(',')
-            slot = item_list[1]
-            capacity = item_list[2]
-            model = item_list[3]
-            rpm = item_list[4]
-            pd_type = item_list[5]
-            disk_obj = models.HardDisk(slot=slot, capacity=capacity, model=model, rpm=rpm, pd_type=pd_type, server_obj_id=server_obj.id)
-            disk_obj.save()
-
-        # ['', '', ',eth0,00:1c:42:a5:57:7a,192.168.1.1,192.168.1.254,8']
-        for item in nic_list[2:]:
-            item_list = item.split(',')
-            name = item_list[1]
-            hwaddr = item_list[2]
-            ippaddrs = item_list[3]
-            switch_ip = item_list[4]
-            switch_port = item_list[5]
-            nic_obj = models.NIC(name=name, hwaddr=hwaddr, ipaddrs=ippaddrs, switch_ip=switch_ip,
-                                 switch_port=switch_port, server_obj_id=server_obj.id)
-            nic_obj.save()
-
-        response.status = True
         return response
 
 
