@@ -37,3 +37,10 @@ static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'buil
 # 刷新cdn地址
 cdn_url_1 = 'http://download-cdn.xinxindai.com/'
 cdn_url_2 = 'https://download-cdn.xinxindai.com/'
+
+# 配置文件修改 日志地址
+# run_log = '/home/admin/logs/run.log'
+# err_log = '/home/admin/logs/err.log'
+
+run_log = '/opt/logs/run.log'
+err_log = '/opt/logs/err.log'

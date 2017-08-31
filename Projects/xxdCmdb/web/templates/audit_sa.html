@@ -175,7 +175,6 @@
         function add_style() {
             $('#table_body').children().each(function () {
               var v = $(this).children().next().next().next().next().next().next().next().next().html();
-{#              var vv = $(this).children().next().next().next().next().next().next().next().next().next().next().children().next().html();#}
               if(v!='SA待审'){
                   $(this).children().next().next().next().next().next().next().next().next().next().next().children().next().first().attr('onclick', '');
                   $(this).children().next().next().next().next().next().next().next().next().next().next().children().next().first().attr('style', 'color:grey');

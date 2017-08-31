@@ -12,6 +12,9 @@ from repository import models
 from utils.response import BaseResponse
 from conf import jenkins_config
 from utils.menu import menu
+from web.service.login import auth_config
+from utils import logger
+
 
 user_list = ['admin', 'xuguohua', 'yanyunfei']
 
@@ -144,7 +147,11 @@ class AddAssetView(View):
         return JsonResponse(response.__dict__)
 
 
+@method_decorator(auth_config, name='dispatch')
 class ConfigListView(View):
+    """
+    用户界面的--配置修改
+    """
     def dispatch(self, request, *args, **kwargs):
         return super(ConfigListView, self).dispatch(request, *args, **kwargs)
 
@@ -154,6 +161,7 @@ class ConfigListView(View):
 
         file = request.GET.get('file', None)
         business_id = request.GET.get('business_id', None)
+        print(file, business_id)
         if file and business_id:
             business_obj = models.BusinessTwo.objects.filter(id=business_id).first()
             business_name = business_obj.name
@@ -187,8 +195,7 @@ class ConfigListView(View):
 
         ret['menu'] = menu(request)
         response.data = ret
-
-        return render(request, 'configs.html', {'business_two_list': business_two_list})
+        return render(request, 'configs.html', {'business_two_list': business_two_list, 'response': response})
 
     def post(self, request):
         """
@@ -226,6 +233,7 @@ class ConfigListView(View):
                 with open(file, "w+") as f:
                     f.write(file_content)
                 f.close()
+                logger.Logger().log('%s change config %s' % (request.session['username'], file), True)
                 response.status = True
 
         return JsonResponse(response.__dict__)

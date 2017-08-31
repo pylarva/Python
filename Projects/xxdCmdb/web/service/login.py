@@ -67,3 +67,17 @@ def auth_sa(func):
             return render(request, 'read_list.html', {'response': '暂无SA审核权限..'})
         return func(request, *args, **kwargs)
     return inner
+
+
+def auth_config(func):
+    def inner(request, *args, **kwargs):
+        user = request.session['username']
+        v = request.session.get('is_login', None)
+        if not v:
+            return redirect('login.html')
+        group_obj = models.UserProfile.objects.filter(name=user).first()
+        group_name = group_obj.group.name
+        if group_name != 'config':
+            return render(request, 'read_list.html', {'response': '暂无修改配置权限..'})
+        return func(request, *args, **kwargs)
+    return inner

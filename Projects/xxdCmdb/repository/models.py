@@ -366,6 +366,22 @@ class AuditLog(models.Model):
         return self.audit_id
 
 
+class VpnAccount(models.Model):
+    """
+    vpn账号
+    """
+    name = models.CharField(max_length=32, null=True, blank=True)
+    password = models.CharField(max_length=108, null=True, blank=True)
+    register_time = models.DateTimeField(auto_created=True, blank=True, null=True)
+    active = models.IntegerField(null=True, blank=True, default=1)
+
+    class Meta:
+        verbose_name_plural = "vpn 账号表"
+
+    def __str__(self):
+        return self.vpn_name
+
+
 class BusinessUnit(models.Model):
     """
     业务线

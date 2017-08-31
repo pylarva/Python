@@ -81,6 +81,8 @@
     <script>
         $(function () {
             $.initMenu('#menu_config');
+            window.setTimeout(do_menu, 200);
+            var t2 = window.setTimeout(menu_active, 200);
             $('#file_commit').click(function () {
                 var business_id = $('#business_2').selectpicker('val');
                 var file_content = $('#config_text').val();
@@ -90,7 +92,7 @@
                     return false;
                 }
                 $.ajax({
-                    url: '/config.html',
+                    url: '/configs.html',
                     type: 'POST',
                     data: {'file_content': file_content, 'file_name': file_name, 'business_id': business_id},
                     dataType: 'JSON',
@@ -105,11 +107,20 @@
             })
         });
 
+        function menu_active() {
+            $('#menu_config').addClass('active');
+        }
+
+        function do_menu() {
+            var str = "<a id='menu_config' class='menu-item' href='/configs.html'> <i class='fa fa-cog' aria-hidden='true' style='width: 14px; margin-left: 1px'></i><span>配置修改</span></a>";
+            $('#user_menu').append(str);
+        }
+
         function get_files() {
             $('#config_files').empty();
             var business = $('#business_2').selectpicker('val');
             $.ajax({
-                url: '/config.html',
+                url: '/configs.html',
                 type: 'GET',
                 data: {'business': business},
                 dataType: 'JSON',
@@ -135,7 +146,7 @@
             var business_id = $('#business_2').selectpicker('val');
             $('#file_name').text(file);
             $.ajax({
-                url: '/config.html',
+                url: '/configs.html',
                 type: 'GET',
                 data: {'file': file, 'business_id': business_id},
                 dataType: 'JSON',
@@ -157,7 +168,7 @@
                 var new_file = $('#new_file').val();
                 var business_id = $('#business_2').selectpicker('val');
                 $.ajax({
-                    url: '/config.html',
+                    url: '/configs.html',
                     type: 'POST',
                     data: {'new_file': new_file, 'business_id': business_id},
                     dataType: 'JSON',
