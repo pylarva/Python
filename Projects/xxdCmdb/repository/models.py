@@ -372,7 +372,7 @@ class VpnAccount(models.Model):
     """
     active_status = (
         (1, '正常'),
-        (2, '注销'),
+        (2, '冻结'),
     )
     name = models.CharField(max_length=32, null=True, blank=True)
     password = models.CharField(max_length=108, null=True, blank=True)

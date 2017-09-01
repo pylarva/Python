@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 import json
 import re
+import os
 import time
 import random
 import hashlib
@@ -55,10 +56,10 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<a href='/asset-{nid}.html' target='_blank'>更改密码</a> |"
-                               "<a href='/asset-{nid}.html' target='_blank'> 注销</a>",
+                    'content': "<i class='fa fa-pencil' aria-hidden='true'></i> <a href='#' onclick='change_pwd({nid})'>更改密码</a> |"
+                               " <i class='fa fa-lock' aria-hidden='true'></i><a href='#' onclick='cancle_account({nid})'> 账号冻结</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
-                'attr': {}
+                'attr': {'style': 'width: 200px'}
             },
         ]
         # 额外搜索条件
@@ -192,7 +193,7 @@ class Asset(BaseServiceList):
         try:
             delete_dict = QueryDict(request.body, encoding='utf-8')
             id_list = delete_dict.getlist('id_list')
-            models.Asset.objects.filter(id__in=id_list).delete()
+            models.VpnAccount.objects.filter(id__in=id_list).delete()
             response.message = '删除成功'
         except Exception as e:
             response.status = False
@@ -207,20 +208,64 @@ class Asset(BaseServiceList):
         :return:
         """
         response = BaseResponse()
+
+        # 注销冻结\解封
+        cancle_id = request.POST.get('cancle_id', None)
+        if cancle_id:
+            try:
+                current_statue = models.VpnAccount.objects.filter(id=cancle_id).first().active
+                if current_statue == 1:
+                    models.VpnAccount.objects.filter(id=cancle_id).update(active=2)
+                elif current_statue == 2:
+                    models.VpnAccount.objects.filter(id=cancle_id).update(active=1)
+                response.status = True
+                response.message = '更新成功！'
+            except Exception as e:
+                response.status = False
+                response.message = '%s' % e
+            return response
+
+        # 更新密码
+        new_pwd = request.POST.get('new_pwd', None)
+        if new_pwd:
+            new_id = request.POST.get('id', None)
+            try:
+                cmd = "mysql -uroot -proot -h10.96.100.110 -e \"update xxdcmdb.repository_vpnaccount set " \
+                      "password=PASSWORD('%s') where id=%s;\"" % (new_pwd, new_id)
+                os.system(cmd)
+                response.status = True
+                response.message = '更新成功！'
+            except Exception as e:
+                response.status = False
+                response.message = '%s' % e
+            return response
+
         new_name = request.POST.get('new_name', None)
+        name_exist = models.VpnAccount.objects.filter(name=new_name).count()
+        if name_exist:
+            response.status = False
+            response.message = '用户名已经存在..'
+            return response
+
+        # 随机生成一个8位密码
         seed = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+=-"
         sa = []
         for i in range(8):
             sa.append(random.choice(seed))
         salt = ''.join(sa)
-        obj = hashlib.md5()
-        obj.update(bytes(salt, encoding='utf-8'))
-        md5_pwd = obj.hexdigest()
-        print(md5_pwd)
+        # obj = hashlib.md5()
+        # obj.update(bytes(salt, encoding='utf-8'))
+        # md5_pwd = obj.hexdigest()
+
+        # 先手动插入一条PASSWORD数据
         r_time = time.strftime('%Y-%m-%d')
-        models.VpnAccount.objects.create(name=new_name, password=md5_pwd, active=1, register_time=r_time)
+        cmd = "mysql -uroot -proot -h10.96.100.110 -e \"insert into xxdcmdb.repository_vpnaccount " \
+              "values('%s', '', '%s', PASSWORD('%s'), 1);\"" % (r_time, new_name, salt)
+        os.system(cmd)
+        # models.VpnAccount.objects.create(name=new_name, password=md5_pwd, active=1, register_time=r_time)
 
         response.status = True
+        response.message = 'vpn账户开通成功！\n 账户: %s \n 密码: %s' % (new_name, salt)
         return response
 
     @staticmethod
