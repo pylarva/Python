@@ -33,8 +33,8 @@ from threading import Timer
 
 API_HOST = 'cmdb.xxd.com'
 # API_URL = 'http://192.168.33.110:8005/api/release'
-# API_URL = 'http://172.16.19.0:8005/api/release'
-API_URL = 'http://cmdb.xinxindai.com/api/release'
+API_URL = 'http://172.16.19.12:8005/api/release'
+# API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -431,7 +431,7 @@ def checkFileMd5sum(filepath, md5sum):
 
     return RET_OK
 
-def downloadFile(path, dest):
+def downloadFile(path, dest, task_id):
     # dir = os.path.dirname(dest)
     # try:
     #     cmd = 'wget %s -P %s' % (path, dir)
@@ -447,12 +447,12 @@ def downloadFile(path, dest):
         ul = urllib.URLopener()
         ul.retrieve(path, dest)
         Logger().log('%s->%s' % (path, dest), True)
+        uploadLog(task_id, 'Download success..%s->%s' % (path, dest))
     except Exception, e:
         LOGGER.info('Download file failed: %s, exception: %s' % (path, e))
         Logger().log('Dowanload %s -> %s err --> %s' % (path, dest, e), True)
         Logger().log('Dowanload %s -> %s err --> %s' % (path, dest, e), False)
-        # Logger().log('Download file failed: %s, exception: %s' % (path, str(e)), True)
-        # Logger().log('Download file failed: %s, exception: %s' % (path, str(e)), False)
+        uploadLog(task_id, 'Dowanload %s -> %s err --> %s' % (path, dest, e))
         return RET_ERROR_DOWNLOAD_FILE_FAILED
 
     return RET_OK
@@ -877,7 +877,7 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, name, runas):
 
 
     # download file
-    retCode = downloadFile(pkgUrl, config['destFile'])
+    retCode = downloadFile(pkgUrl, config['destFile'], taskId)
     recordStageLog(config['taskId'], 'downloadFile', retCode)
     if retCode != RET_OK: return retCode
 
@@ -1279,7 +1279,7 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
             os.system(cmd)
             Logger().log(cmd, True)
             dest_file = '%s/%s' % (dest_dir, os.path.basename(pkgUrl))
-            ret = downloadFile(pkgUrl, '%s' % dest_file)
+            ret = downloadFile(pkgUrl, '%s', taskId) % dest_file
             if not ret:
                 Logger().log('download files success...', True)
             else:
@@ -1308,7 +1308,7 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
         cmd = 'rm -fr %s' % dest_file
         ExecCmd(cmd)
 
-    ret = downloadFile(pkgUrl, dest_file)
+    ret = downloadFile(pkgUrl, dest_file, taskId)
     if not ret:
         Logger().log('download files success...', True)
     else:

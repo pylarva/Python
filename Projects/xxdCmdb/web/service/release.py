@@ -102,7 +102,7 @@ class Asset(BaseServiceList):
                 'text': {
                     'content': "<i class='fa fa-television' aria-hidden='true'></i><a href='#' onclick='do_log({nid},false)'> 查看详细</a>",
                     # 'content': "<a href='/asset-1-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
-                    'kwargs': {'device_type_id': '@device_type_id', 'nid': '@release_id'}},
+                    'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}
             },
         ]

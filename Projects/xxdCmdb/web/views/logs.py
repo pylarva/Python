@@ -56,6 +56,17 @@ class ReleaseLogJsonView(View):
             # response.data = json.dumps(ret)
             return JsonResponse(response.__dict__)
 
+        # release.html 页面发来的日志请求
+        release_id = request.GET.get('release_id', None)
+        if release_id:
+            values = models.ReleaseLog.objects.filter(release_id=release_id).only('release_time', 'release_msg')
+            result = map(lambda x: {'time': x.release_time, 'msg': "%s" % x.release_msg}, values)
+            result = list(result)
+            ret['data_list'] = result
+            response.status = True
+            response.data = ret
+            return JsonResponse(response.__dict__)
+
         release_id = request.GET.get('id', None)
         if not release_id:
             response.status = False

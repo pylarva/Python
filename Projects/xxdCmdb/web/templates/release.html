@@ -139,10 +139,24 @@
         $(function () {
             $.initMenu('#menu_online');
             $.nbDataList('/releases.html', '1');
+            window.setTimeout(add_style, 200)
         });
+        
+        function add_style() {
+            $('#table_body').children().each(function () {
+                var v = $(this).children().next().next().next().next().next().next().next().next().next().next().next().html();
+                if(v=='发布失败'){
+                    $(this).children().next().next().next().next().next().next().next().next().next().next().next().first().css("color", "red");
+                }else{
+                    $(this).children().next().next().next().next().next().next().next().next().next().next().next().first().css("color", "green");
+                }
+            })
+        }
 
         function ChangePage(id) {
             $.nbDataLists(id);
+            window.setTimeout(add_style, 200)
+
         }
 
         // 查询日志函数
@@ -151,7 +165,7 @@
             $.ajax({
                     url: '/release_log.html',
                     type: 'GET',
-                    data: {'id': id},
+                    data: {'release_id': id},
                     dataType: 'JSON',
                     success: function (response) {
                         if (response.status){
