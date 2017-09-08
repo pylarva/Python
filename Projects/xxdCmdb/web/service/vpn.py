@@ -236,7 +236,7 @@ class Asset(BaseServiceList):
         if new_pwd:
             new_id = request.POST.get('id', None)
             try:
-                cmd = "mysql -uroot -proot -h10.96.100.110 -e \"update xxdcmdb.repository_vpnaccount set " \
+                cmd = "mysql -uroot -proot -e \"update xxdcmdb.repository_vpnaccount set " \
                       "password=PASSWORD('%s') where id=%s;\"" % (new_pwd, new_id)
                 os.system(cmd)
                 response.status = True
