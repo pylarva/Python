@@ -1279,7 +1279,7 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
             os.system(cmd)
             Logger().log(cmd, True)
             dest_file = '%s/%s' % (dest_dir, os.path.basename(pkgUrl))
-            ret = downloadFile(pkgUrl, '%s', taskId) % dest_file
+            ret = downloadFile(pkgUrl, dest_file, taskId)
             if not ret:
                 Logger().log('download files success...', True)
             else:

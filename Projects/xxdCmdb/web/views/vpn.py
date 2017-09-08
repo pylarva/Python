@@ -32,7 +32,9 @@ class VpnJsonView(View):
         return JsonResponse(response.__dict__)
 
     def post(self, request):
-        response = vpn.Asset.put_assets(request)
+        obj = vpn.Asset()
+        response = obj.put_assets(request)
+        # response = vpn.Asset.put_assets(request)
         return JsonResponse(response.__dict__)
 
 

@@ -5,6 +5,7 @@ import re
 import os
 import time
 import random
+import threading
 import hashlib
 from django.db.models import Q
 from repository import models
@@ -13,6 +14,11 @@ from utils.response import BaseResponse
 from django.http.request import QueryDict
 from utils.hostname import change_host_name
 from .base import BaseServiceList
+from utils.mail import send_mail
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from conf import mail_config
 
 
 class Asset(BaseServiceList):
@@ -200,8 +206,8 @@ class Asset(BaseServiceList):
             response.message = str(e)
         return response
 
-    @staticmethod
-    def put_assets(request):
+    # @staticmethod
+    def put_assets(self, request):
         """
         添加新的VPN账号
         :param request:
@@ -259,13 +265,19 @@ class Asset(BaseServiceList):
 
         # 先手动插入一条PASSWORD数据
         r_time = time.strftime('%Y-%m-%d')
-        cmd = "mysql -uroot -proot -h10.96.100.110 -e \"insert into xxdcmdb.repository_vpnaccount " \
-              "values('%s', '', '%s', PASSWORD('%s'), 1);\"" % (r_time, new_name, salt)
+        cmd = "mysql -uroot -proot -h%s -e \"insert into xxdcmdb.repository_vpnaccount " \
+              "values('%s', '', '%s', PASSWORD('%s'), 1);\"" % (mail_config.openvpn_db, r_time, new_name, salt)
         os.system(cmd)
         # models.VpnAccount.objects.create(name=new_name, password=md5_pwd, active=1, register_time=r_time)
 
+        # 发送邮件
+        mail_to = '%s@xinxindai.com' % new_name
+        subject = '【VPN账号开通成功】'
+        content = '账户: %s \n密码: %s \n\n 客户端下载: %s' % (new_name, salt, mail_config.openvpn_url)
+        t = threading.Thread(target=send_mail, args=(mail_to, subject, content))
+        t.start()
         response.status = True
-        response.message = 'vpn账户开通成功！\n 账户: %s \n 密码: %s' % (new_name, salt)
+        response.message = 'vpn账户开通成功！\n 账户: %s \n密码: %s' % (new_name, salt)
         return response
 
     @staticmethod
@@ -285,5 +297,37 @@ class Asset(BaseServiceList):
         response.status = True
 
         return response
+
+    def send_mail(self, mail_to, subject, content):
+        mail_host = 'smtp.partner.outlook.cn'
+        mail_port = 587
+        mail_user = 'monitor@xinxindai.com'
+        mail_pass = 'Yhblsqt520'
+        mail_postfix = 'xinxindai.com'
+
+        me = mail_user
+        # msg = MIMEText(content)
+        msg = MIMEMultipart()
+        msg['Subject'] = subject
+        msg['From'] = me
+        msg['to'] = mail_host
+        att1 = MIMEText(open('/opt/openvpn.tgz', 'rb').read(), 'base64', 'utf-8')
+        att1["Content-Type"] = 'application/octet-stream'
+        att1["Content-Disposition"] = 'attachment; filename="hahahha.zip"'
+        msg.attach(att1)
+
+        try:
+            smtp = smtplib.SMTP()
+            smtp.connect(mail_host, mail_port)
+            smtp.starttls()
+            smtp.login(mail_user, mail_pass)
+            smtp.sendmail(me, mail_to, msg.as_string())
+            smtp.close()
+            print('Email send ok...')
+        except Exception as e:
+            senderr = str(e)
+            print(senderr)
+            sendstatus = False
+        return True
 
 
