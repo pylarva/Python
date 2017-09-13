@@ -1,11 +1,10 @@
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-# 管理员审批堡垒机权限通知
-# mail_admin = ['jinyuehui@xinxindai.com', 'lichengbing@xinxindai.com']
+# 管理配置文件
 
-# 开通vpn邮件通知中附件路径
-openvpn_url = 'http://cmdb.xinxindai.com/media/openvpn.tgz'
+# 配置文件所在主机IP
+config_in_host_ip = '192.168.31.80'
 
-# openvpn数据库
-openvpn_db = '10.96.100.110'
+# 配置文件目录
+config_path = '/opt/ci/configure_file'

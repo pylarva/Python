@@ -16,7 +16,7 @@ function loadTree(tData){
 		var node = $('<a>').appendTo(li);
 		var icon = $('<i>').css('margin-right','5').appendTo(node);
 		var aTree = $('<span>').html(tData[i].title).css({'cursor': 'pointer'}).appendTo(node);
-		var aStr = 'checkFile(' + tData[i].field + ')';
+		var aStr = 'checkFile("' + tData[i].field + '")';
 		aTree.attr('onclick', aStr);
 		var input = $('<input>').addClass('field').val(tData[i].field).css({'display':'none'}).appendTo(node);
 

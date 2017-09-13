@@ -8,20 +8,29 @@ import requests
 import subprocess
 import urllib.request
 
-# cmd = 'cd /Users/pylarva/github/Python/Projects/xxdCmdb/scr/ && python2.6 cdn.py Action=RefreshObjectCaches ObjectType=File ObjectPath=https://download-cdn.xinxindai.com/'
-# ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
-# out, err = ret.communicate()
-# url = str(out, encoding='utf-8')
-# cmd = 'curl -I %s' % url
-# print(cmd)
-# os.system(cmd)
+json_data = []
+config_path = '/opt/configure_files'
+print(os.path.basename(config_path))
+
+# {title:'编码', field:'code', candidate:false}
+
+
+# def load_path(config_path, json_data):
+#     pathList = os.listdir(config_path)
+#     for i, item in enumerate(pathList):
+#         config_dict = {}
 #
-# ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
-# out, err = ret.communicate()
-# print(out)
-
-# f = urllib.request.urlopen(url)
-# print(f.read())
-
-sql_cmd = "mysql -uroot -proot -h192.168.33.110 -e \"insert into xxdcmdb.repository_vpnaccount values('2017-09-01', '', 'lichengtao', PASSWORD('d80wPyUV'), 1);\""
-print(sql_cmd)
+#         config_dict['title'] = item
+#         config_dict['open'] = 'false'
+#         config_dict['field'] = os.path.join(config_path, item)
+#         config_dict['candidate'] = 'true'
+#
+#         if os.path.isdir(os.path.join(config_path, item)):
+#             config_dict['children'] = []
+#             config_dict['children'] = load_path(os.path.join(config_path, item), config_dict['children'])
+#
+#         json_data.append(config_dict)
+#     return json_data
+#
+# json_data = load_path(config_path, json_data)
+# print(json_data)

@@ -33,8 +33,8 @@ from threading import Timer
 
 API_HOST = 'cmdb.xxd.com'
 # API_URL = 'http://192.168.33.110:8005/api/release'
-API_URL = 'http://172.16.19.12:8005/api/release'
-# API_URL = 'http://cmdb.xinxindai.com/api/release'
+# API_URL = 'http://172.16.19.12:8005/api/release'
+API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -972,6 +972,8 @@ def uploadMd5(pkgUrl, taskId,):
         )
         Logger().log('%s--%s' % (pkgUrl, md5) , True)
     except Exception, e:
+        Logger().log('Creat md5..%s' % e)
+        uploadLog(taskId, e)
         return e
     return retCode
 

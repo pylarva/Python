@@ -1,7 +1,8 @@
-{% extends 'layout/_laybusiness.html' %}
+{% extends 'layout/_layconfig.html' %}
 
 {% block css %}
     <link rel="stylesheet" href="/static/css/bootstrap-select.css">
+    <link rel="stylesheet" href="/static/css/tree.css">
 
 
 {% endblock %}
@@ -16,17 +17,20 @@
         <div style="width: 100%; height: 50px;">
             <h4 style="display: inline-block">配置</h4>
             <h4 id="file_name" style="display: inline-block"></h4>
-            <div style="float: right; margin-right: 28px">
-                <select id="business_2" class="selectpicker" onchange="get_files()">
-                    {% for item in business_two_list %}
-                        <option id="recipient-name" value={{ item.id }}>{{ item.name }}</option>
-                    {% endfor %}
-                </select>
+{#            <div style="float: right; margin-right: 28px">#}
+{#                <select id="business_2" class="selectpicker" onchange="get_files()">#}
+{#                    {% for item in business_two_list %}#}
+{#                        <option id="recipient-name" value={{ item.id }}>{{ item.name }}</option>#}
+{#                    {% endfor %}#}
+{#                </select>#}
+{#            </div>#}
+{#            <h4 style="display: inline-block; float: right">选择要编辑的业务线：</h4>#}
+            <div style="float: right; margin-right: 28px" id="default_tree" class="col-sm-4"><h3>选择要编辑的配置文件
+                <i class="fa fa-plus" aria-hidden="true" onclick="add_config()"></i></h3>
             </div>
-            <h4 style="display: inline-block; float: right">选择要编辑的业务线：</h4>
         </div>
         <div>
-            <textarea id="config_text" style="width: 80%; height: 600px"></textarea>
+            <textarea id="config_text" style="width: 60%; height: 650px"></textarea>
             <div id="config_files" style="width: 19%; height: 600px; float: right"></div>
         </div>
         <a id="file_commit" class="btn btn-group no-radius" style="width: 100px;">
@@ -77,24 +81,57 @@
     <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="/static/js/nb-list.js"></script>
     <script src="/static/js/bootstrap-select.js"></script>
+    <script src="/static/js/jquery-ui.min.js"></script>
+    <script src="/static/js/tree.js"></script>
 
     <script>
+        $(document).ready(function(){
+            var data1 = [
+                {title: "编码", field: "code",candidate: false},
+                {title: "基本信息", open: false, children:[
+                    {title: "名称", field: "name",candidate: true},
+                    {title: "年龄", field: "age", candidate: true},
+                    {title: "性别", field: "sex", candidate: true}
+                ]}
+            ];
+
+            // 后端请求json
+            $.Show('#shade,#loading');
+            $.ajax({
+                    url: '/pre_production_config_configs.html',
+                    type: 'GET',
+                    data: {'id': 1},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        $.Hide('#shade,#loading');
+                        if(response.status){
+                            var data = response.data;
+                            $('#default_tree').append(loadTree(data));
+	                        nodeClick($('#default_tree'));
+                        }else {
+                            alert(response.message);
+                        }
+                    }
+            });
+        });
+
         $(function () {
             $.initMenu('#menu_config');
             $('#file_commit').click(function () {
-                var business_id = $('#business_2').selectpicker('val');
                 var file_content = $('#config_text').val();
                 var file_name = $('#file_name').text();
                 if(file_content == ''){
                     alert('未选择配置文件');
                     return false;
                 }
+                $.Show('#shade,#loading');
                 $.ajax({
-                    url: '/config.html',
+                    url: '/pre_production_config_configs.html',
                     type: 'POST',
-                    data: {'file_content': file_content, 'file_name': file_name, 'business_id': business_id},
+                    data: {'file_content': file_content, 'file_name': file_name},
                     dataType: 'JSON',
                     success: function (response) {
+                        $.Hide('#shade,#loading');
                         if(response.status){
                             alert('更新配置文件成功！')
                         }else {
@@ -104,6 +141,24 @@
                 })
             })
         });
+
+        // 读取配置文件
+        function checkFile(file) {
+            $('#file_name').text(file);
+            $.ajax({
+                    url: '/pre_production_config_configs.html',
+                    type: 'POST',
+                    data: {'check_file': file},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if(response.status){
+                            $('#config_text').val(response.data);
+                        }else {
+                            alert('服务端文件读写权限拒绝')
+                        }
+                    }
+            })
+        }
 
         function get_files() {
             $('#config_files').empty();
@@ -151,21 +206,32 @@
             })
         }
 
+        // 新增配置文件
         function add_config() {
+            var add_path = $('#file_name').text();
+            if(add_path==''){
+                alert('请先选择要添加配置的目录');
+                return false;
+            }
             $('#add_config').modal();
             $('#confirm_add').click(function () {
                 var new_file = $('#new_file').val();
-                var business_id = $('#business_2').selectpicker('val');
+                if(new_file==''){
+                    alert('文件名不能为空');
+                    return false;
+                }
                 $.ajax({
-                    url: '/config.html',
+                    url: '/pre_production_config_configs.html',
                     type: 'POST',
-                    data: {'new_file': new_file, 'business_id': business_id},
+                    data: {'new_file': new_file, 'add_path': add_path},
                     dataType: 'JSON',
                     success: function (response) {
                         if(response.status){
                             $('#add_config').modal('hide');
                             get_files();
                             alert('创建配置文件成功');
+                        }else {
+                            alert(response.message)
                         }
                     }
                 })

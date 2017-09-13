@@ -25,6 +25,8 @@ from web.views import audit_sa
 from web.views import logs
 from web.views import document
 from web.views import vpn
+from web.views import pre_config
+
 
 
 urlpatterns = [
@@ -43,8 +45,13 @@ urlpatterns = [
     url(r'^release-(?P<nid>\d+).html$', asset.ReleaseDetailView.as_view()),
     url(r'^add-asset.html$', asset.AddAssetView.as_view()),
 
+    # 线上的配置管理
     url(r'^config.html$', config.AssetListView.as_view()),
     url(r'^configs.html$', config.ConfigListView.as_view()),
+
+    # 测试环境的配置管理 192.168.31.80 /opt/ci/configure_files
+    url(r'^pre_production_config.html$', pre_config.AssetListView.as_view()),
+    url(r'^pre_production_config_configs.html$', pre_config.ConfigListView.as_view()),
 
     url(r'^read.html$', read.ReadListView.as_view()),
     url(r'^reads.html$', read.ReadJsonView.as_view()),
