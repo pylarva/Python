@@ -8,29 +8,7 @@ import requests
 import subprocess
 import urllib.request
 
-json_data = []
-config_path = '/opt/configure_files'
-print(os.path.basename(config_path))
+s = 'export PATH=/usr/local/node7/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin && npm install && npm run build'
 
-# {title:'编码', field:'code', candidate:false}
-
-
-# def load_path(config_path, json_data):
-#     pathList = os.listdir(config_path)
-#     for i, item in enumerate(pathList):
-#         config_dict = {}
-#
-#         config_dict['title'] = item
-#         config_dict['open'] = 'false'
-#         config_dict['field'] = os.path.join(config_path, item)
-#         config_dict['candidate'] = 'true'
-#
-#         if os.path.isdir(os.path.join(config_path, item)):
-#             config_dict['children'] = []
-#             config_dict['children'] = load_path(os.path.join(config_path, item), config_dict['children'])
-#
-#         json_data.append(config_dict)
-#     return json_data
-#
-# json_data = load_path(config_path, json_data)
-# print(json_data)
+s1 = s.split(' ')[1].split('=')[1].split(':')[0]
+print(s1)

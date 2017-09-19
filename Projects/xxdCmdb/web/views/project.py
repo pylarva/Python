@@ -30,11 +30,19 @@ class ProjectListView(View):
         pack_cmd = request.POST.get('pack_cmd')
         username = request.POST.get('user_name')
         static_type = request.POST.get('static_cover_type')
+        port = request.POST.get('port', None)
+
+        # 检查是否有重复项目
+        count = models.ProjectTask.objects.filter(business_2_id=release_env).count()
+        if count != 0:
+            response.status = False
+            response.message = '该项目已存在..'
+            return JsonResponse(response.__dict__)
 
         try:
             project_obj = models.ProjectTask(business_2_id=release_env, project_type_id=release_type,
                                              jdk_version=jdk_version, git_url=git_url, release_user=username,
-                                             pack_cmd=pack_cmd, static_type=static_type)
+                                             pack_cmd=pack_cmd, static_type=static_type, git_branch=port)
             project_obj.save()
         except Exception as e:
             print(e)

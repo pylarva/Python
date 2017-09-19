@@ -180,6 +180,11 @@ class ConfigListView(View):
     def get(self, request, *args, **kwargs):
         response = BaseResponse()
         # 由于读取的配置文件夹不在本地 所以要先同步过来
+        local_path = '/opt/%s' % os.path.basename(config_config.config_path)
+        if os.path.exists(local_path):
+            cmd = 'rm -fr %s' % local_path
+            print(cmd)
+            os.system(cmd)
         try:
             cmd = 'scp -r root@%s:%s /opt/' % (config_config.config_in_host_ip, config_config.config_path)
             os.system(cmd)

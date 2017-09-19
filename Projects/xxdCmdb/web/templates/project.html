@@ -97,11 +97,17 @@
                             迭代
                           </label>
                         </div>
-                        </div>
+                </div>
+
+
+                <div id="port_div" style="display: none">
+                    <span class="label label-info">项目监听端口</span>
+                    <input type="text" class="form-control" id="port" style="width: 200px; border-radius: 1px;">
+                    **用于发布系统检查进程是否正常
                 </div>
 
                 <br>
-            <div style="width: 10000px; height: 100px"></div>
+            <div id="width_div" style="width: 10000px; height: 100px"></div>
             <div style="display: inline-block; float: left">
                   <span class="label label-success">GIT地址</span>
                     <input type="text" class="form-control" id="git_url" style="width: 600px; border-radius: 1px;">
@@ -139,6 +145,7 @@
                 var git_url = $('#git_url').val();
                 var pack_cmd = $('#pack_cmd').val();
                 var user_name = $.cookie('username');
+                var port = $('#port').val();
                 if(obj_business==1){
                     alert('请选择发布项目..');
                     return false;
@@ -146,17 +153,26 @@
                 if(git_url==''){
                     alert('git地址不能为空..');
                     return false;
+                }else if($('#obj_type').selectpicker('val')=='3'){
+                    if($('#port').val()==''){
+                        alert('监听端口不能为空..');
+                        return false;
+                    }
+                }else if($('#pack_cmd').val()==''){
+                    alert('打包参数不能为空..');
+                    return false;
                 }
 
                 $.ajax({
                     url: '_project.html',
                     type: 'POST',
                     data: {'obj_env': obj_business, 'obj_type': obj_type, 'jdk_version': jdk_version, 'git_url': git_url,
-                           'user_name': user_name, 'pack_cmd': pack_cmd, 'static_cover_type': static_cover_type},
+                           'user_name': user_name, 'pack_cmd': pack_cmd, 'static_cover_type': static_cover_type,
+                           'port': port},
                     dataType: 'JSON',
                     success: function (response) {
                         if (response.status){
-                            location.href = '/project_list.html'
+                            location.href = '/project_admin.html'
                         } else {
                             alert(response.message);
                         }
@@ -179,9 +195,17 @@
                 $('#jdk_div').attr('style', 'display: none;');
                 $('#mvn_div').attr('style', 'display: none;');
                 $('#static_div').attr('style', 'display:margin-left: 100px; float: left')
-            }else{
+            }else if(obj_type=='1'){
                 $('#jdk_div').attr('style', 'float: left;');
-                $('#mvn_div').attr('style', 'display: inline-block; margin-left: 100px; float: left')
+                $('#mvn_div').attr('style', 'display: inline-block; margin-left: 100px; float: left');
+                $('#static_div').attr('style', 'display: none;')
+            }else if(obj_type=='3'){
+                $('#port_div').attr('style', '');
+                $('#width_div').attr('style', 'width: 10000px; height: 20px');
+                $('#jdk_div').attr('style', 'display: none;');
+                $('#mvn_div').attr('style', 'display: none;');
+                $('#static_div').attr('style', 'display: none;');
+                $('#pack_cmd').val('export PATH=/usr/local/node7/bin:$PATH && npm install && run build');
             }
         }
 

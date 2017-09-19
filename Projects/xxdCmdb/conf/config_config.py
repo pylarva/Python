@@ -7,4 +7,4 @@
 config_in_host_ip = '192.168.31.80'
 
 # 配置文件目录
-config_path = '/opt/ci/configure_file'
+config_path = '/opt/ci/configure_files'

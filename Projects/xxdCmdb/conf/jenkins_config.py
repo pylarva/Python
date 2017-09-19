@@ -14,8 +14,8 @@ api_token = '9e235779d590f7c63d45201bb8c969be'
 
 pkgUrl = 'http://build.xxd.com'
 
-source_script_path = '/application/xxdCmdb/scr/autopublishing.py'
-# source_script_path = '/Users/pylarva/github/Python/Projects/xxdCmdb/scr/autopublishing.py'
+# source_script_path = '/application/xxdCmdb/scr/autopublishing.py'
+source_script_path = '/Users/pylarva/github/Python/Projects/xxdCmdb/scr/autopublishing.py'
 
 # 需要进行两次发布的项目
 static_nginx_dict = {'front': '/static/front/', 'webapp': '/static/webapp/'}
@@ -29,18 +29,18 @@ config_path = '/opt/config/'
 nginx_test_ip_list = ['192.168.31.110', '192.168.33.110']
 
 # 生产环境nginx机器
-nginx_prod_ip_list = ['192.168.31.110', '192.168.33.110']
+nginx_prod_ip_list = ['10.96.1.69', '10.96.1.70', '10.96.1.71']
 
 # 静态资源包
-static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk', 'm': 'dist'}
+static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk', 'm': 'dist', 'digital': 'digital'}
 
 # 刷新cdn地址
 cdn_url_1 = 'http://download-cdn.xinxindai.com/'
 cdn_url_2 = 'https://download-cdn.xinxindai.com/'
 
 # 配置文件修改 日志地址
-# run_log = '/home/admin/logs/run.log'
-# err_log = '/home/admin/logs/err.log'
+run_log = '/home/admin/logs/run.log'
+err_log = '/home/admin/logs/err.log'
 
-run_log = '/opt/logs/run.log'
-err_log = '/opt/logs/err.log'
+# run_log = '/opt/logs/run.log'
+# err_log = '/opt/logs/err.log'

@@ -266,7 +266,8 @@ class Asset(BaseServiceList):
         # 先手动插入一条PASSWORD数据
         r_time = time.strftime('%Y-%m-%d')
         cmd = "mysql -uroot -proot -h%s -e \"insert into xxdcmdb.repository_vpnaccount " \
-              "values('%s', '', '%s', PASSWORD('%s'), 1);\"" % (mail_config.openvpn_db, r_time, new_name, salt)
+              "values('', '%s', PASSWORD('%s'), '%s', 1);\"" % (mail_config.openvpn_db, new_name, salt, r_time)
+        print(cmd)
         os.system(cmd)
         # models.VpnAccount.objects.create(name=new_name, password=md5_pwd, active=1, register_time=r_time)
 

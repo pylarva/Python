@@ -33,8 +33,8 @@ from threading import Timer
 
 API_HOST = 'cmdb.xxd.com'
 # API_URL = 'http://192.168.33.110:8005/api/release'
-# API_URL = 'http://172.16.19.12:8005/api/release'
-API_URL = 'http://cmdb.xinxindai.com/api/release'
+API_URL = 'http://172.16.19.22:8005/api/release'
+# API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -80,10 +80,13 @@ static_pkg_cmd_list = {'mui': 'cnpm install && gulp && cd pages/ && /usr/bin/zip
 
 # 'static_m': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip
 
-static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk', 'm': 'dist'}
+static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk', 'm': 'dist', 'digital': 'digital'}
 
 # apk 放置目录
 apk_path = '/opt/static/download/'
+
+# node.js项目发布目录
+node_publish_path = '/data'
 
 # define return code
 RET_OK = 0
@@ -643,7 +646,37 @@ def createSoftLink(name):
             return 1
     return 0
 
+def publishNodeJsService(config, name, taskId):
+    # 确认需要发布的目录路径是否存在
+    # 删除旧文件
+    try:
+        if not os.path.exists(config['publishPath']):
+            cmd = 'mkdir -p %s' % config['publishPath']
+            os.system(cmd)
+            Logger().log(cmd, True)
+        else:
+            cmd = 'rm -fr %s/*' % config['publishPath']
+            os.system(cmd)
+            Logger().log(cmd, True)
 
+        # 解压包文件
+        cmd = 'unzip -o %s -d %s > /dev/null 2>&1' % (config['destFile'], config['publishPath'])
+        os.system(cmd)
+        Logger().log(cmd, True)
+
+        # 更改权限
+        cmd = 'chown -R admin.admin %s' % config['publishPath']
+        os.system(cmd)
+        Logger().log(cmd, True)
+
+        # 启动
+        cmd = 'killall node'
+        os.system(cmd)
+        Logger().log(cmd, True)
+    except Exception, e:
+        Logger().log(e, True)
+    retCode = RET_OK
+    return retCode
 
 
 def publishTomcatService(config, name, taskId, runas):
@@ -852,7 +885,7 @@ def publishHtmlService(config, runas):
     # check service
     return retCode
 
-def runTask(pkgUrl, md5sum, taskId, serviceType, name, runas):
+def runTask(pkgUrl, md5sum, taskId, serviceType, name, port, runas):
     # build.xxd.com/infra/cmdb/97/cmdb.war 6d200fd40a846900c72574e0521b7e26 97 tomcat
     config = {}
     url = urlparse.urlparse(pkgUrl)
@@ -872,7 +905,7 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, name, runas):
 
     # print current environment
     retCode, output = execSystemCommandRunAs('env', runas)
-    LOGGER.debug('current environment: %s' % (output))
+    LOGGER.debug('current environment: %s' % output)
     Logger().log('current environment: %s' % output, True)
 
 
@@ -900,7 +933,11 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, name, runas):
         config['startTengineCommand'] = 'sudo /etc/init.d/tengine start'
         config['publishPath'] = '/usr/local/tomcat/webapps/'
         Logger().log(config, True)
-        retCode = publishTomcatService(config, name, taskId,runas)
+        retCode = publishTomcatService(config, name, taskId, port, runas)
+    elif serviceType == 'node.js':
+        config['publishPath'] = '%s/%s' % (node_publish_path, name)
+        Logger().log(config, True)
+        retCode = publishNodeJsService(config, name, taskId, port)
     elif serviceType == 'apijar':
         config['stopServiceCommand'] = '/usr/local/tomcat/bin/shutdown.sh'
         config['startServiceCommand'] = '/usr/local/tomcat/bin/startup.sh'
@@ -924,7 +961,7 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, name, runas):
 
     return RET_OK
 
-def run(pkgUrl, md5sum, taskId, serviceType, name, runas='admin'):
+def run(pkgUrl, md5sum, taskId, serviceType, name, port, runas='admin'):
     # Logger()
     if not os.path.exists(run_log_file):
         os.mknod(run_log_file)
@@ -944,7 +981,7 @@ def run(pkgUrl, md5sum, taskId, serviceType, name, runas='admin'):
         LOGGER.info('chdir: %s' % (os.getcwd()))
         LOGGER.info(str(os.environ))
         Logger().log(str(os.environ), True)
-        retCode = runTask(pkgUrl, md5sum, taskId, serviceType, name, runas=RUNNING_USER)
+        retCode = runTask(pkgUrl, md5sum, taskId, serviceType, name, port, runas=RUNNING_USER)
     except Exception, e:
         retCode = RET_ERROR_RUN_EXCEPTION
         tb = traceback.format_exc()
@@ -1137,7 +1174,46 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     # Logger().log('set -e', True)
 
     # 如果是发布静态资源 打包命令在配置文件里
-    if type == '2':
+    if type == '3':
+
+        # 取打包命令前半段配置环境变量 后半段打包
+        cmd_env = str(pack_cmd).split(' ')[1].split('=')[1].split(':')[0]
+        # cmd = '%s:$PATH' % cmd_env
+        # os.system(cmd)
+
+        os.environ['PATH'] = '%s:/usr/local/gcc/bin:/usr/local/maven/bin:/usr/local/node/bin:/usr/local/git/bin/:/usr/local/jdk7/bin:' \
+                             '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin' % \
+                             cmd_env
+
+        # ret, out = ExecCmd(cmd)
+        # Logger().log(cmd, True)
+        Logger().log(os.environ, True)
+
+        cmd = str(pack_cmd).split(' && ', 1)[1]
+        uploadLog(task_id, cmd)
+        uploadLog(task_id, '正在进行代码打包......')
+        os.system(cmd)
+        Logger().log(cmd, True)
+
+        # cmd = 'rsync -avz --delete * %s'
+
+        cmd = 'zip -r * %s.zip' % name
+        ret, out = ExecCmd(cmd)
+        Logger().log(cmd, True)
+        Logger().log(out, True)
+        if ret:
+            Logger().log(out, False)
+            return out
+
+        cmd = "find ./ -name '%s.zip' -exec cp {} %s \; " % (name , pkg_path)
+        ret, out = ExecCmd(cmd)
+        Logger().log(cmd, True)
+        Logger().log(out, True)
+        if ret:
+            Logger().log(out, False)
+            return out
+
+    elif type == '2':
         if name == 'apk':
             # 如果是apk项目 只需拉取文件 打包就行
             os.chdir(workspace_path)
@@ -1269,7 +1345,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
 
     return retCode
 
-def NginxStatic(name, pkgUrl, taskId, env, static_type, branch):
+def NginxStatic(name, pkgUrl, taskId, env, static_type, branch, port):
 
     dest_dir = '/static/%s/%s/' % (env, name)
 
@@ -1359,8 +1435,8 @@ if __name__ == '__main__':
     Logger().log('%s' % len(sys.argv), True)
 
     # 向Nginx发布静态资源
-    if len(sys.argv) == 7:
-        retCode = NginxStatic(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
+    if len(sys.argv) == 8:
+        retCode = NginxStatic(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7])
         Logger().log('exit --> %s' % retCode)
         sys.exit(retCode)
     # 集成Jenkins功能
@@ -1368,10 +1444,10 @@ if __name__ == '__main__':
         retCode = JenkinsModify(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5],sys.argv[6],sys.argv[7],sys.argv[8],sys.argv[9],sys.argv[10])
         sys.exit(retCode)
     # Tomcat项目发布
-    if len(sys.argv) != 6:
+    if len(sys.argv) != 7:
         print "Miss arguments."
         sys.exit(1)
-    retCode = run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+    retCode = run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
     exit(retCode)
     # exit(0)
 
