@@ -44,7 +44,7 @@ AUTH_KEY = 'vLCzbZjGVNKWPxqd'
 CMDB_WORKSPACE = '/root/.cmdb/workspace/'
 run_log_file = '/home/admin/logs/run.log'
 error_log_file = '/home/admin/logs/err.log'
-CHECK_SERVICE_TIMEOUT = 30
+CHECK_SERVICE_TIMEOUT = 120
 
 # 配置文件源目录路径
 config_scource_path = '/opt/config/prod/'
@@ -423,6 +423,7 @@ def getJavaAppPid():
     return None
 
 def checkFileMd5sum(filepath, md5sum):
+    Logger().log('check md5...', True)
     with open(filepath) as f:
         data = f.read()    
         currentMd5sum = hashlib.md5(data).hexdigest()
@@ -526,6 +527,24 @@ def checkApiService(ip, taskId):
         uploadLog('chechk service --> Java start timeout...', taskId)
         return RET_ERROR_CHECK_SERVICE_FAILED
 
+def checkNodeJs(ip, taskId, port, name):
+    total_time = CHECK_SERVICE_TIMEOUT
+    while total_time > 0:
+        total_time -= 1
+        time.sleep(1)
+        cmd = "curl -I -m 5 %s:%s" % (ip, port)
+        ret = os.system(cmd)
+        if ret == 0:
+            Logger().log('check services --> Node.js port:%s start success....' % port, True)
+            uploadLog(taskId, 'Node.js port:%s start success....' % port)
+            return 0
+        else:
+            Logger().log('check services --> %s try to start....%s' % (name, total_time), True)
+            continue
+    Logger().log('check services --> Node.js start timeout....', True)
+    uploadLog('chechk service --> Node.js start timeout...', taskId)
+    return RET_ERROR_CHECK_SERVICE_FAILED
+
 
 def publishCommonService(config, runas):
     retCode = RET_OK
@@ -535,14 +554,14 @@ def publishCommonService(config, runas):
         stopServiceCommand = "cd %s; bash %s stop" %(os.path.join(config['publishPath'], config['appFilePrefix']),
                                                          os.path.basename(config['stopServiceCommand']))
         retCode, output = execSystemCommandRunAs(stopServiceCommand, runas)
-        recordStageLog(config['taskId'], 'stopService', retCode, output)
+        # recordStageLog(config['taskId'], 'stopService', retCode, output)
         if retCode != RET_OK: return retCode
     
     # clean old files
     needCleanPath = os.path.join(config['publishPath'], config['appFilePrefix'])
     if os.path.exists(needCleanPath):
         retCode = moveFile(config['publishPath'], config['appFilePrefix'], config['tempDir'], matchPrefix=False)
-        recordStageLog(config['taskId'], 'cleanOldFiles', retCode)
+        # recordStageLog(config['taskId'], 'cleanOldFiles', retCode)
         if retCode != RET_OK: return retCode
     else:
         if not os.path.exists(config['publishPath']):
@@ -551,21 +570,21 @@ def publishCommonService(config, runas):
     # publish files
     cmd = '/usr/bin/unzip -x %s -d %s > /dev/null' %(config['destFile'], os.path.join(config['publishPath'], config['appFilePrefix']))
     retCode, output = execSystemCommandRunAs(cmd, runas)
-    recordStageLog(config['taskId'], 'publishFiles', retCode, output)
+    # recordStageLog(config['taskId'], 'publishFiles', retCode, output)
     if retCode != RET_OK: return retCode
 
     # start service
     startServiceCommand = "cd %s;bash %s start" %(os.path.join(config['publishPath'], config['appFilePrefix']),
                                                       os.path.basename(config['startServiceCommand']))
     retCode, output = execSystemCommandRunAs(startServiceCommand, runas, timeout=300)
-    recordStageLog(config['taskId'], 'startService', retCode, output)
+    # recordStageLog(config['taskId'], 'startService', retCode, output)
     if retCode != RET_OK: return retCode
 
     # check service
     checkServiceCommand = "cd %s;bash %s status" %(os.path.join(config['publishPath'], config['appFilePrefix']),
                                                       os.path.basename(config['startServiceCommand']))
     retCode, output = execSystemCommandRunAs(checkServiceCommand, runas, timeout=300)
-    recordStageLog(config['taskId'], 'checkService', retCode, output)
+    # recordStageLog(config['taskId'], 'checkService', retCode, output)
     if retCode != RET_OK: return retCode
 
     return retCode
@@ -646,7 +665,7 @@ def createSoftLink(name):
             return 1
     return 0
 
-def publishNodeJsService(config, name, taskId):
+def publishNodeJsService(config, name, taskId, port):
     # 确认需要发布的目录路径是否存在
     # 删除旧文件
     try:
@@ -660,19 +679,28 @@ def publishNodeJsService(config, name, taskId):
             Logger().log(cmd, True)
 
         # 解压包文件
-        cmd = 'unzip -o %s -d %s > /dev/null 2>&1' % (config['destFile'], config['publishPath'])
+        cmd = 'tar xf %s -C %s' % (config['destFile'], config['publishPath'])
+        uploadLog(taskId, cmd)
         os.system(cmd)
         Logger().log(cmd, True)
 
         # 更改权限
         cmd = 'chown -R admin.admin %s' % config['publishPath']
+        uploadLog(taskId, cmd)
         os.system(cmd)
         Logger().log(cmd, True)
 
         # 启动
+        # cmd = "kill -9 `netstat -tunlp|grep 3000|awk -F ' ' '{print $NF}'|awk -F '/' '{print $1}'`"
         cmd = 'killall node'
         os.system(cmd)
         Logger().log(cmd, True)
+
+        uploadLog(taskId, '正在重启%s...' % name)
+        retCode = checkNodeJs('0.0.0.0', taskId, port, name)
+        if retCode != RET_OK: return retCode
+
+
     except Exception, e:
         Logger().log(e, True)
     retCode = RET_OK
@@ -697,7 +725,7 @@ def publishTomcatService(config, name, taskId, runas):
         else:
             retCode, output = execSystemCommandRunAs(config['stopServiceCommand'], runas)
             Logger().log('stop service --> %s %s' % (retCode, output))
-            recordStageLog(config['taskId'], 'stopService', retCode, output)
+            # recordStageLog(config['taskId'], 'stopService', retCode, output)
             time.sleep(3)
 
             # 如果java进程无法关闭 kill进程
@@ -779,20 +807,20 @@ def publishTomcatService(config, name, taskId, runas):
     # start service
     uploadLog(taskId, '正在重启tomcat...')
     retCode, output = execSystemCommandRunAs(config['startServiceCommand'], runas, timeout=300)
-    recordStageLog(config['taskId'], 'startService', retCode, output)
+    # recordStageLog(config['taskId'], 'startService', retCode, output)
     if retCode != RET_OK:
         uploadLog(taskId, 'Tomcat start timeout...')
         return retCode
 
     if config['appFilePrefix'] == 'api':
         retCode, output = execSystemCommandRunAs(config['startTengineCommand'], runas)
-        recordStageLog(config['taskId'], 'startTengineService', retCode, output)
+        # recordStageLog(config['taskId'], 'startTengineService', retCode, output)
         if retCode != RET_OK: return retCode
 
     # check service
     if config['appFilePrefix'] == 'api':
         retCode = checkApiService()
-        recordStageLog(config['taskId'], 'checkService', retCode, '')
+        # recordStageLog(config['taskId'], 'checkService', retCode, '')
 
     retCode = checkApiService('0.0.0.0', taskId)
     if retCode != RET_OK: return retCode
@@ -805,31 +833,31 @@ def publishApijarService(config, runas):
     # stop tengine
     if os.path.exists(config['stopTengineCommand']):
         retCode, output = execSystemCommandRunAs(config['stopTengineCommand'], runas)
-        recordStageLog(config['taskId'], 'stopTengineService', retCode, output)
+        # recordStageLog(config['taskId'], 'stopTengineService', retCode, output)
         if retCode != RET_OK: return retCode
 
     # stop service
     if os.path.exists(config['stopServiceCommand']):
         retCode, output = execSystemCommandRunAs(config['stopServiceCommand'], runas)
-        recordStageLog(config['taskId'], 'stopService', retCode, output)
+        # recordStageLog(config['taskId'], 'stopService', retCode, output)
         if retCode != RET_OK: return retCode
     
     # clean old files
     needCleanPath = config['publishPath']
     if os.path.exists(needCleanPath):
         retCode = moveFile(config['publishPath'], config['appFilePrefix'], config['tempDir'], matchPrefix=True)
-        recordStageLog(config['taskId'], 'cleanOldFiles', retCode)
+        # recordStageLog(config['taskId'], 'cleanOldFiles', retCode)
         if retCode != RET_OK: return retCode
 
     # publish files
     cmd = '/bin/cp %s %s' %(config['destFile'], config['publishPath'])
     retCode, output = execSystemCommandRunAs(cmd, runas)
-    recordStageLog(config['taskId'], 'publishFiles', retCode, output)
+    # recordStageLog(config['taskId'], 'publishFiles', retCode, output)
     if retCode != RET_OK: return retCode
 
     # start service
     retCode, output = execSystemCommandRunAs(config['startServiceCommand'], runas, timeout=300)
-    recordStageLog(config['taskId'], 'startService', retCode, output)
+    # recordStageLog(config['taskId'], 'startService', retCode, output)
     # if retCode != RET_OK: return retCode
     time.sleep(3)
 
@@ -841,7 +869,7 @@ def publishApijarService(config, runas):
 
     # check service
     retCode = checkApiService(ip='0.0.0.0')
-    recordStageLog(config['taskId'], 'checkService', retCode, '')
+    # recordStageLog(config['taskId'], 'checkService', retCode, '')
 
     return retCode
 
@@ -878,7 +906,7 @@ def publishHtmlService(config, runas):
     else:
         retCode = RET_OK
 
-    recordStageLog(config['taskId'], 'publishFiles', retCode, output)
+    # recordStageLog(config['taskId'], 'publishFiles', retCode, output)
     if retCode != RET_OK: return retCode
 
 
@@ -911,12 +939,12 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, name, port, runas):
 
     # download file
     retCode = downloadFile(pkgUrl, config['destFile'], taskId)
-    recordStageLog(config['taskId'], 'downloadFile', retCode)
+    # recordStageLog(config['taskId'], 'downloadFile', retCode)
     if retCode != RET_OK: return retCode
 
     # check file md5sum
     retCode = checkFileMd5sum(config['destFile'], md5sum)
-    recordStageLog(config['taskId'], 'checkMd5sum', retCode)
+    # recordStageLog(config['taskId'], 'checkMd5sum', retCode)
     if retCode != RET_OK:
         uploadLog(config['taskId'], 'checkMd5sum...failed')
         return retCode
@@ -933,7 +961,7 @@ def runTask(pkgUrl, md5sum, taskId, serviceType, name, port, runas):
         config['startTengineCommand'] = 'sudo /etc/init.d/tengine start'
         config['publishPath'] = '/usr/local/tomcat/webapps/'
         Logger().log(config, True)
-        retCode = publishTomcatService(config, name, taskId, port, runas)
+        retCode = publishTomcatService(config, name, taskId, runas)
     elif serviceType == 'node.js':
         config['publishPath'] = '%s/%s' % (node_publish_path, name)
         Logger().log(config, True)
@@ -983,11 +1011,12 @@ def run(pkgUrl, md5sum, taskId, serviceType, name, port, runas='admin'):
         Logger().log(str(os.environ), True)
         retCode = runTask(pkgUrl, md5sum, taskId, serviceType, name, port, runas=RUNNING_USER)
     except Exception, e:
-        retCode = RET_ERROR_RUN_EXCEPTION
-        tb = traceback.format_exc()
-        LOGGER.info('%s %s' %(str(tb), str(e)))
-        msg = '发布异常'
-        commitTaskStatus(taskId, msg, retCode)
+        Logger().log(e, True)
+        # retCode = RET_ERROR_RUN_EXCEPTION
+        # tb = traceback.format_exc()
+        # LOGGER.info('%s %s' %(str(tb), str(e)))
+        # msg = '发布异常'
+        # commitTaskStatus(taskId, msg, retCode)
 
     return retCode
 
@@ -1195,9 +1224,8 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         os.system(cmd)
         Logger().log(cmd, True)
 
-        # cmd = 'rsync -avz --delete * %s'
-
-        cmd = 'zip -r * %s.zip' % name
+        cmd = 'tar zcvf %s.tar.gz * && cp %s.tar.gz %s' % (name, name, pkg_path)
+        uploadLog(task_id, cmd)
         ret, out = ExecCmd(cmd)
         Logger().log(cmd, True)
         Logger().log(out, True)
@@ -1205,13 +1233,12 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
             Logger().log(out, False)
             return out
 
-        cmd = "find ./ -name '%s.zip' -exec cp {} %s \; " % (name , pkg_path)
-        ret, out = ExecCmd(cmd)
-        Logger().log(cmd, True)
-        Logger().log(out, True)
+        ret = uploadMd5(pkg_name, task_id)
         if ret:
-            Logger().log(out, False)
-            return out
+            Logger().log('create md5 failed...', True)
+            return ret
+
+        return retCode
 
     elif type == '2':
         if name == 'apk':
@@ -1265,20 +1292,6 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
             uploadLog(task_id, '代码打包失败......')
             Logger().log('files not exist..%s' % pkg_url, True)
             return False
-    # elif name == 'fk':
-    #     pass
-        # cmd = 'cd /root/.cmdb/Release && /bin/cp YX.war %sYX.war' % pkg_path
-        # ret, out = ExecCmd(cmd)
-        # Logger().log(cmd, True)
-        # Logger().log(out, True)
-        # if ret:
-        #     Logger().log(out, False)
-        #     return out
-        # ret = uploadMd5(pkg_name, task_id)
-        # if ret:
-        #     Logger().log('create md5 failed...', True)
-        #     return ret
-        # return 0
     else:
         # 项目mvn打包如果不要 -P 参数则不加
         if name in pkg_cmd_no_p_list:

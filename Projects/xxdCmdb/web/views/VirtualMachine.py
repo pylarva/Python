@@ -4,6 +4,7 @@ import os
 import json
 import time
 import paramiko
+import threading
 import subprocess
 from netaddr import IPNetwork
 from repository import models
@@ -162,6 +163,14 @@ class VirtualListView(View):
         # 删除主机
         host_del_id = request.POST.get('host_del_id', None)
         if host_del_id:
+            # 当前在线主机不允许删除
+            asset_obj = models.Asset.objects.filter(id=host_del_id).first()
+            asset_status = asset_obj.host_status
+            if asset_status == 1:
+                data_dict['status'] = False
+                data_dict['message'] = "当前主机处于在线状态 删除失败.."
+                return HttpResponse(json.dumps(data_dict))
+
             try:
                 # 删除目标虚拟机
                 self.host_del(host_del_id)
@@ -217,11 +226,15 @@ class VirtualListView(View):
             ssh.close()
 
             # 创建进程去执行任务
-            p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, cpu_num, memory_num, br_name, new_gateway, template_mirror))
-            p.start()
+            # p = Process(target=self.exec_task, args=(host_machine, new_name, new_ip, cpu_num, memory_num, br_name, new_gateway, template_mirror))
+            # p.start()
+
+            # 创建多线程
+            t = threading.Thread(target=self.exec_task, args=(host_machine, new_name, new_ip, cpu_num, memory_num,
+                                                              br_name, new_gateway, template_mirror))
+            t.start()
 
         except Exception:
-
             data_dict['status'] = False
             data_dict['message'] = "宿主机连接失败！请确认已在目标宿主机增加SSH_key公钥验证！"
 
@@ -246,7 +259,7 @@ class VirtualListView(View):
         ssh.connect(host_machine, port=22, username='root', key_filename=kvm_config.ssh_key_file, timeout=kvm_config.ssh_timeout)
         stdin, stdout, stderr = ssh.exec_command('ls')
         result = stdout.read()
-        print(result)
+        # print(result)
 
         # 查询数据库中的镜像名称
         template_mirror = kvm_config.kvm_template_dir + template_mirror + '.qcow2'
@@ -384,7 +397,6 @@ class VirtualListView(View):
         host_name = obj[0].host_name
         host_machine = obj[0].mudroom_host
         host_ip = obj[0].host_ip
-        print(host_del_id, host_name, host_machine)
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -392,10 +404,8 @@ class VirtualListView(View):
                     timeout=kvm_config.ssh_timeout)
         stdin, stdout, stderr = ssh.exec_command('ls')
         result = stdout.read()
-        print(result)
 
         mirror_file = kvm_config.kvm_qcow_dir + host_name + '.qcow2'
-        print(mirror_file)
 
         cmd = 'virsh destroy %s' % host_name
         ssh.exec_command(cmd)

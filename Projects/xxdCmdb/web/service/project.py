@@ -445,8 +445,8 @@ class Project(BaseServiceList):
                 pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
                                                                jenkins_config.static_pkg_name[release_name])
             elif release_type == 3:
-                pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
-                                                               release_business_2)
+                pkg_name = "/data/packages/%s/%s/%s/%s.tar.gz" % (release_business_1, release_business_2, release_obj.id,
+                                                                  release_business_2)
             else:
                 pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
                                                                release_business_2)
@@ -515,6 +515,10 @@ class Project(BaseServiceList):
         obj = models.ReleaseTask.objects.filter(id=task_id).first()
         md5 = obj.release_md5
         print(md5)
+
+        # 开始发布node.js项目
+        if release_type == 3:
+            pass
 
         # 发布类型为静态资源
         if release_type == 2:
@@ -642,12 +646,6 @@ class Project(BaseServiceList):
                 models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
 
         else:
-            # ret = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
-            #                        preexec_fn=os.setsid)
-            # out, err = ret.communicate()
-            # err = str(err, encoding='utf-8')
-            # self.log(task_id, err)
-            # self.log(task_id, '......拉取代码失败')
             self.log(task_id, '发布终止！')
             models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
 
@@ -675,8 +673,11 @@ class Project(BaseServiceList):
 
         cmd = "ssh root@%s 'pip install requests'" % ip
         os.system(cmd)
+        print(cmd)
 
-        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId, serviceType, name, port)
+        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId,
+                                                                serviceType, name, port)
+        print(cmd)
         # 脚本执行过程中 会陆续上传执行日志
         ret = os.system(cmd)
         if ret:

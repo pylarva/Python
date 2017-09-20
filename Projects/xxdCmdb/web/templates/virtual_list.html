@@ -603,11 +603,11 @@
                             if (data_dict.status) {
                                 location.reload();
                             }else {
+                                alert(data_dict.message);
                                 $('#del_machine').hide();
                                 $('#connect_info').hide();
                                 $('#connect_failed').show();
                                 $('#message_info').text(data_dict.message);
-
                             }
                         }
                     });
