@@ -119,6 +119,36 @@
         </div>
     <!-- 添加业务线开始 -->
 
+    <!-- 编辑业务线开始 -->
+    <div class="modal fade" id="exampleModal01" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="exampleModalLabel"><a id="business_edit_name"></a> 业务线说明</h4>
+              </div>
+              <form id="form1">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">业务线接口地址</label>
+                    <input type="text" class="form-control" id="business_info">
+                  </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">备注</label>
+                    <textarea id="business_text" style="width: 570px; height: 180px"></textarea>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <span id="error_message" style="color: red;"></span>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button id="info_commit" type="button" class="btn btn-primary">保存</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+    <!-- 编辑业务线开始 -->
+
     <!-- 删除层开始 -->
     <div id="modal_delete" class="alert alert-danger alert-dismissible fade in modal-delete hide" role="alert">
         <button type="button" class="close" aria-label="Close" onclick="$.Hide('#shade,#modal_delete');"><span>×</span>
@@ -159,5 +189,47 @@
         function ChangePage(id) {
                 $.nbDataLists(id);
             }
+
+        function business_edit(ths, id) {
+            var business_edit_name = $(ths).parent().prev().html();
+            $('#business_edit_name').html(business_edit_name);
+
+            $.ajax({
+                    url: '/business_2s.html',
+                    type: 'POST',
+                    data: {'get_id': id},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if(response.status) {
+                            $('#business_info').val(response.data.business_url);
+                            $('#business_text').val(response.data.business_remark);
+                        }
+                    }
+                });
+
+            $('#exampleModal01').modal('show');
+            $('#info_commit').click(function () {
+                var business_info = $('#business_info').val();
+                var business_text = $('#business_text').val();
+                if(business_info == ''){
+                    alert('业务接口地址不能为空..');
+                    return false;
+                }
+                $.ajax({
+                    url: '/business_2s.html',
+                    type: 'POST',
+                    data: {'id': id,'business_info': business_info, 'business_text': business_text},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if(response.status){
+                            $('#exampleModal01').modal('hide');
+                            alert('保存成功！')
+                        }else {
+                            alert('保存失败！')
+                        }
+                    }
+                })
+            });
+        }
     </script>
 {% endblock %}

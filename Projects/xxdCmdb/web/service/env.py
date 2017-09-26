@@ -14,7 +14,7 @@ class Asset(BaseServiceList):
     def __init__(self):
         condition_config = [
             {'name': 'host_ip', 'text': 'IP', 'condition_type': 'input'},
-            {'name': 'business_2', 'text': '业务类型1', 'condition_type': 'select', 'global_name': 'business_2_list'},
+            {'name': 'id', 'text': '业务线', 'condition_type': 'select', 'global_name': 'business_2_list'},
         ]
         table_config = [
             {
@@ -26,20 +26,27 @@ class Asset(BaseServiceList):
             },
             {
                 'q': 'name',
-                'title': "业务2",
+                'title': "业务线",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@name'}},
                 'attr': {'name': 'name', 'id': '@id', 'origin': '@name', 'edit-enable': 'true',
                          'edit-type': 'input'}
             },
             {
-                'q': None,
-                'title': "选项",
+                'q': 'business_url',
+                'title': "业务接口地址",
                 'display': 1,
-                'text': {
-                    'content': "<i class='fa fa-pencil-square-o' aria-hidden='true'></i><a href='#' onclick='business_edit(this,{nid})'> 编辑业务</a>",
-                    'kwargs': {'id': '@id', 'nid': '@id'}},
-                'attr': {}
+                'text': {'content': "{n}", 'kwargs': {'n': '@business_url'}},
+                'attr': {'name': 'name', 'id': '@id', 'origin': '@name', 'edit-enable': 'true',
+                         'edit-type': 'input'}
+            },
+            {
+                'q': 'business_remark',
+                'title': "备注",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@business_remark'}},
+                'attr': {'name': 'name', 'id': '@id', 'origin': '@name', 'edit-enable': 'true',
+                         'edit-type': 'input'}
             },
         ]
         # 额外搜索条件

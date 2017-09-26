@@ -26,6 +26,7 @@ from web.views import logs
 from web.views import document
 from web.views import vpn
 from web.views import pre_config
+from web.views import env
 
 
 
@@ -125,4 +126,7 @@ urlpatterns = [
 
     url(r'^vpn.html$', vpn.VpnListView.as_view()),
     url(r'^vpns.html$', vpn.VpnJsonView.as_view()),
+    url(r'^env_url.html$', env.AssetListView.as_view()),
+    url(r'^env_urls.html$', env.AssetJsonView.as_view()),
+
 ]
