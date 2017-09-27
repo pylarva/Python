@@ -188,21 +188,17 @@ class Asset(BaseServiceList):
         get_id = request.POST.get('get_id', None)
         if get_id:
             obj = models.BusinessTwo.objects.filter(id=get_id).first()
-            business_url = obj.business_url
             business_remark = obj.business_remark
-            response.data = {'business_url': business_url, 'business_remark': business_remark}
+            response.data = {'business_remark': business_remark}
             response.status = True
             return response
 
         # 编辑业务线说明
-        business_info = request.POST.get('business_info', None)
-        if business_info:
+        business_text = request.POST.get('business_text', None)
+        if business_text:
             business_id = request.POST.get('id', None)
-            business_text = request.POST.get('business_text', None)
-            print(business_info, business_text)
             try:
-                models.BusinessTwo.objects.filter(id=business_id).update(business_url=business_info,
-                                                                         business_remark=business_text)
+                models.BusinessTwo.objects.filter(id=business_id).update(business_remark=business_text)
                 response.status = True
             except Exception as e:
                 response.status = False

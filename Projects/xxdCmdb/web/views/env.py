@@ -18,7 +18,8 @@ class AssetListView(View):
         return super(AssetListView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'env_list.html')
+        business_two_list = models.BusinessTwo.objects.all()
+        return render(request, 'env_list.html', {'business_two_list': business_two_list})
 
 
 class AssetJsonView(View):
@@ -33,6 +34,10 @@ class AssetJsonView(View):
 
     def put(self, request):
         response = env.Asset.put_assets(request)
+        return JsonResponse(response.__dict__)
+
+    def post(self, request):
+        response = env.Asset.post_assets(request)
         return JsonResponse(response.__dict__)
 
 

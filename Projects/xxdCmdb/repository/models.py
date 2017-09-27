@@ -165,7 +165,7 @@ class BusinessTwo(models.Model):
     二级业务线
     """
     name = models.CharField('二级业务线', max_length=64, unique=True)
-    business_url = models.CharField('业务线接口地址', max_length=64, null=True, blank=True)
+    # business_url = models.CharField('业务线接口地址', max_length=64, null=True, blank=True)
     business_remark = models.CharField('备注', max_length=128, null=True, blank=True)
 
     class Meta:

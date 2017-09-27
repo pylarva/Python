@@ -125,16 +125,12 @@
             <div class="modal-content" style="border-radius: 5px">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="exampleModalLabel"><a id="business_edit_name"></a> 业务线说明</h4>
+                  <h4 class="modal-title" id="exampleModalLabel"><a id="business_edit_name"></a> 业务接口说明</h4>
               </div>
               <form id="form1">
               <div class="modal-body">
                   <div class="form-group">
-                    <label for="recipient-name" class="control-label">业务线接口地址</label>
-                    <input type="text" class="form-control" id="business_info">
-                  </div>
-                  <div class="form-group">
-                    <label for="recipient-name" class="control-label">备注</label>
+{#                    <label for="recipient-name" class="control-label">业务线接口说明</label>#}
                     <textarea id="business_text" style="width: 570px; height: 180px"></textarea>
                   </div>
               </div>
@@ -201,7 +197,7 @@
                     dataType: 'JSON',
                     success: function (response) {
                         if(response.status) {
-                            $('#business_info').val(response.data.business_url);
+{#                            $('#business_info').val(response.data.business_url);#}
                             $('#business_text').val(response.data.business_remark);
                         }
                     }
@@ -209,16 +205,15 @@
 
             $('#exampleModal01').modal('show');
             $('#info_commit').click(function () {
-                var business_info = $('#business_info').val();
                 var business_text = $('#business_text').val();
-                if(business_info == ''){
-                    alert('业务接口地址不能为空..');
+                if(business_text == ''){
+                    alert('说明不能为空..');
                     return false;
                 }
                 $.ajax({
                     url: '/business_2s.html',
                     type: 'POST',
-                    data: {'id': id,'business_info': business_info, 'business_text': business_text},
+                    data: {'id': id, 'business_text': business_text},
                     dataType: 'JSON',
                     success: function (response) {
                         if(response.status){

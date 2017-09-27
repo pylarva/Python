@@ -101,8 +101,8 @@ DATABASES = {
         'NAME': 'xxdcmdb',  # hahha
         'USER': 'cmdb',
         'PASSWORD': 'cmdb',
-        'HOST': '10.96.100.110',
-        # 'HOST': '192.168.33.110',
+        # 'HOST': '10.96.100.110',
+        'HOST': '192.168.33.110',
         'PORT': '3306',
     }
 }

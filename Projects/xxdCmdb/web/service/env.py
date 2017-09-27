@@ -13,8 +13,8 @@ from .base import BaseServiceList
 class Asset(BaseServiceList):
     def __init__(self):
         condition_config = [
-            {'name': 'host_ip', 'text': 'IP', 'condition_type': 'input'},
-            {'name': 'id', 'text': '业务线', 'condition_type': 'select', 'global_name': 'business_2_list'},
+            # {'name': 'host_ip', 'text': 'IP', 'condition_type': 'input'},
+            {'name': 'id', 'text': '选择业务线', 'condition_type': 'select', 'global_name': 'business_2_list'},
         ]
         table_config = [
             {
@@ -33,16 +33,8 @@ class Asset(BaseServiceList):
                          'edit-type': 'input'}
             },
             {
-                'q': 'business_url',
-                'title': "业务接口地址",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@business_url'}},
-                'attr': {'name': 'name', 'id': '@id', 'origin': '@name', 'edit-enable': 'true',
-                         'edit-type': 'input'}
-            },
-            {
                 'q': 'business_remark',
-                'title': "备注",
+                'title': "接口地址",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@business_remark'}},
                 'attr': {'name': 'name', 'id': '@id', 'origin': '@name', 'edit-enable': 'true',
@@ -195,9 +187,8 @@ class Asset(BaseServiceList):
         get_id = request.POST.get('get_id', None)
         if get_id:
             obj = models.BusinessTwo.objects.filter(id=get_id).first()
-            business_url = obj.business_url
             business_remark = obj.business_remark
-            response.data = {'business_url': business_url, 'business_remark': business_remark}
+            response.data = {'business_remark': business_remark}
             response.status = True
             return response
 
