@@ -125,7 +125,7 @@
             <div class="modal-content" style="border-radius: 5px">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="exampleModalLabel"><a id="business_edit_name"></a> 业务接口说明</h4>
+                  <h4 class="modal-title" id="exampleModalLabel"><a id="business_id" style="display: none"></a> <a id="business_edit_name"></a> 业务接口说明</h4>
               </div>
               <form id="form1">
               <div class="modal-body">
@@ -137,7 +137,7 @@
               <div class="modal-footer">
                   <span id="error_message" style="color: red;"></span>
                   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button id="info_commit" type="button" class="btn btn-primary">保存</button>
+                  <button id="info_commit" type="button" class="btn btn-primary" onclick="text_commit()">保存</button>
               </div>
             </form>
             </div>
@@ -189,6 +189,7 @@
         function business_edit(ths, id) {
             var business_edit_name = $(ths).parent().prev().html();
             $('#business_edit_name').html(business_edit_name);
+            $('#business_id').html(id);
 
             $.ajax({
                     url: '/business_2s.html',
@@ -202,29 +203,30 @@
                         }
                     }
                 });
-
             $('#exampleModal01').modal('show');
-            $('#info_commit').click(function () {
-                var business_text = $('#business_text').val();
-                if(business_text == ''){
-                    alert('说明不能为空..');
-                    return false;
-                }
-                $.ajax({
-                    url: '/business_2s.html',
-                    type: 'POST',
-                    data: {'id': id, 'business_text': business_text},
-                    dataType: 'JSON',
-                    success: function (response) {
-                        if(response.status){
-                            $('#exampleModal01').modal('hide');
-                            alert('保存成功！')
-                        }else {
-                            alert('保存失败！')
-                        }
+            }
+
+        function text_commit() {
+            var business_text = $('#business_text').val();
+            var id = $('#business_id').html();
+            if(business_text == ''){
+                alert('说明不能为空..');
+                return false;
+            }
+            $.ajax({
+                url: '/business_2s.html',
+                type: 'POST',
+                data: {'id': id, 'business_text': business_text},
+                dataType: 'JSON',
+                success: function (response) {
+                    if(response.status){
+                        $('#exampleModal01').modal('hide');
+                        $('#business_text').val('');
+                    }else {
+                        alert('保存失败！')
                     }
-                })
-            });
+                }
+            })
         }
     </script>
 {% endblock %}

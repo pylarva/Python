@@ -413,6 +413,7 @@ class Asset(BaseServiceList):
         release_name = obj.business_2.name
         pack_cmd = obj.pack_cmd
         static_type = obj.static_type
+        port = obj.git_branch
 
         release_git_url = obj.git_url
         release_jdk_version = obj.jdk_version
@@ -425,6 +426,9 @@ class Asset(BaseServiceList):
         if release_type == 2:
             pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
                                                            jenkins_config.static_pkg_name[release_name])
+        elif release_type == 3:
+            pkg_name = "/data/packages/%s/%s/%s/%s.tar.gz" % (release_business_1, release_business_2, release_obj.id,
+                                                              release_business_2)
         else:
             pkg_name = "/data/packages/%s/%s/%s/%s.war" % (release_business_1, release_business_2, release_obj.id,
                                                            release_business_2)
@@ -436,12 +440,12 @@ class Asset(BaseServiceList):
         # 多线程
         t = threading.Thread(target=self.jenkins_task, args=(pkg_name, release_git_url, release_branch, task_id,
                                                              release_name, release_env_name, pack_cmd, release_type,
-                                                             release_jdk_version, static_type, release_user))
+                                                             release_jdk_version, static_type, release_user, port))
         t.start()
         return True
 
     def jenkins_task(self, pkg_name, release_git_url, release_branch, task_id, release_name, release_env, pack_cmd,
-                     release_type, jdk_version, static_type, release_user):
+                     release_type, jdk_version, static_type, release_user, port):
 
         jdk = {'1': '/usr/local/jdk8', '2': '/usr/local/jdk7', '3': '/usr/java/jdk1.6.0_32'}
         static = {'1': '覆盖式', '2': '迭代式'}
@@ -450,6 +454,8 @@ class Asset(BaseServiceList):
         self.log(task_id, '------------------- 开始创建发布任务 -------------------')
         self.log(task_id, '项目名称: %s' % release_name)
         self.log(task_id, '发布类型: %s' % release_types[str(release_type)])
+        if release_type == 3:
+            self.log(task_id, '项目监听端口: %s' % port)
         self.log(task_id, '发布环境: %s 发布分支: %s 发布用户: %s' % (release_env, release_branch, release_user))
         self.log(task_id, 'Java版本: %s 静态资源类型: %s' % (jdk[str(jdk_version)], static[str(static_type)]))
         # self.log(task_id, 'git地址:%s' % release_git_url)
@@ -503,7 +509,7 @@ class Asset(BaseServiceList):
                 self.log(task_id, nginx_ip_list)
                 for ip in nginx_ip_list:
                     self.log(task_id, '当前发布第%s台Nginx服务器%s...' % (num, ip))
-                    ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env, static_type, release_branch)
+                    ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env, static_type, release_branch, port)
                     if not ret:
                         self.log(task_id, '发布第%s台Nginx服务器%s...【失败】' % (num, ip))
                         self.log(task_id, '终止发布...')
@@ -573,7 +579,8 @@ class Asset(BaseServiceList):
                 if nginx_ip_list:
                     for ip in nginx_ip_list:
                         self.log(task_id, '当前发布第%s台Nginx服务器%s...' % (num, ip))
-                        ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env, static_type, release_branch)
+                        ret = self.nginx_task(ip, release_name, pkg_name, task_id, release_env, static_type,
+                                              release_branch, port)
                         if not ret:
                             self.log(task_id, '发布第%s台Nginx服务器%s...【失败】' % (num, ip))
                             self.log(task_id, '终止发布...')
@@ -595,7 +602,7 @@ class Asset(BaseServiceList):
                 print(item.host_ip)
                 self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
                 # 目标机开始执行发布脚本
-                ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type, business_2)
+                ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type, business_2, port)
                 if not ret:
                     self.log(task_id, '当前发布第%s台%s...【失败】' % (num, item.host_ip))
                     self.log(task_id, '终止发布...')
@@ -633,7 +640,7 @@ class Asset(BaseServiceList):
         """
         models.ReleaseLog.objects.create(release_id=task_id, release_msg=msg)
 
-    def shell_task(self, ip, pkgUrl, md5sum, taskId, serviceType, name):
+    def shell_task(self, ip, pkgUrl, md5sum, taskId, serviceType, name, port):
         """
         连接发布目标机开始执行发布脚本
         :return:
@@ -648,8 +655,12 @@ class Asset(BaseServiceList):
 
         cmd = "ssh root@%s 'pip install requests'" % ip
         os.system(cmd)
+        print(cmd)
 
-        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId, serviceType, name)
+        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId,
+                                                                serviceType, name, port)
+        print(cmd)
+        self.log(taskId, cmd)
         # 脚本执行过程中 会陆续上传执行日志
         ret = os.system(cmd)
         if ret:
@@ -660,7 +671,7 @@ class Asset(BaseServiceList):
         print(ret)
         return True
 
-    def nginx_task(self, ip, name, pkgUrl, taskId, env, static_type, branch):
+    def nginx_task(self, ip, name, pkgUrl, taskId, env, static_type, branch, port):
         pkgUrl = pkgUrl.replace('/data/packages', jenkins_config.pkgUrl)
 
         if name in jenkins_config.static_nginx_dict:
@@ -672,8 +683,8 @@ class Asset(BaseServiceList):
         cmd = "ssh root@%s 'pip install requests'" % ip
         os.system(cmd)
 
-        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, name, pkgUrl, taskId, env,
-                                                                static_type, branch)
+        cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, name, pkgUrl, taskId, env,
+                                                                   static_type, branch, port)
         self.log(taskId, '%s' % cmd)
         print(cmd)
         ret = os.system(cmd)
