@@ -177,7 +177,7 @@ class Disk(models.Model):
     model = models.CharField('磁盘型号', max_length=32)
     capacity = models.FloatField('磁盘容量GB')
     pd_type = models.CharField('磁盘类型', max_length=32)
-    server_obj = models.ForeignKey('Server',related_name='disk')
+    server_obj = models.ForeignKey('Server', related_name='disk')
 
     class Meta:
         verbose_name_plural = "硬盘表"

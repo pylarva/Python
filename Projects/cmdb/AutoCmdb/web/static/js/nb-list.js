@@ -204,7 +204,7 @@
     function initialize(pager) {
         $.Show('#shade,#loading');
         var conditions = JSON.stringify(aggregationSearchCondition());
-        alert(conditions);
+        // alert(conditions);
         var $body = $('#table_body');
         $.ajax({
             url: requestUrl,
@@ -876,9 +876,9 @@
             });
         },
 
-        'nbDataList': function(url){
+        'nbDataList': function(url, page_num){
             requestUrl = url;
-            initialize(1);
+            initialize(page_num);
             bindMenuFunction();
             bindMultiSelect();
             bindSearchCondition();
