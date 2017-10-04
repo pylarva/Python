@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block side-bar-menus %}
+    <ul>
+    <!-- 前端通过request对象里面的user信息反向查找userprofile -->
+    {% for role in request.user.userprofile.roles.all %}
+            {% for menu in role.menus.all %}
+                <li>
+                    <a href="{% if menu.url_type == 0 %}{% url menu.url_name %}{% else %}{{ menu.url_name }}{% endif %}">
+                        <i class="fa {{ menu.url_icon }}"></i>
+                        <span>{{ menu.name }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+    {% endfor %}
+    </ul>
+{% endblock %}
+{% block body %}666{% endblock %}

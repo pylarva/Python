@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from django.conf.urls import include
 from crm import views
 
 
 urlpatterns = [
+    url(r'^admin/', admin.site.urls),
     url(r'^$', views.dashboard, name='sales_dashboard'),
+    url(r'^customers', views.customers, name='customers'),
 ]
