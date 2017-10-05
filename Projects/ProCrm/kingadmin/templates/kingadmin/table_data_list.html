@@ -1,0 +1,23 @@
+{% extends "base1.html" %}
+{% load kingadmin_tags %}
+{% block body %}
+    <div class="card-block">
+        <h4>{% get_model_verbose_name admin_obj.model %}</h4>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    {% for column in admin_obj.list_display %}
+                        <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+        <tbody>
+            {% for obj in admin_obj.queryset %}
+                <tr>
+                    {% build_table_row admin_obj obj %}
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+{% endblock %}

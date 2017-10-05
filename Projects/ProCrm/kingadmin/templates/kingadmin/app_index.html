@@ -1,0 +1,24 @@
+{% extends "base1.html" %}
+{% load kingadmin_tags %}
+{% block body %}
+    <div class="card-block">
+        {% for app,app_tables in site.registered_sites.items %}
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <h3>{{ app }}</h3>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 这里需要使用到自定义标签显示 -->
+                {% for modle_name, amdin_class in app_tables.items %}
+                <tr>
+                    <!-- 把封装了表格model的类传给自定义标签 admin_class.model==models.UserProfile 里面有许多类似 _Meta的方法 -->
+                    <th><a href="/kingadmin/{% get_app_name amdin_class.model %}/{% get_modle_name amdin_class.model %}">{% get_model_verbose_name amdin_class.model %}</a></th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
+    </div>
+{% endblock %}
