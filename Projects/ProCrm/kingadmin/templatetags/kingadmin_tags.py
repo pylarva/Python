@@ -48,7 +48,7 @@ def build_table_row(admin_obj, obj):
                 td_ele = '''<td><a href="/kingadmin/{app_name}/{model_name}/{obj_id}/change/">{column_data}</a> </td>'''\
                             .format(app_name=admin_obj.model._meta.app_label,
                                     model_name=admin_obj.model._meta.model_name,
-                                    obj_id=obj.id,column_data=column_data)
+                                    obj_id=obj.id, column_data=column_data)
             else:
                 td_ele = '''<td>%s</td>''' % column_data
             row_ele += td_ele
@@ -60,13 +60,13 @@ def build_table_row(admin_obj, obj):
 @register.simple_tag
 def get_filter_field(filter_column, admin_obj):
     """
-    多条件过滤
+    条件过滤
     :param filter_column:
     :param admin_obj:
     :return:
     """
     field_obj = admin_obj.model._meta.get_field(filter_column)
-    select_ele = """<select class="form-control selectpicker" data-style="btn-primary" name="%s"> """ %filter_column
+    select_ele = """<select class="form-control selectpicker" data-style="btn-primary" name="%s"> """ % filter_column
     for choice in field_obj.get_choices():
         selected_condtion = admin_obj.filter_condtions.get(filter_column)
         if selected_condtion != None:

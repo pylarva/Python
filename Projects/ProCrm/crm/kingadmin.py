@@ -15,4 +15,12 @@ class CustomerAdmin(BaseAdmin):
     search_fields = ('name', 'qq', 'status')
 
 
+class CourseAdmin(BaseAdmin):
+    list_display = ('id', 'name', 'price', 'outline')
+    # list_filter = ('name',)
+    # search_fields = ('name',)
+    list_per_page = 2
+
+
 site.register(models.Customer, CustomerAdmin)
+site.register(models.Course, CourseAdmin)

@@ -1,4 +1,5 @@
 from django.db.models import Q
+from kingadmin import forms
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -75,3 +76,31 @@ def table_data_list(request, app_name, model_name):
     admin_obj.querysets = objs
 
     return render(request, "kingadmin/table_data_list.html", locals())
+
+
+def table_change(request, app_name, model_name, obj_id):
+    """
+    编辑表格
+    :param request:
+    :param app_name:
+    :param model_name:
+    :param obj_id:
+    :return:
+    """
+    admin_obj = base_admin.site.registered_sites[app_name][model_name]
+
+    # 自动创建用于生成编辑表格的ModelForm类
+    model_form = forms.CreateModelForm(request, admin_obj=admin_obj)
+
+    obj = admin_obj.model.objects.get(id=obj_id)
+
+    if request.method == "GET":
+        # 填充ModelFrom表格数据
+        obj_form = model_form(instance=obj)
+    elif request.method == "POST":
+        # 更新表格数据
+        obj_form = model_form(instance=obj, data=request.POST)
+        if obj_form.is_valid():
+            obj_form.save()
+
+    return render(request, "kingadmin/table_change.html", locals())

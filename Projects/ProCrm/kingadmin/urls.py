@@ -22,4 +22,5 @@ from django.conf.urls import include
 urlpatterns = [
     url(r'^$', views.app_index),
     url(r'^(\w+)/(\w+)/$', views.table_data_list),
+    url(r'^(\w+)/(\w+)/(\d+)/change/$', views.table_change),
 ]
