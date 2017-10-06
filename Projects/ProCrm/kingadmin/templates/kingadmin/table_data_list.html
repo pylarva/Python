@@ -1,23 +1,69 @@
 {% extends "base1.html" %}
 {% load kingadmin_tags %}
+{% block extra_css %}
+{#    <link rel="stylesheet" href="/static/css/bootstrap.css">#}
+    <link rel="stylesheet" href="/static/plugin/bootstrap-select/bootstrap-select.css">
+{% endblock %}
 {% block body %}
     <div class="card-block">
         <h4>{% get_model_verbose_name admin_obj.model %}</h4>
+
+        {% if admin_obj.list_filter %}
+                 <form>
+                 <div class="form-group">
+                    {% for filter_column in admin_obj.list_filter %}
+                            {{ filter_column }}
+                            {% get_filter_field  filter_column admin_obj %}
+                    {% endfor %}
+                 </div>
+                      <input type="text" name="_q" value="{% get_search_key request %}">
+                      <input type="submit" class="btn btn-success" value="过滤">
+{#                      <input type="hidden" name="_o" value="{% get_current_orderby_key request %}">#}
+                 </form>
+        {% endif %}
+
         <table class="table table-bordered table-striped table-condensed">
             <thead>
                 <tr>
                     {% for column in admin_obj.list_display %}
-                        <th>{{ column }}</th>
+                        <th>
+                            <a href="?_o={% get_orderby_key request column %}{% generate_filter_url admin_obj %}">{{ column }}</a>
+                            {% display_order_by_icon request column %}
+                        </th>
                     {% endfor %}
                 </tr>
             </thead>
         <tbody>
-            {% for obj in admin_obj.queryset %}
+            {% for obj in admin_obj.querysets %}
                 <tr>
                     {% build_table_row admin_obj obj %}
                 </tr>
             {% endfor %}
         </tbody>
         </table>
+
+        <div>
+            <nav aria-label="...">
+              <ul class="pagination pagination-sm">
+                <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+
+                  {% for page in admin_obj.querysets.paginator.page_range %}
+                      {% if page == admin_obj.querysets.number %}
+                        <li class="active">
+                        {% else %}
+                          <li>
+                      {% endif %}
+                        <a href="?page={{ page }}{% generate_order_by_url request  %}{% generate_filter_url admin_obj %}">{{ page }} <span class="sr-only">(current)</span></a>
+                    </li>
+                  {% endfor %}
+
+                <li class="disabled"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+
+              </ul>
+            </nav>
+        </div>
     </div>
+{% endblock %}
+{% block extra_js %}
+    <script src="/static/plugin/bootstrap-select/bootstrap-select.js"></script>
 {% endblock %}

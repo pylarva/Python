@@ -10,6 +10,9 @@ class CustomerAdmin(BaseAdmin):
     自定义显示列
     """
     list_display = ('id', 'name', 'qq', 'consultant', 'source', 'consult_content', 'status', 'date')
+    list_filter = ('source', 'status', 'consultant')
+    list_per_page = 2
+    search_fields = ('name', 'qq', 'status')
 
 
 site.register(models.Customer, CustomerAdmin)

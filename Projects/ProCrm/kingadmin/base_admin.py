@@ -22,6 +22,7 @@ class BaseAdmin(object):
     list_display = ()
     list_filter = ()
     search_fields = ()
+    list_per_page = 2
 
 
 class AdminSite(object):

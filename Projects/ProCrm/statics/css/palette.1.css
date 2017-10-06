@@ -214,8 +214,8 @@ fieldset[disabled] .btn-color.active {
 .pagination>.active>span:hover,
 .pagination>.active>a:focus,
 .pagination>.active>span:focus {
-    border-color: #535a6c;
-    background-color: #535a6c;
+    border-color: #20a8d8;
+    background-color: #20a8d8;
     color: #ffffff;
 }
 .progress-bar-color {

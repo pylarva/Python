@@ -62,6 +62,7 @@
     <link rel="stylesheet" href="/static/css/palette.1.css" id="skin">
     <link rel="stylesheet" href="/static/css/style.1.css" id="font">
     <link rel="stylesheet" href="/static/css/main.css">
+    {% block extra_css %}{% endblock %}
 
 
     <script src="/static/js/modernizr.js"></script>
@@ -352,7 +353,7 @@ Personal<b>CRM</b>
     <script src="/static/js/main.js"></script>
 
     <script src="/static/js/panel.js"></script>
-
+    {% block extra_js %}{% endblock %}
     <script>
         $(document).ready(function () {
             $(".main-navigation a[href='{{ request.path }}']").parent().addClass("active");
