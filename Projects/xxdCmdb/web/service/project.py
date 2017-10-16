@@ -410,6 +410,9 @@ class Project(BaseServiceList):
         pack_cmd = obj.pack_cmd
         static_type = obj.static_type
         port = obj.git_branch
+        if not port:
+            port = "None"
+        print('========', port)
 
         obj_env = models.BusinessOne.objects.filter(id=release_env).first()
         release_env_name = obj_env.name
@@ -417,7 +420,6 @@ class Project(BaseServiceList):
         release_git_url = obj.git_url
         release_jdk_version = obj.jdk_version
         release_type = obj.project_type_id
-
         try:
             release_obj = models.ReleaseTask(release_name=release_name, release_env_id=release_env, release_time=release_time,
                                              release_git_branch=release_branch, release_id=release_id,
@@ -428,7 +430,6 @@ class Project(BaseServiceList):
 
             models.ProjectTask.objects.filter(id=release_id).update(release_last_id=release_obj.id,
                                                                     release_last_time=release_time)
-
             response.data = {'id': release_obj.id, 'time': release_time}
             release_business_1 = release_obj.release_env
             release_business_2 = release_obj.release_name
@@ -440,7 +441,6 @@ class Project(BaseServiceList):
 
             # 返回给页面新的发布ID和时间
             release_name = str(release_name)
-
             if release_type == 2:
                 pkg_name = "/data/packages/%s/%s/%s/%s.zip" % (release_business_1, release_business_2, release_obj.id,
                                                                jenkins_config.static_pkg_name[release_name])

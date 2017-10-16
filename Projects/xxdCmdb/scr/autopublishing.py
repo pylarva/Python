@@ -33,8 +33,8 @@ from threading import Timer
 
 API_HOST = 'cmdb.xxd.com'
 # API_URL = 'http://192.168.33.110:8005/api/release'
-API_URL = 'http://172.16.18.231:8005/api/release'
-# API_URL = 'http://cmdb.xinxindai.com/api/release'
+# API_URL = 'http://172.16.18.234:8005/api/release'
+API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -80,10 +80,16 @@ static_pkg_cmd_list = {'mui': 'cnpm install && gulp && cd pages/ && /usr/bin/zip
 
 # 'static_m': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip
 
-static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk', 'm': 'dist', 'digital': 'digital'}
+# 静态资源项目及对应包名(注意,新添加静态资源发布项目必须修改该字典)
+static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk', 'm': 'dist',
+                   'digital': 'digital', 'jk': 'jk'}
 
-# apk 放置目录
-apk_path = '/opt/static/download/'
+# apk项目文件放置目录
+apk_dict = {
+    'apk': "/opt/static/download/",
+    'jk': "/opt/static/download/jk/"
+}
+# apk_path = '/opt/static/download/'
 
 # node.js项目发布目录
 node_publish_path = '/data'
@@ -1241,10 +1247,10 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         return retCode
 
     elif type == '2':
-        if name == 'apk':
+        if name in apk_dict:
             # 如果是apk项目 只需拉取文件 打包就行
             os.chdir(workspace_path)
-            cmd = 'cd apk && zip apk.zip *'
+            cmd = 'cd apk && zip %s.zip *' % name
             uploadLog(task_id, cmd)
             ret, out = ExecCmd(cmd)
             Logger().log(cmd, True)
@@ -1252,7 +1258,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
             if ret:
                 Logger().log(out, False)
                 return out
-            cmd = 'cd apk && /bin/cp -fr apk.zip %s' % pkg_path
+            cmd = 'cd apk && /bin/cp -fr %s.zip %s' % (name, pkg_path)
             uploadLog(task_id, cmd)
             ret, out = ExecCmd(cmd)
             Logger().log(cmd, True)
@@ -1261,6 +1267,7 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
                 Logger().log(out, False)
                 return out
             return 0
+
         os.chdir(workspace_path)
         cmd = '%s%s >> %s' % (static_pkg_cmd_list[name], pkg_path, run_log_file )
         uploadLog(task_id, cmd)

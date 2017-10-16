@@ -414,6 +414,8 @@ class Asset(BaseServiceList):
         pack_cmd = obj.pack_cmd
         static_type = obj.static_type
         port = obj.git_branch
+        if not port:
+            port = "None"
 
         release_git_url = obj.git_url
         release_jdk_version = obj.jdk_version
