@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# 666
 import os
-import json
-import requests
-import subprocess
-import urllib.request
+import re
 
-apk_dict = {
-    'apk': "/opt/static/download/",
-    'jk': "/opt/static/download/jk/"
-}
+print(os.popen('who', 'r').read())
+with os.popen('who', 'r') as f:
+    for line in f:
+        print(re.split(r'\s\s+', line.strip()))
 
-print(apk_dict['jk'])

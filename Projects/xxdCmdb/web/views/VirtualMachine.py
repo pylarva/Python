@@ -164,7 +164,9 @@ class VirtualListView(View):
         host_del_id = request.POST.get('host_del_id', None)
         if host_del_id:
             # 当前在线主机不允许删除
-            asset_obj = models.Asset.objects.filter(id=host_del_id).first()
+            obj = models.VirtualMachines.objects.filter(id=host_del_id)
+            host_ip = obj[0].host_ip
+            asset_obj = models.Asset.objects.filter(host_ip=host_ip).first()
             asset_status = asset_obj.host_status
             if asset_status == 1:
                 data_dict['status'] = False

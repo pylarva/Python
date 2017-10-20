@@ -71,7 +71,7 @@ java_version_path = {'1': '/usr/local/jdk8', '2': '/usr/local/jdk7', '3': '/usr/
 
 # 发布静态资源项目打包命令列表
 static_pkg_cmd_list = {'mui': 'cnpm install && gulp && cd pages/ && /usr/bin/zip -r build.zip build && /bin/cp build.zip ',
-                       'mobile': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
+                       'mobile': 'cnpm install && gulp && /usr/bin/zip -r html.zip html jie && /bin/cp html.zip ',
                        'html': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp html.zip ',
                        'pc': 'cnpm install && gulp && cd pages/ && /usr/bin/zip -r build.zip build && /bin/cp build.zip ',
                        'heidai': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp build.zip ',
@@ -1393,6 +1393,7 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch, port):
             return 0
     else:
         os.makedirs(dest_dir)
+        Logger().log('mkdir %s...' % dest_dir, True)
 
     # 发布静态资源顺序 下载zip包 ➡️ 删除原有文件夹 ➡️ 解压 ➡️ 删除新zip包
     if name in static_nginx_dict:
@@ -1412,15 +1413,15 @@ def NginxStatic(name, pkgUrl, taskId, env, static_type, branch, port):
     else:
         Logger().log('download files failed...', True)
 
-    cmd = "find %s. ! -name '*.zip' -exec rm -fr {} \;" % dest_dir
-    Logger().log(cmd, True)
-    os.system(cmd)
-    time.sleep(1)
+    # cmd = "find %s. ! -name '*.zip' -exec rm -fr {} \;" % dest_dir
+    # Logger().log(cmd, True)
+    # os.system(cmd)
+    # time.sleep(1)
 
-    if name == 'apk':
-        if not os.path.exists(apk_path):
-            os.system('mkdir -p %s' % apk_path)
-        cmd = 'unzip -o %s -d %s' % (dest_file, apk_path)
+    if name in apk_dict:
+        if not os.path.exists(apk_dict[name]):
+            os.system('mkdir -p %s' % apk_dict[name])
+        cmd = 'unzip -o %s -d %s' % (dest_file, apk_dict[name])
         ret, out = ExecCmd(cmd)
         Logger().log(cmd, True)
         Logger().log(out, True)
