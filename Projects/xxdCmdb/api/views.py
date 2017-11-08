@@ -9,7 +9,7 @@ from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-# from utils import auth
+from utils import auth
 from api import config
 from repository import models
 from api.service import asset
@@ -148,7 +148,7 @@ class AssetView(View):
 
         return JsonResponse(response.__dict__)
 
-    # @method_decorator(auth.api_auth)
+    @method_decorator(auth.api_auths)
     def post(self, request, *args, **kwargs):
         """
         更新或者添加资产信息
@@ -160,9 +160,20 @@ class AssetView(View):
 
         server_info = json.loads(request.body.decode('utf-8'))
         server_info = json.loads(server_info)
-        hostname = server_info['k1']
-        #
-        ret = {'code': 1000, 'message': '[%s]更新完成' % hostname}
+        new_ip = server_info['docker']
+
+        host_ip = models.Asset.objects.filter(host_ip=new_ip).count()
+        if host_ip:
+            try:
+                models.Asset.objects.create(host_ip=new_ip, host_name='a0-docker-%s' % new_ip, host_status=2,
+                                            host_item=1, host_type=5, host_cpu=2, host_memory=2, business_1_id=1,
+                                            bussiness_2_id=1, business_3_id=1)
+            except Exception as e:
+                ret = {'code': 1000, 'message': '[%s]添加失败...%s' % (new_ip, e)}
+                return JsonResponse(ret)
+            ret = {'code': 1002, 'message': '[%s]IP已经存在！' % new_ip}
+        else:
+            ret = {'code': 1000, 'message': '[%s]添加成功！' % new_ip}
         #
         # server_obj = models.Server.objects.filter(hostname=hostname).select_related('asset').first()
         # if not server_obj:

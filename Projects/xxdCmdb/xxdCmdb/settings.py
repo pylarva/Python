@@ -98,10 +98,11 @@ WSGI_APPLICATION = 'xxdCmdb.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'xxdcmdb',  # hahha
+        'NAME': 'xxdcmdb',
         'USER': 'cmdb',
         'PASSWORD': 'cmdb',
         # 'HOST': '10.96.100.110',
+        # 'HOST': '192.168.31.110',
         'HOST': '192.168.33.110',
         'PORT': '3306',
     }

@@ -282,7 +282,8 @@ class ConfigListView(View):
             # 更新完后 要将本地文件夹同步回原主机
             try:
                 cmd = 'scp -r /opt/%s root@%s:%s' % (os.path.basename(config_config.config_path),
-                                                     config_config.config_in_host_ip, config_config.config_path)
+                                                     config_config.config_in_host_ip, config_config.config_back_path)
+                print(cmd)
                 os.system(cmd)
                 response.status = True
             except Exception as e:
@@ -305,8 +306,9 @@ class ConfigListView(View):
             # 更新完后 要将本地文件夹同步回原主机
             try:
                 cmd = 'scp -r /opt/%s root@%s:%s' % (os.path.basename(config_config.config_path),
-                                                     config_config.config_in_host_ip, config_config.config_path)
+                                                     config_config.config_in_host_ip, config_config.config_back_path)
                 os.system(cmd)
+                print(cmd)
                 response.status = True
             except Exception as e:
                 response.status = False

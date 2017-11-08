@@ -115,6 +115,7 @@ class Asset(models.Model):
         (2, '虚拟机'),
         (3, '交换机'),
         (4, '防火墙'),
+        (5, 'Docker'),
     )
     device_status_choices = (
         (1, '在线'),
