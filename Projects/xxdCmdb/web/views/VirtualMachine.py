@@ -256,11 +256,11 @@ class VirtualListView(View):
         return ret
 
     def exec_task(self, host_machine, host_name, new_ip, cpu_num, memory_num, br_name, new_gateway, template_mirror):
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(host_machine, port=22, username='root', key_filename=kvm_config.ssh_key_file, timeout=kvm_config.ssh_timeout)
-        stdin, stdout, stderr = ssh.exec_command('ls')
-        result = stdout.read()
+        # ssh = paramiko.SSHClient()
+        # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # ssh.connect(host_machine, port=22, username='root', key_filename=kvm_config.ssh_key_file, timeout=kvm_config.ssh_timeout)
+        # stdin, stdout, stderr = ssh.exec_command('ls')
+        # result = stdout.read()
         # print(result)
 
         # 查询数据库中的镜像名称
@@ -349,7 +349,7 @@ class VirtualListView(View):
         # stdin, stdout, stderr = ssh.exec_command(cmd)
         # result = stdout.read()
         # print(result)
-        ssh.close()
+        # ssh.close()
 
     def change_cpu_memory(self, host_name, new_cpu, new_memory,  new_mirror, br_name):
         """

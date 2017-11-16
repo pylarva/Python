@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 #!/usr/bin/env python
 # coding: utf-8
-=======
 #!/usr/bin/env python3.6
 # coding: utf-8
 
@@ -53,7 +51,3 @@ if __name__ == '__main__':
 # print(ret)
 
 
-
-
-
->>>>>>> release
