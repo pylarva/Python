@@ -27,6 +27,7 @@ from web.views import document
 from web.views import vpn
 from web.views import pre_config
 from web.views import env
+from web.views import docker
 
 
 
@@ -129,4 +130,5 @@ urlpatterns = [
     url(r'^env_url.html$', env.AssetListView.as_view()),
     url(r'^env_urls.html$', env.AssetJsonView.as_view()),
 
+    url(r'docker_index.html', docker.DockerView.as_view())
 ]
