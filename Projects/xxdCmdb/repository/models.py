@@ -654,4 +654,17 @@ class HardDisk(models.Model):
         return self.slot
 
 
+class DockerNode(models.Model):
+    """
+    Docker物理节点机器
+    """
+    ip = models.CharField(max_length=32, null=True, blank=True)
+    create_time = models.CharField(max_length=64, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "docker物理节点表"
+
+    def __str__(self):
+        return self.ip
+
 

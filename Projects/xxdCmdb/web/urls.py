@@ -130,5 +130,6 @@ urlpatterns = [
     url(r'^env_url.html$', env.AssetListView.as_view()),
     url(r'^env_urls.html$', env.AssetJsonView.as_view()),
 
-    url(r'docker_index.html', docker.DockerView.as_view())
+    url(r'docker_index.html', docker.DockerView.as_view()),
+    url(r'docker_index_node.html', docker.DockerJsonView.as_view())
 ]

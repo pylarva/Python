@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+import json
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -10,6 +11,8 @@ from repository import models
 from utils.response import BaseResponse
 from web.service.login import auth_admin
 from utils.menu import menu
+from utils.response import BaseResponse
+
 
 
 @method_decorator(auth_admin, name='dispatch')
@@ -21,18 +24,38 @@ class DockerView(View):
         return render(request, 'docker_index.html')
 
 
-class AssetJsonView(View):
+class DockerJsonView(View):
     def get(self, request):
-        obj = asset.Asset()
-        response = obj.fetch_assets(request)
+        """
+        前端请求docker物理节点
+        :param request:
+        :return:
+        """
+        response = BaseResponse()
+        response.data = [{
+                    "ip": '192.168.1.1',
+                    "time": "2017-11-19"
+                }, {
+                    "ip": '192.168.1.2',
+                    "time": "2017-11-20"
+                }]
         return JsonResponse(response.__dict__)
 
     def delete(self, request):
         response = asset.Asset.delete_assets(request)
         return JsonResponse(response.__dict__)
 
-    def put(self, request):
-        response = asset.Asset.put_assets(request)
+    def post(self, request):
+        response = BaseResponse()
+        response.data = [{
+                    "ip": '192.168.1.1',
+                    "time": "2017-11-20"
+                }, {
+                    "ip": '192.168.1.2',
+                    "time": "2017-11-20"
+                }]
+        print(request)
+        # response = asset.Asset.put_assets(request)
         return JsonResponse(response.__dict__)
 
 

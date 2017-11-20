@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.css"/>
     <link rel="stylesheet" href="/static/css/backend.css"/>
     <link rel="stylesheet" href="/static/css/commons.css"/>
-    <link rel="stylesheet" href="/static/css/bootstrap-select.css"/>
+{#    <link rel="stylesheet" href="/static/css/bootstrap-select.css"/>#}
 
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/artDialog-6.0.4/css/ui-dialog.css" rel="stylesheet">
 
@@ -18,7 +18,7 @@
 
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/kendoui-2015.2.624/styles/kendo.common.min.css" rel="stylesheet">
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/kendoui-2015.2.624/styles/kendo.default.min.css" rel="stylesheet">
-
+    <link href="https://magicbox.bkclouds.cc/static_api/v3/bk/css/bk.css" rel="stylesheet">
     <style type="text/css">
         .self:hover{
             color: yellow;
@@ -201,14 +201,14 @@
 {#                    <label for="recipient-name" class="control-label">1.用户名</label>#}
 {#                    <input type="text" class="form-control" id="user_name">#}
                     <div id="table4_demo3" class="mb30 demo"></div>
-                    <div id="table4_demo4" class="mb30 demo"></div>
+{#                    <div id="table4_demo4" class="mb30 demo"></div>#}
 
                   </div>
               </div>
               <div class="modal-footer">
                   <span id="error_message" style="color: red;"></span>
                   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button id="add_users" type="button" class="btn btn-primary">保存</button>
+                  <button id="save_node" type="button" class="btn btn-primary">保存</button>
               </div>
             </form>
             </div>
@@ -219,7 +219,9 @@
     </div>
 </div>
 </div>
-    <script type="text/javascript" src="/static/js/jquery-1.12.4.js"></script>
+{#    <script type="text/javascript" src="/static/js/jquery-1.12.4.js"></script>#}
+    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/js/jquery-1.10.2.min.js"></script>
+
     <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
 
 	<!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
@@ -227,19 +229,23 @@
     <script type="text/javascript" src="/static/js/nb-list.js"></script>
 
     <!-- 包括所有kendoui的js插件或者可以根据需要使用的js插件调用　-->
-    <script src="/static/js/kendo.all.min.js"></script>
-
+{#    <script src="/static/js/kendo.all.min.js"></script>#}
+    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/kendoui-2015.2.624/js/kendo.all.min.js"></script>
 {#    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/artDialog-6.0.4/dist/dialog-min.js"></script>#}
 {#    <script src="/static/js/bk.js"></script>#}
+{#    <script src="https://magicbox.bkclouds.cc/static_api/v3/bk/js/bk.js"></script>#}
 
     <script type="text/javascript">
     $(document).ready(function() {
-            $.initMenu('#menu_docker');
-            $.nbDataList('/users.html', 1);
+        $('.k-edit').attr('id', 's-update');
+        $.initMenu('#menu_docker');
+        $.nbDataList('/users.html', 1);
 
-       $('#chartA').kendoChart({
+{#        $('#save_node').onclick(function () {#}
+{#            console.log(666);#}
+{#        })#}
 
-
+        $('#chartA').kendoChart({
            seriesDefaults: {
                 type: 'line'
             },
@@ -374,77 +380,65 @@
         });
     });
 
-    //重新绘制
-    $(window).on('resize',function(){
-        var chartA = $("#chartA").data("kendoChart");
-        var chartB = $("#chartB").data("kendoChart");
-        var chartC = $("#chartC").data("kendoChart");
-        var chartD = $("#chartD").data("kendoChart");
+        //重新绘制
+        $(window).on('resize',function(){
+            var chartA = $("#chartA").data("kendoChart");
+            var chartB = $("#chartB").data("kendoChart");
+            var chartC = $("#chartC").data("kendoChart");
+            var chartD = $("#chartD").data("kendoChart");
 
-        chartA.redraw();
-        chartB.redraw();
-        chartC.redraw();
-        chartD.redraw();
-    });
-    var data = [
-    { ip: "192.168.1.1", time: '2017-11-16' },
-    { ip: "192.168.1.2", time: '2017-11-16' }
-];
+            chartA.redraw();
+            chartB.redraw();
+            chartC.redraw();
+            chartD.redraw();
+        });
+        var data = [
+        { ip: "192.168.1.1", time: '2017-11-16' },
+        { ip: "192.168.1.2", time: '2017-11-16' }
+        ];
 
+    function server_show() {
+        $('#myModal').modal({backdrop: 'static', keyboard: false});
+{#        var d = dialog({#}
+{#            width: 260,#}
+{#            title: '欢迎',#}
+{#            quickClose: true,#}
+{#            content: '欢迎使用 artDialog 对话框组件！',#}
+{#            ok: function() {#}
+{#                console.log(this);#}
+{#                // do something#}
+{#            },#}
+{#            cancelValue: '取消',#}
+{#            cancel: function() {#}
+{#                console.log(this);#}
+{#                // do something#}
+{#            },#}
+{#            onshow: function() {#}
+{#                console.log(this);#}
+{#                // do something#}
+{#            }#}
+{#        });#}
+{#        d.show();#}
+    }
 
- var dataSource = new kendo.data.DataSource({//数据源配置项
-            offlineStorage: "offline-kendo-demo",
+        var dataSource = new kendo.data.DataSource({//数据源配置项
             transport: {
                 read: {
-                    url: "./demo.js",
+                    url: "/docker_index_node.html",
+                    type: "get",
                     dataType: "json"
-                }
+                },
+{#                update: {#}
+{#                    url: "/docker_index_node.html",#}
+{#                    type: "post"#}
+{#                }#}
             },
             schema: {
-                model: {
-                    // id:"id",
-                    fields: {
-                        username: {
-                            type: "string",
-                            //自定义验证规则
-                            validation: {
-                                required: true,
-                                usernamevalidation: function (input) {
-                                    if (input.is("[name='username']") && input.val() != "") {
-                                        input.attr("data-usernamevalidation-msg", "请输入中文姓名！");
-                                        return /^[\u4E00-\u9FA5]/.test(input.val());
-                                    }
-
-                                    return true;
-                                }
-                            }
-                        },
-                        phone: {
-                            type: "string",
-                            validation: {
-                                required: true,
-                                phonevalidation: function (input) {
-                                    if (input.is("[name='phone']") && input.val() != "") {
-                                        input.attr("data-phonevalidation-msg", "请输入正确的手机号码！");
-                                        var result = /^1[0-9]{10}/.test(input.val());
-                                        if(!result){
-                                            alert('请输入正确的手机号码！');
-                                            return false;
-                                        }
-                                    }
-
-                                    return true;
-                                }
-                            }
-                        },
-                        age: { type: "number"},
-                        city: { type: "string", validation: { required: true} }
-
-                    }
-                }
+                data: "data",
+{#                total: "itemCount"#}
             }
         });
-        dataSource.online(false);
+{#        dataSource.online(false);#}
         //表格(Kendo UI)-3，可编辑表格
         $('#table4_demo3').kendoGrid({
             height: 250, //设置高度，超过显示滚动条
@@ -457,10 +451,7 @@
                               '</div>'
                 }
             ],
-                  dataSource: {
-                    data: data
-                  },
-{#            dataSource: dataSource,#}
+            dataSource: dataSource,
             columns: [
                 {
                     field: 'ip',
@@ -473,10 +464,16 @@
                 },
                 {
                     title: '操作',
-                    width: 225,
-                    command: ['edit', '初始化', 'destroy']
+                    width: 160,
+                    command: ['edit', 'destroy']
                 }
-            ]
+            ],
+{#            save: function (e) {#}
+{#                dataSource.sync();#}
+{#                for (var i=0;i<this._data.length;i++){#}
+{#                console.log(this._data[i]['ip'])#}
+{#            }}#}
+{#                console.log(this)}#}
         });
 
         var grid3 = $('#table4_demo3').data('kendoGrid');
@@ -485,29 +482,11 @@
             return false;
         });
 
-    function server_show() {
-        $('#myModal').modal({backdrop: 'static', keyboard: false});
-        var d = dialog({
-            width: 260,
-            title: '欢迎',
-            quickClose: true,
-            content: '欢迎使用 artDialog 对话框组件！',
-            ok: function() {
-                console.log(this);
-                // do something
-            },
-            cancelValue: '取消',
-            cancel: function() {
-                console.log(this);
-                // do something
-            },
-            onshow: function() {
-                console.log(this);
-                // do something
-            }
-        });
-{#        d.show();#}
-    }
+{#        $('#save_node').click(function () {#}
+{#            var data = grid3.dataSource.at();#}
+{#            console.log(data['ip'])#}
+{#        })#}
+
 
     </script>
 </body>
