@@ -24,6 +24,14 @@ class DockerView(View):
         return render(request, 'docker_index.html')
 
 
+class DockersView(View):
+    def dispatch(self, request, *args, **kwargs):
+        return super(DockersView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'dockers.html')
+
+
 class DockerJsonView(View):
     def get(self, request):
         """
@@ -32,6 +40,7 @@ class DockerJsonView(View):
         :return:
         """
         response = BaseResponse()
+
         response.data = [{
                     "ip": '192.168.1.1',
                     "time": "2017-11-19"

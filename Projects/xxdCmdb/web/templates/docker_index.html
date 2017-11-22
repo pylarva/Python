@@ -9,16 +9,21 @@
     <link rel="stylesheet" href="/static/css/commons.css"/>
 {#    <link rel="stylesheet" href="/static/css/bootstrap-select.css"/>#}
 
+{#    <link href="/static/css/ui-dialog.css" rel="stylesheet">#}
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/artDialog-6.0.4/css/ui-dialog.css" rel="stylesheet">
+
 
     <!-- 当前项目样式文件 -->
     <link href="/static/css/sb-admin.css" rel="stylesheet">
     <link href="/static/css/sb-bk-theme.css" rel="stylesheet">
     <link href="/static/css/bk.css" rel="stylesheet">
 
-    <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/kendoui-2015.2.624/styles/kendo.common.min.css" rel="stylesheet">
+{#    <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/kendoui-2015.2.624/styles/kendo.common.min.css" rel="stylesheet">#}
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/kendoui-2015.2.624/styles/kendo.default.min.css" rel="stylesheet">
-    <link href="https://magicbox.bkclouds.cc/static_api/v3/bk/css/bk.css" rel="stylesheet">
+
+    <link href="/static/css/kendo.common.min.css" rel="stylesheet">
+{#    <link href="/static/css/kendo.default.min.css" rel="stylesheet">#}
+    <link href="/static/css/bk.css" rel="stylesheet">
     <style type="text/css">
         .self:hover{
             color: yellow;
@@ -90,16 +95,18 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="king-widget2">
                             <div class="king-widget-content p20 bg-info">
-                                <div class="king-counter king-counter-lg self">
-                                    <div class="king-counter-label text-uppercase f16">DOCKER</div>
-                                    <div class="king-counter-number-group">
-                                        <span class="king-counter-number white">0</span>
-                                        <span class="king-counter-icon ml10 white">
-                                            <i class="fa fa-cubes"></i>
-                                        </span>
+                                <a href="/dockers.html" style="text-decoration: none; color: white">
+                                    <div class="king-counter king-counter-lg self">
+                                        <div class="king-counter-label text-uppercase f16">DOCKER</div>
+                                        <div class="king-counter-number-group">
+                                            <span class="king-counter-number white">0</span>
+                                            <span class="king-counter-icon ml10 white">
+                                                <i class="fa fa-cubes"></i>
+                                            </span>
+                                        </div>
+                                        <div class="king-counter-label text-uppercase f16">总容器数量</div>
                                     </div>
-                                    <div class="king-counter-label text-uppercase f16">总容器数量</div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -185,6 +192,21 @@
             </div>
             <!-- /.container-fluid -->
 
+<ul id="treeview_demo1" class="treeview_demo">
+    <li data-expanded="true">
+        Root node
+        <ul>
+            <li>Child node 1
+                <ul>
+                    <li>
+                        <input type="checkbox">Child node a</li>
+                    <li>
+                        <input type="checkbox">Child node b</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
 
         {% block conent %} {% endblock %}
     <!-- 添加用户开始 -->
@@ -219,8 +241,8 @@
     </div>
 </div>
 </div>
-{#    <script type="text/javascript" src="/static/js/jquery-1.12.4.js"></script>#}
-    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-1.12.4.js"></script>
+{#    <script src="/static/js/jquery-1.10.2.min.js"></script>#}
 
     <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
 
@@ -229,21 +251,17 @@
     <script type="text/javascript" src="/static/js/nb-list.js"></script>
 
     <!-- 包括所有kendoui的js插件或者可以根据需要使用的js插件调用　-->
-{#    <script src="/static/js/kendo.all.min.js"></script>#}
-    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/kendoui-2015.2.624/js/kendo.all.min.js"></script>
+    <script src="/static/js/kendo.all.min.js"></script>
+{#    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/kendoui-2015.2.624/js/kendo.all.min.js"></script>#}
 {#    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/artDialog-6.0.4/dist/dialog-min.js"></script>#}
 {#    <script src="/static/js/bk.js"></script>#}
-{#    <script src="https://magicbox.bkclouds.cc/static_api/v3/bk/js/bk.js"></script>#}
+    <script src="https://magicbox.bkclouds.cc/static_api/v3/bk/js/bk.js"></script>
 
     <script type="text/javascript">
+        $('#treeview_demo1').kendoTreeView();
     $(document).ready(function() {
-        $('.k-edit').attr('id', 's-update');
         $.initMenu('#menu_docker');
         $.nbDataList('/users.html', 1);
-
-{#        $('#save_node').onclick(function () {#}
-{#            console.log(666);#}
-{#        })#}
 
         $('#chartA').kendoChart({
            seriesDefaults: {
@@ -422,12 +440,26 @@
     }
 
         var dataSource = new kendo.data.DataSource({//数据源配置项
+            offlineStorage: "offline-kendo-demo",
             transport: {
                 read: {
                     url: "/docker_index_node.html",
                     type: "get",
                     dataType: "json"
                 },
+{#                update: {#}
+{#                url: "/docker_index_node.html",#}
+{#                dataType: "json",#}
+{#                contentType:"application/x-www-form-urlencoded",#}
+{#                type : "post",#}
+{#                    data: '123'#}
+{#                data: function() {#}
+{#                    var roleid = $("#roleId").val();#}
+{#                    return {#}
+{#                     roleId:roleid#}
+{#                    }#}
+{#                  }#}
+{#            },#}
 {#                update: {#}
 {#                    url: "/docker_index_node.html",#}
 {#                    type: "post"#}

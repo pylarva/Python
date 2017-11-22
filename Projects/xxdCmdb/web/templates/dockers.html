@@ -1,0 +1,40 @@
+{% extends 'docker_base.html' %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block conent %}
+    <ol class="breadcrumb" style="margin-bottom: 0;">
+        <li><a href="/cmdb.html">首页</a></li>
+        <li class="active">容器管理</li>
+    </ol>
+    <ul id="treeview_demo1" class="treeview_demo">
+        <li data-expanded="true">
+            物理节点
+            <ul>
+                <li>
+                    <input type="checkbox">192.168.1.1</li>
+                <li>
+                    <input type="checkbox">192.168.1.2</li>
+            </ul>
+        </li>
+
+            <li data-expanded="true">
+                镜像管理
+            <ul>
+                <li>
+                    <input type="checkbox">192.168.1.1</li>
+                <li>
+                    <input type="checkbox">192.168.1.2</li>
+            </ul>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        // html中直接导入数据
+        $('#treeview_demo1').kendoTreeView();
+    </script>
+{% endblock %}
