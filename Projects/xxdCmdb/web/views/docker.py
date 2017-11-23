@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import json
+import docker
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -29,7 +30,16 @@ class DockersView(View):
         return super(DockersView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'dockers.html')
+        host = '192.168.38.56'
+        container_ip = {}
+        c = docker.Client(base_url='tcp://%s:2375' % host, version='auto', timeout=10)
+
+        containers_list = c.containers(quiet=False, all=False, trunc=True, latest=False, since=None,
+                                       before=None, limit=-1)
+        print(containers_list)
+        for i in containers_list:
+            print(i['Id'], i['Names'], i['Image'])
+        return render(request, 'dockers.html', {'data': containers_list})
 
 
 class DockerJsonView(View):

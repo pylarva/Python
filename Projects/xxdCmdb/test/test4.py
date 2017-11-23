@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-<<<<<<< HEAD
-# abc
-=======
 import time
 import random, string
 
@@ -76,4 +72,3 @@ while result is None:
 print(LastBuild, result)
 # print(log)
 # print(ret)
->>>>>>> release

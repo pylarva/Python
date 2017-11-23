@@ -9,27 +9,96 @@
         <li><a href="/cmdb.html">首页</a></li>
         <li class="active">容器管理</li>
     </ol>
-    <ul id="treeview_demo1" class="treeview_demo">
-        <li data-expanded="true">
-            物理节点
-            <ul>
-                <li>
-                    <input type="checkbox">192.168.1.1</li>
-                <li>
-                    <input type="checkbox">192.168.1.2</li>
-            </ul>
-        </li>
 
-            <li data-expanded="true">
-                镜像管理
-            <ul>
-                <li>
-                    <input type="checkbox">192.168.1.1</li>
-                <li>
-                    <input type="checkbox">192.168.1.2</li>
-            </ul>
-        </li>
-    </ul>
+    <div class="king-instruction king-instruction-success">
+    <h5>使用说明</h5>
+    <p>1、您可以设置应用运行时的环境变量，在进行 <span>测试部署</span> 和 <span>正式部署</span> 操作时会生效。</p>
+    <p>2、在您的应用中可以执行 <span>os.environ.get('BKAPP_variable_name')</span> 访问您设置的环境变量。</p>
+    <p>3、环境变量名都以'BKAPP_'为前缀，您输入名字时不需要输入前缀。</p>
+    <p>4、变量名和变量的值均以大小写英文字母，数字或者下划线组成，变量名最大长度为50字符，值的最大长度为100字符。</p>
+    </div>
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <ul id="treeview_demo1" class="treeview_demo">
+                    <li data-expanded="true">
+                        物理节点
+                        <ul>
+                            <li>
+                                <input type="checkbox">192.168.1.1</li>
+                            <li>
+                                <input type="checkbox">192.168.1.2</li>
+                        </ul>
+                    </li>
+
+                        <li data-expanded="true">
+                            镜像管理
+                        <ul>
+                            <li>
+                                <input type="checkbox">192.168.1.1</li>
+                            <li>
+                                <input type="checkbox">192.168.1.2</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-10">
+                    <table class="table table-bordered table7_demo">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>ID</th>
+                            <th>名称</th>
+                            <th>IP</th>
+                            <th>镜像</th>
+                            <th>运行时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in data %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ item.Id }}</td>
+                            <td>
+                                {% for i in item.Names %}
+                                    {{ i }}
+                                {% endfor %}
+                            </td>
+                            <td>192.168.1.1</td>
+                            <td>{{ item.Image }}</td>
+                            <td>{{ item.Status }}</td>
+                            <td>
+                                <span class="label label-info">{{ item.State }}</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-xs btn-success" title="电源">
+                                    <i class="glyphicon glyphicon-off"></i>
+                                </button>
+                                <button class="btn btn-xs btn-warning" title="设置IP">
+                                    <i class="glyphicon glyphicon-cloud"></i>
+                                </button>
+                                <button class="btn btn-xs btn-info" title="重启">
+                                    <i class="glyphicon glyphicon-refresh"></i>
+                                </button>
+                                <button class="btn btn-xs btn-danger" title="删除">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                                <button class="btn btn-xs btn-default" title="详细">
+                                    <i class="glyphicon glyphicon-list"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}
