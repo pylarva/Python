@@ -109,29 +109,29 @@
         $('#treeview_demo1').kendoTreeView();
 
         function containers_get(ip) {
-
-                String.prototype.format = function(args) {
-        var result = this;
-        if (arguments.length > 0) {
-            if (arguments.length == 1 && typeof (args) == "object") {
-                for (var key in args) {
-                    if(args[key]!=undefined){
-                        var reg = new RegExp("({" + key + "})", "g");
-                        result = result.replace(reg, args[key]);
+            // JS 字符串格式化
+            String.prototype.format = function(args) {
+                var result = this;
+                if (arguments.length > 0) {
+                    if (arguments.length == 1 && typeof (args) == "object") {
+                        for (var key in args) {
+                            if(args[key]!=undefined){
+                                var reg = new RegExp("({" + key + "})", "g");
+                                result = result.replace(reg, args[key]);
+                            }
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < arguments.length; i++) {
+                            if (arguments[i] != undefined) {
+                                var reg= new RegExp("({)" + i + "(})", "g");
+                                result = result.replace(reg, arguments[i]);
+                            }
+                        }
                     }
                 }
-            }
-            else {
-                for (var i = 0; i < arguments.length; i++) {
-                    if (arguments[i] != undefined) {
-                        var reg= new RegExp("({)" + i + "(})", "g");
-                        result = result.replace(reg, arguments[i]);
-                    }
-                }
-            }
-        }
-        return result;
-    };
+                return result;
+            };
 
             $.ajax({
                 url : '/dockers.html',
@@ -139,7 +139,8 @@
                 dataType: 'JSON',
                 traditional: true,
                 data: {'ip': ip},
-                success: function (data) {
+                success: function (response) {
+                    var id = response.data.length;
                     var action = "<button class='btn btn-xs btn-success' title='电源'>" +
                         "<i class='glyphicon glyphicon-off'></i></button> " +
                         "<button class='btn btn-xs btn-warning' title='设置IP'><i class='glyphicon glyphicon-cloud'></i>" +
@@ -147,13 +148,24 @@
                         " <button class='btn btn-xs btn-danger' title='删除'><i class='glyphicon glyphicon-remove'></i>" +
                         "</button> <button class='btn btn-xs btn-default' title='详细'><i class='glyphicon glyphicon-list'></i>" +
                         "</button>";
-                    if(data){
-                        var id = "9999";
-                        var str = "<tr><td>{0}</td><td>8a1e33baadda</td><td>test01</td>".format(id) +
-                            "<td>{0}</td><td>{1}</td><td>{2}</td>".format() +
-                            "<td><span class='label label-success'>running</span></td>" +
-                            "<td>" + action + "</td>{0}</tr>";
-                        $('#add_data').append(str)
+                        if(response.data){
+                            for(var i=0;i<response.data.length;i++){
+                                var id = response.data[i].Id;
+                                var name = response.data[i].Names;
+                                var ip = response.data[i].NewIp;
+                                var image = response.data[i].Image;
+                                var status = response.data[i].Status;
+                                var state = response.data[i].State;
+                                if(state=='running'){
+                                    var str_status = "<td><span class='label label-success'>running</span></td>"
+                                }else {
+                                    var str_status = "<td><span class='label label-default'>exited</span></td>"
+                                }
+                                var str = "<tr><td>{0}</td><td>{1}</td><td>{2}</td>".format(i, id, name) +
+                                    "<td>{0}</td><td>{1}</td><td>{2}</td>".format(ip, image, status) + str_status +
+                                    "<td>" + action + "</td>{0}</tr>";
+                                $('#add_data').append(str)
+                    }
                     }else {
                         $('#add_error_02').text(data.message)
                     }

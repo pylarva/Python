@@ -3,6 +3,7 @@
 import os
 import json
 import docker
+import subprocess
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -30,20 +31,6 @@ class DockersView(View):
         return super(DockersView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        host = '192.168.38.56'
-        c = docker.Client(base_url='tcp://%s:2375' % host, version='auto', timeout=10)
-
-        containers_list = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
-                                       before=None, limit=-1)
-        # for i in containers_list:
-        #     i['Names'] = i['Names'][0].split('/')[1]
-        #     i['NewIp'] = os.popen("ssh root@%s docker exec %s ifconfig | awk 'NR==2 {print $2}'" % (host, i['Names'])).read().strip()
-            # ssh取每个容器的外网IP地址
-            # print(os.system("ssh root@192.168.38.56 docker exec test01 ifconfig | awk 'NR==2 {print $2}'"))
-
-        print(containers_list)
-
-        # return render(request, 'dockers.html', {'data': containers_list})
         return render(request, 'dockers.html')
 
     def post(self, request):
@@ -51,10 +38,20 @@ class DockersView(View):
         host = request.POST.get('ip')
         print(host)
         c = docker.Client(base_url='tcp://%s:2375' % host, version='auto', timeout=10)
-        data = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
-                           before=None, limit=-1)
-
-        return JsonResponse({'data': data})
+        response.data = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
+                                     before=None, limit=-1)
+        for i in response.data:
+            i['Names'] = i['Names'][0].split('/')[1]
+            cmd = "ssh root@%s docker exec %s ifconfig | awk 'NR==2 {print $2}'" % (host, i['Names'])
+            try:
+                # i['NewIp'] = os.popen("ssh root@%s docker exec %s ifconfig | awk 'NR==2 {print $2}'" % (host, i['Names'])).read().strip()
+                ret = subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                i['NewIp'] = ret.stdout.read()
+            except Exception as e:
+                i['NewIp'] = ''
+            # ssh取每个容器的外网IP地址
+        return JsonResponse(response.__dict__)
 
 
 class DockerJsonView(View):
