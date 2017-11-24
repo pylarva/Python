@@ -25,10 +25,10 @@
                     <li data-expanded="true">
                         物理节点
                         <ul>
-                            <li>
-                                <input type="checkbox">192.168.1.1</li>
-                            <li>
-                                <input type="checkbox">192.168.1.2</li>
+                            <li><i class="glyphicon glyphicon-hand-right"></i>
+                                <a onclick="containers_get('192.168.38.56')"></a>192.168.38.56</li>
+                            <li><i class="glyphicon glyphicon-hand-right"></i>
+                                <a onclick="containers_get('192.168.38.57')"></a>192.168.38.57</li>
                         </ul>
                     </li>
 
@@ -36,13 +36,15 @@
                             镜像管理
                         <ul>
                             <li>
-                                <input type="checkbox">192.168.1.1</li>
+                                <input type="checkbox" onclick="containers_get('192.168.38.56')">192.168.38.56</li>
                             <li>
                                 <input type="checkbox">192.168.1.2</li>
                         </ul>
                     </li>
                 </ul>
             </div>
+
+{#        <img id="loading" alt="loadding" src="/static/imgs/hourglass.gif">#}
 
             <div class="col-md-10">
                     <table class="table table-bordered table7_demo">
@@ -58,21 +60,21 @@
                             <th>操作</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="add_data">
                     {% for item in data %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ item.Id }}</td>
-                            <td>
-                                {% for i in item.Names %}
-                                    {{ i }}
-                                {% endfor %}
-                            </td>
-                            <td>192.168.1.1</td>
+                            <td>{{ item.Names }}</td>
+                            <td>{{ item.NewIp }}</td>
                             <td>{{ item.Image }}</td>
                             <td>{{ item.Status }}</td>
                             <td>
-                                <span class="label label-info">{{ item.State }}</span>
+                                {% if item.State == 'running' %}
+                                    <span class="label label-success">{{ item.State }}</span>
+                                {% elif item.State == 'exited' %}
+                                    <span class="label label-default">{{ item.State }}</span>
+                                {% endif %}
                             </td>
                             <td>
                                 <button class="btn btn-xs btn-success" title="电源">
@@ -105,5 +107,58 @@
     <script type="text/javascript">
         // html中直接导入数据
         $('#treeview_demo1').kendoTreeView();
+
+        function containers_get(ip) {
+
+                String.prototype.format = function(args) {
+        var result = this;
+        if (arguments.length > 0) {
+            if (arguments.length == 1 && typeof (args) == "object") {
+                for (var key in args) {
+                    if(args[key]!=undefined){
+                        var reg = new RegExp("({" + key + "})", "g");
+                        result = result.replace(reg, args[key]);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < arguments.length; i++) {
+                    if (arguments[i] != undefined) {
+                        var reg= new RegExp("({)" + i + "(})", "g");
+                        result = result.replace(reg, arguments[i]);
+                    }
+                }
+            }
+        }
+        return result;
+    };
+
+            $.ajax({
+                url : '/dockers.html',
+                type: 'POST',
+                dataType: 'JSON',
+                traditional: true,
+                data: {'ip': ip},
+                success: function (data) {
+                    var action = "<button class='btn btn-xs btn-success' title='电源'>" +
+                        "<i class='glyphicon glyphicon-off'></i></button> " +
+                        "<button class='btn btn-xs btn-warning' title='设置IP'><i class='glyphicon glyphicon-cloud'></i>" +
+                        "</button> <button class='btn btn-xs btn-info' title='重启'><i class='glyphicon glyphicon-refresh'></i></button>" +
+                        " <button class='btn btn-xs btn-danger' title='删除'><i class='glyphicon glyphicon-remove'></i>" +
+                        "</button> <button class='btn btn-xs btn-default' title='详细'><i class='glyphicon glyphicon-list'></i>" +
+                        "</button>";
+                    if(data){
+                        var id = "9999";
+                        var str = "<tr><td>{0}</td><td>8a1e33baadda</td><td>test01</td>".format(id) +
+                            "<td>{0}</td><td>{1}</td><td>{2}</td>".format() +
+                            "<td><span class='label label-success'>running</span></td>" +
+                            "<td>" + action + "</td>{0}</tr>";
+                        $('#add_data').append(str)
+                    }else {
+                        $('#add_error_02').text(data.message)
+                    }
+                }
+            })
+        }
     </script>
 {% endblock %}

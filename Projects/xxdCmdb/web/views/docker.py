@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+import os
 import json
 import docker
 from django.views import View
@@ -13,7 +14,6 @@ from utils.response import BaseResponse
 from web.service.login import auth_admin
 from utils.menu import menu
 from utils.response import BaseResponse
-
 
 
 @method_decorator(auth_admin, name='dispatch')
@@ -31,15 +31,30 @@ class DockersView(View):
 
     def get(self, request, *args, **kwargs):
         host = '192.168.38.56'
-        container_ip = {}
         c = docker.Client(base_url='tcp://%s:2375' % host, version='auto', timeout=10)
 
-        containers_list = c.containers(quiet=False, all=False, trunc=True, latest=False, since=None,
+        containers_list = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
                                        before=None, limit=-1)
+        # for i in containers_list:
+        #     i['Names'] = i['Names'][0].split('/')[1]
+        #     i['NewIp'] = os.popen("ssh root@%s docker exec %s ifconfig | awk 'NR==2 {print $2}'" % (host, i['Names'])).read().strip()
+            # ssh取每个容器的外网IP地址
+            # print(os.system("ssh root@192.168.38.56 docker exec test01 ifconfig | awk 'NR==2 {print $2}'"))
+
         print(containers_list)
-        for i in containers_list:
-            print(i['Id'], i['Names'], i['Image'])
-        return render(request, 'dockers.html', {'data': containers_list})
+
+        # return render(request, 'dockers.html', {'data': containers_list})
+        return render(request, 'dockers.html')
+
+    def post(self, request):
+        response = BaseResponse()
+        host = request.POST.get('ip')
+        print(host)
+        c = docker.Client(base_url='tcp://%s:2375' % host, version='auto', timeout=10)
+        data = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
+                           before=None, limit=-1)
+
+        return JsonResponse({'data': data})
 
 
 class DockerJsonView(View):
