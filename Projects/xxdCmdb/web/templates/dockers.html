@@ -1,7 +1,7 @@
 {% extends 'docker_base.html' %}
 
 {% block css %}
-
+    <link href="/static/css/toastr.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block conent %}
@@ -12,9 +12,9 @@
 
     <div class="king-instruction king-instruction-success">
     <h5>使用说明</h5>
-    <p>1、您可以设置应用运行时的环境变量，在进行 <span>测试部署</span> 和 <span>正式部署</span> 操作时会生效。</p>
-    <p>2、在您的应用中可以执行 <span>os.environ.get('BKAPP_variable_name')</span> 访问您设置的环境变量。</p>
-    <p>3、环境变量名都以'BKAPP_'为前缀，您输入名字时不需要输入前缀。</p>
+    <p>1、所有容器节点均通过服务器<span>网桥br0</span>连接</p>
+    <p>2、您可以设置应用运行时的环境变量，在进行 <span>测试部署</span> 和 <span>正式部署</span> 操作时会生效。</p>
+        <p>3、关闭或者重启容器后，系统自动设置容器创建时<span>主机名</span>末尾数字为IP地址, 网关为<span>xx.xx.xx.253</span></p>
     <p>4、变量名和变量的值均以大小写英文字母，数字或者下划线组成，变量名最大长度为50字符，值的最大长度为100字符。</p>
     </div>
     <br>
@@ -25,10 +25,10 @@
                     <li data-expanded="true">
                         物理节点
                         <ul>
-                            <li><i class="glyphicon glyphicon-hand-right"></i>
-                                <a onclick="containers_get('192.168.38.56')"></a>192.168.38.56</li>
-                            <li><i class="glyphicon glyphicon-hand-right"></i>
-                                <a onclick="containers_get('192.168.38.57')"></a>192.168.38.57</li>
+                            {% for item in data %}
+                                <li><i class="glyphicon glyphicon-hand-right"></i>
+                                <a onclick="containers_get('{{ item.ip }}')"></a>{{ item.ip }}</li>
+                            {% endfor %}
                         </ul>
                     </li>
 
@@ -43,8 +43,6 @@
                     </li>
                 </ul>
             </div>
-
-{#        <img id="loading" alt="loadding" src="/static/imgs/hourglass.gif">#}
 
             <div class="col-md-10">
                     <table class="table table-bordered table7_demo">
@@ -61,53 +59,60 @@
                         </tr>
                     </thead>
                     <tbody id="add_data">
-                    {% for item in data %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ item.Id }}</td>
-                            <td>{{ item.Names }}</td>
-                            <td>{{ item.NewIp }}</td>
-                            <td>{{ item.Image }}</td>
-                            <td>{{ item.Status }}</td>
-                            <td>
-                                {% if item.State == 'running' %}
-                                    <span class="label label-success">{{ item.State }}</span>
-                                {% elif item.State == 'exited' %}
-                                    <span class="label label-default">{{ item.State }}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <button class="btn btn-xs btn-success" title="电源">
-                                    <i class="glyphicon glyphicon-off"></i>
-                                </button>
-                                <button class="btn btn-xs btn-warning" title="设置IP">
-                                    <i class="glyphicon glyphicon-cloud"></i>
-                                </button>
-                                <button class="btn btn-xs btn-info" title="重启">
-                                    <i class="glyphicon glyphicon-refresh"></i>
-                                </button>
-                                <button class="btn btn-xs btn-danger" title="删除">
-                                    <i class="glyphicon glyphicon-remove"></i>
-                                </button>
-                                <button class="btn btn-xs btn-default" title="详细">
-                                    <i class="glyphicon glyphicon-list"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    {% endfor %}
+
+                    <!-- js加载容器数据 -->
+
                     </tbody>
                 </table>
             </div>
-
+        <div align="center" id="loading" class="hide">
+            <img alt="loadding" src="/static/imgs/hourglass.gif">
         </div>
+        </div>
+
     </div>
+
+    <a style="display: none;" id="set_new_ip"></a>
+
+        <!-- 添加用户开始 -->
+    <div class="modal fade bs-example-modal-lg" id="myModal01" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 0px">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">容器</h4>
+              </div>
+              <form id="form1">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="inputCount3" placeholder="用户名/QQ号码/手机号码">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <span id="error_message" style="color: red;"></span>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button id="save_node" type="button" class="btn btn-primary">保存</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+    <!-- 添加用户结束 -->
 {% endblock %}
 
 {% block js %}
+
+    <script src="/static/js/toastr.min.js"></script>
     <script type="text/javascript">
         // html中直接导入数据
         $('#treeview_demo1').kendoTreeView();
 
+        $('.plugin27_demo1').on('click', function(){
+            var type = $(this).attr('data-type');
+            toastr[type]('<br>当前提示类型：'+type,type);
+        });
+
+        // 选择容器节点IP获取容器信息
         function containers_get(ip) {
             // JS 字符串格式化
             String.prototype.format = function(args) {
@@ -132,7 +137,9 @@
                 }
                 return result;
             };
-
+            $('#add_data').empty();
+            $.Show('#loading');
+            // ajax请求后端容器节点信息
             $.ajax({
                 url : '/dockers.html',
                 type: 'POST',
@@ -140,35 +147,83 @@
                 traditional: true,
                 data: {'ip': ip},
                 success: function (response) {
-                    var id = response.data.length;
-                    var action = "<button class='btn btn-xs btn-success' title='电源'>" +
-                        "<i class='glyphicon glyphicon-off'></i></button> " +
-                        "<button class='btn btn-xs btn-warning' title='设置IP'><i class='glyphicon glyphicon-cloud'></i>" +
-                        "</button> <button class='btn btn-xs btn-info' title='重启'><i class='glyphicon glyphicon-refresh'></i></button>" +
-                        " <button class='btn btn-xs btn-danger' title='删除'><i class='glyphicon glyphicon-remove'></i>" +
-                        "</button> <button class='btn btn-xs btn-default' title='详细'><i class='glyphicon glyphicon-list'></i>" +
-                        "</button>";
                         if(response.data){
-                            for(var i=0;i<response.data.length;i++){
-                                var id = response.data[i].Id;
-                                var name = response.data[i].Names;
-                                var ip = response.data[i].NewIp;
-                                var image = response.data[i].Image;
-                                var status = response.data[i].Status;
-                                var state = response.data[i].State;
-                                if(state=='running'){
-                                    var str_status = "<td><span class='label label-success'>running</span></td>"
-                                }else {
-                                    var str_status = "<td><span class='label label-default'>exited</span></td>"
-                                }
-                                var str = "<tr><td>{0}</td><td>{1}</td><td>{2}</td>".format(i, id, name) +
-                                    "<td>{0}</td><td>{1}</td><td>{2}</td>".format(ip, image, status) + str_status +
-                                    "<td>" + action + "</td>{0}</tr>";
-                                $('#add_data').append(str)
-                    }
+                            data_fill(response.data, ip);
+                    $.Hide('#loading');
                     }else {
                         $('#add_error_02').text(data.message)
                     }
+                }
+            })
+        }
+        
+        function data_fill(data, ip) {
+            for(var i=0;i<data.length;i++){
+                var id = data[i].Id;
+                var name = data[i].Names;
+                var Nip = data[i].NewIp;
+                var image = data[i].Image;
+                var status = data[i].Status;
+                var state = data[i].State;
+                var str_power = "shutdown('" + ip + "','" + name + "','" + 'power' +"')";
+                var str_set_ip = "shutdown('" + ip + "','" + name + "','" + 'set_ip' +"')";
+                var str_restart = "shutdown('" + ip + "','" + name + "','" + 'restart' +"')";
+                var str_delete = "shutdown('" + ip + "','" + name + "','" + 'delete' +"')";
+                var action = "<button class='btn btn-xs btn-success' title='电源' onclick={0}>".format(str_power) +
+                    "<i class='glyphicon glyphicon-off'></i></button> " +
+                    "<button class='btn btn-xs btn-warning' title='设置IP' onclick={0}>".format(str_set_ip) + "<i class='glyphicon glyphicon-cloud'></i>" +
+                    "</button> <button class='btn btn-xs btn-info' title='重启'><i class='glyphicon glyphicon-refresh'></i></button>" +
+                    " <button class='btn btn-xs btn-danger' title='删除'><i class='glyphicon glyphicon-remove'></i>" +
+                    "</button> <button class='btn btn-xs btn-default' title='详细'><i class='glyphicon glyphicon-list'></i>" +
+                    "</button>";
+
+                if(state=='running'){
+                    var str_status = "<td><span class='label label-success'>running</span></td>"
+                }else {
+                    var str_status = "<td><span class='label label-default'>exited</span></td>"
+                }
+                var str = "<tr><td>{0}</td><td>{1}</td><td>{2}</td>".format(i, id, name) +
+                    "<td>{0}</td><td>{1}</td><td>{2}</td>".format(Nip, image, status) + str_status +
+                    "<td>" + action + "</td>{0}</tr>";
+                $('#add_data').append(str)
+            }
+        }
+
+        function shutdown(ip, name, cmd) {
+            if(cmd=='set_ip'){
+                $('#myModal01').modal({backdrop: 'static', keyboard: false});
+
+            }
+            toastr['info']('<br>正在连接容器....','info');
+            $.ajax({
+                url : '/dockers.html',
+                type: 'POST',
+                dataType: 'JSON',
+                traditional: true,
+                data: {'is_handle': true, 'ip': ip, 'name': name, 'cmd': cmd},
+                success: function (response) {
+                        if(response.data){
+                            toastr['success']('<br>操作成功：'+'success','success');
+                            $('#add_data').empty();
+                            data_fill(response.data, ip);
+                        }
+                }
+            })
+        }
+
+        function set_ip() {
+            $.ajax({
+                url : '/dockers.html',
+                type: 'POST',
+                dataType: 'JSON',
+                traditional: true,
+                data: {'is_handle': true, 'ip': ip, 'name': name, 'cmd': cmd},
+                success: function (response) {
+                        if(response.data){
+                            toastr['success']('<br>操作成功：'+'success','success');
+                            $('#add_data').empty();
+                            data_fill(response.data, ip);
+                        }
                 }
             })
         }

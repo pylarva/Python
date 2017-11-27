@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import os
+import time
 import json
 import docker
 import subprocess
@@ -31,27 +32,86 @@ class DockersView(View):
         return super(DockersView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'dockers.html')
+        data = models.DockerNode.objects.all()
+        return render(request, 'dockers.html', {'data': data})
 
     def post(self, request):
         response = BaseResponse()
-        host = request.POST.get('ip')
-        print(host)
-        c = docker.Client(base_url='tcp://%s:2375' % host, version='auto', timeout=10)
+
+        # 操作容器
+        is_handle = request.POST.get('is_handle')
+        if is_handle:
+            response = self.container_handle(request)
+            return JsonResponse(response.__dict__)
+
+        host_ip = request.POST.get('ip')
+        response = self.container_inspect(host_ip)
+
+        return JsonResponse(response.__dict__)
+
+    def container_inspect(self, host_ip):
+        """
+        容器详细JSON
+        :param host_ip:
+        :return:
+        """
+        response = BaseResponse()
+
+        c = docker.Client(base_url='tcp://%s:2375' % host_ip, version='auto', timeout=10)
         response.data = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
                                      before=None, limit=-1)
+
+        # ssh取每个容器的外网IP地址
         for i in response.data:
             i['Names'] = i['Names'][0].split('/')[1]
-            cmd = "ssh root@%s docker exec %s ifconfig | awk 'NR==2 {print $2}'" % (host, i['Names'])
+
+            cmd = "ssh root@%s docker exec %s ifconfig | awk 'NR==2 {print $2}'" % (host_ip, i['Names'])
             try:
-                # i['NewIp'] = os.popen("ssh root@%s docker exec %s ifconfig | awk 'NR==2 {print $2}'" % (host, i['Names'])).read().strip()
-                ret = subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                ret = subprocess.Popen(cmd, stdin=subprocess.PIPE, shell=True,
                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-                i['NewIp'] = ret.stdout.read()
+                i['NewIp'] = ret.stdout.read().strip()
             except Exception as e:
                 i['NewIp'] = ''
-            # ssh取每个容器的外网IP地址
-        return JsonResponse(response.__dict__)
+
+        return response
+
+    def container_handle(self, request):
+        """
+        操作容器
+        :param request:
+        :return:
+        """
+        ip = request.POST.get('ip')
+        name = request.POST.get('name')
+        cmd = request.POST.get('cmd')
+
+        c = docker.Client(base_url='tcp://%s:2375' % ip, version='auto', timeout=10)
+
+        if cmd == 'power':
+            current_status = c.inspect_container(name).get('State').get('Status')
+            print(c.inspect_container(name))
+            if current_status == 'running':
+                c.stop(name)
+            else:
+                c.start(name)
+                # 根据容器名重新设置容器的IP地址
+                old_ip = c.inspect_container(name).get('Config').get('Hostname').split('-')[-1]
+                new_ip = '%s.%s' % ('.'.join(ip.split('.')[0:3]), old_ip)
+                new_gateway = '%s.%s' % ('.'.join(ip.split('.')[0:3]), '253')
+                cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (ip, name, new_ip, new_gateway)
+                try:
+                    subprocess.Popen(cmd_shell, stdin=subprocess.PIPE, shell=True,
+                                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                    time.sleep(2)
+                except Exception as e:
+                    print(e)
+
+        if cmd == 'set_ip':
+            cmd_shell = 'ssh root@%s '
+
+        response = self.container_inspect(ip)
+        return response
+
 
 
 class DockerJsonView(View):

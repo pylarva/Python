@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-import os
+a = '192.168.1.211'
+b = '.'.join(a.split('.')[0:3]) + '.211'
 
-print(os.popen("ssh root@192.168.38.56 docker exec test01 ifconfig | awk 'NR==2 {print $2}'").read().strip())
-
-
-
-
+print(b)
