@@ -24,6 +24,9 @@
     <link href="/static/css/kendo.common.min.css" rel="stylesheet">
 {#    <link href="/static/css/kendo.default.min.css" rel="stylesheet">#}
     <link href="/static/css/bk.css" rel="stylesheet">
+    <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/jquery.sumoselect-2.0.0/sumoselect.css" rel="stylesheet">
+    <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/icheck-1.x/skins/all.css" rel="stylesheet">
+    <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/icheck-1.x/skins/flat/blue.css" rel="stylesheet">
     <style type="text/css">
         .self:hover{
             color: yellow;
@@ -128,13 +131,11 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="king-widget2">
-                            <div class="king-widget-content p20 bg-success">
+                            <div class="king-widget-content p20 bg-success" onclick="add_container()">
                                 <div class="king-counter king-counter-lg self-nocolor">
                                     <div class="king-counter-label text-uppercase f16">DOCKER</div>
                                     <div class="king-counter-number-group">
-{#                                        <span class="king-counter-number white">50</span>#}
                                         <span class="king-counter-number-related white">+</span>
-{#                                        <i class="fa fa-"></i>#}
                                     </div>
                                     <div class="king-counter-label text-uppercase f16">新建容器</div>
                                 </div>
@@ -209,7 +210,7 @@
 </ul>
 
         {% block conent %} {% endblock %}
-    <!-- 添加用户开始 -->
+    <!-- 添加节点开始 -->
     <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
           <div class="modal-dialog" role="document">
             <div class="modal-content" style="border-radius: 0px">
@@ -220,11 +221,7 @@
               <form id="form1">
               <div class="modal-body">
                   <div class="form-group">
-{#                    <label for="recipient-name" class="control-label">1.用户名</label>#}
-{#                    <input type="text" class="form-control" id="user_name">#}
                     <div id="table4_demo3" class="mb30 demo"></div>
-{#                    <div id="table4_demo4" class="mb30 demo"></div>#}
-
                   </div>
               </div>
               <div class="modal-footer">
@@ -236,7 +233,63 @@
             </div>
           </div>
         </div>
-    <!-- 添加用户结束 -->
+    <!-- 添加节点结束 -->
+
+    <!-- 添加容器开始 -->
+    <div class="modal fade" id="myModal01" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document" style="width: 1200px">
+            <div class="modal-content" style="border-radius: 0px">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">容器节点</h4>
+              </div>
+              <form id="form1">
+              <div class="modal-body">
+                      <div class="row">
+                          <div class="col-md-6">
+                            <img src="/static/imgs/docker-01.png" alt="">
+                          </div>
+                          <div class="sumoselect_demo col-md-6" id="sumoselect_demo1">
+{#                                <select name="somename" class="SlectBox">#}
+{#                                    <option disabled="disabled">disabled selected</option>#}
+{#                                    <option value="volvo">Volvo</option>#}
+{#                                    <option value="saab">Saab</option>#}
+{#                                    <option value="mercedes">Mercedes</option>#}
+{#                                    <option value="audi">Audi</option>#}
+{#                                </select>#}
+                                <div class="row" id="dome1">
+                                    <ul class="ul-box">
+                                          <div class="col-xs-6 col-md-3">
+                                              <label>
+                                            <a href="#" class="thumbnail">
+                                              <img src="/static/imgs/docker-02.png" alt="...">
+                                                <p style="margin-left: 10px">192.168.1.1</p>
+                                                <input tabindex="3" type="radio" id="input-3" name="demo-radio" checked>
+                                            </a>
+                                                  </label>
+                                          </div>
+
+                                          <div class="col-xs-6 col-md-3">
+                                            <a href="#" class="thumbnail">
+                                              <img src="/static/imgs/docker-02.png" alt="...">
+                                                <p style="margin-left: 10px">192.168.1.1</p>
+                                                <input tabindex="3" type="radio" id="input-4" name="demo-radio">
+                                            </a>
+                                          </div>
+                                    </ul>
+                          </div>
+                      </div>
+              </div>
+              <div class="modal-footer">
+                  <span id="error_message" style="color: red;"></span>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button id="save_node" type="button" class="btn btn-primary">保存</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+    <!-- 添加容器结束 -->
 
     </div>
 </div>
@@ -256,8 +309,14 @@
 {#    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/artDialog-6.0.4/dist/dialog-min.js"></script>#}
 {#    <script src="/static/js/bk.js"></script>#}
     <script src="https://magicbox.bkclouds.cc/static_api/v3/bk/js/bk.js"></script>
-
+    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/jquery.sumoselect-2.0.0/jquery.sumoselect.min.js"></script>
+    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/icheck-1.x/icheck.min.js"></script>
     <script type="text/javascript">
+
+    $('#dome1 input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue'
+    });
         $('#treeview_demo1').kendoTreeView();
     $(document).ready(function() {
         $.initMenu('#menu_docker');
@@ -414,6 +473,10 @@
         { ip: "192.168.1.1", time: '2017-11-16' },
         { ip: "192.168.1.2", time: '2017-11-16' }
         ];
+
+        function add_container() {
+            $('#myModal01').modal({backdrop: 'static', keyboard: false});
+        }
 
     function server_show() {
         $('#myModal').modal({backdrop: 'static', keyboard: false});

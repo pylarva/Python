@@ -6,6 +6,7 @@ import json
 import docker
 import subprocess
 from django.views import View
+from netaddr import IPNetwork
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import JsonResponse
@@ -16,6 +17,8 @@ from utils.response import BaseResponse
 from web.service.login import auth_admin
 from utils.menu import menu
 from utils.response import BaseResponse
+from conf import kvm_config
+
 
 
 @method_decorator(auth_admin, name='dispatch')
@@ -36,14 +39,13 @@ class DockersView(View):
         return render(request, 'dockers.html', {'data': data})
 
     def post(self, request):
-        response = BaseResponse()
-
         # 操作容器
         is_handle = request.POST.get('is_handle')
         if is_handle:
             response = self.container_handle(request)
             return JsonResponse(response.__dict__)
 
+        # 页面返回容器详细信息
         host_ip = request.POST.get('ip')
         response = self.container_inspect(host_ip)
 
@@ -73,6 +75,7 @@ class DockersView(View):
             except Exception as e:
                 i['NewIp'] = ''
 
+        response.status = True
         return response
 
     def container_handle(self, request):
@@ -81,12 +84,14 @@ class DockersView(View):
         :param request:
         :return:
         """
+        response = BaseResponse()
         ip = request.POST.get('ip')
         name = request.POST.get('name')
         cmd = request.POST.get('cmd')
 
         c = docker.Client(base_url='tcp://%s:2375' % ip, version='auto', timeout=10)
 
+        # 开启或者重启容器
         if cmd == 'power':
             current_status = c.inspect_container(name).get('State').get('Status')
             print(c.inspect_container(name))
@@ -95,22 +100,87 @@ class DockersView(View):
             else:
                 c.start(name)
                 # 根据容器名重新设置容器的IP地址
-                old_ip = c.inspect_container(name).get('Config').get('Hostname').split('-')[-1]
+                try:
+                    old_ip = c.inspect_container(name).get('Config').get('Hostname').split('-')[-1]
+                except Exception as e:
+                    response.status = False
+                    response.error = '容器主机名中未检测到末尾的IP的地址信息...'
+                    return response
                 new_ip = '%s.%s' % ('.'.join(ip.split('.')[0:3]), old_ip)
                 new_gateway = '%s.%s' % ('.'.join(ip.split('.')[0:3]), '253')
                 cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (ip, name, new_ip, new_gateway)
-                try:
-                    subprocess.Popen(cmd_shell, stdin=subprocess.PIPE, shell=True,
-                                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-                    time.sleep(2)
-                except Exception as e:
-                    print(e)
+                self.set_ip(cmd_shell)
 
+        # 给容器设置新的IP地址
         if cmd == 'set_ip':
-            cmd_shell = 'ssh root@%s '
+            ip_type = request.POST.get('ip_type')
+            # 自动设置Ip地址
+            if ip_type == 'auto':
+                new_ip = self.get_ip(ip)
+                print(new_ip)
+                new_gateway = '%s.%s' % ('.'.join(ip.split('.')[0:3]), '253')
+                c.restart(name)
+                cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (ip, name, new_ip, new_gateway)
+                self.set_ip(cmd_shell)
+
+                # 自动设置完IP后需要修改主机名
+                get_old_ip = c.inspect_container(name).get('Config').get('Hostname').split('-')[-1]
+                a = c.inspect_container(name).get('Config').get('Hostname')
+                new_hostname = a.replace(get_old_ip, str(new_ip).split('.')[-1])
+                cmd_shell = 'ssh root@%s docker exec %s hostname %s' % (ip, name, new_hostname)
+                self.set_ip(cmd_shell)
+
+        # 重启容器
+        if cmd == 'restart':
+            c.restart(name)
+            # 根据容器名重新设置容器的IP地址
+            try:
+                old_ip = c.inspect_container(name).get('Config').get('Hostname').split('-')[-1]
+            except Exception as e:
+                response.status = False
+                response.error = '容器主机名中未检测到末尾的IP的地址信息...'
+                return response
+            new_ip = '%s.%s' % ('.'.join(ip.split('.')[0:3]), old_ip)
+            new_gateway = '%s.%s' % ('.'.join(ip.split('.')[0:3]), '253')
+            cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (ip, name, new_ip, new_gateway)
+            self.set_ip(cmd_shell)
+
+        # 删除容器
+        if cmd == 'delete':
+            c.remove_container(name)
 
         response = self.container_inspect(ip)
         return response
+
+    def get_ip(self, host_machine):
+        """
+        自动获取IP地址
+        :param host_machine:
+        :return:
+        """
+        ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
+        for ip in ipaddr:
+            s = subprocess.call("ssh root@%s 'ping -c1 -W 1 %s > /dev/null'" % (host_machine, ip), shell=True)
+            if s != 0:
+                num = models.Asset.objects.filter(host_ip=ip).count()
+                if num == 0:
+                    return ip
+        return False
+
+    def set_ip(self, cmd_shell):
+        """
+        远程设置容器IP地址
+        :param cmd_shell:
+        :return:
+        """
+        print(cmd_shell)
+        try:
+            subprocess.Popen(cmd_shell, stdin=subprocess.PIPE, shell=True,
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            time.sleep(2)
+        except Exception as e:
+            print(e)
+        return True
 
 
 

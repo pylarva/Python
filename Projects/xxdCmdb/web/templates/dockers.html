@@ -12,10 +12,9 @@
 
     <div class="king-instruction king-instruction-success">
     <h5>使用说明</h5>
-    <p>1、所有容器节点均通过服务器<span>网桥br0</span>连接</p>
-    <p>2、您可以设置应用运行时的环境变量，在进行 <span>测试部署</span> 和 <span>正式部署</span> 操作时会生效。</p>
-        <p>3、关闭或者重启容器后，系统自动设置容器创建时<span>主机名</span>末尾数字为IP地址, 网关为<span>xx.xx.xx.253</span></p>
-    <p>4、变量名和变量的值均以大小写英文字母，数字或者下划线组成，变量名最大长度为50字符，值的最大长度为100字符。</p>
+    <p>1、初始化容器节点服务器需要安装docker服务端并且开启远程API端口<span>2375</span></p>
+    <p>2、所有容器节点均通过服务器<span>网桥br0</span>连接，重新给容器设置IP需要确认<span>Pipework</span>正常使用</p>
+    <p>3、关闭或者重启容器后，系统自动设置容器创建时<span>主机名</span>末尾数字为IP地址, 网关为<span>xx.xx.xx.253</span></p>
     </div>
     <br>
     <div class="container-fluid">
@@ -72,8 +71,6 @@
 
     </div>
 
-    <a style="display: none;" id="set_new_ip"></a>
-
         <!-- 添加用户开始 -->
     <div class="modal fade bs-example-modal-lg" id="myModal01" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
           <div class="modal-dialog" role="document">
@@ -103,7 +100,20 @@
 {% block js %}
 
     <script src="/static/js/toastr.min.js"></script>
+    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/bootstrap-confirmation-1.0.1/js/bootstrap-tooltip.js"></script>
+    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/bootstrap-confirmation-1.0.1/js/bootstrap-confirmation.js"></script>
     <script type="text/javascript">
+         $('.dome-box button').confirmation({
+                title:'确定删除?',
+                btnOkClass:  'king-btn king-btn-small king-danger',
+                btnCancelClass:  'king-btn king-btn-small',
+                btnOkLabel: '<i class="fa fa-check btn-icon"></i>删除',
+                btnCancelLabel: '<i class="fa fa-close"></i> 取消',
+                onConfirm: function(event, target){
+                    target.confirmation('hide');
+                    return false;
+                }
+            });
         // html中直接导入数据
         $('#treeview_demo1').kendoTreeView();
 
@@ -171,9 +181,9 @@
                 var str_delete = "shutdown('" + ip + "','" + name + "','" + 'delete' +"')";
                 var action = "<button class='btn btn-xs btn-success' title='电源' onclick={0}>".format(str_power) +
                     "<i class='glyphicon glyphicon-off'></i></button> " +
-                    "<button class='btn btn-xs btn-warning' title='设置IP' onclick={0}>".format(str_set_ip) + "<i class='glyphicon glyphicon-cloud'></i>" +
-                    "</button> <button class='btn btn-xs btn-info' title='重启'><i class='glyphicon glyphicon-refresh'></i></button>" +
-                    " <button class='btn btn-xs btn-danger' title='删除'><i class='glyphicon glyphicon-remove'></i>" +
+                    "<button class='btn btn-xs btn-warning' type='button' title='设置IP' id={0} onclick={1}>".format(name, str_set_ip) + "<i class='glyphicon glyphicon-cloud'></i>" +
+                    "</button> <button class='btn btn-xs btn-info' title='重启' onclick={0}>".format(str_restart) + "<i class='glyphicon glyphicon-refresh'></i></button>" +
+                    " <button class='btn btn-xs btn-danger' title='删除' onclick={0}>".format(str_delete) + "<i class='glyphicon glyphicon-remove'></i>" +
                     "</button> <button class='btn btn-xs btn-default' title='详细'><i class='glyphicon glyphicon-list'></i>" +
                     "</button>";
 
@@ -184,16 +194,75 @@
                 }
                 var str = "<tr><td>{0}</td><td>{1}</td><td>{2}</td>".format(i, id, name) +
                     "<td>{0}</td><td>{1}</td><td>{2}</td>".format(Nip, image, status) + str_status +
-                    "<td>" + action + "</td>{0}</tr>";
+                    "<td class='dome-box'>" + action + "</td>{0}</tr>";
                 $('#add_data').append(str)
             }
         }
 
+        // 操作容器
         function shutdown(ip, name, cmd) {
             if(cmd=='set_ip'){
-                $('#myModal01').modal({backdrop: 'static', keyboard: false});
-
+                var iid = "'#{0}'".format(name);
+{#                $('#myModal01').modal({backdrop: 'static', keyboard: false});#}
+                $('.dome-box button').confirmation({
+                    title:'确定删除?',
+                    btnOkClass:  'king-btn king-btn-small king-danger',
+                    btnCancelClass:  'king-btn king-btn-small',
+                    btnOkLabel: '<i class="fa fa-check btn-icon"></i>自动设置',
+                    btnCancelLabel: '<i class="fa fa-hand-pointer-o"></i> 手动设置',
+                    onConfirm: function(event, target){
+                        toastr['info']('<br>正在自动设置容器IP地址....','info');
+                        $.ajax({
+                            url : '/dockers.html',
+                            type: 'POST',
+                            dataType: 'JSON',
+                            traditional: true,
+                            data: {'is_handle': true, 'ip': ip, 'name': name, 'cmd': cmd, 'ip_type': 'auto'},
+                            success: function (response) {
+                                    if(response.data){
+                                        toastr['success']('<br>操作成功：'+'success','success');
+                                        $('#add_data').empty();
+                                        data_fill(response.data, ip);
+                                    }
+                            }
+                        });
+                        target.confirmation('hide');
+                        return false;
+                    }
+                });
+                return false;
             }
+
+            if(cmd=='delete'){
+                $('.dome-box button').confirmation({
+                    title:'确定删除?',
+                    btnOkClass:  'king-btn king-btn-small king-danger',
+                    btnCancelClass:  'king-btn king-btn-small',
+                    btnOkLabel: '<i class="fa fa-check btn-icon"></i>确定',
+                    btnCancelLabel: '<i class="fa fa-close"></i> 取消',
+                    onConfirm: function(event, target){
+                        toastr['info']('<br>正在删除容器....','info');
+                        $.ajax({
+                            url : '/dockers.html',
+                            type: 'POST',
+                            dataType: 'JSON',
+                            traditional: true,
+                            data: {'is_handle': true, 'ip': ip, 'name': name, 'cmd': cmd},
+                            success: function (response) {
+                                    if(response.data){
+                                        toastr['success']('<br>操作成功：'+'success','success');
+                                        $('#add_data').empty();
+                                        data_fill(response.data, ip);
+                                    }
+                            }
+                        });
+                        target.confirmation('hide');
+                        return false;
+                    }
+                });
+                return false;
+            }
+
             toastr['info']('<br>正在连接容器....','info');
             $.ajax({
                 url : '/dockers.html',
@@ -202,10 +271,12 @@
                 traditional: true,
                 data: {'is_handle': true, 'ip': ip, 'name': name, 'cmd': cmd},
                 success: function (response) {
-                        if(response.data){
+                        if(response.status){
                             toastr['success']('<br>操作成功：'+'success','success');
                             $('#add_data').empty();
                             data_fill(response.data, ip);
+                        }else {
+                            toastr['error']('<br>'.format(response.error),'error');
                         }
                 }
             })
