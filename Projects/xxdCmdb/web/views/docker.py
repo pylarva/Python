@@ -27,7 +27,24 @@ class DockerView(View):
         return super(DockerView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'docker_index.html')
+        data = models.DockerNode.objects.all()
+        return render(request, 'docker_index.html', {'data': data})
+
+    def post(self, request):
+        # 前端请求主机容器上面的镜像
+        host_ip = request.POST.get('ip')
+        response = BaseResponse()
+        try:
+            c = docker.Client(base_url='tcp://%s:2375' % host_ip, version='auto', timeout=5)
+        except Exception as e:
+            response.error = '连接%s超时...' % host_ip
+            print(e)
+            response.status = False
+            return JsonResponse(response.__dict__)
+        response.data = c.images()
+        response.status = True
+        return JsonResponse(response.__dict__)
+        # return JsonResponse(response.__dict__)
 
 
 class DockersView(View):

@@ -27,6 +27,9 @@
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/jquery.sumoselect-2.0.0/sumoselect.css" rel="stylesheet">
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/icheck-1.x/skins/all.css" rel="stylesheet">
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/icheck-1.x/skins/flat/blue.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/bootstrap-select.css"/>
+    <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/toastr-2.1.2/toastr.min.css" rel="stylesheet">
+
     <style type="text/css">
         .self:hover{
             color: yellow;
@@ -245,46 +248,73 @@
               </div>
               <form id="form1">
               <div class="modal-body">
+                  <div class="container-fluid">
                       <div class="row">
-                          <div class="col-md-6">
+                          <div class="col-md-6" style="margin-bottom: 20px">
                             <img src="/static/imgs/docker-01.png" alt="">
                           </div>
-                          <div class="sumoselect_demo col-md-6" id="sumoselect_demo1">
-{#                                <select name="somename" class="SlectBox">#}
-{#                                    <option disabled="disabled">disabled selected</option>#}
-{#                                    <option value="volvo">Volvo</option>#}
-{#                                    <option value="saab">Saab</option>#}
-{#                                    <option value="mercedes">Mercedes</option>#}
-{#                                    <option value="audi">Audi</option>#}
-{#                                </select>#}
-                                <div class="row" id="dome1">
-                                    <ul class="ul-box">
-                                          <div class="col-xs-6 col-md-3">
-                                              <label>
-                                            <a href="#" class="thumbnail">
-                                              <img src="/static/imgs/docker-02.png" alt="...">
-                                                <p style="margin-left: 10px">192.168.1.1</p>
-                                                <input tabindex="3" type="radio" id="input-3" name="demo-radio" checked>
-                                            </a>
-                                                  </label>
-                                          </div>
+                          <div class="col-md-6">
+                              <div class="container">
+                                    <div class="row">
+                                        <div class="king-pearls">
+                                            <div class="king-pearl current col-xs-2" id="start_1" style="cursor: pointer;">
+                                                <span class="king-pearl-number">1</span>
+                                                <span class="king-pearl-title">选择容器节点</span>
+                                            </div>
+                                            <div class="king-pearl col-xs-2">
+                                                <span class="king-pearl-number">2</span>
+                                                <span class="king-pearl-title">选择容器配置</span>
+                                            </div>
+                                            <div class="king-pearl col-xs-2">
+                                                <span class="king-pearl-number">3</span>
+                                                <span class="king-pearl-title">完成创建</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="color: white">n</div>
 
-                                          <div class="col-xs-6 col-md-3">
-                                            <a href="#" class="thumbnail">
-                                              <img src="/static/imgs/docker-02.png" alt="...">
-                                                <p style="margin-left: 10px">192.168.1.1</p>
-                                                <input tabindex="3" type="radio" id="input-4" name="demo-radio">
-                                            </a>
-                                          </div>
-                                    </ul>
+                                    <div class="" id="dome1" style="width: 570px">
+                                        <ul class="ul-box">
+                                            {% for item in data %}
+                                                <div class="" style="width: 100px; height: 100px; display: inline-block">
+                                                    <label>
+                                                        <a href="#" class="thumbnail">
+                                                          <img src="/static/imgs/docker-02.png" alt="...">
+                                                            <p style="margin-left: 0px;width: 90px">{{ item.ip }}</p>
+                                                            <input tabindex="3" type="radio" id="input-3" name="demo-radio" value={{ item.ip }}>
+                                                        </a>
+                                                    </label>
+                                                  </div>
+                                            {% endfor %}
+
+                                        </ul>
+
+                                        <div style="margin-top: 50px; margin-left: 40px; width: 300px; height: 100px;">
+                                            <img class="hide" id="loading_1" src="/static/imgs/reload_24.gif">
+                                            <div class="hide" id="show_image">
+                                                   <h5>选择镜像</h5>
+                                                   <select class="selectpicker" id="recipient-name" style="width: 300px">
+                                                    </select>
+                                            </div>
+                                        </div>
+                                        <div style="margin-left: 410px; margin-top: 100px;">
+                                              <a class="king-btn-demo king-btn king-radius king-primary" style="background-color: rgb(68, 219, 154); border-color:rgb(68, 219, 154);" title="搜索">
+                                                下一步 <i class="fa fa-angle-double-right"></i>
+                                              </a>
+                                        </div>
+
+                                    </div>
+
+                                </div>
                           </div>
                       </div>
+                  </div>
               </div>
-              <div class="modal-footer">
-                  <span id="error_message" style="color: red;"></span>
-                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button id="save_node" type="button" class="btn btn-primary">保存</button>
-              </div>
+{#              <div class="modal-footer">#}
+{#                  <span id="error_message" style="color: red;"></span>#}
+{#                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>#}
+{#                  <button id="save_node" type="button" class="btn btn-primary">保存</button>#}
+{#              </div>#}
             </form>
             </div>
           </div>
@@ -311,151 +341,194 @@
     <script src="https://magicbox.bkclouds.cc/static_api/v3/bk/js/bk.js"></script>
     <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/jquery.sumoselect-2.0.0/jquery.sumoselect.min.js"></script>
     <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/icheck-1.x/icheck.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-select.js"></script>
+    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/toastr-2.1.2/toastr.min.js"></script>
     <script type="text/javascript">
 
-    $('#dome1 input').iCheck({
-        checkboxClass: 'icheckbox_square-blue',
-        radioClass: 'iradio_square-blue'
-    });
-        $('#treeview_demo1').kendoTreeView();
-    $(document).ready(function() {
-        $.initMenu('#menu_docker');
-        $.nbDataList('/users.html', 1);
-
-        $('#chartA').kendoChart({
-           seriesDefaults: {
-                type: 'line'
-            },
-            legend:{
-                position : "bottom"
-            },
-            theme : 'bootstrap',
-            tooltip:{
-                visible:true,
-                template:"#= series.name # #= value #"
-            },
-            categoryAxis: {
-                categories: ['07-20','07-21','07-22','07-23','07-24','07-25','07-26'],
-                majorGridLines: {
-                    visible: false
-                }
-            },
-            series: [{
-                name: "test3_web",
-                data: [0, 2, 4, 5, 0, 1, 0]
-            }, {
-                name: "test3_front",
-                data: [0, 1, 0, 0, 2, 0, 0]
-            }, {
-                name: "test3_mobile",
-                data: [4, 0, 2, 1, 5, 0, 1]
-            }]
-        });
-
-        $('#chartB').kendoChart({
-            legend:{
-                position : "bottom"
-            },
-            theme : 'bootstrap',
-            seriesDefaults:{
-                type:'area',
-                area: {
-                    line: {
-                        style: "smooth"
+        var events = ["ifClicked"];
+        $.each(events, function (index, event) {
+        $('#dome1 input').on(event, function (e) {
+                var target = e.target;
+                var docker_host_ip = $(target).val();
+                $('#show_image').addClass('hide');
+                $('#loading_1').removeClass('hide');
+                $.ajax({
+                    url : '/docker_index.html',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    traditional: true,
+                    data: {'ip': docker_host_ip},
+                    success: function (response) {
+                            if(response.status){
+                                $('#loading_1').addClass('hide');
+                                if($('#show_image').hasClass('hide')){
+                                    $('#show_image').removeClass('hide')
+                                }
+                                var data = response.data;
+                                $.each(data, function (i) {
+                                    $("<option value='" + data[i].Id + "'>" + data[i].RepoTags + "</option>").appendTo(".selectpicker");
+                                });
+                                $('.selectpicker').selectpicker('refresh');
+                        }else {
+                                $('#loading_1').addClass('hide');
+                                toastr['error']('<br>' + response.error,'error');
+                        }
                     }
-                }
-            },
-            categoryAxis:{
-                categories : ['周一','周二','周三','周四','周五','周六','周日'],
-                majorGridLines: {
-                    visible: false
-                }
-            },
-            series: [{
-                name:'节点一',
-                data:[10, 12, 21, 54, 260, 830, 710]
-            },
-            {
-                name:'节点二',
-                data:[30, 182, 434, 791, 390, 30, 10]
-            },
-            {
-                name:'节点三',
-                data:[1320, 1132, 601, 234, 120, 90, 20]
-            }]
+                    })
+                });
         });
 
-        $('#chartC').kendoChart({
-            legend:{
-                position : "bottom"
-            },
-            theme : 'bootstrap',
-            seriesDefaults: {
-                labels: {
-                    template: "#= category # - #= kendo.format('{0:P}', percentage)#",
-                    position: "outsideEnd",
-                    visible: true,
-                    background: "transparent"
-                }
-            },
-            series: [{
-                name: '访问来源',
-                type: 'pie',
-                data: [{
-                    category:'节点一',
-                    value:335
+        $('#start_1').click(function () {
+            if($('#dome1').hasClass('hide')){
+                $('#dome1').removeClass('hide')
+            }else {
+                $('#dome1').addClass('hide')
+            }
+        });
+
+        $('#dome1 input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue'
+        });
+            $('#treeview_demo1').kendoTreeView();
+        $(document).ready(function() {
+            $.initMenu('#menu_docker');
+            $.nbDataList('/users.html', 1);
+
+            $('#chartA').kendoChart({
+               seriesDefaults: {
+                    type: 'line'
                 },
-                {
-                    value: 310,
-                    category: '节点二'
+                legend:{
+                    position : "bottom"
                 },
-                {
-                    value: 234,
-                    category: '节点三'
+                theme : 'bootstrap',
+                tooltip:{
+                    visible:true,
+                    template:"#= series.name # #= value #"
                 },
-                {
-                    value: 135,
-                    category: '节点四'
+                categoryAxis: {
+                    categories: ['07-20','07-21','07-22','07-23','07-24','07-25','07-26'],
+                    majorGridLines: {
+                        visible: false
+                    }
                 },
-                {
-                    value: 1548,
-                    category: '节点五'
+                series: [{
+                    name: "test3_web",
+                    data: [0, 2, 4, 5, 0, 1, 0]
+                }, {
+                    name: "test3_front",
+                    data: [0, 1, 0, 0, 2, 0, 0]
+                }, {
+                    name: "test3_mobile",
+                    data: [4, 0, 2, 1, 5, 0, 1]
                 }]
-            }]
-        });
+            });
 
-        $('#chartD').kendoChart({
-            seriesDefaults: {
-                type: 'column'
-            },
-            legend:{
-                position : "bottom"
-            },
-            theme : 'bootstrap',
-            tooltip: {
-                visible: true,
-            },
-            categoryAxis: {
-                categories: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-                majorGridLines: {
-                    visible: false
-                }
-            },
-            series: [{
-                name: '测试数据1',
-                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-            }, {
-                name: '测试数据2',
-                data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
-            }, {
-                name: '测试数据4',
-                data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-            }, {
-                name: '测试数据5',
-                data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
-            }]
+            $('#chartB').kendoChart({
+                legend:{
+                    position : "bottom"
+                },
+                theme : 'bootstrap',
+                seriesDefaults:{
+                    type:'area',
+                    area: {
+                        line: {
+                            style: "smooth"
+                        }
+                    }
+                },
+                categoryAxis:{
+                    categories : ['周一','周二','周三','周四','周五','周六','周日'],
+                    majorGridLines: {
+                        visible: false
+                    }
+                },
+                series: [{
+                    name:'节点一',
+                    data:[10, 12, 21, 54, 260, 830, 710]
+                },
+                {
+                    name:'节点二',
+                    data:[30, 182, 434, 791, 390, 30, 10]
+                },
+                {
+                    name:'节点三',
+                    data:[1320, 1132, 601, 234, 120, 90, 20]
+                }]
+            });
+
+            $('#chartC').kendoChart({
+                legend:{
+                    position : "bottom"
+                },
+                theme : 'bootstrap',
+                seriesDefaults: {
+                    labels: {
+                        template: "#= category # - #= kendo.format('{0:P}', percentage)#",
+                        position: "outsideEnd",
+                        visible: true,
+                        background: "transparent"
+                    }
+                },
+                series: [{
+                    name: '访问来源',
+                    type: 'pie',
+                    data: [{
+                        category:'节点一',
+                        value:335
+                    },
+                    {
+                        value: 310,
+                        category: '节点二'
+                    },
+                    {
+                        value: 234,
+                        category: '节点三'
+                    },
+                    {
+                        value: 135,
+                        category: '节点四'
+                    },
+                    {
+                        value: 1548,
+                        category: '节点五'
+                    }]
+                }]
+            });
+
+            $('#chartD').kendoChart({
+                seriesDefaults: {
+                    type: 'column'
+                },
+                legend:{
+                    position : "bottom"
+                },
+                theme : 'bootstrap',
+                tooltip: {
+                    visible: true,
+                },
+                categoryAxis: {
+                    categories: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+                    majorGridLines: {
+                        visible: false
+                    }
+                },
+                series: [{
+                    name: '测试数据1',
+                    data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+                }, {
+                    name: '测试数据2',
+                    data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+                }, {
+                    name: '测试数据4',
+                    data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+                }, {
+                    name: '测试数据5',
+                    data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+                }]
+            });
         });
-    });
 
         //重新绘制
         $(window).on('resize',function(){
@@ -480,26 +553,6 @@
 
     function server_show() {
         $('#myModal').modal({backdrop: 'static', keyboard: false});
-{#        var d = dialog({#}
-{#            width: 260,#}
-{#            title: '欢迎',#}
-{#            quickClose: true,#}
-{#            content: '欢迎使用 artDialog 对话框组件！',#}
-{#            ok: function() {#}
-{#                console.log(this);#}
-{#                // do something#}
-{#            },#}
-{#            cancelValue: '取消',#}
-{#            cancel: function() {#}
-{#                console.log(this);#}
-{#                // do something#}
-{#            },#}
-{#            onshow: function() {#}
-{#                console.log(this);#}
-{#                // do something#}
-{#            }#}
-{#        });#}
-{#        d.show();#}
     }
 
         var dataSource = new kendo.data.DataSource({//数据源配置项
