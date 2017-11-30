@@ -28,12 +28,31 @@ class DockerView(View):
 
     def get(self, request, *args, **kwargs):
         data = models.DockerNode.objects.all()
-        return render(request, 'docker_index.html', {'data': data})
+        business_2 = models.BusinessTwo.objects.all()
+        return render(request, 'docker_index.html', {'data': data, 'business_2': business_2})
 
     def post(self, request):
+        response = BaseResponse()
+
+        # 检查容器名称是否重复
+        check_container_name = request.POST.get('check_container_name')
+        if check_container_name:
+            print(check_container_name)
+            ip = request.POST.get('ip')
+            c = docker.Client(base_url='tcp://%s:2375' % ip, version='auto', timeout=5)
+            container_list = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
+                                          before=None, limit=-1)
+            response.status = True
+            check_container_name = '/%s' % check_container_name
+            for item in container_list:
+                if check_container_name == item['Names'][0]:
+                    response.status = False
+                    break
+
+            return JsonResponse(response.__dict__)
+
         # 前端请求主机容器上面的镜像
         host_ip = request.POST.get('ip')
-        response = BaseResponse()
         try:
             c = docker.Client(base_url='tcp://%s:2375' % host_ip, version='auto', timeout=5)
         except Exception as e:

@@ -29,7 +29,7 @@
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/icheck-1.x/skins/flat/blue.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/bootstrap-select.css"/>
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/toastr-2.1.2/toastr.min.css" rel="stylesheet">
-
+    <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/opentip-master-2.0/css/opentip.css" rel="stylesheet">
     <style type="text/css">
         .self:hover{
             color: yellow;
@@ -261,11 +261,11 @@
                                                 <span class="king-pearl-number">1</span>
                                                 <span class="king-pearl-title">选择容器节点</span>
                                             </div>
-                                            <div class="king-pearl col-xs-2">
+                                            <div class="king-pearl col-xs-2" id="start_2">
                                                 <span class="king-pearl-number">2</span>
                                                 <span class="king-pearl-title">选择容器配置</span>
                                             </div>
-                                            <div class="king-pearl col-xs-2">
+                                            <div class="king-pearl col-xs-2" id="start_3">
                                                 <span class="king-pearl-number">3</span>
                                                 <span class="king-pearl-title">完成创建</span>
                                             </div>
@@ -273,6 +273,7 @@
                                     </div>
                                     <div class="row" style="color: white">n</div>
 
+                                    <!-- 步骤1 -->
                                     <div class="" id="dome1" style="width: 570px">
                                         <ul class="ul-box">
                                             {% for item in data %}
@@ -298,12 +299,124 @@
                                             </div>
                                         </div>
                                         <div style="margin-left: 410px; margin-top: 100px;">
-                                              <a class="king-btn-demo king-btn king-radius king-primary" style="background-color: rgb(68, 219, 154); border-color:rgb(68, 219, 154);" title="搜索">
+                                              <a id="next_2" class="king-btn-demo king-btn king-radius king-primary" style="background-color: rgb(68, 219, 154); border-color:rgb(68, 219, 154);" title="搜索">
                                                 下一步 <i class="fa fa-angle-double-right"></i>
                                               </a>
                                         </div>
 
                                     </div>
+
+                                    <!-- 步骤2 -->
+                                    <div class="hide" id="dome2" style="width: 600px; height: 400px;">
+                                    <div class="container-fluid">
+                                        <form class="form-horizontal mt15" id="user_form" action="#">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">容器名：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" placeholder="请填写容器名" id="container_name" name="user_account">
+                                                    <span class="king-required-tip text-danger ml5">*</span>
+                                                </div>
+                                            </div>
+{#                                            <div class="form-group">#}
+{#                                                <label class="col-sm-2 control-label" style="margin-top: 6px">主机名：</label>#}
+{#                                                <div class="col-sm-10" style="margin-top: 6px">#}
+{#                                                    <input type="text" class="form-control" placeholder="请填写主机名" id="user_account" name="user_account">#}
+{#                                                    <span class="king-required-tip text-danger ml5">*</span>#}
+{#                                                </div>#}
+{#                                            </div>#}
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" style="margin-top: 6px">IP地址：</label>
+                                                <div class="col-sm-10" style="margin-top: 6px">
+                                                    <input type="text" class="form-control" placeholder="不填写则自动获取" id="user_account" name="user_account">
+                                                </div>
+                                            </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label" style="margin-top: 6px">内存：</label>
+                                        <div class="col-sm-10" style="margin-top: 6px">
+                                            <select class="form-control" id="user_role" name="user_role">
+                                                <option value="1">1G</option>
+                                                <option value="2">2G</option>
+                                                <option value="4">4G</option>
+                                                <option value="8">8G</option>
+                                                <option value="16">16G</option>
+                                                <option value="32">32G</option>
+                                            </select>
+                                            <span class="king-required-tip text-danger ml5">*</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label" style="margin-top: 6px">CPU：</label>
+                                        <div class="col-sm-10" style="margin-top: 6px">
+                                            <select class="form-control" id="user_role" name="user_role">
+                                                <option value="1">1核</option>
+                                                <option value="2">2核</option>
+                                                <option value="4">4核</option>
+                                                <option value="8">8核</option>
+                                                <option value="16">16核</option>
+                                                <option value="32">32核</option>
+                                            </select>
+                                            <span class="king-required-tip text-danger ml5">*</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label" style="margin-top: 6px">业务线:</label>
+                                        <div class="col-sm-10" style="margin-top: 6px">
+                                            <select class="form-control" id="user_role" name="user_role">
+                                                <option value="0">选择关联业务线</option>
+                                                {% for item in business_2 %}
+                                                    <option value={{ item.id }}>{{ item.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label" style="margin-top: 6px">app名：</label>
+                                        <div class="col-sm-10" style="margin-top: 6px">
+                                            <input type="text" class="form-control" placeholder="如：ROOT、xxdai_batch..." id="user_account" name="user_account">
+                                        </div>
+                                        <a style="display: inline-block;;font-size: 5px; margin-left: 111px; color: grey;opacity:0.5;"><i style="color: red" class="fa fa-info-circle" aria-hidden="true"></i>关联业务线+app用于发布,程序会自动创建该目录并挂载进容器.</a>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label" style="margin-top: -11px">电子邮件:</label>
+                                        <div class="col-sm-10" style="margin-top: -11px">
+                                            <input type="text" class="form-control" placeholder="通知邮件地址" id="user_email" name="user_email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label" style="margin-top: 6px">地址：</label>
+                                        <div class="col-sm-10" style="margin-top: 6px">
+                                            <textarea class="form-control" style="height:80px;" placeholder="容器功能说明"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                                    </div>
+
+                                        <div style="width: 450px; height: 30px; margin-left: 123px; margin-top: 20px;">
+                                            <div style="display: inline-block; width: 285px; margin-top: -10px; border: 1px white solid">
+                                                <div class="hide king-notice2 king-notice-danger notice-borders" id="error_div">
+                                                    <i class="fa fa-exclamation-triangle"></i>
+                                                    <div class="notice-text">
+                                                        <p id="error_text">错误的提示文案</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div style="margin-top: 10px; width: 20px; display: inline-block; border: 1px white solid">
+                                                <div class="hide" id="loadding_2">
+                                                    <img alt="loadding" src="/static/imgs/balls_24.gif">
+                                                </div>
+                                            </div>
+
+                                                <div style="display: inline-block">
+                                                  <a id="next_3" class="king-btn-demo king-btn king-radius king-primary" style="background-color: rgb(68, 219, 154); border-color:rgb(68, 219, 154);" title="搜索">
+                                                    下一步 <i class="fa fa-angle-double-right"></i>
+                                                  </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- 步骤2结束 -->
 
                                 </div>
                           </div>
@@ -343,8 +456,10 @@
     <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/icheck-1.x/icheck.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-select.js"></script>
     <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/toastr-2.1.2/toastr.min.js"></script>
+    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/opentip-master-2.0/downloads/opentip-jquery.min.js"></script>
     <script type="text/javascript">
 
+        // 选择容器节点触发函数 选择镜像
         var events = ["ifClicked"];
         $.each(events, function (index, event) {
         $('#dome1 input').on(event, function (e) {
@@ -364,6 +479,8 @@
                                 if($('#show_image').hasClass('hide')){
                                     $('#show_image').removeClass('hide')
                                 }
+                                $('.selectpicker').find('all').remove();
+                                $('.selectpicker').selectpicker('refresh');
                                 var data = response.data;
                                 $.each(data, function (i) {
                                     $("<option value='" + data[i].Id + "'>" + data[i].RepoTags + "</option>").appendTo(".selectpicker");
@@ -380,9 +497,54 @@
 
         $('#start_1').click(function () {
             if($('#dome1').hasClass('hide')){
-                $('#dome1').removeClass('hide')
+                $('#dome1').removeClass('hide');
+                $('#dome2').addClass('hide');
+                $('#start_1').removeClass('done');
+                $('#start_1').addClass('current');
+                $('#start_2').removeClass('current');
             }else {
-                $('#dome1').addClass('hide')
+{#                $('#dome1').addClass('hide')#}
+            }
+        });
+
+        $('#next_2').click(function () {
+            var val=$('input:radio[name="demo-radio"]:checked').val();
+            if(val==null){
+                toastr['info']('<br>' + '请选择一个节点服务器..','info');
+            }else {
+                $('#dome1').addClass('hide');
+                $('#dome2').removeClass('hide');
+                $('#start_1').removeClass('current');
+                $('#start_1').addClass('done');
+                $('#start_2').addClass('current');
+            }
+        });
+
+        $('#next_3').click(function () {
+            var container_name = $('#container_name').val();
+            var ip=$('input:radio[name="demo-radio"]:checked').val();
+            if(container_name==''){
+                $('#error_div').removeClass('hide');
+                $('#error_text').text('请输入容器名称!')
+            }else {
+                // 检索容器名称是否重复
+                $('#loadding_2').removeClass('hide');
+                $.ajax({
+                    url: '/docker_index.html',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    traditional: true,
+                    data: {'check_container_name': container_name, 'ip': ip},
+                    success: function (response) {
+                        $('#loadding_2').addClass('hide');
+                        if (response.status) {
+                            $('#error_div').addClass('hide');
+                        } else {
+                            $('#error_div').removeClass('hide');
+                            $('#error_text').text('容器名已经存在!')
+                        }
+                    }
+                })
             }
         });
 
