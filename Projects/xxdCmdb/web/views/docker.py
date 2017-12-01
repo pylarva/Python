@@ -18,6 +18,7 @@ from web.service.login import auth_admin
 from utils.menu import menu
 from utils.response import BaseResponse
 from conf import kvm_config
+from conf import jenkins_config
 
 
 
@@ -33,8 +34,9 @@ class DockerView(View):
 
     def post(self, request):
         response = BaseResponse()
+        response.data = []
 
-        # 检查容器名称是否重复
+        # 检查容器名称是否重复 && 分配IP地址 && 确认容器挂载路径
         check_container_name = request.POST.get('check_container_name')
         if check_container_name:
             print(check_container_name)
@@ -43,11 +45,41 @@ class DockerView(View):
             container_list = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
                                           before=None, limit=-1)
             response.status = True
+            # 检测到相同容器名就退出
             check_container_name = '/%s' % check_container_name
             for item in container_list:
                 if check_container_name == item['Names'][0]:
                     response.status = False
-                    break
+                    response.error = '容器名已存在!'
+                    return JsonResponse(response.__dict__)
+
+            # 分配IP地址
+            container_ip = request.POST.get('container_ip')
+            if container_ip == 'auto':
+                try:
+                    container_new_ip = self.get_ip(ip)
+                except Exception as e:
+                    print(e)
+                    response.status = False
+                    response.error = '自动获取IP地址失败...'
+                    return JsonResponse(response.__dict__)
+                response.data.append(str(container_new_ip))
+
+            # 设置挂载路径
+            container_business = request.POST.get('container_business')
+            if container_business:
+                container_app_name = request.POST.get('container_app_name')
+                if container_business == 'no' and container_app_name == 'no':
+                    response.data.append('no')
+                    response.data.append('no')
+                    return JsonResponse(response.__dict__)
+                else:
+                    print(container_business, container_app_name)
+                    mount_inside = jenkins_config.container_mount_inside.replace('AAA', container_app_name)
+                    mount_outside = jenkins_config.container_mount_outside.replace('AAA', container_business).replace('BBB', container_app_name)
+                    response.data.append(mount_inside)
+                    response.data.append(mount_outside)
+                    print(response.data)
 
             return JsonResponse(response.__dict__)
 
@@ -63,7 +95,21 @@ class DockerView(View):
         response.data = c.images()
         response.status = True
         return JsonResponse(response.__dict__)
-        # return JsonResponse(response.__dict__)
+
+    def get_ip(self, host_machine):
+        """
+        自动获取IP地址
+        :param host_machine:
+        :return:
+        """
+        ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
+        for ip in ipaddr:
+            s = subprocess.call("ssh root@%s 'ping -c1 -W 1 %s > /dev/null'" % (host_machine, ip), shell=True)
+            if s != 0:
+                num = models.Asset.objects.filter(host_ip=ip).count()
+                if num == 0:
+                    return ip
+        return False
 
 
 class DockersView(View):

@@ -47,3 +47,7 @@ err_log = '/home/admin/logs/err.log'
 
 # run_log = '/opt/logs/run.log'
 # err_log = '/opt/logs/err.log'
+
+# 容器挂载目录
+container_mount_inside = '/usr/local/tomcat/webapps/AAA'
+container_mount_outside = '/opt/docker/war/AAA/webapps/BBB'

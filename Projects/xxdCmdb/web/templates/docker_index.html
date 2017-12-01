@@ -30,6 +30,9 @@
     <link rel="stylesheet" href="/static/css/bootstrap-select.css"/>
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/toastr-2.1.2/toastr.min.css" rel="stylesheet">
     <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/opentip-master-2.0/css/opentip.css" rel="stylesheet">
+    <link href="/static/css/simple-line-icons.css">
+    <link href="/static/css/style.css">
+    <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/artDialog-6.0.4/css/ui-dialog.css" rel="stylesheet">
     <style type="text/css">
         .self:hover{
             color: yellow;
@@ -219,7 +222,7 @@
             <div class="modal-content" style="border-radius: 0px">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">容器节点</h4>
+                <h4 class="modal-title" id="exampleModalLabel">创建容器</h4>
               </div>
               <form id="form1">
               <div class="modal-body">
@@ -294,8 +297,14 @@
                                             <img class="hide" id="loading_1" src="/static/imgs/reload_24.gif">
                                             <div class="hide" id="show_image">
                                                    <h5>选择镜像</h5>
-                                                   <select class="selectpicker" id="recipient-name" style="width: 300px">
-                                                    </select>
+                                                <div class="row">
+                                                    <div class="col-xs-10">
+                                                        <div class="form-group">
+                                                            <select class="selectpicker form-control" id="recipient-name" style="width: 300px" data-style="btn-primary">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div style="margin-left: 410px; margin-top: 100px;">
@@ -327,13 +336,13 @@
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label" style="margin-top: 6px">IP地址：</label>
                                                 <div class="col-sm-10" style="margin-top: 6px">
-                                                    <input type="text" class="form-control" placeholder="不填写则自动获取" id="user_account" name="user_account">
+                                                    <input type="text" class="form-control" placeholder="不填写则自动获取" id="container_ip" name="user_account">
                                                 </div>
                                             </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label" style="margin-top: 6px">内存：</label>
                                         <div class="col-sm-10" style="margin-top: 6px">
-                                            <select class="form-control" id="user_role" name="user_role">
+                                            <select class="form-control" id="container_memory" name="user_role">
                                                 <option value="1">1G</option>
                                                 <option value="2">2G</option>
                                                 <option value="4">4G</option>
@@ -347,7 +356,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label" style="margin-top: 6px">CPU：</label>
                                         <div class="col-sm-10" style="margin-top: 6px">
-                                            <select class="form-control" id="user_role" name="user_role">
+                                            <select class="form-control" id="container_cpu" name="user_role">
                                                 <option value="1">1核</option>
                                                 <option value="2">2核</option>
                                                 <option value="4">4核</option>
@@ -361,10 +370,10 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label" style="margin-top: 6px">业务线:</label>
                                         <div class="col-sm-10" style="margin-top: 6px">
-                                            <select class="form-control" id="user_role" name="user_role">
+                                            <select class="form-control" id="container_business" name="user_role">
                                                 <option value="0">选择关联业务线</option>
                                                 {% for item in business_2 %}
-                                                    <option value={{ item.id }}>{{ item.name }}</option>
+                                                    <option value={{ item.name }}>{{ item.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -372,7 +381,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label" style="margin-top: 6px">app名：</label>
                                         <div class="col-sm-10" style="margin-top: 6px">
-                                            <input type="text" class="form-control" placeholder="如：ROOT、xxdai_batch..." id="user_account" name="user_account">
+                                            <input type="text" class="form-control" placeholder="如：ROOT、xxdai_batch..." id="container_app_name" name="user_account">
                                         </div>
                                         <a style="display: inline-block;;font-size: 5px; margin-left: 111px; color: grey;opacity:0.5;"><i style="color: red" class="fa fa-info-circle" aria-hidden="true"></i>关联业务线+app用于发布,程序会自动创建该目录并挂载进容器.</a>
                                     </div>
@@ -383,7 +392,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" style="margin-top: 6px">地址：</label>
+                                        <label class="col-sm-2 control-label" style="margin-top: 6px">说明：</label>
                                         <div class="col-sm-10" style="margin-top: 6px">
                                             <textarea class="form-control" style="height:80px;" placeholder="容器功能说明"></textarea>
                                         </div>
@@ -414,9 +423,57 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                     <!-- 步骤2结束 -->
+
+                                    <!-- 步骤3开始 -->
+                                    <div class="hide" id="dome3" style="width: 485px; height: 400px; margin-left: 50px;">
+                                        <div class="panel panel-default">
+{#                                            <div class="panel-heading">#}
+{#                                                <h3 class="panel-title">任务面板</h3>#}
+{#                                            </div>#}
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <span class="badge king-info" id="confirm_node">192.168.38.56</span>
+                                                    <i class="fa fa-cubes"></i><a style="color: black">容器节点</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge king-warning" id="confirm_image">centos7_tomcat7_jdk_8</span>
+                                                    <i class="fa fa-hdd-o"></i><a style="color: black">容器镜像</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge king-danger" id="confirm_container_name">test01</span>
+                                                    <i class="fa fa-twitch"></i><a style="color: black">容器名称</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge king-primary" id="confirm_container_ip">192.168.38.211</span>
+                                                    <i class="fa fa-empire"></i><a style="color: black">容器IP</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge king-success" id="confirm_cpu">1G</span>
+                                                    <i class="fa fa-microchip"></i><a style="color: black">CPU</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge" id="confirm_memory">2G</span>
+                                                    <i class="fa fa-microchip"></i> <a style="color: black">内存</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge" id="confirm_business">webapp</span>
+                                                    <i class="fa fa-heart"></i><a style="color: black">关联业务线</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge king-danger" id="confirm_mount_in">/opt/docker/war/app/</span>
+                                                    <span class="badge king-danger" id="confirm_mount_out">/data/</span>
+                                                    <i class="fa fa-tasks"></i><a style="color: black">挂载</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="card-block">
+                                            <button id="plugin4_demo10" type="button" style="background-color: rgb(68, 219, 154); border-color:rgb(68, 219, 154);" class="btn btn-primary btn-lg btn-block">开始创建</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- 步骤3开始 -->
 
                                 </div>
                           </div>
@@ -457,7 +514,20 @@
     <script type="text/javascript" src="/static/js/bootstrap-select.js"></script>
     <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/toastr-2.1.2/toastr.min.js"></script>
     <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/opentip-master-2.0/downloads/opentip-jquery.min.js"></script>
+    <script src="https://magicbox.bkclouds.cc/static_api/v3/assets/artDialog-6.0.4/dist/dialog-min.js"></script>
     <script type="text/javascript">
+        $("#plugin4_demo10").click(function(){
+    			var d = dialog({
+    				width: 440,
+    				title: "提示",
+    				content: '<div class="king-notice3 king-notice-wating">'+
+        						'<span><img src="/static/imgs/notice3-icon.png"></img></span>'+
+        						'<div class="king-notice-text">'+ '<br>' +
+        							'<p class="f24">正在创建容器，请稍等...</p>'+
+        						'</div>'+ '</div>'
+    			});
+    			d.show();
+    		});
 
         // 选择容器节点触发函数 选择镜像
         var events = ["ifClicked"];
@@ -479,11 +549,11 @@
                                 if($('#show_image').hasClass('hide')){
                                     $('#show_image').removeClass('hide')
                                 }
-                                $('.selectpicker').find('all').remove();
-                                $('.selectpicker').selectpicker('refresh');
+{#                                $('.selectpicker').find('all').remove();#}
+{#                                $('.selectpicker').selectpicker('refresh');#}
                                 var data = response.data;
                                 $.each(data, function (i) {
-                                    $("<option value='" + data[i].Id + "'>" + data[i].RepoTags + "</option>").appendTo(".selectpicker");
+                                    $("<option value='" + data[i].RepoTags + "'>" + data[i].RepoTags + "</option>").appendTo(".selectpicker");
                                 });
                                 $('.selectpicker').selectpicker('refresh');
                         }else {
@@ -503,7 +573,16 @@
                 $('#start_1').addClass('current');
                 $('#start_2').removeClass('current');
             }else {
-{#                $('#dome1').addClass('hide')#}
+            }
+        });
+
+        $('#start_2').click(function () {
+            if(!$('#dome1').hasClass('hide')){
+                return false;
+            }
+            if(!$('#dome3').hasClass('hide')){
+                $('#dome3').addClass('hide');
+                $('#dome2').removeClass('hide')
             }
         });
 
@@ -523,25 +602,87 @@
         $('#next_3').click(function () {
             var container_name = $('#container_name').val();
             var ip=$('input:radio[name="demo-radio"]:checked').val();
+            var container_ip = $('#container_ip').val();
+            var container_business = $('#container_business').val();
+            var container_app_name = $('#container_app_name').val();
+            if(container_ip==''){
+                container_ip = 'auto';
+            }else {
+                var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+                var ret = reg.test(container_ip);
+                if(!ret){
+                    $('#error_div').removeClass('hide');
+                    $('#error_text').text('IP地址格式有误!');
+                    return false;
+                }
+                // 检测新IP地址是否和宿主机在同一个网段
+                if(container_ip.split('.')[2]!=ip.split('.')[2]){
+                    $('#error_div').removeClass('hide');
+                    $('#error_text').text('容器IP地址需保持和宿主机在同一网段!');
+                    return false;
+                }
+            }
+            if(container_app_name==''&&container_business==0){
+                container_business = 'no';
+                container_app_name = 'no'
+            }
+            if(container_business==0&& container_app_name != ''){
+                $('#error_div').removeClass('hide');
+                $('#error_text').text('请选择容器关联业务!');
+                return false;
+            }
+            if(container_business!=0&&container_app_name==''){
+                container_app_name = 'ROOT'
+            }
             if(container_name==''){
                 $('#error_div').removeClass('hide');
                 $('#error_text').text('请输入容器名称!')
             }else {
                 // 检索容器名称是否重复
                 $('#loadding_2').removeClass('hide');
+
                 $.ajax({
                     url: '/docker_index.html',
                     type: 'POST',
                     dataType: 'JSON',
                     traditional: true,
-                    data: {'check_container_name': container_name, 'ip': ip},
+                    data: {'check_container_name': container_name, 'ip': ip, 'container_ip': container_ip,
+                           'container_business': container_business, 'container_app_name': container_app_name},
                     success: function (response) {
                         $('#loadding_2').addClass('hide');
                         if (response.status) {
                             $('#error_div').addClass('hide');
+                            $('#dome2').addClass('hide');
+                            $('#dome3').removeClass('hide');
+                            $('#start_2').removeClass('current');
+                            $('#start_2').addClass('done');
+                            $('#start_3').addClass('current');
+
+                            $('#confirm_node').text($('input:radio[name="demo-radio"]:checked').val());
+                            $('#confirm_image').text($('#recipient-name').selectpicker('val'));
+                            $('#confirm_container_name').text($('#container_name').val());
+                            if(container_ip!='auto'){
+                                $('#confirm_container_ip').text(container_ip);
+                            }else {
+                                $('#confirm_container_ip').text(response.data[0]);
+                            }
+                            $('#confirm_cpu').text($('#container_cpu').val());
+                            $('#confirm_memory').text($('#container_memory').val());
+                            if(container_business==0){
+                                $('#confirm_business').text('无');
+                            }else {
+                                $('#confirm_business').text($('#container_business').val());
+                            }
+                            if(container_business=='no'&&container_app_name=='no'){
+                                $('#confirm_mount_in').text('');
+                                $('#confirm_mount_out').text('无');
+                            }else {
+                                $('#confirm_mount_in').text(response.data[1]);
+                                $('#confirm_mount_out').text(response.data[2]);
+                            }
                         } else {
                             $('#error_div').removeClass('hide');
-                            $('#error_text').text('容器名已经存在!')
+                            $('#error_text').text(response.error)
                         }
                     }
                 })
