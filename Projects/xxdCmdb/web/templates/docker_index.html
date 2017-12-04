@@ -247,7 +247,7 @@
             <div class="modal-content" style="border-radius: 0px">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">容器节点</h4>
+                <h4 class="modal-title" id="exampleModalLabel">欢迎创建容器</h4>
               </div>
               <form id="form1">
               <div class="modal-body">
@@ -340,20 +340,6 @@
                                                 </div>
                                             </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" style="margin-top: 6px">内存：</label>
-                                        <div class="col-sm-10" style="margin-top: 6px">
-                                            <select class="form-control" id="container_memory" name="user_role">
-                                                <option value="1">1G</option>
-                                                <option value="2">2G</option>
-                                                <option value="4">4G</option>
-                                                <option value="8">8G</option>
-                                                <option value="16">16G</option>
-                                                <option value="32">32G</option>
-                                            </select>
-                                            <span class="king-required-tip text-danger ml5">*</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <label class="col-sm-2 control-label" style="margin-top: 6px">CPU：</label>
                                         <div class="col-sm-10" style="margin-top: 6px">
                                             <select class="form-control" id="container_cpu" name="user_role">
@@ -363,6 +349,20 @@
                                                 <option value="8">8核</option>
                                                 <option value="16">16核</option>
                                                 <option value="32">32核</option>
+                                            </select>
+                                            <span class="king-required-tip text-danger ml5">*</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label" style="margin-top: 6px">内存：</label>
+                                        <div class="col-sm-10" style="margin-top: 6px">
+                                            <select class="form-control" id="container_memory" name="user_role">
+                                                <option value="1">1G</option>
+                                                <option value="2">2G</option>
+                                                <option value="4">4G</option>
+                                                <option value="8">8G</option>
+                                                <option value="16">16G</option>
+                                                <option value="32">32G</option>
                                             </select>
                                             <span class="king-required-tip text-danger ml5">*</span>
                                         </div>
@@ -526,7 +526,47 @@
         							'<p class="f24">正在创建容器，请稍等...</p>'+
         						'</div>'+ '</div>'
     			});
+
+    			var c = dialog({
+    				width: 440,
+    				title: "提示",
+    				content: '<div class="king-notice3 king-notice-success">' +
+                                '<span><img src="/static/imgs/notice4-icon.png"></img></span>' +
+                                '<div class="king-notice-text">' +
+                                    '<p class="f24">创建成功</p>' +
+                                    '<p class="f12"><span class="king-notice3-color">3秒</span>后跳转至应用创建状态页面</p>' +
+                                '</div></div>'
+    			});
     			d.show();
+
+                var create_node = $('input:radio[name="demo-radio"]:checked').val();
+                var create_image = $('#recipient-name').selectpicker('val');
+                var create_name = $('#container_name').val();
+                var create_ip = $('#confirm_container_ip').text();
+                var create_cpu = $('#container_cpu').val();
+                var create_memory = $('#container_memory').val();
+                var create_mount_in = $('#confirm_mount_in').text();
+                var create_mount_out = $('#confirm_mount_out').text();
+
+                console.log(create_node, create_image, create_name, create_ip, create_cpu, create_memory, create_mount_in, create_mount_out);
+
+    			$.ajax({
+                    url : '/docker_index.html',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    traditional: true,
+                    data: {'is_create': '1', 'create_node': create_node, 'create_image': create_image, 'create_name': create_name,
+                           'create_ip': create_ip, 'create_cpu': create_cpu, 'create_memory': create_memory,
+                           'create_mount_in': create_mount_in, 'create_mount_out': create_mount_out},
+                    success: function (response) {
+                            if(response.status){
+                                d.close();
+                                c.show();
+                                
+                        }else {
+                        }
+                    }
+                })
     		});
 
         // 选择容器节点触发函数 选择镜像
@@ -572,6 +612,9 @@
                 $('#start_1').removeClass('done');
                 $('#start_1').addClass('current');
                 $('#start_2').removeClass('current');
+                $('#start_2').removeClass('done');
+                $('#start_3').removeClass('current');
+                $('#dome3').addClass('hide');
             }else {
             }
         });
@@ -666,8 +709,8 @@
                             }else {
                                 $('#confirm_container_ip').text(response.data[0]);
                             }
-                            $('#confirm_cpu').text($('#container_cpu').val());
-                            $('#confirm_memory').text($('#container_memory').val());
+                            $('#confirm_cpu').text($('#container_cpu').val()+'核');
+                            $('#confirm_memory').text($('#container_memory').val()+'G');
                             if(container_business==0){
                                 $('#confirm_business').text('无');
                             }else {

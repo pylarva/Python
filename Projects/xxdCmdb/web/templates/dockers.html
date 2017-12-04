@@ -219,10 +219,12 @@
                             traditional: true,
                             data: {'is_handle': true, 'ip': ip, 'name': name, 'cmd': cmd, 'ip_type': 'auto'},
                             success: function (response) {
-                                    if(response.data){
+                                    if(response.status){
                                         toastr['success']('<br>操作成功：'+'success','success');
                                         $('#add_data').empty();
                                         data_fill(response.data, ip);
+                                    }else {
+                                        toastr['error']('<br>操作失败：'+ response.error,'error');
                                     }
                             }
                         });
@@ -249,10 +251,12 @@
                             traditional: true,
                             data: {'is_handle': true, 'ip': ip, 'name': name, 'cmd': cmd},
                             success: function (response) {
-                                    if(response.data){
+                                    if(response.status){
                                         toastr['success']('<br>操作成功：'+'success','success');
                                         $('#add_data').empty();
                                         data_fill(response.data, ip);
+                                    }else {
+                                        toastr['error']('<br>操作失败：'+ response.error,'error');
                                     }
                             }
                         });

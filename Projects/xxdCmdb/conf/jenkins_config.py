@@ -51,3 +51,6 @@ err_log = '/home/admin/logs/err.log'
 # 容器挂载目录
 container_mount_inside = '/usr/local/tomcat/webapps/AAA'
 container_mount_outside = '/opt/docker/war/AAA/webapps/BBB'
+
+# 容器自定义IP地址网关末位地址
+container_gateway_ip = '253'

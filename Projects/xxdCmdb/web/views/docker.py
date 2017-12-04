@@ -22,7 +22,7 @@ from conf import jenkins_config
 
 
 
-@method_decorator(auth_admin, name='dispatch')
+# @method_decorator(auth_admin, name='dispatch')
 class DockerView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(DockerView, self).dispatch(request, *args, **kwargs)
@@ -35,6 +35,10 @@ class DockerView(View):
     def post(self, request):
         response = BaseResponse()
         response.data = []
+
+        is_create = request.POST.get('is_create')
+        if is_create:
+            self.container_create(request)
 
         # 检查容器名称是否重复 && 分配IP地址 && 确认容器挂载路径
         check_container_name = request.POST.get('check_container_name')
@@ -85,15 +89,61 @@ class DockerView(View):
 
         # 前端请求主机容器上面的镜像
         host_ip = request.POST.get('ip')
-        try:
-            c = docker.Client(base_url='tcp://%s:2375' % host_ip, version='auto', timeout=5)
-        except Exception as e:
-            response.error = '连接%s超时...' % host_ip
-            print(e)
-            response.status = False
-            return JsonResponse(response.__dict__)
-        response.data = c.images()
+        if host_ip:
+            try:
+                c = docker.Client(base_url='tcp://%s:2375' % host_ip, version='auto', timeout=5)
+            except Exception as e:
+                response.error = '连接%s超时...' % host_ip
+                print(e)
+                response.status = False
+                return JsonResponse(response.__dict__)
+            response.data = c.images()
+            response.status = True
+        return JsonResponse(response.__dict__)
+
+    def container_create(self, request):
+        """
+        创建容器
+        :param request:
+        :return:
+        """
+        response = BaseResponse()
         response.status = True
+        create_node = request.POST.get('create_node')
+        create_image = request.POST.get('create_image')
+        create_name = request.POST.get('create_name')
+        create_ip = request.POST.get('create_ip')
+        create_cpu = request.POST.get('create_cpu')
+        create_memory = request.POST.get('create_memory')
+        create_mount_in = request.POST.get('create_mount_in')
+        create_mount_out = request.POST.get('create_mount_out')
+
+        host_name = 'a0-test3-docker-%s-%s' % (create_ip.split('.')[-2], create_ip.split('.')[-1])
+        new_gateway = '%s.%s' % ('.'.join(create_ip.split('.')[0:3]), jenkins_config.container_gateway_ip)
+        # try:
+            # 创建容器
+            # c = docker.Client(base_url='tcp://%s:2375' % create_node, version='auto', timeout=10)
+            # host_config = c.create_host_config(binds={create_mount_out: {'bind': create_mount_in, 'ro': False}},
+            #                                    mem_limit='%sg' % create_memory, cpu_period=int('%s00000' % create_cpu),
+            #                                    cpu_quota=int('%s00000' % create_cpu * 2))
+            # c_ret = c.create_container(create_image, hostname=host_name, user=None,
+            #                            detach=True, stdin_open=True, tty=True,
+            #                            ports=None, environment=None, dns=None,
+            #                            volumes=[create_mount_out],
+            #                            host_config=host_config,
+            #                            volumes_from=None, network_disabled=True, name=create_name,
+            #                            entrypoint=None, cpu_shares=None, working_dir=None)
+            # c.start(c_ret['Id'])
+
+            # 分配IP
+            # cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (create_node, create_name, create_ip, new_gateway)
+            # self.set_ip(cmd_shell)
+
+        # except Exception as e:
+        #     print(e)
+        #     response.error = str(e)
+        #     return JsonResponse(response.__dict__)
+        time.sleep(5)
         return JsonResponse(response.__dict__)
 
     def get_ip(self, host_machine):
@@ -110,6 +160,21 @@ class DockerView(View):
                 if num == 0:
                     return ip
         return False
+
+    def set_ip(self, cmd_shell):
+        """
+        远程设置容器IP地址
+        :param cmd_shell:
+        :return:
+        """
+        print(cmd_shell)
+        try:
+            subprocess.Popen(cmd_shell, stdin=subprocess.PIPE, shell=True,
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            time.sleep(2)
+        except Exception as e:
+            print(e)
+        return True
 
 
 class DockersView(View):
@@ -129,9 +194,9 @@ class DockersView(View):
 
         # 页面返回容器详细信息
         host_ip = request.POST.get('ip')
-        response = self.container_inspect(host_ip)
-
-        return JsonResponse(response.__dict__)
+        if host_ip:
+            response = self.container_inspect(host_ip)
+            return JsonResponse(response.__dict__)
 
     def container_inspect(self, host_ip):
         """
@@ -167,6 +232,7 @@ class DockersView(View):
         :return:
         """
         response = BaseResponse()
+        response.status = True
         ip = request.POST.get('ip')
         name = request.POST.get('name')
         cmd = request.POST.get('cmd')
@@ -229,7 +295,12 @@ class DockersView(View):
 
         # 删除容器
         if cmd == 'delete':
-            c.remove_container(name)
+            try:
+                c.remove_container(name)
+            except Exception as e:
+                response.status = False
+                response.error = str(e)
+                return response
 
         response = self.container_inspect(ip)
         return response
@@ -263,7 +334,6 @@ class DockersView(View):
         except Exception as e:
             print(e)
         return True
-
 
 
 class DockerJsonView(View):
