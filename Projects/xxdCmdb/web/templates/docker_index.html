@@ -394,7 +394,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label" style="margin-top: 6px">说明：</label>
                                         <div class="col-sm-10" style="margin-top: 6px">
-                                            <textarea class="form-control" style="height:80px;" placeholder="容器功能说明"></textarea>
+                                            <textarea id="docker_info" class="form-control" style="height:80px;" placeholder="容器功能说明"></textarea>
                                         </div>
                                     </div>
                                 </form>
@@ -534,7 +534,7 @@
                                 '<span><img src="/static/imgs/notice4-icon.png"></img></span>' +
                                 '<div class="king-notice-text">' +
                                     '<p class="f24">创建成功</p>' +
-                                    '<p class="f12"><span class="king-notice3-color">3秒</span>后跳转至应用创建状态页面</p>' +
+                                    '<p class="f12"><span class="king-notice3-color" id="refresh_time">4</span><span class="king-notice3-color">秒</span>后跳转至容器管理页面</p>' +
                                 '</div></div>'
     			});
     			d.show();
@@ -547,9 +547,8 @@
                 var create_memory = $('#container_memory').val();
                 var create_mount_in = $('#confirm_mount_in').text();
                 var create_mount_out = $('#confirm_mount_out').text();
-
-                console.log(create_node, create_image, create_name, create_ip, create_cpu, create_memory, create_mount_in, create_mount_out);
-
+                var docker_info = $('#docker_info').val();
+                console.log(create_node, create_image, create_name, create_ip, create_cpu, create_memory, create_mount_in, create_mount_out, docker_info);
     			$.ajax({
                     url : '/docker_index.html',
                     type: 'POST',
@@ -557,12 +556,24 @@
                     traditional: true,
                     data: {'is_create': '1', 'create_node': create_node, 'create_image': create_image, 'create_name': create_name,
                            'create_ip': create_ip, 'create_cpu': create_cpu, 'create_memory': create_memory,
-                           'create_mount_in': create_mount_in, 'create_mount_out': create_mount_out},
+                           'create_mount_in': create_mount_in, 'create_mount_out': create_mount_out,
+                           'docker_info': docker_info},
                     success: function (response) {
                             if(response.status){
                                 d.close();
                                 c.show();
-                                
+                                delayURL();
+                                function delayURL() {
+                                    var delay = $('#refresh_time').text();
+                                    var t = setTimeout(delayURL, 1000);
+                                    if (delay > 0) {
+                                        delay--;
+                                        $('#refresh_time').text(delay);
+                                    } else {
+                                 clearTimeout(t);
+                                        window.location.href = "/dockers.html";
+                                    }
+                                }
                         }else {
                         }
                     }

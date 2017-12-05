@@ -117,32 +117,54 @@ class DockerView(View):
         create_memory = request.POST.get('create_memory')
         create_mount_in = request.POST.get('create_mount_in')
         create_mount_out = request.POST.get('create_mount_out')
+        docker_info = request.POST.get('docker_info')
 
-        host_name = 'a0-test3-docker-%s-%s' % (create_ip.split('.')[-2], create_ip.split('.')[-1])
+        host_name = jenkins_config.container_host_name.replace('A', create_ip.split('.')[-2]).replace('B', create_ip.split('.')[-1])
         new_gateway = '%s.%s' % ('.'.join(create_ip.split('.')[0:3]), jenkins_config.container_gateway_ip)
-        # try:
-            # 创建容器
-            # c = docker.Client(base_url='tcp://%s:2375' % create_node, version='auto', timeout=10)
-            # host_config = c.create_host_config(binds={create_mount_out: {'bind': create_mount_in, 'ro': False}},
-            #                                    mem_limit='%sg' % create_memory, cpu_period=int('%s00000' % create_cpu),
-            #                                    cpu_quota=int('%s00000' % create_cpu * 2))
-            # c_ret = c.create_container(create_image, hostname=host_name, user=None,
-            #                            detach=True, stdin_open=True, tty=True,
-            #                            ports=None, environment=None, dns=None,
-            #                            volumes=[create_mount_out],
-            #                            host_config=host_config,
-            #                            volumes_from=None, network_disabled=True, name=create_name,
-            #                            entrypoint=None, cpu_shares=None, working_dir=None)
-            # c.start(c_ret['Id'])
+
+        # 创建容器
+        try:
+            c = docker.Client(base_url='tcp://%s:2375' % create_node, version='auto', timeout=10)
+
+            # 需要挂载
+            if create_mount_in and create_mount_out:
+
+                host_config = c.create_host_config(binds={create_mount_out: {'bind': create_mount_in, 'ro': False}},
+                                                   mem_limit='%sg' % create_memory, cpu_period=int('%s00000' % create_cpu),
+                                                   cpu_quota=int('%s00000' % create_cpu * 2))
+                c_ret = c.create_container(create_image, hostname=host_name, user=None,
+                                           detach=True, stdin_open=True, tty=True,
+                                           ports=None, environment=None, dns=None,
+                                           volumes=[create_mount_out],
+                                           host_config=host_config,
+                                           volumes_from=None, network_disabled=False, name=create_name,
+                                           entrypoint=None, cpu_shares=None, working_dir=None)
+                c.start(c_ret['Id'])
+
+            # 不需要挂载
+            else:
+                c_ret = c.create_container(create_image, hostname=host_name, user=None,
+                                           detach=True, stdin_open=True, tty=True,
+                                           ports=None, environment=None, dns=None,
+                                           volumes_from=None, network_disabled=False, name=create_name,
+                                           entrypoint=None, cpu_shares=None, working_dir=None)
+                c.start(c_ret['Id'])
 
             # 分配IP
-            # cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (create_node, create_name, create_ip, new_gateway)
-            # self.set_ip(cmd_shell)
+            cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (create_node, create_name, create_ip, new_gateway)
+            self.set_ip(cmd_shell)
 
-        # except Exception as e:
-        #     print(e)
-        #     response.error = str(e)
-        #     return JsonResponse(response.__dict__)
+            # 资产入库
+            models.Asset.objects.create(host_ip=create_ip, host_name=host_name, host_type=5, host_machine=create_node,
+                                        host_cpu=create_cpu, host_memory=create_memory)
+            # 容器信息记录表
+            models.DockerInfo.objects.create(name=create_name, ip=create_ip, create_user=request.session['username'],
+                                             docker_info=docker_info)
+        except Exception as e:
+            response.status = False
+            print(e)
+            response.error = str(e)
+
         time.sleep(5)
         return JsonResponse(response.__dict__)
 
@@ -214,7 +236,7 @@ class DockersView(View):
         for i in response.data:
             i['Names'] = i['Names'][0].split('/')[1]
 
-            cmd = "ssh root@%s docker exec %s ifconfig | awk 'NR==2 {print $2}'" % (host_ip, i['Names'])
+            cmd = "ssh root@%s docker exec %s ifconfig | awk 'NR==10 {print $2}'" % (host_ip, i['Names'])
             try:
                 ret = subprocess.Popen(cmd, stdin=subprocess.PIPE, shell=True,
                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -236,6 +258,7 @@ class DockersView(View):
         ip = request.POST.get('ip')
         name = request.POST.get('name')
         cmd = request.POST.get('cmd')
+        nip = request.POST.get('nip')
 
         c = docker.Client(base_url='tcp://%s:2375' % ip, version='auto', timeout=10)
 
@@ -297,6 +320,13 @@ class DockersView(View):
         if cmd == 'delete':
             try:
                 c.remove_container(name)
+                # 删除资产 (从容器信息查询表获取容器IP)
+                obj = models.DockerInfo.objects.filter(name=name).count()
+                if obj:
+                    nip = models.DockerInfo.objects.filter(name=name).first().ip
+                    models.Asset.objects.filter(host_ip=nip).delete()
+                    models.DockerInfo.objects.filter(name=name).delete()
+                    print('delete docker...%s' % nip)
             except Exception as e:
                 response.status = False
                 response.error = str(e)

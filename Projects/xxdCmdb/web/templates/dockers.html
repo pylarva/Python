@@ -175,15 +175,15 @@
                 var image = data[i].Image;
                 var status = data[i].Status;
                 var state = data[i].State;
-                var str_power = "shutdown('" + ip + "','" + name + "','" + 'power' +"')";
-                var str_set_ip = "shutdown('" + ip + "','" + name + "','" + 'set_ip' +"')";
-                var str_restart = "shutdown('" + ip + "','" + name + "','" + 'restart' +"')";
-                var str_delete = "shutdown('" + ip + "','" + name + "','" + 'delete' +"')";
+                var str_power = "shutdown('" + ip + "','" + name + "','" + 'power' + "','" + Nip +"')";
+                var str_set_ip = "shutdown('" + ip + "','" + name + "','" + 'set_ip' + "','" + Nip + "')";
+                var str_restart = "shutdown('" + ip + "','" + name + "','" + 'restart' + "','" + Nip + "')";
+                var str_delete = "shutdown('" + ip + "','" + name + "','" + 'delete' + "','" + Nip + "')";
                 var action = "<button class='btn btn-xs btn-success' title='电源' onclick={0}>".format(str_power) +
                     "<i class='glyphicon glyphicon-off'></i></button> " +
-                    "<button class='btn btn-xs btn-warning' type='button' title='设置IP' id={0} onclick={1}>".format(name, str_set_ip) + "<i class='glyphicon glyphicon-cloud'></i>" +
+                    "<button id='action_set_ip' class='btn btn-xs btn-warning' type='button' title='设置IP' id={0} onclick={1}>".format(name, str_set_ip) + "<i class='glyphicon glyphicon-cloud'></i>" +
                     "</button> <button class='btn btn-xs btn-info' title='重启' onclick={0}>".format(str_restart) + "<i class='glyphicon glyphicon-refresh'></i></button>" +
-                    " <button class='btn btn-xs btn-danger' title='删除' onclick={0}>".format(str_delete) + "<i class='glyphicon glyphicon-remove'></i>" +
+                    " <button id='action_del' class='btn btn-xs btn-danger' title='删除' onclick={0}>".format(str_delete) + "<i class='glyphicon glyphicon-remove'></i>" +
                     "</button> <button class='btn btn-xs btn-default' title='详细'><i class='glyphicon glyphicon-list'></i>" +
                     "</button>";
 
@@ -200,11 +200,9 @@
         }
 
         // 操作容器
-        function shutdown(ip, name, cmd) {
+        function shutdown(ip, name, cmd, nip) {
             if(cmd=='set_ip'){
-                var iid = "'#{0}'".format(name);
-{#                $('#myModal01').modal({backdrop: 'static', keyboard: false});#}
-                $('.dome-box button').confirmation({
+                $('#action_set_ip').confirmation({
                     title:'确定删除?',
                     btnOkClass:  'king-btn king-btn-small king-danger',
                     btnCancelClass:  'king-btn king-btn-small',
@@ -236,7 +234,7 @@
             }
 
             if(cmd=='delete'){
-                $('.dome-box button').confirmation({
+                $('#action_del').confirmation({
                     title:'确定删除?',
                     btnOkClass:  'king-btn king-btn-small king-danger',
                     btnCancelClass:  'king-btn king-btn-small',
@@ -249,7 +247,7 @@
                             type: 'POST',
                             dataType: 'JSON',
                             traditional: true,
-                            data: {'is_handle': true, 'ip': ip, 'name': name, 'cmd': cmd},
+                            data: {'is_handle': true, 'ip': ip, 'name': name, 'cmd': cmd, 'nip': nip},
                             success: function (response) {
                                     if(response.status){
                                         toastr['success']('<br>操作成功：'+'success','success');

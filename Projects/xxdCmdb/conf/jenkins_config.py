@@ -54,3 +54,6 @@ container_mount_outside = '/opt/docker/war/AAA/webapps/BBB'
 
 # 容器自定义IP地址网关末位地址
 container_gateway_ip = '253'
+
+# 容器主机名
+container_host_name = 'a0-test3-docker-A-B.yh'

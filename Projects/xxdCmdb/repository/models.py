@@ -668,3 +668,23 @@ class DockerNode(models.Model):
         return self.ip
 
 
+class DockerInfo(models.Model):
+    """
+    记录容器详细信息
+    """
+    name = models.CharField(max_length=32, null=True, blank=True)
+    ip = models.CharField(max_length=32, null=True, blank=True)
+    create_user = models.CharField(max_length=32, null=True, blank=True)
+    docker_info = models.CharField(max_length=128, null=True, blank=True)
+    create_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    remove_time = models.CharField(max_length=32, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "docker容器信息查询表"
+
+    def __str__(self):
+        return self.name
+
+
+
+
