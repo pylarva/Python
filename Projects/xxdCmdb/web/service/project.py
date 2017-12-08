@@ -492,10 +492,12 @@ class Project(BaseServiceList):
         # 将发布脚本发送到目标机器
         cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_config.host)
         os.system(cmd)
+        # self.cmd_shell(cmd, task_id)
 
         # 将配置文件发送到目标机器
         cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, jenkins_config.host)
         os.system(cmd)
+        # self.cmd_shell(cmd, task_id)
 
         pack_cmd = '"' + pack_cmd + '"'
         cmd = "python2.6 {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10}".format(*[jenkins_config.script_path, pkg_name, task_id,
@@ -503,7 +505,7 @@ class Project(BaseServiceList):
                                                                               release_env, pack_cmd, jdk_version, release_type, static_type])
 
         cmd = "ssh root@%s '%s'" % (jenkins_config.host, cmd)
-        print(cmd)
+        # self.cmd_shell(cmd, task_id)
         os.system(cmd)
 
         # ssh = paramiko.SSHClient()
@@ -648,6 +650,17 @@ class Project(BaseServiceList):
         else:
             self.log(task_id, '发布终止！')
             models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
+
+    def cmd_shell(self, cmd, task_id):
+        ret = subprocess.Popen(cmd, stdin=subprocess.PIPE, shell=True,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        print(cmd)
+        ret_err = ret.stderr.read()
+        if ret_err:
+            print(ret_err)
+            self.log(task_id, ret_err)
+            self.log(task_id, '发布终止！')
+            return False
 
     def log(self, task_id, msg):
         """

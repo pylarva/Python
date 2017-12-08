@@ -272,7 +272,7 @@ class DockersView(View):
                 c.start(name)
                 # 根据容器名重新设置容器的IP地址
                 try:
-                    old_ip = c.inspect_container(name).get('Config').get('Hostname').split('-')[-1]
+                    old_ip = c.inspect_container(name).get('Config').get('Hostname').split('-')[-1].split('.')[0]
                 except Exception as e:
                     response.status = False
                     response.error = '容器主机名中未检测到末尾的IP的地址信息...'
@@ -306,7 +306,7 @@ class DockersView(View):
             c.restart(name)
             # 根据容器名重新设置容器的IP地址
             try:
-                old_ip = c.inspect_container(name).get('Config').get('Hostname').split('-')[-1]
+                old_ip = c.inspect_container(name).get('Config').get('Hostname').split('-')[-1].split('.')[0]
             except Exception as e:
                 response.status = False
                 response.error = '容器主机名中未检测到末尾的IP的地址信息...'
