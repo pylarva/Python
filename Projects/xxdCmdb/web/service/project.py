@@ -684,9 +684,10 @@ class Project(BaseServiceList):
         cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, ip)
         os.system(cmd)
 
+        # docker容器远程安装模块会报错
         cmd = "ssh root@%s 'pip install requests'" % ip
-        os.system(cmd)
-        print(cmd)
+        # os.system(cmd)
+        # print(cmd)
 
         cmd = "ssh root@%s 'python2.6 %s %s %s %s %s %s %s'" % (ip, jenkins_config.script_path, pkgUrl, md5sum, taskId,
                                                                 serviceType, name, port)

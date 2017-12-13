@@ -319,12 +319,13 @@
                                     <div class="hide" id="dome2" style="width: 600px; height: 400px;">
                                     <div class="container-fluid">
                                         <form class="form-horizontal mt15" id="user_form" action="#">
-{#                                            <div class="form-group">#}
-{#                                                <label class="col-sm-2 control-label">容器名：</label>#}
-{#                                                <div class="col-sm-10">#}
-{#                                                    <input type="text" class="form-control" placeholder="不填写则自动命名" id="container_name" name="user_account">#}
-{#                                                </div>#}
-{#                                            </div>#}
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">容器名：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" placeholder="请填写容器名" id="container_name" name="user_account">
+                                                    <span class="king-required-tip text-danger ml5">*</span>
+                                                </div>
+                                            </div>
 {#                                            <div class="form-group">#}
 {#                                                <label class="col-sm-2 control-label" style="margin-top: 6px">主机名：</label>#}
 {#                                                <div class="col-sm-10" style="margin-top: 6px">#}
@@ -367,18 +368,6 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" style="margin-top: 6px">环境:</label>
-                                        <div class="col-sm-10" style="margin-top: 6px">
-                                            <select class="form-control" id="container_env" name="user_role">
-                                                <option value="0">选择运行环境</option>
-                                                {% for item in business_1 %}
-                                                    <option value={{ item.name }}>{{ item.name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <span class="king-required-tip text-danger ml5">*</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <label class="col-sm-2 control-label" style="margin-top: 6px">业务线:</label>
                                         <div class="col-sm-10" style="margin-top: 6px">
                                             <select class="form-control" id="container_business" name="user_role">
@@ -387,7 +376,6 @@
                                                     <option value={{ item.name }}>{{ item.name }}</option>
                                                 {% endfor %}
                                             </select>
-                                            <span class="king-required-tip text-danger ml5">*</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -395,7 +383,7 @@
                                         <div class="col-sm-10" style="margin-top: 6px">
                                             <input type="text" class="form-control" placeholder="/opt/webaspps/" id="container_app_name" name="user_account">
                                         </div>
-                                        <a style="display: inline-block;;font-size: 5px; margin-left: 111px; color: grey;opacity:0.5;"><i style="color: red" class="fa fa-info-circle" aria-hidden="true"></i> 容器启动时将会自动挂载宿主机该目录.</a>
+                                        <a style="display: inline-block;;font-size: 5px; margin-left: 111px; color: grey;opacity:0.5;"><i style="color: red" class="fa fa-info-circle" aria-hidden="true"></i>容器启动时将会自动挂载宿主机该目录.</a>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label" style="margin-top: -11px">电子邮件:</label>
@@ -553,7 +541,7 @@
 
                 var create_node = $('input:radio[name="demo-radio"]:checked').val();
                 var create_image = $('#recipient-name').selectpicker('val');
-                var create_name = $('#confirm_container_name').text();
+                var create_name = $('#container_name').val();
                 var create_ip = $('#confirm_container_ip').text();
                 var create_cpu = $('#container_cpu').val();
                 var create_memory = $('#container_memory').val();
@@ -666,11 +654,10 @@
         });
 
         $('#next_3').click(function () {
-            var container_name = '';
+            var container_name = $('#container_name').val();
             var ip=$('input:radio[name="demo-radio"]:checked').val();
             var container_ip = $('#container_ip').val();
             var container_business = $('#container_business').val();
-            var container_env = $('#container_env').val();
             var container_app_name = $('#container_app_name').val();
             if(container_ip==''){
                 container_ip = 'auto';
@@ -689,69 +676,71 @@
                     return false;
                 }
             }
-            if(container_env==0){
-                $('#error_div').removeClass('hide');
-                $('#error_text').text('请选择容器运行环境!');
-                return false;
+            if(container_app_name==''&&container_business==0){
+                container_business = 'no';
+                container_app_name = 'no'
             }
-            if(container_business==0){
+            if(container_business==0&& container_app_name != ''){
                 $('#error_div').removeClass('hide');
                 $('#error_text').text('请选择容器关联业务!');
                 return false;
             }
-
-            if(container_name==''){
-                container_name = 'auto';
+            if(container_business!=0&&container_app_name==''){
+                container_app_name = 'ROOT'
             }
-            // 检索容器名称是否重复
-            $('#loadding_2').removeClass('hide');
+            if(container_name==''){
+                $('#error_div').removeClass('hide');
+                $('#error_text').text('请输入容器名称!')
+            }else {
+                // 检索容器名称是否重复
+                $('#loadding_2').removeClass('hide');
 
-            $.ajax({
-                url: '/docker_index.html',
-                type: 'POST',
-                dataType: 'JSON',
-                traditional: true,
-                data: {'check_container_name': container_name, 'ip': ip, 'container_ip': container_ip, 'container_env': container_env,
-                       'container_business': container_business, 'container_app_name': container_app_name},
-                success: function (response) {
-                    $('#loadding_2').addClass('hide');
-                    if (response.status) {
-                        $('#error_div').addClass('hide');
-                        $('#dome2').addClass('hide');
-                        $('#dome3').removeClass('hide');
-                        $('#start_2').removeClass('current');
-                        $('#start_2').addClass('done');
-                        $('#start_3').addClass('current');
+                $.ajax({
+                    url: '/docker_index.html',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    traditional: true,
+                    data: {'check_container_name': container_name, 'ip': ip, 'container_ip': container_ip,
+                           'container_business': container_business, 'container_app_name': container_app_name},
+                    success: function (response) {
+                        $('#loadding_2').addClass('hide');
+                        if (response.status) {
+                            $('#error_div').addClass('hide');
+                            $('#dome2').addClass('hide');
+                            $('#dome3').removeClass('hide');
+                            $('#start_2').removeClass('current');
+                            $('#start_2').addClass('done');
+                            $('#start_3').addClass('current');
 
-                        $('#confirm_node').text($('input:radio[name="demo-radio"]:checked').val());
-                        $('#confirm_image').text($('#recipient-name').selectpicker('val'));
-                        $('#confirm_container_name').text(response.data[3]);
-                        if(container_ip!='auto'){
-                            $('#confirm_container_ip').text(container_ip);
-                        }else {
-                            $('#confirm_container_ip').text(response.data[0]);
+                            $('#confirm_node').text($('input:radio[name="demo-radio"]:checked').val());
+                            $('#confirm_image').text($('#recipient-name').selectpicker('val'));
+                            $('#confirm_container_name').text($('#container_name').val());
+                            if(container_ip!='auto'){
+                                $('#confirm_container_ip').text(container_ip);
+                            }else {
+                                $('#confirm_container_ip').text(response.data[0]);
+                            }
+                            $('#confirm_cpu').text($('#container_cpu').val()+'核');
+                            $('#confirm_memory').text($('#container_memory').val()+'G');
+                            if(container_business==0){
+                                $('#confirm_business').text('无');
+                            }else {
+                                $('#confirm_business').text($('#container_business').val());
+                            }
+                            if(container_business=='no'&&container_app_name=='no'){
+                                $('#confirm_mount_in').text('');
+                                $('#confirm_mount_out').text('无');
+                            }else {
+                                $('#confirm_mount_in').text(response.data[1]);
+                                $('#confirm_mount_out').text(response.data[2]);
+                            }
+                        } else {
+                            $('#error_div').removeClass('hide');
+                            $('#error_text').text(response.error)
                         }
-                        $('#confirm_cpu').text($('#container_cpu').val()+'核');
-                        $('#confirm_memory').text($('#container_memory').val()+'G');
-                        if(container_business==0){
-                            $('#confirm_business').text('无');
-                        }else {
-                            $('#confirm_business').text($('#container_business').val());
-                        }
-                        if(container_business=='no'&&container_app_name=='no'){
-                            $('#confirm_mount_in').text('');
-                            $('#confirm_mount_out').text('无');
-                        }else {
-                            $('#confirm_mount_in').text(response.data[1]);
-                            $('#confirm_mount_out').text(response.data[2]);
-                        }
-                    } else {
-                        $('#error_div').removeClass('hide');
-                        $('#error_text').text(response.error)
                     }
-                }
-            })
-
+                })
+            }
         });
 
         $('#dome1 input').iCheck({

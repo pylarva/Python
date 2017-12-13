@@ -21,7 +21,6 @@ from conf import kvm_config
 from conf import jenkins_config
 
 
-
 # @method_decorator(auth_admin, name='dispatch')
 class DockerView(View):
     def dispatch(self, request, *args, **kwargs):
@@ -30,7 +29,8 @@ class DockerView(View):
     def get(self, request, *args, **kwargs):
         data = models.DockerNode.objects.all()
         business_2 = models.BusinessTwo.objects.all()
-        return render(request, 'docker_index.html', {'data': data, 'business_2': business_2})
+        business_1 = models.BusinessOne.objects.all()
+        return render(request, 'docker_index.html', {'data': data, 'business_2': business_2, 'business_1': business_1})
 
     def post(self, request):
         response = BaseResponse()
@@ -40,22 +40,12 @@ class DockerView(View):
         if is_create:
             self.container_create(request)
 
-        # 检查容器名称是否重复 && 分配IP地址 && 确认容器挂载路径
+        # 确认容器名称 && 分配IP地址 && 确认容器挂载路径
         check_container_name = request.POST.get('check_container_name')
-        if check_container_name:
-            print(check_container_name)
+        print(check_container_name,'===')
+        if check_container_name == 'auto':
             ip = request.POST.get('ip')
-            c = docker.Client(base_url='tcp://%s:2375' % ip, version='auto', timeout=5)
-            container_list = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
-                                          before=None, limit=-1)
             response.status = True
-            # 检测到相同容器名就退出
-            check_container_name = '/%s' % check_container_name
-            for item in container_list:
-                if check_container_name == item['Names'][0]:
-                    response.status = False
-                    response.error = '容器名已存在!'
-                    return JsonResponse(response.__dict__)
 
             # 分配IP地址
             container_ip = request.POST.get('container_ip')
@@ -71,19 +61,21 @@ class DockerView(View):
 
             # 设置挂载路径
             container_business = request.POST.get('container_business')
+            container_env = request.POST.get('container_env')
+            print('----',container_business)
             if container_business:
-                container_app_name = request.POST.get('container_app_name')
-                if container_business == 'no' and container_app_name == 'no':
-                    response.data.append('no')
-                    response.data.append('no')
-                    return JsonResponse(response.__dict__)
-                else:
-                    print(container_business, container_app_name)
-                    mount_inside = jenkins_config.container_mount_inside.replace('AAA', container_app_name)
-                    mount_outside = jenkins_config.container_mount_outside.replace('AAA', container_business).replace('BBB', container_app_name)
-                    response.data.append(mount_inside)
-                    response.data.append(mount_outside)
-                    print(response.data)
+                print(container_business)
+                mount_inside = jenkins_config.container_mount_inside
+                mount_outside = jenkins_config.container_mount_outside
+                response.data.append(mount_inside)
+                response.data.append(mount_outside)
+
+                # 设置容器名称 a0-test3-front-38-68.yh
+                host_name = 'a0-%s-%s-%s-%s.yh' % (container_env, container_business, str(container_new_ip).split('.')[-2],
+                                                   str(container_new_ip).split('.')[-1])
+                response.data.append(host_name)
+
+                print(response.data)
 
             return JsonResponse(response.__dict__)
 
