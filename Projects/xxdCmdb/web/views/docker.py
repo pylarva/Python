@@ -42,7 +42,6 @@ class DockerView(View):
 
         # 确认容器名称 && 分配IP地址 && 确认容器挂载路径
         check_container_name = request.POST.get('check_container_name')
-        print(check_container_name,'===')
         if check_container_name == 'auto':
             ip = request.POST.get('ip')
             response.status = True
@@ -62,7 +61,6 @@ class DockerView(View):
             # 设置挂载路径
             container_business = request.POST.get('container_business')
             container_env = request.POST.get('container_env')
-            print('----',container_business)
             if container_business:
                 print(container_business)
                 mount_inside = jenkins_config.container_mount_inside
@@ -109,6 +107,8 @@ class DockerView(View):
         create_memory = request.POST.get('create_memory')
         create_mount_in = request.POST.get('create_mount_in')
         create_mount_out = request.POST.get('create_mount_out')
+        create_business = request.POST.get('create_business')
+        create_env = request.POST.get('create_env')
         docker_info = request.POST.get('docker_info')
 
         host_name = jenkins_config.container_host_name.replace('A', create_ip.split('.')[-2]).replace('B', create_ip.split('.')[-1])
@@ -147,8 +147,11 @@ class DockerView(View):
             self.set_ip(cmd_shell)
 
             # 资产入库
+            c_env = models.BusinessOne.objects.filter(name=create_env).first().id
+            c_business = models.BusinessTwo.objects.filter(name=create_business).first().id
             models.Asset.objects.create(host_ip=create_ip, host_name=host_name, host_type=5, host_machine=create_node,
-                                        host_cpu=create_cpu, host_memory=create_memory)
+                                        host_cpu=create_cpu, host_memory=create_memory, business_1_id=c_env,
+                                        business_2_id=c_business, host_status=1)
             # 容器信息记录表
             models.DockerInfo.objects.create(name=create_name, ip=create_ip, create_user=request.session['username'],
                                              docker_info=docker_info)
@@ -157,7 +160,7 @@ class DockerView(View):
             print(e)
             response.error = str(e)
 
-        time.sleep(5)
+        time.sleep(2)
         return JsonResponse(response.__dict__)
 
     def get_ip(self, host_machine):

@@ -560,6 +560,9 @@
                 var create_mount_in = $('#confirm_mount_in').text();
                 var create_mount_out = $('#confirm_mount_out').text();
                 var docker_info = $('#docker_info').val();
+                var container_business = $('#container_business').val();
+                var container_env = $('#container_env').val();
+
                 console.log(create_node, create_image, create_name, create_ip, create_cpu, create_memory, create_mount_in, create_mount_out, docker_info);
     			$.ajax({
                     url : '/docker_index.html',
@@ -569,7 +572,7 @@
                     data: {'is_create': '1', 'create_node': create_node, 'create_image': create_image, 'create_name': create_name,
                            'create_ip': create_ip, 'create_cpu': create_cpu, 'create_memory': create_memory,
                            'create_mount_in': create_mount_in, 'create_mount_out': create_mount_out,
-                           'docker_info': docker_info},
+                           'docker_info': docker_info, 'create_business': container_business, 'create_env': container_env},
                     success: function (response) {
                             if(response.status){
                                 d.close();
