@@ -30,6 +30,26 @@ class DockerView(View):
         data = models.DockerNode.objects.all()
         business_2 = models.BusinessTwo.objects.all()
         business_1 = models.BusinessOne.objects.all()
+
+        # 统计容器节点数 和正在运行容器数量
+        get_count = request.GET.get('get_count')
+        if get_count:
+            response = BaseResponse()
+            docker_node_num = models.DockerNode.objects.count()
+            total_dockers = 0
+            run_dockers = 0
+            data = models.DockerNode.objects.all()
+            for item in data:
+                print(item)
+                c = docker.Client(base_url='tcp://%s:2375' % item, version='auto', timeout=10)
+                total_dockers += int(c.info()['Containers'])
+                run_dockers += int(c.info()['ContainersRunning'])
+            response.data = {}
+            response.data['total_node'] = docker_node_num
+            response.data['total_dockers'] = total_dockers
+            response.data['run_dockers'] = run_dockers
+            response.status = True
+            return JsonResponse(response.__dict__)
         return render(request, 'docker_index.html', {'data': data, 'business_2': business_2, 'business_1': business_1})
 
     def post(self, request):
@@ -69,8 +89,8 @@ class DockerView(View):
                 response.data.append(mount_outside)
 
                 # 设置容器名称 a0-test3-front-38-68.yh
-                host_name = 'a0-%s-%s-%s-%s.yh' % (container_env, container_business, str(container_new_ip).split('.')[-2],
-                                                   str(container_new_ip).split('.')[-1])
+                host_name = jenkins_config.container_host_name.replace('A', container_env).replace(
+                    'B', container_business).replace('C', str(container_new_ip).split('.')[-2]).replace('D', str(container_new_ip).split('.')[-1])
                 response.data.append(host_name)
 
                 print(response.data)
@@ -111,7 +131,9 @@ class DockerView(View):
         create_env = request.POST.get('create_env')
         docker_info = request.POST.get('docker_info')
 
-        host_name = jenkins_config.container_host_name.replace('A', create_ip.split('.')[-2]).replace('B', create_ip.split('.')[-1])
+        host_name = jenkins_config.container_host_name.replace('A', create_env).replace('B', create_business).replace(
+            'C', create_ip.split('.')[-2]).replace('D', create_ip.split('.')[-1])
+
         new_gateway = '%s.%s' % ('.'.join(create_ip.split('.')[0:3]), jenkins_config.container_gateway_ip)
 
         # 创建容器
@@ -226,7 +248,6 @@ class DockersView(View):
         c = docker.Client(base_url='tcp://%s:2375' % host_ip, version='auto', timeout=10)
         response.data = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
                                      before=None, limit=-1)
-
         # ssh取每个容器的外网IP地址
         for i in response.data:
             i['Names'] = i['Names'][0].split('/')[1]

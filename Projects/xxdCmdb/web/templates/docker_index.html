@@ -29,7 +29,8 @@
     <link href="/static/css/blue.css" rel="stylesheet">
     <link href="/static/css/toastr.min.css" rel="stylesheet">
     <link href="/static/css/opentip.css" rel="stylesheet">
-    <link href="/static/css/ui-dialog.css">
+    <link href="https://magicbox.bkclouds.cc/static_api/v3/assets/artDialog-6.0.4/css/ui-dialog.css" rel="stylesheet">
+
     <style type="text/css">
         .self:hover{
             color: yellow;
@@ -88,7 +89,7 @@
                                 <div class="king-counter king-counter-lg self">
                                     <div class="king-counter-label text-uppercase f16">DOCKER</div>
                                     <div class="king-counter-number-group">
-                                        <span class="king-counter-number white">2</span>
+                                        <span class="king-counter-number white" id="total_node_num">2</span>
                                         <span class="king-counter-icon ml10 white">
                                             <i class="fa fa-server"></i>
                                         </span>
@@ -105,7 +106,7 @@
                                     <div class="king-counter king-counter-lg self">
                                         <div class="king-counter-label text-uppercase f16">DOCKER</div>
                                         <div class="king-counter-number-group">
-                                            <span class="king-counter-number white">0</span>
+                                            <span class="king-counter-number white" id="total_dockers">0</span>
                                             <span class="king-counter-icon ml10 white">
                                                 <i class="fa fa-cubes"></i>
                                             </span>
@@ -122,7 +123,7 @@
                                 <div class="king-counter king-counter-lg self">
                                     <div class="king-counter-label text-uppercase f16">DOCKER</div>
                                     <div class="king-counter-number-group">
-                                        <span class="king-counter-number white">0</span>
+                                        <span class="king-counter-number white" id="run_dockers">0</span>
                                         <span class="king-counter-icon ml10 white">
                                         <i class="fa fa-ship"></i>
                                     </span>
@@ -521,7 +522,28 @@
     <script src="/static/js/toastr.min.js"></script>
     <script src="/static/js/opentip-jquery.min.js"></script>
     <script src="/static/js/dialog-min.js"></script>
+
+
     <script type="text/javascript">
+        $(function () {
+           $.ajax({
+                url : '/docker_index.html',
+                type: 'GET',
+                dataType: 'JSON',
+                traditional: true,
+                data: {'get_count': 111 },
+                success: function (response) {
+                        if(response.status){
+                            console.log(response.data['total_dockers']);
+                            $('#total_node_num').text(response.data['total_node']);
+                            $('#total_dockers').text(response.data['total_dockers']);
+                            $('#run_dockers').text(response.data['run_dockers']);
+                    }else {
+                    }
+                }
+                })
+        });
+
         $("#plugin4_demo10").click(function(){
     			var d = dialog({
     				width: 440,
@@ -540,7 +562,7 @@
                                 '<span><img src="/static/imgs/notice4-icon.png"></img></span>' +
                                 '<div class="king-notice-text">' +
                                     '<p class="f24">创建成功</p>' +
-                                    '<p class="f12"><span class="king-notice3-color" id="refresh_time">4</span><span class="king-notice3-color">秒</span>后跳转至容器管理页面</p>' +
+                                    '<p class="f12"><span class="king-notice3-color" id="refresh_time">3</span><span class="king-notice3-color">秒</span>后跳转至容器管理页面</p>' +
                                 '</div></div>'
     			});
     			d.show();
@@ -609,8 +631,6 @@
                                 if($('#show_image').hasClass('hide')){
                                     $('#show_image').removeClass('hide')
                                 }
-{#                                $('.selectpicker').find('all').remove();#}
-{#                                $('.selectpicker').selectpicker('refresh');#}
                                 var data = response.data;
                                 $.each(data, function (i) {
                                     $("<option value='" + data[i].RepoTags + "'>" + data[i].RepoTags + "</option>").appendTo(".selectpicker");

@@ -1,19 +1,13 @@
-# import docker
-# ip = '192.168.38.56'
-# new = '192.168.38.57'
-# c = docker.Client(base_url='tcp://%s:2375' % ip, version='auto', timeout=10)
-# b = c.images()
-#
-# print(b)
-import subprocess
+import docker
 from conf import jenkins_config
-
-cmd = "ssh root@192.168.38.60 'python2.6 /opt/autopublishing.py http://build.xxd.com/prod/front/424/front.war 1e545a527904c6de68d15537ec1f96fa 424 tomcat front None'"
-
-ret = subprocess.Popen(cmd, stdin=subprocess.PIPE, shell=True,
-                       stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-ret_err = ret.stderr.read()
-ret_out = ret.stdout.read()
-if ret_err:
-    print('----', ret_err)
-    print('====', ret_out)
+ip = '192.168.38.56'
+create_ip = '192.168.38.64'
+create_env = 'dev'
+create_business = 'ops'
+host_name = jenkins_config.container_host_name.replace('A', create_env).replace('B', create_business).replace('C', create_ip.split('.')[-2]).replace('D', create_ip.split('.')[-1])
+print(host_name)
+# li = ['192.168.38.56']
+# for i in li:
+#     c = docker.Client(base_url='tcp://%s:2375' % ip, version='auto', timeout=10)
+#     print(c.info()['Containers'])
+#     print(c.info()['ContainersRunning'])

@@ -179,7 +179,8 @@
                 var str_set_ip = "shutdown('" + ip + "','" + name + "','" + 'set_ip' + "')";
                 var str_restart = "shutdown('" + ip + "','" + name + "','" + 'restart' + "')";
                 var str_delete = "shutdown('" + ip + "','" + name + "','" + 'delete' + "')";
-                var str_id = name + '_del';
+                var new_name = name.toString().split('.')[0];
+                var str_id = new_name + '_del';
                 var action = "<button class='btn btn-xs btn-success' title='电源' onclick={0}>".format(str_power) +
                     "<i class='glyphicon glyphicon-off'></i></button> " +
                     "<button id='action_set_ip' class='btn btn-xs btn-warning' type='button' title='设置IP' id={0} onclick={1}>".format(name, str_set_ip) + "<i class='glyphicon glyphicon-cloud'></i>" +
@@ -202,7 +203,8 @@
 
         // 操作容器
         function shutdown(ip, name, cmd) {
-            var str_del_id = "#{0}_del".format(name);
+            var new_name = name.toString().split('.')[0];
+            var str_del_id = "#{0}_del".format(new_name);
             if(cmd=='set_ip'){
                 $('#action_set_ip').confirmation({
                     title:'确定删除?',
