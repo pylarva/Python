@@ -29,7 +29,7 @@
       <imported>true</imported>
       <remarks>$PROJECT_DIR$/xxdCmdb/settings.py</remarks>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://192.168.33.110:3306/xxdcmdb</jdbc-url>
+      <jdbc-url>jdbc:mysql://192.168.33.110/xxdcmdb</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />

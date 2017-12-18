@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ae2ccfce-a29b-41f6-8029-e8599c2e2773" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/conf/note" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/db.sqlite3" afterPath="$PROJECT_DIR$/../ProCrm/db.sqlite3" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ProCrm/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/crm/admin.py" afterPath="$PROJECT_DIR$/../ProCrm/crm/admin.py" />
@@ -14,12 +15,13 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/kingadmin/urls.py" afterPath="$PROJECT_DIR$/../ProCrm/kingadmin/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/kingadmin/views.py" afterPath="$PROJECT_DIR$/../ProCrm/kingadmin/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../cmdb/AutoClient/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../cmdb/AutoClient/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/jenkins_config.py" afterPath="$PROJECT_DIR$/conf/jenkins_config.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test66.py" afterPath="$PROJECT_DIR$/test/test66.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/templates/docker_index.html" afterPath="$PROJECT_DIR$/web/templates/docker_index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/templates/dockers.html" afterPath="$PROJECT_DIR$/web/templates/dockers.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/views/docker.py" afterPath="$PROJECT_DIR$/web/views/docker.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xxdCmdb/settings.py" afterPath="$PROJECT_DIR$/xxdCmdb/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../day10/code/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../day10/code/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,7 +32,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/xxdCmdb$test66.coverage" NAME="test66 Coverage Results" MODIFIED="1513321334530" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
+    <SUITE FILE_PATH="coverage/xxdCmdb$test66.coverage" NAME="test66 Coverage Results" MODIFIED="1513326517148" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/xxdCmdb$test6.coverage" NAME="test6 Coverage Results" MODIFIED="1510127996164" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -39,80 +41,34 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="test66.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/test66.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="docker_index.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/web/templates/docker_index.html">
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="374">
-              <caret line="575" column="68" lean-forward="true" selection-start-line="575" selection-start-column="68" selection-end-line="575" selection-end-column="68" />
+              <caret line="106" column="25" lean-forward="true" selection-start-line="106" selection-start-column="25" selection-end-line="106" selection-end-column="25" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="docker.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="dockers.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/templates/dockers.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="276">
+              <caret line="251" column="45" lean-forward="true" selection-start-line="251" selection-start-column="45" selection-end-line="251" selection-end-column="45" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="docker.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/views/docker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="376">
-              <caret line="94" column="0" lean-forward="true" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+            <state relative-caret-position="189">
+              <caret line="421" column="7" lean-forward="false" selection-start-line="421" selection-start-column="6" selection-end-line="421" selection-end-column="7" />
               <folding>
                 <element signature="e#45#54#0" expanded="true" />
-                <element signature="e#15637#16612#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pagination.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils/pagination.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1785">
-              <caret line="134" column="37" lean-forward="false" selection-start-line="134" selection-start-column="37" selection-end-line="134" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/repository/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="716">
-              <caret line="134" column="21" lean-forward="false" selection-start-line="134" selection-start-column="21" selection-end-line="134" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="project.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/service/project.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11441">
-              <caret line="692" column="84" lean-forward="false" selection-start-line="692" selection-start-column="84" selection-end-line="692" selection-end-column="84" />
-              <folding>
-                <element signature="e#45#56#0" expanded="true" />
-                <marker date="1513144457000" expanded="true" signature="4394:4541" ph="select hostn... repository_server" />
-                <marker date="1513144457000" expanded="true" signature="4574:4740" ph="select manag... repository_networkdevice" />
+                <element signature="e#15690#16665#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -121,8 +77,8 @@
       <file leaf-file-name="jenkins_config.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="58" column="0" lean-forward="false" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+            <state relative-caret-position="412">
+              <caret line="59" column="0" lean-forward="true" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -139,16 +95,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>hide</find>
-      <find>fa-microchip</find>
-      <find>recipient-name4</find>
-      <find>response.data</find>
       <find>recipient-name</find>
       <find>images</find>
       <find>style</find>
       <find>machinetype</find>
       <find>容器节点</find>
-      <find>删除</find>
       <find>print</find>
       <find>container_business</find>
       <find>success_time</find>
@@ -169,6 +120,11 @@
       <find>物理</find>
       <find>host_name</find>
       <find>4</find>
+      <find>秒</find>
+      <find>物理节点</find>
+      <find>删除</find>
+      <find>创建</find>
+      <find>A</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -196,7 +152,6 @@
         <option value="$PROJECT_DIR$/web/templates/docker_base.html" />
         <option value="$PROJECT_DIR$/web/static/css/simple-line-icons.css" />
         <option value="$PROJECT_DIR$/web/static/css/bk.css" />
-        <option value="$PROJECT_DIR$/xxdCmdb/settings.py" />
         <option value="$PROJECT_DIR$/repository/admin.py" />
         <option value="$PROJECT_DIR$/web/views/project.py" />
         <option value="$PROJECT_DIR$/web/views/project_admin.py" />
@@ -205,10 +160,12 @@
         <option value="$PROJECT_DIR$/scr/autopublishing.py" />
         <option value="$PROJECT_DIR$/web/service/project.py" />
         <option value="$PROJECT_DIR$/web/templates/dockers.html" />
-        <option value="$PROJECT_DIR$/conf/jenkins_config.py" />
         <option value="$PROJECT_DIR$/test/test66.py" />
-        <option value="$PROJECT_DIR$/web/views/docker.py" />
+        <option value="$PROJECT_DIR$/conf/note" />
         <option value="$PROJECT_DIR$/web/templates/docker_index.html" />
+        <option value="$PROJECT_DIR$/xxdCmdb/settings.py" />
+        <option value="$PROJECT_DIR$/conf/jenkins_config.py" />
+        <option value="$PROJECT_DIR$/web/views/docker.py" />
       </list>
     </option>
   </component>
@@ -264,6 +221,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="web" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -301,6 +272,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xxdCmdb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -397,7 +386,7 @@
       <recent name="$PROJECT_DIR$/test" />
     </key>
   </component>
-  <component name="RunManager" selected="Django server.xxdCmdb">
+  <component name="RunManager" selected="Python.test66">
     <configuration default="false" name="test6" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -759,14 +748,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/web/templates/asset_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="112" column="32" lean-forward="false" selection-start-line="112" selection-start-column="32" selection-end-line="112" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/admin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -850,14 +831,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="97" column="13" lean-forward="true" selection-start-line="97" selection-start-column="13" selection-end-line="97" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1018,7 +991,7 @@
         <state relative-caret-position="11441">
           <caret line="692" column="84" lean-forward="false" selection-start-line="692" selection-start-column="84" selection-end-line="692" selection-end-column="84" />
           <folding>
-            <element signature="e#45#56#0" expanded="true" />
+            <element signature="e#45#56#0" expanded="false" />
             <marker date="1513144457000" expanded="true" signature="4394:4541" ph="select hostn... repository_server" />
             <marker date="1513144457000" expanded="true" signature="4574:4740" ph="select manag... repository_networkdevice" />
           </folding>
@@ -1084,14 +1057,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/dockers.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1321">
-          <caret line="178" column="63" lean-forward="false" selection-start-line="178" selection-start-column="63" selection-end-line="178" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/audit_sa.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2618">
@@ -1116,40 +1081,62 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
+    <entry file="file://$PROJECT_DIR$/test/test66.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="58" column="0" lean-forward="false" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+        <state relative-caret-position="238">
+          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="19" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/test66.py">
+    <entry file="file://$PROJECT_DIR$/conf/note">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/docker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
-          <caret line="94" column="0" lean-forward="true" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
-          <folding>
-            <element signature="e#45#54#0" expanded="true" />
-            <element signature="e#15637#16612#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="17">
+          <caret line="1" column="28" lean-forward="true" selection-start-line="1" selection-start-column="28" selection-end-line="1" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/templates/docker_index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="575" column="68" lean-forward="true" selection-start-line="575" selection-start-column="68" selection-end-line="575" selection-end-column="68" />
+        <state relative-caret-position="5554">
+          <caret line="1000" column="35" lean-forward="true" selection-start-line="1000" selection-start-column="35" selection-end-line="1000" selection-end-column="35" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/dockers.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="251" column="45" lean-forward="true" selection-start-line="251" selection-start-column="45" selection-end-line="251" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="106" column="25" lean-forward="true" selection-start-line="106" selection-start-column="25" selection-end-line="106" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="412">
+          <caret line="59" column="0" lean-forward="true" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/docker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="421" column="7" lean-forward="false" selection-start-line="421" selection-start-column="6" selection-end-line="421" selection-end-column="7" />
+          <folding>
+            <element signature="e#45#54#0" expanded="true" />
+            <element signature="e#15690#16665#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

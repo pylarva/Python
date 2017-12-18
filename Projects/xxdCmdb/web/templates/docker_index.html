@@ -89,7 +89,7 @@
                                 <div class="king-counter king-counter-lg self">
                                     <div class="king-counter-label text-uppercase f16">DOCKER</div>
                                     <div class="king-counter-number-group">
-                                        <span class="king-counter-number white" id="total_node_num">2</span>
+                                        <span class="king-counter-number white" id="total_node_num">0</span>
                                         <span class="king-counter-icon ml10 white">
                                             <i class="fa fa-server"></i>
                                         </span>
@@ -927,10 +927,11 @@
             chartC.redraw();
             chartD.redraw();
         });
-        var data = [
-        { ip: "192.168.1.1", time: '2017-11-16' },
-        { ip: "192.168.1.2", time: '2017-11-16' }
-        ];
+
+{#        var data = [#}
+{#        { ip: "192.168.1.1", time: '2017-11-16' },#}
+{#        { ip: "192.168.1.2", time: '2017-11-16' }#}
+{#        ];#}
 
         function add_container() {
             $('#myModal01').modal({backdrop: 'static', keyboard: false});
@@ -995,11 +996,11 @@
                     field: 'time',
                     title: '创建时间'
                 },
-                {
-                    title: '操作',
-                    width: 160,
-                    command: ['edit', 'destroy']
-                }
+{#                {#}
+{#                    title: '操作',#}
+{#                    width: 160,#}
+{#                    command: ['edit', 'destroy']#}
+{#                }#}
             ],
 {#            save: function (e) {#}
 {#                dataSource.sync();#}

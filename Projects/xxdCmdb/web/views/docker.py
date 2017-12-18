@@ -21,7 +21,7 @@ from conf import kvm_config
 from conf import jenkins_config
 
 
-# @method_decorator(auth_admin, name='dispatch')
+@method_decorator(auth_admin, name='dispatch')
 class DockerView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(DockerView, self).dispatch(request, *args, **kwargs)
@@ -89,8 +89,8 @@ class DockerView(View):
                 response.data.append(mount_outside)
 
                 # 设置容器名称 a0-test3-front-38-68.yh
-                host_name = jenkins_config.container_host_name.replace('A', container_env).replace(
-                    'B', container_business).replace('C', str(container_new_ip).split('.')[-2]).replace('D', str(container_new_ip).split('.')[-1])
+                host_name = jenkins_config.container_host_name.replace('AA', container_env).replace(
+                    'BB', container_business).replace('CC', str(container_new_ip).split('.')[-2]).replace('DD', str(container_new_ip).split('.')[-1])
                 response.data.append(host_name)
 
                 print(response.data)
@@ -131,8 +131,8 @@ class DockerView(View):
         create_env = request.POST.get('create_env')
         docker_info = request.POST.get('docker_info')
 
-        host_name = jenkins_config.container_host_name.replace('A', create_env).replace('B', create_business).replace(
-            'C', create_ip.split('.')[-2]).replace('D', create_ip.split('.')[-1])
+        host_name = jenkins_config.container_host_name.replace('AA', create_env).replace('BB', create_business).replace(
+            'CC', create_ip.split('.')[-2]).replace('DD', create_ip.split('.')[-1])
 
         new_gateway = '%s.%s' % ('.'.join(create_ip.split('.')[0:3]), jenkins_config.container_gateway_ip)
 
@@ -216,6 +216,7 @@ class DockerView(View):
         return True
 
 
+@method_decorator(auth_admin, name='dispatch')
 class DockersView(View):
     def dispatch(self, request, *args, **kwargs):
         return super(DockersView, self).dispatch(request, *args, **kwargs)

@@ -56,4 +56,4 @@ container_mount_outside = '/opt/webapps'
 container_gateway_ip = '253'
 
 # 容器主机名
-container_host_name = 'a0-docker-A-B-C-D.yh'
+container_host_name = 'a0-docker-AA-BB-CC-DD.yh'
