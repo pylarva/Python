@@ -24,6 +24,12 @@ class BaseAdmin(object):
     search_fields = ()
     list_per_page = 2
 
+    default_actions = ["delete_selected"]
+    actions = []
+
+    def delete_selected(self, request, queryset):
+        print("going to delete ")
+
 
 class AdminSite(object):
     """

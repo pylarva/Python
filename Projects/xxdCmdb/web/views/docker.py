@@ -82,7 +82,6 @@ class DockerView(View):
             container_business = request.POST.get('container_business')
             container_env = request.POST.get('container_env')
             if container_business:
-                print(container_business)
                 mount_inside = jenkins_config.container_mount_inside
                 mount_outside = jenkins_config.container_mount_outside
                 response.data.append(mount_inside)
@@ -92,7 +91,6 @@ class DockerView(View):
                 host_name = jenkins_config.container_host_name.replace('AA', container_env).replace(
                     'BB', container_business).replace('CC', str(container_new_ip).split('.')[-2]).replace('DD', str(container_new_ip).split('.')[-1])
                 response.data.append(host_name)
-
                 print(response.data)
 
             return JsonResponse(response.__dict__)
@@ -167,6 +165,10 @@ class DockerView(View):
             # 分配IP
             cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (create_node, create_name, create_ip, new_gateway)
             self.set_ip(cmd_shell)
+
+            print('--------')
+            print(create_name)
+            print(host_name)
 
             # 资产入库
             c_env = models.BusinessOne.objects.filter(name=create_env).first().id
@@ -282,7 +284,6 @@ class DockersView(View):
         # 开启或者重启容器
         if cmd == 'power':
             current_status = c.inspect_container(name).get('State').get('Status')
-            print(c.inspect_container(name))
             if current_status == 'running':
                 c.stop(name)
             else:
@@ -305,7 +306,6 @@ class DockersView(View):
             # 自动设置Ip地址
             if ip_type == 'auto':
                 new_ip = self.get_ip(ip)
-                print(new_ip)
                 new_gateway = '%s.%s' % ('.'.join(ip.split('.')[0:3]), '253')
                 c.restart(name)
                 cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (ip, name, new_ip, new_gateway)

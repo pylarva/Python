@@ -672,7 +672,7 @@ class DockerInfo(models.Model):
     """
     记录容器详细信息
     """
-    name = models.CharField(max_length=32, null=True, blank=True)
+    name = models.CharField(max_length=108, null=True, blank=True)
     ip = models.CharField(max_length=32, null=True, blank=True)
     create_user = models.CharField(max_length=32, null=True, blank=True)
     docker_info = models.CharField(max_length=128, null=True, blank=True)

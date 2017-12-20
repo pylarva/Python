@@ -13,6 +13,13 @@ class CustomerAdmin(BaseAdmin):
     list_filter = ('source', 'status', 'consultant')
     list_per_page = 2
     search_fields = ('name', 'qq', 'status')
+    readonly_fields = ('qq', 'name')
+    actions = ["change_status", ]
+
+    def change_status(self, request, querysets):
+        querysets.update(status=1)
+
+    change_status.short_description = "改变报名状态"
 
 
 class CourseAdmin(BaseAdmin):

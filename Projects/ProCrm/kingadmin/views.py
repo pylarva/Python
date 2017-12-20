@@ -1,6 +1,8 @@
+import json
 from django.db.models import Q
 from kingadmin import forms
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -52,9 +54,19 @@ def table_data_list(request, app_name, model_name):
     admin_obj = base_admin.site.registered_sites[app_name][model_name]
     obj_list = admin_obj.model.objects.all()
 
+    # 批量操作动作
+    if request.method == "POST":
+        action = request.POST.get("action_select")
+        selected_ids = request.POST.get("selected_ids")
+        selected_ids = json.loads(selected_ids)
+        print("action:", selected_ids, action)
+        selected_objs = admin_obj.model.objects.filter(id__in=selected_ids)
+
+        action_func = getattr(admin_obj, action)
+        action_func(request, selected_objs)
+
     # 进行多条件过滤完 过滤条件继续返回给前端
     queryset, condtions = filter_querysets(request, obj_list)
-    print(queryset, condtions)
     admin_obj.filter_condtions = condtions
 
     # 搜索
@@ -104,3 +116,27 @@ def table_change(request, app_name, model_name, obj_id):
             obj_form.save()
 
     return render(request, "kingadmin/table_change.html", locals())
+
+
+def table_add(request, app_name, model_name):
+    """
+    添加数据
+    :param request:
+    :param app_name:
+    :param model_name:
+    :return:
+    """
+    admin_obj = base_admin.site.registered_sites[app_name][model_name]
+    model_form = forms.CreateModelForm(request,admin_obj=admin_obj)
+
+    if request.method == "GET":
+        obj_form = model_form()
+
+    elif request.method == "POST":
+        # Form添加数据
+        obj_form = model_form(data=request.POST)
+        if obj_form.is_valid():
+            obj_form.save()
+        if not obj_form.errors:
+            return redirect("/kingadmin/%s/%s/" % (app_name, model_name))
+    return render(request, "kingadmin/table_add.html", locals())

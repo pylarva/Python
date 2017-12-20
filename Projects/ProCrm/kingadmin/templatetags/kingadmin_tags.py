@@ -144,6 +144,23 @@ def get_search_key(request):
     return request.GET.get("_q") or ''
 
 
+@register.simple_tag
+def get_admin_actions(admin_obj):
+    """ 批量操作动作 """
+    options = "<option class='' value='-1'>-------</option>"
+    actions = admin_obj.default_actions + admin_obj.actions
+
+    for action in actions:
+        action_func = getattr(admin_obj, action)
+        if hasattr(action_func, "short_description"):
+            action_name = action_func.short_description
+        else:
+            action_name = action
+        options += """<option value="{action_func_name}">{action_name}</option> """.format(action_func_name=action,
+                                                                                           action_name=action_name)
+    return mark_safe(options)
+
+
 
 
 

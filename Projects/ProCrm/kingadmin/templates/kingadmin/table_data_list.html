@@ -6,7 +6,13 @@
 {% endblock %}
 {% block body %}
     <div class="card-block">
+        <ol class="breadcrumb">
+          <li><a href="/kingadmin/">Home</a></li>
+          <li><a href="/kingadmin/{% get_app_name admin_obj.model %}/">{% get_app_name admin_obj.model %}</a></li>
+          <li class="active">{% get_model_verbose_name admin_obj.model%}</li>
+        </ol>
         <h4>{% get_model_verbose_name admin_obj.model %}</h4>
+
 
         {% if admin_obj.list_filter %}
                  <form>
@@ -18,13 +24,24 @@
                  </div>
                       <input type="text" name="_q" value="{% get_search_key request %}">
                       <input type="submit" class="btn btn-success" value="过滤">
+                      <a href="{{ request.path }}add/" class="btn btn-sm btn-success pull-right">+Add {% get_model_verbose_name admin_obj.model%} </a>
 {#                      <input type="hidden" name="_o" value="{% get_current_orderby_key request %}">#}
                  </form>
+
+                <form method="post" onsubmit="return ActionValidation(this)">{% csrf_token %}
+                    <select name="action_select">
+                        {% get_admin_actions admin_obj %}
+                    </select>
+                    <input type="submit" value="执行">
+                </form>
         {% endif %}
 
         <table class="table table-bordered table-striped table-condensed">
             <thead>
                 <tr>
+                    <th>
+                        <input tag="obj_checkbox" type="checkbox" onclick="SelectAll(this);">
+                    </th>
                     {% for column in admin_obj.list_display %}
                         <th>
                             <a href="?_o={% get_orderby_key request column %}{% generate_filter_url admin_obj %}">{{ column }}</a>
@@ -36,6 +53,9 @@
         <tbody>
             {% for obj in admin_obj.querysets %}
                 <tr>
+                    <td>
+                        <input tag="obj_checkbox" type="checkbox" value="{{ obj.id }}">
+                    </td>
                     {% build_table_row admin_obj obj %}
                 </tr>
             {% endfor %}
@@ -66,4 +86,44 @@
 {% endblock %}
 {% block extra_js %}
     <script src="/static/plugin/bootstrap-select/bootstrap-select.js"></script>
+
+    <script>
+        // 选中checkbox
+        function SelectAll(ele) {
+            if ($(ele).prop("checked")){
+                $("input[tag='obj_checkbox']").prop("checked",true)
+            }else {
+                $("input[tag='obj_checkbox']").prop("checked",false)
+            }
+
+        }
+
+        // 提交批量操作动作
+        function ActionValidation(form_ele) {
+            if ($("select[name='action_select']").val() == "-1"){
+                alert("must select action before submit!");
+                return false;
+            }
+
+            var selected_objs = [];
+            $("input[tag='obj_checkbox']").each(function () {
+                if ($(this).prop("checked")){
+                    selected_objs.push($(this).val());
+                }
+            });//end each
+
+            console.log(selected_objs)
+            if ( selected_objs.length ==0){
+                alert("must select at least one object to run the action!");
+                return false;
+            }
+
+            var selected_objs_ele = "<input name='selected_ids' type='hidden' value=" + JSON.stringify(selected_objs) + " >" ;
+            $(form_ele).append(selected_objs_ele);
+
+            return true;
+
+        }
+
+    </script>
 {% endblock %}

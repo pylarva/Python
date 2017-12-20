@@ -1,9 +1,18 @@
 {% extends "base1.html" %}
 {% load kingadmin_tags %}
 {% block body %}
+    <ol class="breadcrumb">
+          <li><a href="/kingadmin/">Home</a></li>
+          <li><a href="/kingadmin/{% get_app_name admin_obj.model %}/">{% get_app_name admin_obj.model %}</a></li>
+          <li ><a href="/kingadmin/{% get_app_name admin_obj.model %}/{% get_modle_name admin_obj.model %}/">{% get_model_verbose_name admin_obj.model%} </a></li>
+          <li class="active">{{ obj_form.instance }}</li>
+    </ol>
+{#    <h4>Change {% get_model_verbose_name admin_obj.model  %}</h4>#}
+
     <div class="card-block">
+    {{ field.errors }}
       <div class="form-group">
-          <form class="form-horizontal" method="post">{% csrf_token %}
+          <form class="form-horizontal" method="post" onsubmit="return BeforeFormSubmit(this);">{% csrf_token %}
           {% for field in obj_form %}
                 <label  class="col-sm-2 " style="font-weight: normal">
                     {% if field.field.required %}
@@ -21,4 +30,13 @@
           </form>
       </div>
     </div>
+
+    <!-- 提交表单前去除只读字段的disabled属性 -->
+    <script>
+        function  BeforeFormSubmit(form_ele) {
+            $('form input[disabled]').prop("disabled",false);
+            //return false;
+        }
+
+    </script>
 {% endblock %}
