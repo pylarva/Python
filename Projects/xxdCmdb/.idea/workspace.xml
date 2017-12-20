@@ -2,29 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ae2ccfce-a29b-41f6-8029-e8599c2e2773" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/repository/migrations/0001_initial.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/repository/migrations/0002_dockerinfo.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/repository/migrations/0003_auto_20171205_1706.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/db.sqlite3" afterPath="$PROJECT_DIR$/../ProCrm/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ProCrm/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/crm/admin.py" afterPath="$PROJECT_DIR$/../ProCrm/crm/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/crm/kingadmin.py" afterPath="$PROJECT_DIR$/../ProCrm/crm/kingadmin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/kingadmin/base_admin.py" afterPath="$PROJECT_DIR$/../ProCrm/kingadmin/base_admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/kingadmin/forms.py" afterPath="$PROJECT_DIR$/../ProCrm/kingadmin/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/kingadmin/templates/kingadmin/table_change.html" afterPath="$PROJECT_DIR$/../ProCrm/kingadmin/templates/kingadmin/table_change.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/kingadmin/templates/kingadmin/table_data_list.html" afterPath="$PROJECT_DIR$/../ProCrm/kingadmin/templates/kingadmin/table_data_list.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/kingadmin/templatetags/kingadmin_tags.py" afterPath="$PROJECT_DIR$/../ProCrm/kingadmin/templatetags/kingadmin_tags.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/kingadmin/urls.py" afterPath="$PROJECT_DIR$/../ProCrm/kingadmin/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/kingadmin/views.py" afterPath="$PROJECT_DIR$/../ProCrm/kingadmin/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../cmdb/AutoClient/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../cmdb/AutoClient/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/repository/models.py" afterPath="$PROJECT_DIR$/repository/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scr/autopublishing.py" afterPath="$PROJECT_DIR$/scr/autopublishing.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/templates/docker_index.html" afterPath="$PROJECT_DIR$/web/templates/docker_index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/views/docker.py" afterPath="$PROJECT_DIR$/web/views/docker.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xxdCmdb/settings.py" afterPath="$PROJECT_DIR$/xxdCmdb/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../day10/code/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../day10/code/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -506,6 +484,14 @@
       <option name="presentableId" value="Default" />
       <updated>1509504221633</updated>
     </task>
+    <task id="LOCAL-00001" summary="122001">
+      <created>1513737745283</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1513737745283</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -537,6 +523,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="122001" />
+    <option name="LAST_COMMIT_MESSAGE" value="122001" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
