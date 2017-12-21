@@ -2,10 +2,13 @@
 # -*- coding:utf-8 -*-
 import os
 import time
+import queue
 import json
 import docker
+import socket
 import subprocess
 from django.views import View
+from threading import Thread
 from netaddr import IPNetwork
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -69,10 +72,8 @@ class DockerView(View):
             # 分配IP地址
             container_ip = request.POST.get('container_ip')
             if container_ip == 'auto':
-                try:
-                    container_new_ip = self.get_ip(ip)
-                except Exception as e:
-                    print(e)
+                container_new_ip = self.get_ip(ip)
+                if not container_new_ip:
                     response.status = False
                     response.error = '自动获取IP地址失败...'
                     return JsonResponse(response.__dict__)
@@ -193,14 +194,24 @@ class DockerView(View):
         :param host_machine:
         :return:
         """
+
+        def socket_ip(ip, q):
+            ip = str(ip)
+            s = socket.socket()
+            s.settimeout(1)
+            if s.connect_ex((ip, 22)) != 0:
+                q.put(ip)
+            s.close()
+
         ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
+        q = queue.Queue()
         for ip in ipaddr:
-            s = subprocess.call("ssh root@%s 'ping -c1 -W 1 %s > /dev/null'" % (host_machine, ip), shell=True)
-            if s != 0:
-                num = models.Asset.objects.filter(host_ip=ip).count()
-                if num == 0:
-                    return ip
-        return False
+            Thread(target=socket_ip, args=(ip, q)).start()
+        try:
+            new_ip = q.get(block=True, timeout=5)
+            return new_ip
+        except Exception as e:
+            return False
 
     def set_ip(self, cmd_shell):
         """
@@ -251,10 +262,33 @@ class DockersView(View):
         c = docker.Client(base_url='tcp://%s:2375' % host_ip, version='auto', timeout=10)
         response.data = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
                                      before=None, limit=-1)
-        # ssh取每个容器的外网IP地址
-        for i in response.data:
-            i['Names'] = i['Names'][0].split('/')[1]
 
+        for i in response.data:
+            name = i['Names'][0].split('/')[1]
+            try:
+                new_ip = models.DockerInfo.objects.filter(name=name).first().ip
+            except Exception as e:
+                new_ip = ''
+            i['Names'] = name
+            i['NewIp'] = new_ip
+
+        response.status = True
+        return response
+
+    def container_inspects(self, host_ip):
+        """
+        容器详细JSON 多线程去拿IP地址有问题 弃用~~
+        :param host_ip:
+        :return:
+        """
+        response = BaseResponse()
+
+        c = docker.Client(base_url='tcp://%s:2375' % host_ip, version='auto', timeout=10)
+        response.data = c.containers(quiet=False, all=True, trunc=True, latest=False, since=None,
+                                     before=None, limit=-1)
+
+        def get_new_ip(i, q):
+            i['Names'] = i['Names'][0].split('/')[1]
             cmd = "ssh root@%s docker exec %s ifconfig | awk 'NR==10 {print $2}'" % (host_ip, i['Names'])
             try:
                 ret = subprocess.Popen(cmd, stdin=subprocess.PIPE, shell=True,
@@ -262,8 +296,25 @@ class DockersView(View):
                 i['NewIp'] = ret.stdout.read().strip()
             except Exception as e:
                 i['NewIp'] = ''
+            q.put(1)
 
-        response.status = True
+        # ssh取每个容器的外网IP地址
+        q = queue.Queue()
+        data_len = len(response.data)
+        for i in response.data:
+            Thread(target=get_new_ip, args=(i, q)).start()
+        i = 0
+        while i < 20:
+            print('------', q.qsize())
+            if q.qsize() == data_len:
+                response.status = True
+                break
+            else:
+                time.sleep(1)
+                i += 1
+        print(response.data)
+
+        response.status = False
         return response
 
     def container_handle(self, request):
@@ -358,14 +409,23 @@ class DockersView(View):
         :param host_machine:
         :return:
         """
+        def socket_ip(ip, q):
+            ip = str(ip)
+            s = socket.socket()
+            s.settimeout(1)
+            if s.connect_ex((ip, 22)) != 0:
+                q.put(ip)
+            s.close()
+
         ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
+        q = queue.Queue()
         for ip in ipaddr:
-            s = subprocess.call("ssh root@%s 'ping -c1 -W 1 %s > /dev/null'" % (host_machine, ip), shell=True)
-            if s != 0:
-                num = models.Asset.objects.filter(host_ip=ip).count()
-                if num == 0:
-                    return ip
-        return False
+            Thread(target=socket_ip, args=(ip, q)).start()
+        try:
+            new_ip = q.get(block=True, timeout=5)
+            return new_ip
+        except Exception as e:
+            return False
 
     def set_ip(self, cmd_shell):
         """

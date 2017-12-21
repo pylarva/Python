@@ -1,20 +1,36 @@
-import docker
-# from conf import jenkins_config
-# ip = '192.168.38.56'
-# create_ip = '192.168.38.64'
-# create_env = 'dev'
-# create_business = 'ops'
-# host_name = jenkins_config.container_host_name.replace('A', create_env).replace('B', create_business).replace('C', create_ip.split('.')[-2]).replace('D', create_ip.split('.')[-1])
-# print(host_name)
-# li = ['192.168.38.56']
-# for i in li:
-#     c = docker.Client(base_url='tcp://%s:2375' % ip, version='auto', timeout=10)
-#     print(c.info()['Containers'])
-#     print(c.info()['ContainersRunning'])
+from netaddr import IPNetwork
+import socket
+import queue
+from conf import kvm_config
+from threading import Thread
 
-a = [1,2,3]
-s = ''
-for i in a:
-    new_s = str(i) + ','
-    s += new_s
-print(s)
+
+def get_ip(host_machine):
+    """
+    自动获取IP地址
+    :param host_machine:
+    :return:
+    """
+
+    def aaa(ip, q):
+        ip = str(ip)
+        s = socket.socket()
+        s.settimeout(1)
+        if s.connect_ex((ip, 22)) != 0:
+            q.put(ip)
+        s.close()
+
+    ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
+    q = queue.Queue()
+    for ip in ipaddr:
+        Thread(target=aaa, args=(ip, q)).start()
+    try:
+        new_ip = q.get(block=True, timeout=5)
+        return new_ip
+    except Exception as e:
+        return False
+
+ret = get_ip('192.168.31.10')
+print(ret)
+
+

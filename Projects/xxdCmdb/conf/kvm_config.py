@@ -19,7 +19,7 @@ kvm_str = 'yh'
 kvm_last_gateway = '253'
 
 # 自动获取IP地址范围
-kvm_range_ip = [51, 200]
+kvm_range_ip = [51, 249]
 
 # 模版镜像统一IP
 kvm_template_ip = '192.168.31.130'
