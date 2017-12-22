@@ -33,7 +33,7 @@ from threading import Timer
 
 API_HOST = 'cmdb.xxd.com'
 # API_URL = 'http://192.168.33.110:8005/api/release'
-API_URL = 'http://172.16.10.47:8005/api/release'
+API_URL = 'http://172.16.10.98:8005/api/release'
 # API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
@@ -41,7 +41,8 @@ RUNNING_USER = 'admin'
 HOME_DIR = '/home/admin'
 LOGGER = None
 AUTH_KEY = 'vLCzbZjGVNKWPxqd'
-CMDB_WORKSPACE = '/root/.cmdb/workspace/'
+# CMDB_WORKSPACE = '/root/.cmdb/workspace/'
+CMDB_WORKSPACE = '/root/.cmdb/workspace/test3/'
 run_log_file = '/home/admin/logs/run.log'
 error_log_file = '/home/admin/logs/err.log'
 CHECK_SERVICE_TIMEOUT = 120

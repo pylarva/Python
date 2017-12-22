@@ -4,9 +4,15 @@ import json
 import re
 import os
 import time
+import docker
 import threading
+import socket
+import queue
 import paramiko
 import subprocess
+from netaddr import IPNetwork
+from conf import kvm_config
+from threading import Thread
 from multiprocessing import Process
 from django.db.models import Q
 from repository import models
@@ -401,7 +407,6 @@ class Project(BaseServiceList):
         release_env = request.POST.get('release_env')
         release_branch = request.POST.get('release_branch')
         release_time = time.strftime('%Y-%m-%d %H:%M')
-        print('-----------------------')
         print(release_time)
         release_user = request.POST.get('user_name')
 
@@ -412,7 +417,6 @@ class Project(BaseServiceList):
         port = obj.git_branch
         if not port:
             port = "None"
-        print('========', port)
 
         obj_env = models.BusinessOne.objects.filter(id=release_env).first()
         release_env_name = obj_env.name
@@ -489,13 +493,16 @@ class Project(BaseServiceList):
         # models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
         # return True
 
+        # 容器化发布 需要先创建一个jenkins容器并分配好Ip后连接执行打包任务
+        new_jenkins_ip = self.create_jenkins_container(task_id)
+
         # 将发布脚本发送到目标机器
-        cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_config.host)
+        cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, new_jenkins_ip)
         os.system(cmd)
         # self.cmd_shell(cmd, task_id)
 
         # 将配置文件发送到目标机器
-        cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, jenkins_config.host)
+        cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, new_jenkins_ip)
         os.system(cmd)
         # self.cmd_shell(cmd, task_id)
 
@@ -504,8 +511,10 @@ class Project(BaseServiceList):
                                                                               release_git_url, release_branch, release_name,
                                                                               release_env, pack_cmd, jdk_version, release_type, static_type])
 
-        cmd = "ssh root@%s '%s'" % (jenkins_config.host, cmd)
+        cmd = "ssh root@%s '%s'" % (new_jenkins_ip, cmd)
+        # cmd = "ssh root@%s '%s'" % (jenkins_config.host, cmd)
         # self.cmd_shell(cmd, task_id)
+        print(cmd)
         os.system(cmd)
 
         # ssh = paramiko.SSHClient()
@@ -724,6 +733,79 @@ class Project(BaseServiceList):
             return False
         return True
 
+    def create_jenkins_container(self, task_id):
+        """
+        创建docker容器
+        :return:
+        """
+        ip = self.get_ip('192.168.31.10')
+        if not ip:
+            return False
+        create_node = '192.168.31.10'
+        create_mount_in = '/data/packages/'
+        create_mount_out = '/data/packages/'
+        create_image = 'centos7_jenkins:latest'
+        host_name = jenkins_config.container_host_name.replace('AA', 'temporary').replace('BB', 'jenkins').replace(
+            'CC', ip.split('.')[-2]).replace('DD', ip.split('.')[-1])
+
+        c = docker.Client(base_url='tcp://%s:2375' % create_node, version='auto', timeout=10)
+        host_config = c.create_host_config(binds={create_mount_out: {'bind': create_mount_in, 'ro': False}},)
+        c_ret = c.create_container(create_image, hostname=host_name, user=None,
+                                   detach=True, stdin_open=True, tty=True,
+                                   ports=None, environment=None, dns=None,
+                                   volumes=[create_mount_out],
+                                   host_config=host_config,
+                                   volumes_from=None, network_disabled=False, name=host_name,
+                                   entrypoint=None, cpu_shares=None, working_dir=None)
+        c.start(c_ret['Id'])
+
+        # 设置IP
+        new_gateway = '%s.%s' % ('.'.join(ip.split('.')[0:3]), jenkins_config.container_gateway_ip)
+        cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (create_node, host_name, ip, new_gateway)
+        self.set_ip(cmd_shell)
+
+        self.log(task_id, '创建容器jenkins...%s' % host_name)
+        return ip
+
+    def get_ip(self, host_machine):
+        """
+        自动获取docker IP地址
+        :param host_machine:
+        :return:
+        """
+
+        def socket_ip(ip, q):
+            ip = str(ip)
+            s = socket.socket()
+            s.settimeout(1)
+            if s.connect_ex((ip, 22)) != 0:
+                q.put(ip)
+            s.close()
+
+        ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
+        q = queue.Queue()
+        for ip in ipaddr:
+            Thread(target=socket_ip, args=(ip, q)).start()
+        try:
+            new_ip = q.get(block=True, timeout=5)
+            return new_ip
+        except Exception as e:
+            return False
+
+    def set_ip(self, cmd_shell):
+        """
+        远程设置容器IP地址
+        :param cmd_shell:
+        :return:
+        """
+        print(cmd_shell)
+        try:
+            subprocess.Popen(cmd_shell, stdin=subprocess.PIPE, shell=True,
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            time.sleep(2)
+        except Exception as e:
+            print(e)
+        return True
 
 
 

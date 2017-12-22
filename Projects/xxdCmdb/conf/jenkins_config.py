@@ -2,7 +2,8 @@
 # -*- coding:utf-8 -*-
 
 # jenkins配置
-host = '192.168.31.80'
+# host = '192.168.31.80'
+host = '192.168.31.10'
 
 script_path = '/opt/autopublishing.py'
 
@@ -26,11 +27,11 @@ config_path = '/opt/config/'
 
 # Nginx服务器
 # 测试环境nginx机器
-nginx_test_ip_list = ['192.168.31.110', '192.168.33.110']
+nginx_test_ip_list = ['192.168.33.110']
 
 # 生产环境nginx机器
 # nginx_prod_ip_list = ['10.96.1.69', '10.96.1.70', '10.96.1.71']
-nginx_prod_ip_list = ['192.168.31.110', '192.168.33.110']
+nginx_prod_ip_list = ['192.168.33.110']
 
 
 # 静态资源包
