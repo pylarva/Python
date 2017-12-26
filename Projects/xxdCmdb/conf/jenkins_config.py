@@ -58,3 +58,7 @@ container_gateway_ip = '253'
 
 # 容器主机名
 container_host_name = 'a0-docker-AA-BB-CC-DD.yh'
+
+# 是否采用容器化的jenkins发布（1:是 0:否 即使用原有jenkins服务器打包 build.xxd.com）
+jenkins_docker_switch = 1
+

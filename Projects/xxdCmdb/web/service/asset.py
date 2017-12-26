@@ -17,6 +17,7 @@ class Asset(BaseServiceList):
         condition_config = [
             {'name': 'host_ip', 'text': 'IP', 'condition_type': 'input'},
             {'name': 'business_1', 'text': '环境', 'condition_type': 'select', 'global_name': 'business_1_list'},
+            {'name': 'host_name', 'text': '主机名', 'condition_type': 'input'},
             {'name': 'business_2', 'text': '二级业务线', 'condition_type': 'select', 'global_name': 'business_2_list'},
             {'name': 'business_3', 'text': '三级业务线', 'condition_type': 'select', 'global_name': 'business_3_list'},
             {'name': 'host_type', 'text': '资产类型', 'condition_type': 'select', 'global_name': 'device_type_list'},

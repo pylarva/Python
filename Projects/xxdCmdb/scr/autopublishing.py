@@ -33,7 +33,7 @@ from threading import Timer
 
 API_HOST = 'cmdb.xxd.com'
 # API_URL = 'http://192.168.33.110:8005/api/release'
-API_URL = 'http://172.16.10.98:8005/api/release'
+API_URL = 'http://172.16.10.85:8005/api/release'
 # API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
@@ -1177,9 +1177,13 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
         return out
 
     if name == 'html':
-        cmd = "ssh 127.0.0.1 'cd /root/.cmdb/workspace/xxd_html && /usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1'" % release_git_url
+        if not os.path.exists('/root/.cmdb/workspace/xxd_html'):
+            os.mkdir('/root/.cmdb/workspace/xxd_html')
+        cmd = "ssh -o StrictHostKeyChecking=no 127.0.0.1 'cd /root/.cmdb/workspace/xxd_html && /usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1'" % release_git_url
     else:
-        cmd = "ssh 127.0.0.1 'cd /root/.cmdb/workspace/%s && /usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1'" % (name, release_git_url)
+        if not os.path.exists('/root/.cmdb/workspace/%s' % name):
+            os.mkdir('/root/.cmdb/workspace/%s' % name)
+        cmd = "ssh -o StrictHostKeyChecking=no 127.0.0.1 'cd /root/.cmdb/workspace/%s && /usr/local/git/bin/git fetch --tags --progress %s +refs/heads/*:refs/remotes/origin/* > /dev/null 2>&1'" % (name, release_git_url)
     ret, out = ExecCmd(cmd)
     Logger().log(cmd, True)
     Logger().log(out, True)

@@ -493,16 +493,20 @@ class Project(BaseServiceList):
         # models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
         # return True
 
-        # 容器化发布 需要先创建一个jenkins容器并分配好Ip后连接执行打包任务
-        new_jenkins_ip = self.create_jenkins_container(task_id)
+        # 打包方式选择
+        if jenkins_config.jenkins_docker_switch:
+            # 容器化发布 需要先创建一个jenkins容器并分配好Ip后连接执行打包任务
+            jenkins_host_ip = self.create_jenkins_container(task_id)
+        else:
+            jenkins_host_ip = jenkins_config.host
 
         # 将发布脚本发送到目标机器
-        cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, new_jenkins_ip)
+        cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_host_ip)
         os.system(cmd)
         # self.cmd_shell(cmd, task_id)
 
         # 将配置文件发送到目标机器
-        cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, new_jenkins_ip)
+        cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, jenkins_host_ip)
         os.system(cmd)
         # self.cmd_shell(cmd, task_id)
 
@@ -511,11 +515,14 @@ class Project(BaseServiceList):
                                                                               release_git_url, release_branch, release_name,
                                                                               release_env, pack_cmd, jdk_version, release_type, static_type])
 
-        cmd = "ssh root@%s '%s'" % (new_jenkins_ip, cmd)
-        # cmd = "ssh root@%s '%s'" % (jenkins_config.host, cmd)
+        cmd = "ssh root@%s '%s'" % (jenkins_host_ip, cmd)
         # self.cmd_shell(cmd, task_id)
         print(cmd)
         os.system(cmd)
+
+        # models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
+        # self.log(task_id, '发布成功结束！')
+        # return True
 
         # ssh = paramiko.SSHClient()
         # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -744,7 +751,7 @@ class Project(BaseServiceList):
         create_node = '192.168.31.10'
         create_mount_in = '/data/packages/'
         create_mount_out = '/data/packages/'
-        create_image = 'centos7_jenkins:latest'
+        create_image = 'jenkins_test06:latest'
         host_name = jenkins_config.container_host_name.replace('AA', 'temporary').replace('BB', 'jenkins').replace(
             'CC', ip.split('.')[-2]).replace('DD', ip.split('.')[-1])
 
@@ -764,7 +771,7 @@ class Project(BaseServiceList):
         cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (create_node, host_name, ip, new_gateway)
         self.set_ip(cmd_shell)
 
-        self.log(task_id, '创建容器jenkins...%s' % host_name)
+        self.log(task_id, '创建打包容器...%s' % host_name)
         return ip
 
     def get_ip(self, host_machine):
