@@ -42,7 +42,7 @@ HOME_DIR = '/home/admin'
 LOGGER = None
 AUTH_KEY = 'vLCzbZjGVNKWPxqd'
 # CMDB_WORKSPACE = '/root/.cmdb/workspace/'
-CMDB_WORKSPACE = '/root/.cmdb/workspace/test3/'
+CMDB_WORKSPACE = '/root/.cmdb/workspace/'
 run_log_file = '/home/admin/logs/run.log'
 error_log_file = '/home/admin/logs/err.log'
 CHECK_SERVICE_TIMEOUT = 120
@@ -1367,6 +1367,12 @@ def JenkinsModify(pkg_name, task_id, release_git_url, release_branch, name, env,
     if ret:
         Logger().log('create md5 failed...', True)
         return ret
+
+    # 拷贝日志
+    cmd = "/bin/cp /home/admin/logs/run.log /data/packages/logs/%s-%s-%s.log" % (env, name, task_id)
+    ret, out = ExecCmd(cmd)
+    Logger().log(cmd, True)
+    Logger().log(out, True)
 
     return retCode
 

@@ -496,7 +496,7 @@ class Project(BaseServiceList):
         # 打包方式选择
         if jenkins_config.jenkins_docker_switch:
             # 容器化发布 需要先创建一个jenkins容器并分配好Ip后连接执行打包任务
-            jenkins_host_ip = self.create_jenkins_container(task_id)
+            jenkins_host_ip, docker_name = self.create_jenkins_container(task_id)
         else:
             jenkins_host_ip = jenkins_config.host
 
@@ -667,6 +667,27 @@ class Project(BaseServiceList):
             self.log(task_id, '发布终止！')
             models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)
 
+        # 销毁打包容器
+        if jenkins_config.jenkins_docker_switch:
+            self.del_jenkins_container(docker_name, task_id)
+
+    def del_jenkins_container(self, container_name, task_id):
+        """
+        删除打包容器
+        :param container_name:
+        :return:
+        """
+        docker_host_ip = jenkins_config.jenkins_host
+        try:
+            c = docker.Client(base_url='tcp://%s:2375' % docker_host_ip, version='auto', timeout=10)
+            c.stop(container_name)
+            c.remove_container(container_name)
+            self.log(task_id, '删除打包容器【%s】...成功' % container_name)
+        except Exception as e:
+            self.log(task_id, '删除打包容器【%s】...失败' % container_name)
+
+        return True
+
     def cmd_shell(self, cmd, task_id):
         ret = subprocess.Popen(cmd, stdin=subprocess.PIPE, shell=True,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -751,7 +772,7 @@ class Project(BaseServiceList):
         create_node = '192.168.31.10'
         create_mount_in = '/data/packages/'
         create_mount_out = '/data/packages/'
-        create_image = 'jenkins_test06:latest'
+        create_image = 'jenkins_test07:latest'
         host_name = jenkins_config.container_host_name.replace('AA', 'temporary').replace('BB', 'jenkins').replace(
             'CC', ip.split('.')[-2]).replace('DD', ip.split('.')[-1])
 
@@ -772,7 +793,7 @@ class Project(BaseServiceList):
         self.set_ip(cmd_shell)
 
         self.log(task_id, '创建打包容器...%s' % host_name)
-        return ip
+        return ip, host_name
 
     def get_ip(self, host_machine):
         """
