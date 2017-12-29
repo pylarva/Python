@@ -1,5 +1,6 @@
 from netaddr import IPNetwork
 import socket
+import subprocess
 import queue
 from conf import kvm_config
 from threading import Thread
@@ -13,12 +14,15 @@ def get_ip(host_machine):
     """
 
     def aaa(ip, q):
-        ip = str(ip)
-        s = socket.socket()
-        s.settimeout(1)
-        if s.connect_ex((ip, 22)) != 0:
+        # ip = str(ip)
+        # s = socket.socket()
+        # s.settimeout(1)
+        # if s.connect_ex((ip, 22)) != 0:
+        #     q.put(ip)
+        # s.close()
+        s = subprocess.call("ping -c1 -W 1 %s > /dev/null" % ip, shell=True)
+        if s != 0:
             q.put(ip)
-        s.close()
 
     ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
     q = queue.Queue()
@@ -31,6 +35,6 @@ def get_ip(host_machine):
         return False
 
 ret = get_ip('192.168.31.10')
-print(ret)
+print('----', ret)
 
 

@@ -196,12 +196,15 @@ class DockerView(View):
         """
 
         def socket_ip(ip, q):
-            ip = str(ip)
-            s = socket.socket()
-            s.settimeout(1)
-            if s.connect_ex((ip, 22)) != 0:
+            # ip = str(ip)
+            # s = socket.socket()
+            # s.settimeout(1)
+            # if s.connect_ex((ip, 22)) != 0:
+            #     q.put(ip)
+            # s.close()
+            s = subprocess.call("ping -c1 -W 1 %s > /dev/null" % ip, shell=True)
+            if s != 0:
                 q.put(ip)
-            s.close()
 
         ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
         q = queue.Queue()
@@ -209,7 +212,7 @@ class DockerView(View):
             Thread(target=socket_ip, args=(ip, q)).start()
         try:
             new_ip = q.get(block=True, timeout=5)
-            return new_ip
+            return str(new_ip)
         except Exception as e:
             return False
 
@@ -459,12 +462,15 @@ class DockersView(View):
         :return:
         """
         def socket_ip(ip, q):
-            ip = str(ip)
-            s = socket.socket()
-            s.settimeout(1)
-            if s.connect_ex((ip, 22)) != 0:
+            # ip = str(ip)
+            # s = socket.socket()
+            # s.settimeout(1)
+            # if s.connect_ex((ip, 22)) != 0:
+            #     q.put(ip)
+            # s.close()
+            s = subprocess.call("ping -c1 -W 1 %s > /dev/null" % ip, shell=True)
+            if s != 0:
                 q.put(ip)
-            s.close()
 
         ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
         q = queue.Queue()
@@ -472,7 +478,7 @@ class DockersView(View):
             Thread(target=socket_ip, args=(ip, q)).start()
         try:
             new_ip = q.get(block=True, timeout=5)
-            return new_ip
+            return str(new_ip)
         except Exception as e:
             return False
 

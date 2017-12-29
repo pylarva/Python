@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ae2ccfce-a29b-41f6-8029-e8599c2e2773" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/repository/models.py" afterPath="$PROJECT_DIR$/repository/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scr/autopublishing.py" afterPath="$PROJECT_DIR$/scr/autopublishing.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test66.py" afterPath="$PROJECT_DIR$/test/test66.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/service/project.py" afterPath="$PROJECT_DIR$/web/service/project.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/templates/dockers.html" afterPath="$PROJECT_DIR$/web/templates/dockers.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/views/docker.py" afterPath="$PROJECT_DIR$/web/views/docker.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,7 +15,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/xxdCmdb$test66.coverage" NAME="test66 Coverage Results" MODIFIED="1513823113231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
+    <SUITE FILE_PATH="coverage/xxdCmdb$test66.coverage" NAME="test66 Coverage Results" MODIFIED="1514516430623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/xxdCmdb$test6.coverage" NAME="test6 Coverage Results" MODIFIED="1510127996164" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -29,8 +27,8 @@
       <file leaf-file-name="test66.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test66.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="20" column="17" lean-forward="true" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
+            <state relative-caret-position="162">
+              <caret line="18" column="22" lean-forward="false" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="22" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -48,16 +46,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="project.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="project.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/service/project.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="787" column="93" lean-forward="true" selection-start-line="787" selection-start-column="93" selection-end-line="787" selection-end-column="93" />
+            <state relative-caret-position="409">
+              <caret line="823" column="30" lean-forward="true" selection-start-line="823" selection-start-column="30" selection-end-line="823" selection-end-column="30" />
               <folding>
                 <element signature="e#45#56#0" expanded="true" />
                 <element signature="e#22739#25894#0" expanded="false" />
-                <marker date="1514513404000" expanded="true" signature="4522:4669" ph="select hostn... repository_server" />
-                <marker date="1514513404000" expanded="true" signature="4702:4868" ph="select manag... repository_networkdevice" />
+                <marker date="1514516796000" expanded="true" signature="4522:4669" ph="select hostn... repository_server" />
+                <marker date="1514516796000" expanded="true" signature="4702:4868" ph="select manag... repository_networkdevice" />
               </folding>
             </state>
           </provider>
@@ -97,14 +95,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="docker.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="docker.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/views/docker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="529">
-              <caret line="439" column="20" lean-forward="false" selection-start-line="439" selection-start-column="20" selection-end-line="439" selection-end-column="20" />
+            <state relative-caret-position="332">
+              <caret line="476" column="25" lean-forward="true" selection-start-line="476" selection-start-column="25" selection-end-line="476" selection-end-column="25" />
               <folding>
                 <element signature="e#45#54#0" expanded="true" />
-                <element signature="e#19409#20384#0" expanded="false" />
+                <element signature="e#19703#20678#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -131,7 +129,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>auto_now_add</find>
       <find>auto_now_</find>
       <find>shutdown</find>
       <find>dome-box</find>
@@ -161,6 +158,7 @@
       <find>创建容器</find>
       <find>删除容器</find>
       <find>删除</find>
+      <find>settimeout</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -194,16 +192,16 @@
         <option value="$PROJECT_DIR$/web/templates/index.html" />
         <option value="$PROJECT_DIR$/conf/note" />
         <option value="$PROJECT_DIR$/web/templates/docker_index.html" />
-        <option value="$PROJECT_DIR$/test/test66.py" />
         <option value="$PROJECT_DIR$/conf/kvm_config.py" />
         <option value="$PROJECT_DIR$/web/service/asset.py" />
         <option value="$PROJECT_DIR$/conf/jenkins_config.py" />
         <option value="$PROJECT_DIR$/scr/autopublishing.py" />
         <option value="$PROJECT_DIR$/repository/models.py" />
-        <option value="$PROJECT_DIR$/web/views/docker.py" />
         <option value="$PROJECT_DIR$/web/templates/dockers.html" />
         <option value="$PROJECT_DIR$/xxdCmdb/settings.py" />
+        <option value="$PROJECT_DIR$/test/test66.py" />
         <option value="$PROJECT_DIR$/web/service/project.py" />
+        <option value="$PROJECT_DIR$/web/views/docker.py" />
       </list>
     </option>
   </component>
@@ -791,12 +789,19 @@
       <option name="project" value="LOCAL" />
       <updated>1514368776883</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="1229">
+      <created>1514514120808</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1514514120808</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24892704" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -804,7 +809,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3033419" sideWeight="0.4914163" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3033419" sideWeight="0.4914163" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3277635" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -828,7 +833,8 @@
     <MESSAGE value="122001" />
     <MESSAGE value="1222" />
     <MESSAGE value="1227" />
-    <option name="LAST_COMMIT_MESSAGE" value="1227" />
+    <MESSAGE value="1229" />
+    <option name="LAST_COMMIT_MESSAGE" value="1229" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1109,16 +1115,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/test66.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="20" column="17" lean-forward="true" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/conf/kvm_config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
@@ -1179,18 +1175,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-302">
-          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="91" column="18" lean-forward="true" selection-start-line="91" selection-start-column="18" selection-end-line="91" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/dockers.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="284">
+          <caret line="320" column="37" lean-forward="true" selection-start-line="320" selection-start-column="37" selection-end-line="320" selection-end-column="37" />
+          <folding>
+            <element signature="e#671#695#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-302">
+          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1205,36 +1211,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/dockers.html">
+    <entry file="file://$PROJECT_DIR$/test/test66.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="320" column="37" lean-forward="true" selection-start-line="320" selection-start-column="37" selection-end-line="320" selection-end-column="37" />
+        <state relative-caret-position="162">
+          <caret line="18" column="22" lean-forward="false" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="22" />
           <folding>
-            <element signature="e#671#695#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/docker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="439" column="20" lean-forward="false" selection-start-line="439" selection-start-column="20" selection-end-line="439" selection-end-column="20" />
-          <folding>
-            <element signature="e#45#54#0" expanded="true" />
-            <element signature="e#19409#20384#0" expanded="false" />
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/service/project.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="787" column="93" lean-forward="true" selection-start-line="787" selection-start-column="93" selection-end-line="787" selection-end-column="93" />
+        <state relative-caret-position="409">
+          <caret line="823" column="30" lean-forward="true" selection-start-line="823" selection-start-column="30" selection-end-line="823" selection-end-column="30" />
           <folding>
             <element signature="e#45#56#0" expanded="true" />
             <element signature="e#22739#25894#0" expanded="false" />
-            <marker date="1514513404000" expanded="true" signature="4522:4669" ph="select hostn... repository_server" />
-            <marker date="1514513404000" expanded="true" signature="4702:4868" ph="select manag... repository_networkdevice" />
+            <marker date="1514516796000" expanded="true" signature="4522:4669" ph="select hostn... repository_server" />
+            <marker date="1514516796000" expanded="true" signature="4702:4868" ph="select manag... repository_networkdevice" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/docker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="476" column="25" lean-forward="true" selection-start-line="476" selection-start-column="25" selection-end-line="476" selection-end-column="25" />
+          <folding>
+            <element signature="e#45#54#0" expanded="true" />
+            <element signature="e#19703#20678#0" expanded="false" />
           </folding>
         </state>
       </provider>
