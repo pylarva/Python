@@ -179,7 +179,7 @@ class DockerView(View):
                                         business_2_id=c_business, host_status=1)
             # 容器信息记录表
             models.DockerInfo.objects.create(name=create_name, ip=create_ip, create_user=request.session['username'],
-                                             docker_info=docker_info)
+                                             docker_info=docker_info, image=create_image)
         except Exception as e:
             response.status = False
             print(e)
@@ -239,6 +239,12 @@ class DockersView(View):
         return render(request, 'dockers.html', {'data': data})
 
     def post(self, request):
+        # 一件恢复所有容器
+        is_recover = request.POST.get('is_recover')
+        if is_recover:
+            response = self.container_recover(request)
+            return JsonResponse(response.__dict__)
+
         # 操作容器
         is_handle = request.POST.get('is_handle')
         if is_handle:
@@ -250,6 +256,49 @@ class DockersView(View):
         if host_ip:
             response = self.container_inspect(host_ip)
             return JsonResponse(response.__dict__)
+
+    def container_recover(self, request):
+        """
+        一件恢复所有容器
+        :param host_ip:
+        :return:
+        """
+        response = BaseResponse()
+        ip = request.POST.get('ip')
+        create_mount_out = jenkins_config.container_mount_outside
+        create_mount_in = jenkins_config.container_mount_inside
+        c = docker.Client(base_url='tcp://%s:2375' % ip, version='auto', timeout=10)
+
+        # 查询容器记录表 批量恢复
+        containers_list = models.DockerInfo.objects.all()
+        for item in containers_list:
+            try:
+                print(item.name, item.image)
+                create_image = item.image
+                host_name = item.name
+                create_ip = item.ip
+                new_gateway = '%s.%s' % ('.'.join(create_ip.split('.')[0:3]), jenkins_config.container_gateway_ip)
+
+                host_config = c.create_host_config(binds={create_mount_out: {'bind': create_mount_in, 'ro': False}})
+                c_ret = c.create_container(create_image, hostname=host_name, user=None,
+                                           detach=True, stdin_open=True, tty=True,
+                                           ports=None, environment=None, dns=None,
+                                           volumes=[create_mount_out],
+                                           host_config=host_config,
+                                           volumes_from=None, network_disabled=False, name=host_name,
+                                           entrypoint=None, cpu_shares=None, working_dir=None)
+                c.start(c_ret['Id'])
+
+                # 设置IP
+                cmd_shell = 'ssh root@%s pipework br0 %s %s/24@%s' % (ip, host_name, create_ip, new_gateway)
+                self.set_ip(cmd_shell)
+            except Exception as e:
+                response.status = False
+                response.error = '恢复容器%s失败....' % item.name
+                return response
+
+        response = self.container_inspect(ip)
+        return response
 
     def container_inspect(self, host_ip):
         """

@@ -678,6 +678,7 @@ class DockerInfo(models.Model):
     docker_info = models.CharField(max_length=128, null=True, blank=True)
     create_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     remove_time = models.CharField(max_length=32, null=True, blank=True)
+    image = models.CharField(max_length=64, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "docker容器信息查询表"

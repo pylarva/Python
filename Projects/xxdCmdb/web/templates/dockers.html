@@ -15,6 +15,7 @@
     <p>1、初始化容器节点服务器需要安装docker服务端并且开启远程API端口<span>2375</span></p>
     <p>2、所有容器节点均通过服务器<span>网桥br0</span>连接，重新给容器设置IP需要确认<span>Pipework</span>正常使用</p>
     <p>3、关闭或者重启容器后，系统自动设置容器创建时<span>主机名</span>末尾数字为IP地址, 网关为<span>xx.xx.xx.253</span></p>
+    <p>4、宿主机出现宕机情况，导致所有容器丢失可以临时恢复所有容器, 恢复后需要重新发布代码<span><a style="cursor: pointer;" onclick="docker_recover()">[一键恢复]</a></span>【慎用】[<a id="recover_ip"></a>]</p>
     </div>
     <br>
     <div class="container-fluid">
@@ -124,6 +125,7 @@
 
         // 选择容器节点IP获取容器信息
         function containers_get(ip) {
+            $('#recover_ip').text(ip);
             // JS 字符串格式化
             String.prototype.format = function(args) {
                 var result = this;
@@ -303,6 +305,31 @@
                         }
                 }
             })
+        }
+
+        // 宿主机故障 一键恢复所有容器
+        function docker_recover() {
+             var docker_ip = $('#recover_ip').text();
+            if(docker_ip == ''){
+                alert('请先选择容器主机..');
+                return false;
+            }else {
+                toastr['info']('<br>正在恢复，请稍候...：'+'success','success');
+                $.ajax({
+                    url : '/dockers.html',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    traditional: true,
+                    data: {'is_recover': 1, 'ip': docker_ip},
+                    success: function (response) {
+                            if(response.status){
+                                toastr['success']('<br>恢复成功：'+'success','success');
+                                $('#add_data').empty();
+                                data_fill(response.data, docker_ip);
+                            }
+                    }
+                })
+            }
         }
     </script>
 {% endblock %}

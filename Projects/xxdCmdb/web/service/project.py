@@ -502,11 +502,13 @@ class Project(BaseServiceList):
 
         # 将发布脚本发送到目标机器
         cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_host_ip)
+        print(cmd)
         os.system(cmd)
         # self.cmd_shell(cmd, task_id)
 
         # 将配置文件发送到目标机器
         cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, jenkins_host_ip)
+        print(cmd)
         os.system(cmd)
         # self.cmd_shell(cmd, task_id)
 
@@ -772,7 +774,7 @@ class Project(BaseServiceList):
         create_node = '192.168.31.10'
         create_mount_in = '/data/packages/'
         create_mount_out = '/data/packages/'
-        create_image = 'jenkins_test07:latest'
+        create_image = 'centos7_jenkins:latest'
         host_name = jenkins_config.container_host_name.replace('AA', 'temporary').replace('BB', 'jenkins').replace(
             'CC', ip.split('.')[-2]).replace('DD', ip.split('.')[-1])
 
