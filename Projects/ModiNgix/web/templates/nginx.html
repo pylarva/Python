@@ -1,0 +1,418 @@
+{% extends 'index.html' %}
+{% block css %}
+    <link href="/static/css/datepicker.css" rel="stylesheet">
+    <style>
+        .hide{
+            display: none;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+
+    <!-- 循环nginx主机 开始-->
+    <div class="container-fluid">
+        <div id="alert-warning" class="alert alert-warning alert-dismissible hide" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Warning! </strong> <a id="warning_text">11</a>
+        </div>
+        <div id="alert-success" class="alert alert-success alert-dismissible hide" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Success!</strong> 屏蔽时间添加成功！
+        </div>
+        <div id="alert-del" class="alert alert-success alert-dismissible hide" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Success!</strong> 删除屏蔽记录成功！
+        </div>
+        <div id="alert-danger" class="alert alert-danger alert-dismissible hide" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Warning!</strong> Better check yourself, you're not looking too good.
+        </div>
+            {% for item in data %}
+        <div class="row">
+            <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fa fa-edit"></i>修改屏蔽时间
+                                <div class="card-actions">
+                                    <a href="#" class="btn-setting"><i class="icon-settings"></i></a>
+                                    <a href="#" class="btn-minimize"><i class="icon-arrow-up"></i></a>
+                                    <a href="#" class="btn-close"><i class="icon-close"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+
+                                        <div class="form-group" style="margin-top: 10px">
+                                            <label for="name">IP地址</label>
+                                            <input type="text" id="ip" class="form-control" name="disabled-input" value="{{ item.ip }}">
+                                        </div>
+
+                            </div>
+                                <div class="col-sm-12">
+
+                                            <div class="form-group">
+                                                <label for="name">nginx文件地址</label>
+                                                <input type="text" id="path" class="form-control" value="{{ item.path }}">
+                                            </div>
+
+                                </div>
+                                <div class="row">
+                                <div class="form-group col-sm-3" style="margin-left: 15px">
+                                    <label for="ccyear">年</label>
+                                    <select id="year" class="form-control">
+                                        <option>2017</option>
+                                        <option>2018</option>
+                                        <option>2019</option>
+                                        <option>2020</option>
+                                        <option>2021</option>
+                                        <option>2022</option>
+                                        <option>2023</option>
+                                        <option>2024</option>
+                                        <option>2025</option>
+                                    </select>
+
+                                </div>
+
+                                <div class="form-group col-sm-3" >
+                                    <label for="ccmonth">月</label>
+                                    <select id="month" class="form-control">
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                        <option>04</option>
+                                        <option>05</option>
+                                        <option>06</option>
+                                        <option>07</option>
+                                        <option>08</option>
+                                        <option>09</option>
+                                        <option>10</option>
+                                        <option>11</option>
+                                        <option>12</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-3" >
+                                    <label for="ccmonth">日</label>
+                                    <select id="day" class="form-control">
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                        <option>04</option>
+                                        <option>05</option>
+                                        <option>06</option>
+                                        <option>07</option>
+                                        <option>08</option>
+                                        <option>09</option>
+                                        <option>10</option>
+                                        <option>11</option>
+                                        <option>12</option>
+                                        <option>13</option>
+                                        <option>14</option>
+                                        <option>15</option>
+                                        <option>16</option>
+                                        <option>17</option>
+                                        <option>18</option>
+                                        <option>19</option>
+                                        <option>20</option>
+                                        <option>21</option>
+                                        <option>22</option>
+                                        <option>23</option>
+                                        <option>24</option>
+                                        <option>25</option>
+                                        <option>26</option>
+                                        <option>27</option>
+                                        <option>28</option>
+                                        <option>29</option>
+                                        <option>30</option>
+                                        <option>31</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+
+                                    <div class="form-group">
+                                        <label for="cvv">屏蔽时间</label>
+                                        <input type="text" class="form-control" id="input_time" style="width: 159px" value="">
+                                    </div>
+
+                                </div>
+
+                            </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-3" style="margin-left: 15px">
+                                    <label for="ccyear">时</label>
+                                    <select id="hour" class="form-control">
+                                        <option>00</option>
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                        <option>04</option>
+                                        <option>05</option>
+                                        <option>06</option>
+                                        <option>07</option>
+                                        <option>08</option>
+                                        <option>09</option>
+                                        <option>10</option>
+                                        <option>11</option>
+                                        <option>12</option>
+                                        <option>13</option>
+                                        <option>14</option>
+                                        <option>15</option>
+                                        <option>16</option>
+                                        <option>17</option>
+                                        <option>18</option>
+                                        <option>19</option>
+                                        <option>20</option>
+                                        <option>21</option>
+                                        <option>22</option>
+                                        <option>23</option>
+                                    </select>
+                                    <button id="e" type="button" class="btn btn-primary" style="margin-top: 20px; width: 90px" onclick="get_record()">读取</button>
+                                    <button id="check_time" type="button" class="btn btn-success" style="margin-top: 20px; width: 90px">新增</button>
+
+                                    </div>
+
+                                    <div class="form-group col-sm-3">
+                                    <label for="ccyear">分</label>
+                                    <select id="minute" class="form-control">
+                                        <option>00</option>
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                        <option>04</option>
+                                        <option>05</option>
+                                        <option>06</option>
+                                        <option>07</option>
+                                        <option>08</option>
+                                        <option>09</option>
+                                        <option>10</option>
+                                        <option>11</option>
+                                        <option>12</option>
+                                        <option>13</option>
+                                        <option>14</option>
+                                        <option>15</option>
+                                        <option>16</option>
+                                        <option>17</option>
+                                        <option>18</option>
+                                        <option>19</option>
+                                        <option>20</option>
+                                        <option>21</option>
+                                        <option>22</option>
+                                        <option>23</option>
+                                        <option>24</option>
+                                        <option>25</option>
+                                        <option>26</option>
+                                        <option>27</option>
+                                        <option>28</option>
+                                        <option>29</option>
+                                        <option>30</option>
+                                        <option>31</option>
+                                        <option>32</option>
+                                        <option>33</option>
+                                        <option>34</option>
+                                        <option>35</option>
+                                        <option>36</option>
+                                        <option>37</option>
+                                        <option>38</option>
+                                        <option>39</option>
+                                        <option>40</option>
+                                        <option>41</option>
+                                        <option>42</option>
+                                        <option>43</option>
+                                        <option>44</option>
+                                        <option>45</option>
+                                        <option>46</option>
+                                        <option>47</option>
+                                        <option>48</option>
+                                        <option>49</option>
+                                        <option>50</option>
+                                        <option>51</option>
+                                        <option>52</option>
+                                        <option>53</option>
+                                        <option>54</option>
+                                        <option>55</option>
+                                        <option>56</option>
+                                        <option>57</option>
+                                        <option>58</option>
+                                        <option>59</option>
+                                    </select>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                    <label for="ccyear">秒</label>
+                                    <select id="second" class="form-control">
+                                        <option>00</option>
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                        <option>04</option>
+                                        <option>05</option>
+                                        <option>06</option>
+                                        <option>07</option>
+                                        <option>08</option>
+                                        <option>09</option>
+                                        <option>10</option>
+                                        <option>11</option>
+                                        <option>12</option>
+                                        <option>13</option>
+                                        <option>14</option>
+                                        <option>15</option>
+                                        <option>16</option>
+                                        <option>17</option>
+                                        <option>18</option>
+                                        <option>19</option>
+                                        <option>20</option>
+                                        <option>21</option>
+                                        <option>22</option>
+                                        <option>23</option>
+                                        <option>24</option>
+                                        <option>25</option>
+                                        <option>26</option>
+                                        <option>27</option>
+                                        <option>28</option>
+                                        <option>29</option>
+                                        <option>30</option>
+                                        <option>31</option>
+                                        <option>32</option>
+                                        <option>33</option>
+                                        <option>34</option>
+                                        <option>35</option>
+                                        <option>36</option>
+                                        <option>37</option>
+                                        <option>38</option>
+                                        <option>39</option>
+                                        <option>40</option>
+                                        <option>41</option>
+                                        <option>42</option>
+                                        <option>43</option>
+                                        <option>44</option>
+                                        <option>45</option>
+                                        <option>46</option>
+                                        <option>47</option>
+                                        <option>48</option>
+                                        <option>49</option>
+                                        <option>50</option>
+                                        <option>51</option>
+                                        <option>52</option>
+                                        <option>53</option>
+                                        <option>54</option>
+                                        <option>55</option>
+                                        <option>56</option>
+                                        <option>57</option>
+                                        <option>58</option>
+                                        <option>59</option>
+                                    </select>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/.col-->
+                        </div>
+
+        </div>
+        {% endfor %}
+        <!-- 循环nginx主机  结束-->
+    <div class="container-fluid">
+        <div class="row">
+        <div class="col-sm-6 col-md-12">
+                                <div class="card card-accent-success">
+                                    <div class="card-header">
+                                        当前屏蔽记录
+{#                                        <i class="icon-reload float-right" style="margin-left: 10px; margin-top: 3px"></i>#}
+                                        <img id="reload_ing" style="margin-left: 10px; margin-top: -3px" class="icon-reload float-right hide" alt="loadding" src="/static/img/reload_24.gif">
+                                        <img id="reload_end" style="margin-left: 10px; margin-top: -3px" class="icon-reload float-right" alt="loadding" src="/static/img/reload_2.png">
+                                        <span id="num" class="badge badge-pill badge-info float-right">0</span>
+                                    </div>
+                                    <div id="ppp" class="card-block">
+                                    </div>
+                                </div>
+                            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        get_record();
+        // GET获取屏蔽时间列表
+        function get_record() {
+            var ip = $('#ip').val();
+            var path = $('#path').val();
+            $('#reload_ing').removeClass('hide');
+            $('#reload_end').addClass('hide');
+            var str_1 = "<a class='badge badge-pill badge-danger float-right' style='margin-right: 36px; color:white' onclick=del_record(this)>-</a>";
+            $.ajax({
+                url: '/nginx/',
+                type: 'GET',
+                data: {'ip': ip, 'path': path},
+                dataType: 'JSON',
+                success: function (response) {
+                    if(response.status){
+                        $('#reload_ing').addClass('hide');
+                        $('#reload_end').removeClass('hide');
+                        $('#ppp').empty();
+                        for(var i in response.data){
+                          $('#ppp').append("<p>" + response.data[i] + str_1 + "</p>");
+                            $('#num').text(i);
+                        }
+                    }else {
+                    }
+                }
+            });
+        }
+
+        function del_record(ths) {
+            var name = $(ths).parent().text();
+            var ip = $('#ip').val();
+            var path = $('#path').val();
+            $.ajax({
+                    url: '/nginx/',
+                    type: 'POST',
+                    data: {'ip': ip, 'is_del': 1, 'path': path, 'name': name},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if(response.status){
+                            $('#alert-warning').addClass('hide');
+                            $('#alert-danger').addClass('hide');
+                            $('#alert-success').addClass('hide');
+                            $('#alert-del').removeClass('hide');
+                            get_record();
+                        }else {
+                        }
+                    }
+                })
+        }
+
+
+        // 添加屏蔽时间记录
+        $('#check_time').click(function () {
+            var ip = $('#ip').val();
+            var path = $('#path').val();
+            var year = $('#year').val();
+            var month = $('#month').val();
+            var day = $('#day').val();
+            var hour = $('#hour').val();
+            var minute = $('#minute').val();
+            var second = $('#second').val();
+            var time = $('#input_time').val();
+            if(time==''){
+                $('#alert-warning').removeClass('hide');
+                $('#warning_text').text('屏蔽时间不能为空...');
+                return false;
+            }
+            $.ajax({
+                    url: '/nginx/',
+                    type: 'POST',
+                    data: {'ip': ip, 'year': year, 'month': month, 'day': day, 'hour': hour, 'minute': minute,
+                    'second': second, 'time': time, 'path': path},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if(response.status){
+                            $('#alert-warning').addClass('hide');
+                            $('#alert-danger').addClass('hide');
+                            $('#alert-success').removeClass('hide');
+                            get_record();
+                        }else {
+                        }
+                    }
+                })
+        })
+
+    </script>
+{% endblock %}
