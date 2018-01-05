@@ -26,7 +26,7 @@
         </div>
         <div id="alert-danger" class="alert alert-danger alert-dismissible hide" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>Warning!</strong> Better check yourself, you're not looking too good.
+          <strong>Warning!</strong> <a id="error"></a>
         </div>
             {% for item in data %}
         <div class="row">
@@ -53,6 +53,14 @@
                                             <div class="form-group">
                                                 <label for="name">nginx文件地址</label>
                                                 <input type="text" id="path" class="form-control" value="{{ item.path }}">
+                                            </div>
+
+                                </div>
+                            <div class="col-sm-12">
+
+                                            <div class="form-group">
+                                                <label for="name">nginx重启命令</label>
+                                                <input type="text" id="cmd" class="form-control" value="{{ item.reload_cmd }}">
                                             </div>
 
                                 </div>
@@ -334,24 +342,27 @@
         function get_record() {
             var ip = $('#ip').val();
             var path = $('#path').val();
+            var cmd = $('#cmd').val();
             $('#reload_ing').removeClass('hide');
             $('#reload_end').addClass('hide');
             var str_1 = "<a class='badge badge-pill badge-danger float-right' style='margin-right: 36px; color:white' onclick=del_record(this)>-</a>";
+            $('#ppp').empty();
             $.ajax({
                 url: '/nginx/',
                 type: 'GET',
-                data: {'ip': ip, 'path': path},
+                data: {'ip': ip, 'path': path, 'cmd': cmd},
                 dataType: 'JSON',
                 success: function (response) {
                     if(response.status){
                         $('#reload_ing').addClass('hide');
                         $('#reload_end').removeClass('hide');
-                        $('#ppp').empty();
                         for(var i in response.data){
                           $('#ppp').append("<p>" + response.data[i] + str_1 + "</p>");
-                            $('#num').text(i);
+                          $('#num').text(i);
                         }
                     }else {
+                        $('#alert-danger').removeClass('hide');
+                        $('#error').text(response.error)
                     }
                 }
             });
@@ -361,10 +372,11 @@
             var name = $(ths).parent().text();
             var ip = $('#ip').val();
             var path = $('#path').val();
+            var cmd = $('#cmd').val();
             $.ajax({
                     url: '/nginx/',
                     type: 'POST',
-                    data: {'ip': ip, 'is_del': 1, 'path': path, 'name': name},
+                    data: {'ip': ip, 'is_del': 1, 'path': path, 'name': name, 'cmd': cmd},
                     dataType: 'JSON',
                     success: function (response) {
                         if(response.status){
@@ -374,6 +386,8 @@
                             $('#alert-del').removeClass('hide');
                             get_record();
                         }else {
+                            $('#alert-danger').removeClass('hide');
+                            $('#error').text(response.error)
                         }
                     }
                 })
@@ -391,6 +405,7 @@
             var minute = $('#minute').val();
             var second = $('#second').val();
             var time = $('#input_time').val();
+            var cmd = $('#cmd').val();
             if(time==''){
                 $('#alert-warning').removeClass('hide');
                 $('#warning_text').text('屏蔽时间不能为空...');
@@ -400,7 +415,7 @@
                     url: '/nginx/',
                     type: 'POST',
                     data: {'ip': ip, 'year': year, 'month': month, 'day': day, 'hour': hour, 'minute': minute,
-                    'second': second, 'time': time, 'path': path},
+                    'second': second, 'time': time, 'path': path, 'cmd': cmd},
                     dataType: 'JSON',
                     success: function (response) {
                         if(response.status){
@@ -409,6 +424,8 @@
                             $('#alert-success').removeClass('hide');
                             get_record();
                         }else {
+                            $('#alert-danger').removeClass('hide');
+                            $('#error').text(response.error)
                         }
                     }
                 })

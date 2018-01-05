@@ -45,9 +45,16 @@ class NginxView(View):
                 cmd = 'rm -fr %s' % file
                 self.exec_cmd(cmd)
             cmd = 'scp root@%s:%s /opt/' % (ip, path)
-            self.exec_cmd(cmd)
-            self.exec_cmd('chmod 777 %s' % file)
-
+            status, err = self.exec_cmd(cmd)
+            if not status:
+                response.status = False
+                response.error = err
+                return JsonResponse(response.__dict__)
+            status, err = self.exec_cmd('chmod 777 %s' % file)
+            if not status:
+                response.status = False
+                response.error = err
+                return JsonResponse(response.__dict__)
             # 读取文件
             data_list = []
             with open(file, 'r') as f:
@@ -68,6 +75,7 @@ class NginxView(View):
             ip = request.POST.get('ip')
             path = request.POST.get('path')
             name = request.POST.get('name')
+            reload_cmd = request.POST.get('cmd')
             print(name)
             name_del = 'still_range %s' % name.split(',')[1]
             print(name_del)
@@ -78,8 +86,16 @@ class NginxView(View):
                 cmd = 'rm -fr %s' % file
                 self.exec_cmd(cmd)
             cmd = 'scp root@%s:%s /opt/' % (ip, path)
-            self.exec_cmd(cmd)
-            self.exec_cmd('chmod 777 %s' % file)
+            status, err = self.exec_cmd(cmd)
+            if not status:
+                response.status = False
+                response.error = err
+                return JsonResponse(response.__dict__)
+            status, err = self.exec_cmd('chmod 777 %s' % file)
+            if not status:
+                response.status = False
+                response.error = err
+                return JsonResponse(response.__dict__)
 
             # 修改文件
             new_file = '/opt/newfile.conf'
@@ -94,7 +110,19 @@ class NginxView(View):
 
             # 拷贝新文件到nginx机器
             cmd = 'scp /opt/newfile.conf root@%s:%s' % (ip, path)
-            self.exec_cmd(cmd)
+            status, err = self.exec_cmd(cmd)
+            if not status:
+                response.status = False
+                response.error = err
+                return JsonResponse(response.__dict__)
+
+            # 重启nginx
+            cmd = 'ssh root@%s %s' % (ip, reload_cmd)
+            status, err = self.exec_cmd(cmd)
+            if not status:
+                response.error = err
+                response.status = False
+                return JsonResponse(response.__dict__)
 
             return JsonResponse(response.__dict__)
 
@@ -107,6 +135,7 @@ class NginxView(View):
         minute = request.POST.get('minute')
         second = request.POST.get('second')
         s_time = request.POST.get('time')
+        reload_cmd = request.POST.get('cmd')
 
         new_str = 'still_range %s%s%sT%s%s%s %ss;' % (year, month, day, hour, minute, second, s_time)
         print(new_str)
@@ -116,8 +145,17 @@ class NginxView(View):
             cmd = 'rm -fr %s' % file
             self.exec_cmd(cmd)
         cmd = 'scp root@%s:%s /opt/' % (ip, path)
-        self.exec_cmd(cmd)
-        self.exec_cmd('chmod 777 %s' % file)
+        status, err = self.exec_cmd(cmd)
+        if not status:
+            response.status = False
+            response.error = err
+            return JsonResponse(response.__dict__)
+
+        status, err = self.exec_cmd('chmod 777 %s' % file)
+        if not status:
+            response.status = False
+            response.error = err
+            return JsonResponse(response.__dict__)
 
         # 修改文件
         new_file = '/opt/newfile.conf'
@@ -133,7 +171,19 @@ class NginxView(View):
 
         # 拷贝新文件到nginx机器
         cmd = 'scp /opt/newfile.conf root@%s:%s' % (ip, path)
-        self.exec_cmd(cmd)
+        status, err = self.exec_cmd(cmd)
+        if not status:
+            response.status = False
+            response.error = err
+            return JsonResponse(response.__dict__)
+
+        # 重启nginx
+        cmd = 'ssh root@%s %s' % (ip, reload_cmd)
+        status, err = self.exec_cmd(cmd)
+        if not status:
+            response.error = err
+            response.status = False
+            return JsonResponse(response.__dict__)
 
         return JsonResponse(response.__dict__)
 
@@ -143,13 +193,14 @@ class NginxView(View):
         :param cmd_shell:
         :return:
         """
-        # print(cmd_shell)
+        print(cmd_shell)
         try:
             ret = subprocess.Popen(cmd_shell, stdin=subprocess.PIPE, shell=True,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             err = ret.stderr.read()
             if err:
                 print('--------', err)
+                return 0, err
         except Exception as e:
             print(e)
-        return True
+        return 1, 1
