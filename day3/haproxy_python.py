@@ -120,7 +120,7 @@ def maxconn_add():
             print('输入有误...')
 
 
-def backend_server_add(backend_server_dict):
+def wbackend_server_add(backend_server_dict):
     """
     根据server字典写文件操作，一个文件读，一个文件写
     :param backend_server_dict: server字典

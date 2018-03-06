@@ -2,10 +2,328 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ae2ccfce-a29b-41f6-8029-e8599c2e2773" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../untitled/.idea/workspace.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/test/test01.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/assets/js/libs/Chart.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/assets/js/libs/bootstrap.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/assets/js/libs/jquery.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/assets/js/libs/pace.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/assets/js/libs/tether.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/css/datepicker.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/css/font-awesome.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/css/font-awesome.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/css/font-awesome.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/css/simple-line-icons.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/css/style.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/fonts/Simple-Line-Icons.eot" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/fonts/Simple-Line-Icons.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/fonts/Simple-Line-Icons.ttf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/fonts/Simple-Line-Icons.woff" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/fonts/Simple-Line-Icons.woff2" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/avatars/1.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/avatars/2.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/avatars/3.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/avatars/4.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/avatars/5.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/avatars/6.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/avatars/7.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/avatars/8.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/favicon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/ASEAN.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Afghanistan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/African Union.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Albania.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Algeria.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/American Samoa.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Andorra.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Angola.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Anguilla.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Antarctica.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Antigua &amp; Barbuda.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Arab League.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Argentina.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Armenia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Aruba.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Australia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Austria.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Azerbaijan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Bahamas.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Bahrain.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Bangladesh.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Barbados.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Belarus.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Belgium.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Belize.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Benin.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Bermuda.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Bhutan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Bolivia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Bosnia &amp; Herzegovina.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Botswana.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Brazil.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Brunei.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Bulgaria.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Burkina Faso.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Burundi.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/CARICOM.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/CIS.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Cambodja.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Cameroon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Canada.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Cape Verde.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Cayman Islands.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Central African Republic.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Chad.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Chile.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/China.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Colombia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Commonwealth.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Comoros.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Congo-Brazzaville.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Congo-Kinshasa(Zaire).png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Cook Islands.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Costa Rica.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Cote d'Ivoire.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Croatia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Cuba.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Cyprus.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Czech Republic.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Denmark.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Djibouti.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Dominica.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Dominican Republic.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Ecuador.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Egypt.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/El Salvador.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/England.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Equatorial Guinea.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Eritrea.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Estonia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Ethiopia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/European Union.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Faroes.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Fiji.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Finland.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/France.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Gabon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Gambia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Georgia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Germany.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Ghana.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Gibraltar.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Greece.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Greenland.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Grenada.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Guadeloupe.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Guam.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Guatemala.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Guernsey.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Guinea-Bissau.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Guinea.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Guyana.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Haiti.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Honduras.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Hong Kong.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Hungary.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Iceland.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/India.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Indonezia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Iran.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Iraq.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Ireland.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Islamic Conference.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Isle of Man.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Israel.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Italy.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Jamaica.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Japan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Jersey.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Jordan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Kazakhstan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Kenya.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Kiribati.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Kosovo.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Kuwait.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Kyrgyzstan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Laos.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Latvia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Lebanon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Lesotho.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Liberia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Libya.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Liechtenshein.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Lithuania.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Luxembourg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Macao.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Macedonia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Madagascar.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Malawi.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Malaysia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Maldives.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Mali.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Malta.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Marshall Islands.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Martinique.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Mauritania.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Mauritius.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Mexico.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Micronesia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Moldova.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Monaco.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Mongolia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Montenegro.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Montserrat.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Morocco.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Mozambique.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Myanmar(Burma).png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/NATO.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Namibia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Nauru.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Nepal.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Netherlands Antilles.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Netherlands.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/New Caledonia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/New Zealand.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Nicaragua.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Niger.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Nigeria.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/North Korea.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Northern Cyprus.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Northern Ireland.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Norway.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/OPEC.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Olimpic Movement.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Oman.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Pakistan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Palau.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Palestine.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Panama.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Papua New Guinea.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Paraguay.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Peru.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Philippines.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Poland.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Portugal.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Puerto Rico.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Qatar.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Red Cross.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Reunion.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Romania.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Russia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Rwanda.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Saint Lucia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Samoa.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/San Marino.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Sao Tome &amp; Principe.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Saudi Arabia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Scotland.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Senegal.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Serbia(Yugoslavia).png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Seychelles.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Sierra Leone.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Singapore.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Slovakia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Slovenia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Solomon Islands.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Somalia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Somaliland.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/South Africa.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/South Korea.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Spain.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Sri Lanka.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/St Kitts &amp; Nevis.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/St Vincent &amp; the Grenadines.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Sudan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Suriname.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Swaziland.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Sweden.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Switzerland.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Syria.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Tahiti(French Polinesia).png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Taiwan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Tajikistan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Tanzania.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Thailand.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Timor-Leste.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Togo.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Tonga.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Trinidad &amp; Tobago.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Tunisia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Turkey.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Turkmenistan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Turks and Caicos Islands.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Tuvalu.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/USA.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Uganda.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Ukraine.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/United Arab Emirates.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/United Nations.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/United-Kingdom.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Uruguay.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Uzbekistan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Vanutau.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Vatican City.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Venezuela.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Viet Nam.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Virgin Islands British.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Virgin Islands US.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Wales.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Western Sahara.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Yemen.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Zambia.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/flags/Zimbabwe.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/img/logo.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/js/app.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/js/bootstrap-datepicker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/js/views/charts.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/js/views/main.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/static/js/views/widgets.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/blank.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/charts.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/components-buttons.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/components-cards.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/components-forms.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/components-modals.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/components-social-buttons.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/components-switches.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/components-tables.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/components-tabs.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/icons-font-awesome.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/icons-simple-line-icons.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/pages-404.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/pages-500.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/pages-register.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/templates/widgets.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/urls.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../untitled/web/views/nginx.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/repository/migrations/0001_initial.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ModiNgix/db.sqlite3" afterPath="$PROJECT_DIR$/../ModiNgix/db.sqlite3" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/db.sqlite3" afterPath="$PROJECT_DIR$/../ProCrm/db.sqlite3" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../HostManager/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../HostManager/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Jumpserver/backend/main.py" afterPath="$PROJECT_DIR$/../Jumpserver/backend/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Jumpserver/test/test02.py" afterPath="$PROJECT_DIR$/../Jumpserver/test/test02.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ModiNgix/.idea/misc.xml" afterPath="$PROJECT_DIR$/../ModiNgix/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ModiNgix/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ModiNgix/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ModiNgix/web/templates/index.html" afterPath="$PROJECT_DIR$/../ModiNgix/web/templates/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ModiNgix/web/urls.py" afterPath="$PROJECT_DIR$/../ModiNgix/web/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ModiNgix/web/views/nginx.py" afterPath="$PROJECT_DIR$/../ModiNgix/web/views/nginx.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ProCrm/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ProCrm/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test66.py" afterPath="$PROJECT_DIR$/test/test66.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/jenkins_config.py" afterPath="$PROJECT_DIR$/conf/jenkins_config.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/note" afterPath="$PROJECT_DIR$/conf/note" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/repository/models.py" afterPath="$PROJECT_DIR$/repository/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scr/autopublishing.py" afterPath="$PROJECT_DIR$/scr/autopublishing.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/service/asset.py" afterPath="$PROJECT_DIR$/web/service/asset.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/service/project.py" afterPath="$PROJECT_DIR$/web/service/project.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/views/docker.py" afterPath="$PROJECT_DIR$/web/views/docker.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/templates/add_asset.html" afterPath="$PROJECT_DIR$/web/templates/add_asset.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/templates/include/asset_server_hardware.html" afterPath="$PROJECT_DIR$/web/templates/include/asset_server_hardware.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/templates/layout/_laytask.html" afterPath="$PROJECT_DIR$/web/templates/layout/_laytask.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/urls.py" afterPath="$PROJECT_DIR$/web/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xxdCmdb/settings.py" afterPath="$PROJECT_DIR$/xxdCmdb/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../day3/haproxy_python.py" afterPath="$PROJECT_DIR$/../../day3/haproxy_python.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,96 +342,67 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="test66.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/test66.py">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="18" column="22" lean-forward="false" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="22" />
+            <state relative-caret-position="357">
+              <caret line="74" column="37" lean-forward="false" selection-start-line="74" selection-start-column="37" selection-end-line="74" selection-end-column="37" />
               <folding>
-                <element signature="e#0#29#0" expanded="true" />
+                <element signature="e#0#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
+      <file leaf-file-name="users_list.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/templates/users_list.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="91" column="18" lean-forward="true" selection-start-line="91" selection-start-column="18" selection-end-line="91" selection-end-column="18" />
+            <state relative-caret-position="-3451">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="project.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/service/project.py">
+      <file leaf-file-name="VirtualMachine.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/views/VirtualMachine.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="409">
-              <caret line="823" column="30" lean-forward="true" selection-start-line="823" selection-start-column="30" selection-end-line="823" selection-end-column="30" />
-              <folding>
-                <element signature="e#45#56#0" expanded="true" />
-                <element signature="e#22739#25894#0" expanded="false" />
-                <marker date="1514516796000" expanded="true" signature="4522:4669" ph="select hostn... repository_server" />
-                <marker date="1514516796000" expanded="true" signature="4702:4868" ph="select manag... repository_networkdevice" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="autopublishing.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scr/autopublishing.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="36" column="51" lean-forward="true" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
-              <folding>
-                <element signature="e#293#302#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="jenkins_config.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-302">
-              <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+            <state relative-caret-position="369">
+              <caret line="71" column="41" lean-forward="false" selection-start-line="71" selection-start-column="41" selection-end-line="71" selection-end-column="41" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dockers.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/templates/dockers.html">
+      <file leaf-file-name="virtual_list.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/templates/virtual_list.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="320" column="37" lean-forward="true" selection-start-line="320" selection-start-column="37" selection-end-line="320" selection-end-column="37" />
-              <folding>
-                <element signature="e#671#695#0#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="docker.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/web/views/docker.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="476" column="25" lean-forward="true" selection-start-line="476" selection-start-column="25" selection-end-line="476" selection-end-column="25" />
-              <folding>
-                <element signature="e#45#54#0" expanded="true" />
-                <element signature="e#19703#20678#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/repository/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="671" column="7" lean-forward="true" selection-start-line="671" selection-start-column="7" selection-end-line="671" selection-end-column="7" />
+            <state relative-caret-position="266">
+              <caret line="174" column="52" lean-forward="true" selection-start-line="174" selection-start-column="52" selection-end-line="174" selection-end-column="52" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="asset.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/views/asset.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="233">
+              <caret line="56" column="39" lean-forward="false" selection-start-line="56" selection-start-column="39" selection-end-line="56" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="asset.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web/service/asset.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+              <folding>
+                <marker date="1520325169000" expanded="true" signature="6357:6486" ph="select hostn... repository_server" />
+                <marker date="1520325169000" expanded="true" signature="6519:6667" ph="select manag... repository_networkdevice" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -129,14 +418,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>auto_now_</find>
-      <find>shutdown</find>
-      <find>dome-box</find>
-      <find>cmd_shell</find>
-      <find>requests</find>
-      <find>ln</find>
-      <find>ifconfig</find>
-      <find>主机名</find>
       <find>超时</find>
       <find>sprite</find>
       <find>手动设置</find>
@@ -147,7 +428,6 @@
       <find>秒</find>
       <find>物理节点</find>
       <find>A</find>
-      <find>print</find>
       <find>pack</find>
       <find>自动获取IP地址失败</find>
       <find>get_ip</find>
@@ -159,6 +439,15 @@
       <find>删除容器</find>
       <find>删除</find>
       <find>settimeout</find>
+      <find>repository</find>
+      <find>subpro</find>
+      <find>timeout</find>
+      <find>sub</find>
+      <find>print</find>
+      <find>release_name</find>
+      <find>task_</find>
+      <find>add</find>
+      <find>display</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -175,13 +464,11 @@
         <option value="$PROJECT_DIR$/test/add_asset.py" />
         <option value="$PROJECT_DIR$/web/views/VirtualMachine.py" />
         <option value="$PROJECT_DIR$/test/test5.py" />
-        <option value="$PROJECT_DIR$/web/templates/layout/_laytask.html" />
         <option value="$PROJECT_DIR$/web/static/css/sb-admin.css" />
         <option value="$PROJECT_DIR$/web/static/css/sb-admin01.css" />
         <option value="$PROJECT_DIR$/web/static/js/kendo.all.js" />
         <option value="$PROJECT_DIR$/web/static/js/kendo.all.min.js" />
         <option value="$PROJECT_DIR$/web/templates/docker_test.html" />
-        <option value="$PROJECT_DIR$/web/urls.py" />
         <option value="$PROJECT_DIR$/test/test4.py" />
         <option value="$PROJECT_DIR$/web/templates/docker_base.html" />
         <option value="$PROJECT_DIR$/web/static/css/simple-line-icons.css" />
@@ -190,18 +477,23 @@
         <option value="$PROJECT_DIR$/web/views/project.py" />
         <option value="$PROJECT_DIR$/web/views/project_admin.py" />
         <option value="$PROJECT_DIR$/web/templates/index.html" />
-        <option value="$PROJECT_DIR$/conf/note" />
         <option value="$PROJECT_DIR$/web/templates/docker_index.html" />
         <option value="$PROJECT_DIR$/conf/kvm_config.py" />
-        <option value="$PROJECT_DIR$/web/service/asset.py" />
-        <option value="$PROJECT_DIR$/conf/jenkins_config.py" />
-        <option value="$PROJECT_DIR$/scr/autopublishing.py" />
-        <option value="$PROJECT_DIR$/repository/models.py" />
         <option value="$PROJECT_DIR$/web/templates/dockers.html" />
-        <option value="$PROJECT_DIR$/xxdCmdb/settings.py" />
         <option value="$PROJECT_DIR$/test/test66.py" />
-        <option value="$PROJECT_DIR$/web/service/project.py" />
         <option value="$PROJECT_DIR$/web/views/docker.py" />
+        <option value="$PROJECT_DIR$/web/service/project.py" />
+        <option value="$PROJECT_DIR$/conf/jenkins_config.py" />
+        <option value="$PROJECT_DIR$/xxdCmdb/settings.py" />
+        <option value="$PROJECT_DIR$/scr/autopublishing.py" />
+        <option value="$PROJECT_DIR$/conf/note" />
+        <option value="$PROJECT_DIR$/web/templates/layout/_laytask.html" />
+        <option value="$PROJECT_DIR$/web/views/pyhsicalServer.py" />
+        <option value="$PROJECT_DIR$/web/urls.py" />
+        <option value="$PROJECT_DIR$/web/templates/add_asset.html" />
+        <option value="$PROJECT_DIR$/repository/models.py" />
+        <option value="$PROJECT_DIR$/web/templates/include/asset_server_hardware.html" />
+        <option value="$PROJECT_DIR$/web/service/asset.py" />
       </list>
     </option>
   </component>
@@ -234,7 +526,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -257,39 +549,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="xxdCmdb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xxdCmdb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xxdCmdb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xxdCmdb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xxdCmdb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -357,20 +617,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xxdCmdb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xxdCmdb" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="scr" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -399,13 +645,17 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="conf" />
+              <option name="myItemId" value="repository" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="migrations" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -415,10 +665,10 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/web/views" />
       <recent name="$PROJECT_DIR$/web/templates" />
       <recent name="$PROJECT_DIR$/web/static/imgs" />
       <recent name="$PROJECT_DIR$/web/static/css" />
-      <recent name="$PROJECT_DIR$/web/views" />
       <recent name="$PROJECT_DIR$/test" />
     </key>
   </component>
@@ -796,20 +1046,27 @@
       <option name="project" value="LOCAL" />
       <updated>1514514120808</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="122902">
+      <created>1514518422812</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1514518422812</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24892704" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26037195" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3033419" sideWeight="0.50858366" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3033419" sideWeight="0.4914163" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25578406" sideWeight="0.4914163" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3277635" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -834,244 +1091,20 @@
     <MESSAGE value="1222" />
     <MESSAGE value="1227" />
     <MESSAGE value="1229" />
-    <option name="LAST_COMMIT_MESSAGE" value="1229" />
+    <MESSAGE value="122902" />
+    <option name="LAST_COMMIT_MESSAGE" value="122902" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/web/static/css/simple-line-icons.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="9" lean-forward="false" selection-start-line="0" selection-start-column="9" selection-end-line="0" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/virtual_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2686">
-          <caret line="119" column="94" lean-forward="true" selection-start-line="119" selection-start-column="94" selection-end-line="119" selection-end-column="94" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/conf/config_config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/response.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="8" lean-forward="false" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/static/imgs/notice3-icon.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/apps.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/static/imgs/notice4-icon.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/repository/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/logs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1322">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/service/login.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="31" column="42" lean-forward="false" selection-start-line="31" selection-start-column="15" selection-end-line="31" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/project.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="46" lean-forward="true" selection-start-line="13" selection-start-column="46" selection-end-line="13" selection-end-column="46" />
-          <folding>
-            <element signature="e#45#56#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/auditlog.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="15" lean-forward="true" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/db/models/fields/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="1125" column="29" lean-forward="false" selection-start-line="1125" selection-start-column="20" selection-end-line="1125" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/pytz/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="225" column="0" lean-forward="false" selection-start-line="225" selection-start-column="0" selection-end-line="225" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/service/audit_db.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="340" column="13" lean-forward="true" selection-start-line="340" selection-start-column="13" selection-end-line="340" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/audit_db.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="36" column="38" lean-forward="false" selection-start-line="36" selection-start-column="38" selection-end-line="36" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/layout/_layread.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-306">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/layout/_laybusiness.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="85" column="41" lean-forward="false" selection-start-line="85" selection-start-column="41" selection-end-line="85" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/layout/_layout.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-221">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/layout/_laytask.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-68">
-          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/include/asset_basic.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="32" column="18" lean-forward="true" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/audit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/docker_index_bak.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/static/js/kendo.all.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="26" column="13649" lean-forward="false" selection-start-line="26" selection-start-column="13643" selection-end-line="26" selection-end-column="13649" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/static/css/ui-dialog.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/static/css/blue.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/static/css/bk.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="0" column="125244" lean-forward="true" selection-start-line="0" selection-start-column="125244" selection-end-line="0" selection-end-column="125244" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/docker_base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/audit_sa.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2618">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils/pagination.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/conf/note">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="28" lean-forward="true" selection-start-line="1" selection-start-column="28" selection-end-line="1" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -1087,15 +1120,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xxdCmdb/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="22" column="27" lean-forward="true" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1107,19 +1131,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="88" column="51" lean-forward="false" selection-start-line="88" selection-start-column="51" selection-end-line="88" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/conf/kvm_config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
           <caret line="20" column="12" lean-forward="false" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1127,27 +1142,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="128">
           <caret line="241" column="15" lean-forward="true" selection-start-line="241" selection-start-column="15" selection-end-line="241" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/service/asset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="89" column="13" lean-forward="true" selection-start-line="89" selection-start-column="13" selection-end-line="89" selection-end-column="13" />
-          <folding>
-            <element signature="e#45#56#0" expanded="true" />
-            <marker date="1514273488000" expanded="true" signature="5755:5884" ph="select hostn... repository_server" />
-            <marker date="1514273488000" expanded="true" signature="5917:6065" ph="select manag... repository_networkdevice" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/asset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="40" column="29" lean-forward="false" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1155,7 +1149,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1163,51 +1156,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
           <caret line="287" column="8" lean-forward="false" selection-start-line="287" selection-start-column="8" selection-end-line="287" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/repository/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="671" column="7" lean-forward="true" selection-start-line="671" selection-start-column="7" selection-end-line="671" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="91" column="18" lean-forward="true" selection-start-line="91" selection-start-column="18" selection-end-line="91" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/templates/dockers.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="320" column="37" lean-forward="true" selection-start-line="320" selection-start-column="37" selection-end-line="320" selection-end-column="37" />
-          <folding>
-            <element signature="e#671#695#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-302">
-          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scr/autopublishing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="36" column="51" lean-forward="true" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
-          <folding>
-            <element signature="e#293#302#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1215,32 +1163,356 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="18" column="22" lean-forward="false" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/conf/urls/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="18" column="4" lean-forward="false" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/response.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="9" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/projects.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="18" lean-forward="false" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#45#56#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/service/project.py">
+    <entry file="file://$PROJECT_DIR$/xxdCmdb/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
-          <caret line="823" column="30" lean-forward="true" selection-start-line="823" selection-start-column="30" selection-end-line="823" selection-end-column="30" />
+        <state relative-caret-position="374">
+          <caret line="22" column="28" lean-forward="false" selection-start-line="22" selection-start-column="28" selection-end-line="22" selection-end-column="28" />
           <folding>
-            <element signature="e#45#56#0" expanded="true" />
-            <element signature="e#22739#25894#0" expanded="false" />
-            <marker date="1514516796000" expanded="true" signature="4522:4669" ph="select hostn... repository_server" />
-            <marker date="1514516796000" expanded="true" signature="4702:4868" ph="select manag... repository_networkdevice" />
+            <element signature="e#641#673#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/audit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/account.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="7" lean-forward="false" selection-start-line="27" selection-start-column="7" selection-end-line="27" selection-end-column="7" />
+          <folding>
+            <element signature="e#45#56#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1161">
+          <caret line="43" column="6" lean-forward="false" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="32" lean-forward="false" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#32#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/layout/_laybusiness.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="531">
+          <caret line="85" column="41" lean-forward="false" selection-start-line="85" selection-start-column="41" selection-end-line="85" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/repository/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/audit_sa.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4862">
+          <caret line="286" column="39" lean-forward="false" selection-start-line="286" selection-start-column="39" selection-end-line="286" selection-end-column="39" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/views/docker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="476" column="25" lean-forward="true" selection-start-line="476" selection-start-column="25" selection-end-line="476" selection-end-column="25" />
+        <state relative-caret-position="353">
+          <caret line="349" column="31" lean-forward="false" selection-start-line="349" selection-start-column="31" selection-end-line="349" selection-end-column="31" />
           <folding>
-            <element signature="e#45#54#0" expanded="true" />
             <element signature="e#19703#20678#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/pymysql/cursors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="613">
+          <caret line="165" column="0" lean-forward="false" selection-start-line="165" selection-start-column="0" selection-end-line="165" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/project.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1707">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/project_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="201" column="49" lean-forward="false" selection-start-line="201" selection-start-column="49" selection-end-line="201" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/auditlog.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="4" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/jenkins_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="41" column="9" lean-forward="false" selection-start-line="41" selection-start-column="9" selection-end-line="41" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/dockers.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5440">
+          <caret line="320" column="37" lean-forward="false" selection-start-line="320" selection-start-column="37" selection-end-line="320" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/service/project.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8789">
+          <caret line="542" column="29" lean-forward="false" selection-start-line="542" selection-start-column="29" selection-end-line="542" selection-end-column="29" />
+          <folding>
+            <element signature="e#45#56#0" expanded="false" />
+            <marker date="1515399852000" expanded="true" signature="4522:4669" ph="select hostn... repository_server" />
+            <marker date="1515399852000" expanded="true" signature="4702:4868" ph="select manag... repository_networkdevice" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/apply.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="17" column="37" lean-forward="false" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/apply.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/apply_read.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="17" column="40" lean-forward="false" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/apply_read.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/service/apply_read.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="25" column="41" lean-forward="false" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+          <folding>
+            <marker date="1506332647000" expanded="true" signature="4142:4271" ph="select hostn... repository_server" />
+            <marker date="1506332647000" expanded="true" signature="4304:4452" ph="select manag... repository_networkdevice" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scr/autopublishing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="40" column="24" lean-forward="false" selection-start-line="40" selection-start-column="24" selection-end-line="40" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/note">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xxdCmdb/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="128" column="0" lean-forward="true" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/layout/_laytask.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="30" column="59" lean-forward="true" selection-start-line="30" selection-start-column="59" selection-end-line="30" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/pyhsicalServer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/repository/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="635" column="72" lean-forward="true" selection-start-line="635" selection-start-column="72" selection-end-line="635" selection-end-column="72" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/asset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="56" column="39" lean-forward="false" selection-start-line="56" selection-start-column="39" selection-end-line="56" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/add_asset.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="411" column="39" lean-forward="false" selection-start-line="411" selection-start-column="39" selection-end-line="411" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/user.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="19" column="40" lean-forward="false" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/users_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3451">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="74" column="37" lean-forward="false" selection-start-line="74" selection-start-column="37" selection-end-line="74" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/VirtualMachine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="71" column="41" lean-forward="false" selection-start-line="71" selection-start-column="41" selection-end-line="71" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/virtual_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="174" column="52" lean-forward="true" selection-start-line="174" selection-start-column="52" selection-end-line="174" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/include/asset_server_hardware.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="97" column="17" lean-forward="true" selection-start-line="97" selection-start-column="17" selection-end-line="97" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/asset_detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="39" column="59" lean-forward="false" selection-start-line="39" selection-start-column="59" selection-end-line="39" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/service/asset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+          <folding>
+            <marker date="1520325169000" expanded="true" signature="6357:6486" ph="select hostn... repository_server" />
+            <marker date="1520325169000" expanded="true" signature="6519:6667" ph="select manag... repository_networkdevice" />
           </folding>
         </state>
       </provider>

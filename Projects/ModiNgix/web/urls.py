@@ -8,4 +8,5 @@ from web.views import nginx
 urlpatterns = [
     url(r'^index/', nginx.IndexView.as_view()),
     url(r'^nginx/', nginx.NginxView.as_view()),
+    url(r'^crontab/', nginx.CrontabView.as_view()),
 ]

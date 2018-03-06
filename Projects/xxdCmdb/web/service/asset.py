@@ -21,8 +21,10 @@ class Asset(BaseServiceList):
             {'name': 'business_2', 'text': '二级业务线', 'condition_type': 'select', 'global_name': 'business_2_list'},
             {'name': 'business_3', 'text': '三级业务线', 'condition_type': 'select', 'global_name': 'business_3_list'},
             {'name': 'host_type', 'text': '资产类型', 'condition_type': 'select', 'global_name': 'device_type_list'},
-            {'name': 'host_status', 'text': '资产状态', 'condition_type': 'select',
+            {'name': 'host_status', 'text': '在线状态', 'condition_type': 'select',
              'global_name': 'device_status_list'},
+            {'name': 'host_item', 'text': '资产状态', 'condition_type': 'select',
+             'global_name': 'physical_server_status'},
         ]
         table_config = [
             {
@@ -122,6 +124,16 @@ class Asset(BaseServiceList):
                          'global-name': 'device_type_list'}
             },
             {
+                'q': 'host_item',
+                'title': "资产状态",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@physical_server_status'}},
+                'attr': {'name': 'host_item', 'id': '@host_item', 'original': '@host_item',
+                         'edit-enable': 'true',
+                         'edit-type': 'select',
+                         'global-name': 'physical_server_status'}
+            },
+            {
                 'q': None,
                 'title': "选项",
                 'display': 1,
@@ -147,6 +159,11 @@ class Asset(BaseServiceList):
     @property
     def device_type_list(self):
         result = map(lambda x: {'id': x[0], 'name': x[1]}, models.Asset.device_type_choices)
+        return list(result)
+
+    @property
+    def physical_server_status(self):
+        result = map(lambda x: {'id': x[0], 'name': x[1]}, models.Asset.device_item_choices)
         return list(result)
 
     @property
@@ -237,6 +254,7 @@ class Asset(BaseServiceList):
             ret['global_dict'] = {
                 'device_status_list': self.device_status_list,
                 'device_type_list': self.device_type_list,
+                'physical_server_status': self.physical_server_status,
                 'idc_list': self.idc_list,
                 'business_unit_list': self.business_unit_list,
                 'business_1_list': self.business_1_list,
@@ -430,6 +448,7 @@ class Asset(BaseServiceList):
         disk_list = request.POST.getlist('disk_list')
         nic_list = request.POST.getlist('nic_list')
         os = request.POST.get('os')
+        physical_server_status = request.POST.get('physical_server_status')
 
         for item in nic_list[2:]:
             item_list = item.split(',')
@@ -443,7 +462,8 @@ class Asset(BaseServiceList):
             return response
 
         # 首先创建 Assets资产表 ➡️ 创建Server表关联Asset ➡️ 创建Disk表关联Server表 ➡️ 创建Memory表关联Server表
-        asset_obj = models.Asset(host_ip=ippaddrs, host_name=host, host_status=1, host_type=1, host_cpu=int(cpu_num)*int(core_num), host_memory=memory)
+        asset_obj = models.Asset(host_ip=ippaddrs, host_name=host, host_status=1, host_type=1, host_cpu=int(cpu_num)*int(core_num), host_memory=memory,
+                                 host_item=physical_server_status)
         asset_obj.save()
 
         server_obj = models.DellServer(asset_id=asset_obj.id, hostname=host, manage_ip=ip, idc=idc, cabinet=cabinet,

@@ -30,7 +30,6 @@ from web.views import env
 from web.views import docker
 
 
-
 urlpatterns = [
     url(r'^login.html$', account.LoginView.as_view()),
     url(r'^logout.html$', account.LogoutView.as_view()),

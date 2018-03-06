@@ -31,10 +31,10 @@ from threading import Timer
 # from urllib import request
 
 
-API_HOST = 'cmdb.xxd.com'
+# API_HOST = 'cmdb.xxd.com'
 # API_URL = 'http://192.168.33.110:8005/api/release'
-API_URL = 'http://172.16.10.39:8005/api/release'
-# API_URL = 'http://cmdb.xinxindai.com/api/release'
+# API_URL = 'http://172.16.10.44:8005/api/release'
+API_URL = 'http://cmdb.xinxindai.com/api/release'
 TMP_DIR = '/tmp'
 LOGGER_FILE = '/home/admin/logs/autopublishing.log'
 RUNNING_USER = 'admin'
@@ -45,7 +45,7 @@ AUTH_KEY = 'vLCzbZjGVNKWPxqd'
 CMDB_WORKSPACE = '/root/.cmdb/workspace/'
 run_log_file = '/home/admin/logs/run.log'
 error_log_file = '/home/admin/logs/err.log'
-CHECK_SERVICE_TIMEOUT = 120
+CHECK_SERVICE_TIMEOUT = 20
 
 # 配置文件源目录路径
 config_scource_path = '/opt/config/prod/'
@@ -56,10 +56,10 @@ config_target_path = '/usr/local/tomcat/webapps/AAA/WEB-INF/classes/'
 static_nginx_dict = ['front', 'webapp']
 
 # 需要ROOT目录的项目列表
-ROOT_obj = ['front', 'seo', 'webapi', 'sso', 'shorturl', 'fk']
+ROOT_obj = ['front', 'seo', 'webapi', 'sso', 'shorturl', 'fk', 'xxd_csm']
 
 # 项目名与路径不一致项目列表
-Diff_obj = {'front': 'ROOT', 'seo': 'ROOT', 'webapi': 'ROOT', 'sso': 'ROOT', 'shorturl': 'ROOT', 'webapp': 'm', 'fk': 'ROOT'}
+Diff_obj = {'front': 'ROOT', 'seo': 'ROOT', 'webapi': 'ROOT', 'sso': 'ROOT', 'shorturl': 'ROOT', 'webapp': 'm', 'fk': 'ROOT', 'xxd_csm': 'ROOT'}
 
 # 新建软链项目列表
 soft_link_list = {'front':'ROOT', 'xxdai_sys_admin': 'xxdai_sys_admin', 'seo': 'ROOT', 'webapp': 'm', 'v5_mobile': 'v5_mobile'}
@@ -77,13 +77,14 @@ static_pkg_cmd_list = {'mui': 'cnpm install && gulp && cd pages/ && /usr/bin/zip
                        'pc': 'cnpm install && gulp && cd pages/ && /usr/bin/zip -r build.zip build && /bin/cp build.zip ',
                        'heidai': 'cnpm install && gulp && /usr/bin/zip -r html.zip html && /bin/cp build.zip ',
                        'digital': 'mv pages digital && /usr/bin/zip -r digital.zip digital && /bin/cp digital.zip ',
-                       'm': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip '}
+                       'm': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip ',
+                       'csm': 'npm install && npm run build && /usr/bin/zip -r csm.zip dist && /bin/cp csm.zip '}
 
 # 'static_m': 'cnpm install && npm run build && /usr/bin/zip -r dist.zip dist && /bin/cp dist.zip
 
 # 静态资源项目及对应包名(注意,新添加静态资源发布项目必须修改该字典)
 static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk', 'm': 'dist',
-                   'digital': 'digital', 'jk': 'jk'}
+                   'digital': 'digital', 'jk': 'jk', 'csm': 'csm'}
 
 # apk项目文件放置目录
 apk_dict = {
@@ -521,7 +522,7 @@ def checkApiService(ip, taskId):
         while total_time > 0:
             total_time -= 1
             time.sleep(1)
-            cmd = "curl -I -m 5 %s:8080" % ip
+            cmd = "curl -I -m 10 %s:8080" % ip
             ret = os.system(cmd)
             if ret == 0:
                 Logger().log('check services --> Java start success....', True)

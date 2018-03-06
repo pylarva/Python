@@ -9,9 +9,9 @@ class HostManager(object):
     def __init__(self):
         self.user = None
 
-    def get_session_id(self,bind_host_obj,tag):
-        '''apply  session id'''
-        session_obj = models.Session(user_id = self.user.id,bind_host=bind_host_obj,tag=tag)
+    def get_session_id(self, bind_host_obj, tag):
+        """ apply  session id """
+        session_obj = models.Session(user_id=self.user.id, bind_host=bind_host_obj, tag=tag)
 
         session_obj.save()
         return session_obj
@@ -24,7 +24,7 @@ class HostManager(object):
         while count <3:
             username = input("Username:").strip()
             password = input("Password:").strip()
-            user = authenticate(username=username,password=password)
+            user = authenticate(username=username, password=password)
             if user:
                 print("Welcome %s".center(50,'-') % user.name )
                 self.user = user

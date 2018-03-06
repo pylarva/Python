@@ -458,7 +458,6 @@ class Project(BaseServiceList):
             # 多进程执行连接Jenkins执行
             # p = Process(target=self.JenkinsTask, args=(pkg_name, release_git_url, release_branch, task_id, obj))
             # p.start()
-
             # 多线程
             t = threading.Thread(target=self.jenkins_task, args=(pkg_name, release_git_url, release_branch, task_id,
                                                                  release_name, release_env_name, pack_cmd, release_type,
@@ -542,6 +541,10 @@ class Project(BaseServiceList):
 
         # 发布类型为静态资源
         if release_type == 2:
+            # 销毁打包容器
+            # if jenkins_config.jenkins_docker_switch:
+            #     self.del_jenkins_container(docker_name, task_id)
+
             if release_env != 'prod':
                 nginx_ip_list = jenkins_config.nginx_test_ip_list
             else:
@@ -593,6 +596,7 @@ class Project(BaseServiceList):
 
                 models.ReleaseTask.objects.filter(id=task_id).update(release_status=2)
                 self.log(task_id, '发布成功结束！')
+
                 return True
             else:
                 models.ReleaseTask.objects.filter(id=task_id).update(release_status=3)

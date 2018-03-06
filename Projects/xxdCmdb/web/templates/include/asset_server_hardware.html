@@ -91,6 +91,12 @@
             <td>机柜</td>
             <td colspan="4">{{ response.data.cabinet }}</td>
         </tr>
+        <tr>
+            <td>资产状态</td>
+            <td colspan="4">{{ response.data.get_physical_server_status_display }}
+            <span class="label label-info">开始装机</span>
+            </td>
+        </tr>
 
 
         <!-- 网卡信息开始 -->

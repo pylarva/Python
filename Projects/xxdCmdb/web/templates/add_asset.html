@@ -98,10 +98,16 @@
                 <div class="form-group">
                   <input id="putaway" type="text" class="form-control" placeholder="">
                 </div>
-{#                <label>型号</label>#}
-{#                <div class="form-group">#}
-{#                  <input type="text" class="form-control" placeholder="">#}
-{#                </div>#}
+                <label>资产状态</label>
+                    <div class="form-group" style="display: inline-block">
+                        <div id="wd_3">
+                            <select class="selectpicker" id="physical_server_status">
+                                  <option value='2'>未装机</option>
+                                  <option value='1'>已装机</option>
+                                  <option value='3'>故障机</option>
+                            </select>
+                        </div>
+                    </div>
             </form>
         </div>
 
@@ -132,6 +138,8 @@
                             <select class="selectpicker" id="os">
                                   <option value='CentOS_6.9'>CentOS_6.9</option>
                                   <option value='CentOS_7.2'>CentOS_7.2</option>
+                                  <option value='Windows_2008'>Windows_2008</option>
+                                  <option value='Windows_2012'>Windows_2012</option>
                             </select>
                         </div>
                     </div>
@@ -372,6 +380,7 @@
                 var cpu_num = $('#cpu_num').val();
                 var core_num = $('#core_num').val();
                 var os = $('#os').val();
+                var physical_server_status = $('#physical_server_status').val();
                 if(host == '' || ip == '' || idc == '' || cabinet == '' || putaway == '' || machine == '' || sn == '' ||
                 memory == '' || raid == '' || service == ''){
 {#                if(host == '' || ip == ''){#}
@@ -404,7 +413,7 @@
                         type: 'POST',
                         data: {'host': host, 'ip': ip, 'memory': memory,
                             'idc': idc, 'cabinet': cabinet, 'putaway': putaway, 'machine': machine, 'sn': sn,
-                            'cpu_num': cpu_num, 'core_num': core_num, 'os':os,
+                            'cpu_num': cpu_num, 'core_num': core_num, 'os':os, 'physical_server_status': physical_server_status,
                             'cpu': cpu, 'service': service, 'raid': raid, 'disk_list': disk_list, 'nic_list': nic_list},
                         dataType: 'JSON',
                         traditional: true,

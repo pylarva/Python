@@ -37,7 +37,7 @@ nginx_prod_ip_list = ['192.168.33.110']
 
 # 静态资源包
 static_pkg_name = {'mui': 'build', 'mobile': 'html', 'html': 'html', 'pc': 'build', 'apk': 'apk', 'm': 'dist',
-                   'digital': 'digital', 'jk': 'jk'}
+                   'digital': 'digital', 'jk': 'jk', 'csm': 'csm'}
 
 # 刷新cdn地址
 cdn_url_1 = 'http://download-cdn.xinxindai.com/'
@@ -61,5 +61,5 @@ container_gateway_ip = '253'
 container_host_name = 'a0-docker-AA-BB-CC-DD.yh'
 
 # 是否采用容器化的jenkins发布（1:是 0:否 即使用原有jenkins服务器打包 build.xxd.com）
-jenkins_docker_switch = 1
+jenkins_docker_switch = 0
 

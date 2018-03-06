@@ -122,8 +122,9 @@ class Asset(models.Model):
         (2, '离线'),
     )
     device_item_choices = (
-        (1, 'c1'),
-        (2, 'c2'),
+        (1, '已装机'),
+        (2, '未装机'),
+        (3, '故障机'),
     )
 
     host_ip = models.CharField(max_length=32, null=True, blank=True)
@@ -613,6 +614,12 @@ class DellServer(models.Model):
     """
     服务器信息
     """
+    device_item_choices = (
+        (1, '已装机'),
+        (2, '未装机'),
+        (3, '故障机'),
+    )
+
     asset_id = models.IntegerField('资产', null=True, blank=True)
 
     hostname = models.CharField('主机名', max_length=128, null=True, blank=True)
@@ -628,6 +635,7 @@ class DellServer(models.Model):
     cpu = models.ForeignKey('Cpu', verbose_name='CPU型号', null=True, blank=True, on_delete=models.SET_NULL)
     raid = models.CharField('Raid', max_length=8, null=True, blank=True)
     service = models.CharField('保修期', max_length=32, null=True, blank=True)
+    physical_server_status = models.IntegerField(choices=device_item_choices, default=2)
 
     class Meta:
         verbose_name_plural = "服务器表"
