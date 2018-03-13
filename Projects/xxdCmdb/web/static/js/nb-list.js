@@ -132,7 +132,7 @@
 
     // 添加业务线
     function do_save1() {
-        v = $('#business_1_name').val();
+        var v = $('#business_1_name').val();
         $.ajax({
             url: requestUrl,
             type: 'POST',

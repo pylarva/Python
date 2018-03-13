@@ -28,6 +28,7 @@ from web.views import vpn
 from web.views import pre_config
 from web.views import env
 from web.views import docker
+from web.views import net
 
 
 urlpatterns = [
@@ -131,5 +132,11 @@ urlpatterns = [
 
     url(r'docker_index.html', docker.DockerView.as_view()),
     url(r'docker_index_node.html', docker.DockerJsonView.as_view()),
-    url(r'dockers.html', docker.DockersView.as_view())
+    url(r'dockers.html', docker.DockersView.as_view()),
+
+    url(r'net.html', net.NetListView.as_view()),
+    url(r'nets.html', net.NetJsonView.as_view()),
+    url(r'ippool.html', net.IpListView.as_view()),
+    url(r'ippools.html', net.IpJsonView.as_view()),
+
 ]

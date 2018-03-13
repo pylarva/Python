@@ -695,5 +695,72 @@ class DockerInfo(models.Model):
         return self.name
 
 
+class Vlan(models.Model):
+    """
+    网段Vlan信息
+    """
+    vlan = models.CharField(max_length=32, unique=True)
+    network = models.CharField(max_length=32, unique=True)
+    netmask = models.CharField(max_length=32, null=True, blank=True)
+    gateway = models.CharField(max_length=32, null=True, blank=True)
+    usable = models.IntegerField(null=True, blank=True)
+    disabled = models.IntegerField(null=True, blank=True)
+    online = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Vlan表"
+
+    def __str__(self):
+        return self.vlan
+
+
+class IpPool(models.Model):
+    """
+    IP池
+    """
+    ip_status_choices = (
+        (1, '在线'),
+        (2, '空闲'),
+        (3, '禁用'),
+    )
+    ip = models.GenericIPAddressField(null=True, blank=True)
+    network = models.GenericIPAddressField(null=True, blank=True)
+    vlan = models.GenericIPAddressField(null=True, blank=True)
+    gateway = models.GenericIPAddressField(null=True, blank=True)
+    remark = models.CharField(max_length=108, null=True, blank=True)
+    status = models.IntegerField(choices=ip_status_choices, default=2)
+
+    class Meta:
+        verbose_name_plural = "IP地址池"
+
+    def __str__(self):
+        return self.ip
+
+
+class PhysicsInstall(models.Model):
+    """
+    物理机系统安装
+    """
+    sn = models.CharField(max_length=108, null=True, blank=True)
+    ip = models.GenericIPAddressField(null=True, blank=True)
+    hostname = models.CharField(max_length=108, null=True, blank=True)
+    raid_level = models.IntegerField(null=True, blank=True)
+    switch_ip = models.GenericIPAddressField(null=True, blank=True)
+    switch_interface = models.IntegerField(null=True, blank=True)
+    ilo_ip = models.GenericIPAddressField(null=True, blank=True)
+    server_model = models.CharField(max_length=108, null=True, blank=True)
+    os_version = models.CharField(max_length=108, null=True, blank=True)
+    vlan = models.CharField(max_length=32, null=True, blank=True)
+    netmask = models.IntegerField(null=True, blank=True)
+    gateway = models.GenericIPAddressField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "装机任务表"
+
+    def __str__(self):
+        return self.sn
+
+
+
 
 
