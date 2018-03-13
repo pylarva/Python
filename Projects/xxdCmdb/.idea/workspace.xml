@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ae2ccfce-a29b-41f6-8029-e8599c2e2773" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/service/ippool.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/service/net.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/templates/ippool.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/templates/net.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/views/net.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/repository/migrations/0001_initial.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/repository/migrations/0002_dellserver_physical_server_status.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ModiNgix/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ModiNgix/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/repository/models.py" afterPath="$PROJECT_DIR$/repository/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test66.py" afterPath="$PROJECT_DIR$/test/test66.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/static/js/nb-list.js" afterPath="$PROJECT_DIR$/web/static/js/nb-list.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/templates/layout/_laybusiness.html" afterPath="$PROJECT_DIR$/web/templates/layout/_laybusiness.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/urls.py" afterPath="$PROJECT_DIR$/web/urls.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -757,7 +744,14 @@
       <option name="project" value="LOCAL" />
       <updated>1520325496670</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="0306 add physical_server_status">
+      <created>1520929810732</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1520929810732</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1033,6 +1027,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="368">
           <caret line="159" column="5" lean-forward="true" selection-start-line="159" selection-start-column="5" selection-end-line="159" selection-end-column="5" />
+          <folding />
         </state>
       </provider>
     </entry>
