@@ -741,6 +741,12 @@ class PhysicsInstall(models.Model):
     """
     物理机系统安装
     """
+    install_status_choices = (
+        (1, '待安装'),
+        (2, '安装中'),
+        (3, '已安装'),
+        (4, '已撤销'),
+    )
     sn = models.CharField(max_length=108, null=True, blank=True)
     ip = models.GenericIPAddressField(null=True, blank=True)
     hostname = models.CharField(max_length=108, null=True, blank=True)
@@ -753,6 +759,7 @@ class PhysicsInstall(models.Model):
     vlan = models.CharField(max_length=32, null=True, blank=True)
     netmask = models.IntegerField(null=True, blank=True)
     gateway = models.GenericIPAddressField(null=True, blank=True)
+    status = models.IntegerField(choices=install_status_choices, default=1)
 
     class Meta:
         verbose_name_plural = "装机任务表"

@@ -94,7 +94,7 @@
         <tr>
             <td>资产状态</td>
             <td colspan="4">{{ response.data.get_physical_server_status_display }}
-            <span class="label label-info">开始装机</span>
+            <span class="label label-info" onclick="add_install_task('{{ response.data.manage_ip }}')">开始装机</span>
             </td>
         </tr>
 

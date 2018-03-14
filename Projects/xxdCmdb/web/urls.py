@@ -29,6 +29,7 @@ from web.views import pre_config
 from web.views import env
 from web.views import docker
 from web.views import net
+from web.views import server_install
 
 
 urlpatterns = [
@@ -138,5 +139,8 @@ urlpatterns = [
     url(r'nets.html', net.NetJsonView.as_view()),
     url(r'ippool.html', net.IpListView.as_view()),
     url(r'ippools.html', net.IpJsonView.as_view()),
+
+    url(r'server_install.html', server_install.ServerListView.as_view()),
+    url(r'server_installs.html', server_install.ServerJsonView.as_view()),
 
 ]

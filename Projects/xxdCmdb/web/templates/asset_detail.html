@@ -67,5 +67,21 @@
             $.initMenu('#menu_asset');
 
         });
+        // 添加新的装机任务
+        function add_install_task(ilo_ip) {
+            $.ajax({
+                    url: '/server_install.html',
+                    type: 'POST',
+                    data: {'ilo_ip': ilo_ip},
+                    dataType: 'JSON',
+                    success: function (response) {
+                        if(response.status){
+                            alert('审核成功！');
+                        }else {
+                            alert('审核失败！');
+                        }
+                    }
+                })
+        }
     </script>
 {% endblock %}
