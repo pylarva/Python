@@ -68,20 +68,20 @@
 
         });
         // 添加新的装机任务
-        function add_install_task(ilo_ip) {
+        function add_install_task(ilo_ip, asset_id) {
             $.ajax({
-                    url: '/server_install.html',
-                    type: 'POST',
-                    data: {'ilo_ip': ilo_ip},
-                    dataType: 'JSON',
-                    success: function (response) {
-                        if(response.status){
-                            alert('审核成功！');
-                        }else {
-                            alert('审核失败！');
-                        }
+                url: '/server_install.html',
+                type: 'POST',
+                data: {'ilo_ip': ilo_ip, 'asset_id': asset_id},
+                dataType: 'JSON',
+                success: function (response) {
+                    if(response.status){
+                        alert(response.message);
+                    }else {
+                        alert(response.message);
                     }
-                })
+                }
+            })
         }
     </script>
 {% endblock %}

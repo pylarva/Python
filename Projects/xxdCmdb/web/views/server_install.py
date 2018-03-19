@@ -22,17 +22,49 @@ class ServerListView(View):
         return render(request, 'server_install.html')
 
     def post(self, request, *args, **kwargs):
+
         # 前端新添加装机任务 检查是否允许装机 再添加装机任务
         response = BaseResponse()
         response.status = True
         ilo_ip = request.POST.get("ilo_ip")
+        asset_id = request.POST.get('asset_id')
         if ilo_ip:
             server_obj = models.DellServer.objects.filter(manage_ip=ilo_ip).first()
-            if server_obj.manage_ip != 2:
+            host_ip = models.Asset.objects.filter(id=asset_id).first().host_ip
+            if server_obj.physical_server_status != 2:
                 response.status = False
                 response.message = '物理机已被安装系统或者为故障机'
             else:
-                pass
+                try:
+                    # 装机任务所需的装机参数传给PhysicsInstall表
+                    sn = server_obj.sn
+                    hostname = server_obj.hostname
+                    raid_level = server_obj.raid
+                    ilo_ip = ilo_ip
+                    server_model = server_obj.model
+                    os_version = server_obj.os
+
+                    # 查交换机
+                    switch_obj = models.NIC.objects.filter(server_obj_id=server_obj.id).first()
+                    switch_ip = switch_obj.switch_ip
+                    switch_interface = switch_obj.switch_port
+
+                    # 查vlan
+                    vlan_obj = models.IpPool.objects.filter(ip=host_ip).first()
+                    vlan = vlan_obj.vlan
+                    gateway = vlan_obj.gateway
+
+                    # 添加装机任务
+                    models.PhysicsInstall.objects.create(sn=sn, ip=host_ip, hostname=hostname, raid_level=raid_level,
+                                                         switch_ip=switch_ip, switch_interface=switch_interface,
+                                                         ilo_ip=ilo_ip, server_model=server_model, os_version=os_version,
+                                                         vlan=vlan, netmask='24', gateway=gateway, status=1)
+                except Exception as e:
+                    response.status = False
+                    response.message = e
+
+                response.message = '添加装机任务成功！'
+
         return JsonResponse(response.__dict__)
 
 

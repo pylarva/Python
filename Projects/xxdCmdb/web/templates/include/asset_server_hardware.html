@@ -94,7 +94,7 @@
         <tr>
             <td>资产状态</td>
             <td colspan="4">{{ response.data.get_physical_server_status_display }}
-            <span class="label label-info" onclick="add_install_task('{{ response.data.manage_ip }}')">开始装机</span>
+            <span class="label label-info" onclick="add_install_task('{{ response.data.manage_ip }}', '{{ response.data.asset_id }}')">开始装机</span>
             </td>
         </tr>
 
@@ -172,4 +172,30 @@
 
         </tbody>
     </table>
+
+<!-- 添加装机任务开始 -->
+    <div class="modal fade" id="exampleModal_install" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加一级业务线</h4>
+              </div>
+              <form id="form1">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">预装机IP地址</label>
+                    <input type="text" class="form-control" id="server_install_ip">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <span id="error_message" style="color: red;"></span>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button type="button" class="btn btn-primary">保存</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+    <!-- 添加业务线开始 -->
 </div>

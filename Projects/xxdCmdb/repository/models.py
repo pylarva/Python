@@ -747,7 +747,7 @@ class PhysicsInstall(models.Model):
         (3, '已安装'),
         (4, '已撤销'),
     )
-    sn = models.CharField(max_length=108, null=True, blank=True)
+    sn = models.CharField(max_length=108, unique=True)
     ip = models.GenericIPAddressField(null=True, blank=True)
     hostname = models.CharField(max_length=108, null=True, blank=True)
     raid_level = models.IntegerField(null=True, blank=True)
