@@ -1,0 +1,42 @@
+# 修改nginx配置小程序
+
+# 运行环境 centos6 + python3.6
+
+使用方法
+
+1）编译安装Python3.6
+   yum install zlib-devel openssl-devel sqlite* -y
+   wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz
+
+2）安装Django
+   pip3 install django
+
+3) 解压包
+   tar xf ModiNginx.tar.gz
+   cd ModiNginx
+
+4）运行程序
+   python3.6 manage.py runserver 0.0.0.0:8000 >/opt/run.log 2>&1 &
+
+5）程序日志
+   tail -f /opt/run.log
+
+6）结束程序
+   kill -9 [python3.6 pid]
+
+支持输入IP地址来连接nginx服务器并修改添加still_range参数
+
+1）部署程序的服务器必须配置免密钥登陆目标nginx服务器，且ssh登陆是不能出现 Warning: Permanently added...等提示
+
+2) 前端页面默认显示nginx服务器IP地址修改：http://[程序服务器外网IP地址]:8000/admin 用户名 admin 密码 adminadmin 修改Nginx主机节点表
+
+3）后端插入屏蔽时间记录是在 timeshift_segments_per_playlist 这个参数后依次插入 确保该参数存在
+
+4）要修改默认IP地址以外的nginx服务器只需同理配置免密钥登陆 修改IP地址 nginx配置文件地址等参数 直接点击读取文件即可
+
+4）每次删除屏蔽时间记录会重启nginx
+
+
+20180301更新
+    -- 添加定时任务功能
+    -- 定时任务主机配置 conf/config.py (主程序运行主机和目标主机需要配置免密钥登陆 页面修改主机地址点击读取即可读取定时任务并修改)

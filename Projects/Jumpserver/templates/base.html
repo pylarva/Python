@@ -1,0 +1,479 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="description" content="Flat, Clean, Responsive, admin template built with bootstrap 3">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+
+    <title>Cameo | Responsive Admin Dashboard</title>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        try {
+            if (!window.CloudFlare) {
+                var CloudFlare = [{
+                    verbose: 0,
+                    p: 0,
+                    byc: 0,
+                    owlid: "cf",
+                    bag2: 1,
+                    mirage2: 0,
+                    oracle: 0,
+                    paths: {
+                        cloudflare: "/cdn-cgi/nexp/dok2v=1613a3a185/"
+                    },
+                    atok: "1668c19642567e08c574f5d9458345a2",
+                    petok: "3285f1db20753df31d6fcdae6015a30e5a60a785-1419101748-1800",
+                    zone: "nyasha.me",
+                    rocket: "0",
+                    apps: {
+                        "ga_key": {
+                            "ua": "UA-50530436-1",
+                            "ga_bs": "2"
+                        }
+                    }
+                }];
+                CloudFlare.push({
+                    "apps": {
+                        "ape": "86d42e0b8c0027bb178361fce707fc15"
+                    }
+                });
+                ! function(a, b) {
+                    a = document.createElement("script"), b = document.getElementsByTagName("script")[0], a.async = !0, a.src = "/static/js/cloudflare.min.js", b.parentNode.insertBefore(a, b)
+                }()
+            }
+        } catch (e) {};
+        //]]>
+    </script>
+    <link rel="stylesheet" href="/static/vendor/offline/theme.css">
+    <link rel="stylesheet" href="/static/vendor/pace/theme.css">
+    <link rel="stylesheet" href="/static/vendor/jvectormap/jquery-jvectormap-1.2.2.css">
+    <link rel="stylesheet" href="/static/vendor/bxslider/jquery.bxslider.css">
+
+
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/bootstrap-3.3.4.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+    <link rel="stylesheet" href="/static/css/animate.min.css">
+
+    <link rel="stylesheet" href="/static/css/panel.css">
+
+    <link rel="stylesheet" href="/static/css/skins/palette.1.css" id="skin">
+    <link rel="stylesheet" href="/static/css/fonts/style.1.css" id="font">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+
+    <!--[if lt IE 9]>
+        <script src="/static/js/html5shiv.js"></script>
+        <script src="/static/js/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="/static/vendor/modernizr.js"></script>
+    <script type="text/javascript">
+
+        (function(b) {
+            (function(a) {
+                "__CF" in b && "DJS" in b.__CF ? b.__CF.DJS.push(a) : "addEventListener" in b ? b.addEventListener("load", a, !1) : b.attachEvent("onload", a)
+            })(function() {
+                "FB" in b && "Event" in FB && "subscribe" in FB.Event && (FB.Event.subscribe("edge.create", function(a) {
+                    _gaq.push(["_trackSocial", "facebook", "like", a])
+                }), FB.Event.subscribe("edge.remove", function(a) {
+                    _gaq.push(["_trackSocial", "facebook", "unlike", a])
+                }), FB.Event.subscribe("message.send", function(a) {
+                    _gaq.push(["_trackSocial", "facebook", "send", a])
+                }));
+                "twttr" in b && "events" in twttr && "bind" in twttr.events && twttr.events.bind("tweet", function(a) {
+                    if (a) {
+                        var b;
+                        if (a.target && a.target.nodeName == "IFRAME") a: {
+                            if (a = a.target.src) {
+                                a = a.split("#")[0].match(/[^?=&]+=([^&]*)?/g);
+                                b = 0;
+                                for (var c; c = a[b]; ++b)
+                                    if (c.indexOf("url") === 0) {
+                                        b = unescape(c.split("=")[1]);
+                                        break a
+                                    }
+                            }
+                            b = void 0
+                        }
+                        _gaq.push(["_trackSocial", "twitter", "tweet", b])
+                    }
+                })
+            })
+        })(window);
+        /* ]]> */
+    </script>
+</head>
+
+<body>
+    <div class="ob_options hidden-xs">
+        <div class="options">
+            <h6>COLOR SKINS</h6>
+            <div class="options-container color_skins">
+                <a href="/static/css/skins/palette.1.css" class="css_orange cs_color cs_1"></a>
+                <a href="/static/css/skins/palette.2.css" class="css_orange cs_color cs_2"></a>
+                <a href="/static/css/skins/palette.3.css" class="css_orange cs_color cs_3"></a>
+                <a href="/static/css/skins/palette.4.css" class="css_orange cs_color cs_4"></a>
+                <a href="/static/css/skins/palette.5.css" class="css_orange cs_color cs_5"></a>
+                <a href="/static/css/skins/palette.6.css" class="css_orange cs_color cs_6"></a>
+                <a href="/static/css/skins/palette.7.css" class="css_orange cs_color cs_7"></a>
+                <a href="/static/css/skins/palette.8.css" class="css_orange cs_color cs_8"></a>
+                <a href="/static/css/skins/palette.9.css" class="css_orange cs_color cs_9"></a>
+                <a href="/static/css/skins/palette.10.css" class="css_orange cs_color cs_10"></a>
+            </div>
+            <h6>FONT OPTIONS</h6>
+            <div class="options-container font_options">
+                <select class="input-sm">
+                    <option value="/static/css/fonts/style.1.css">Open Sans</option>
+                    <option value="/static/css/fonts/style.2.css">Helvetica Neue</option>
+                    <option value="/static/css/fonts/style.3.css">Montserrat &amp; Open Sans</option>
+                </select>
+            </div>
+            <h6>LAYOUT VARIATIONS</h6>
+            <div class="options-container layout_options">
+                <select class="input-sm">
+                    <option value="boxed.html">Boxed</option>
+                    <option value="horizontal.html">Horizontal menu</option>
+                    <option value="horizontal_boxed.html">Horizontal Boxed</option>
+                    <option value="small-sidebar.html">Small sidebar</option>
+                    <option value="right-sidebar.html">Right sidebar</option>
+                    <option value="right-sidebar-collapsible.html">Right Collapsed</option>
+                    <option value="both.html">Mixed Menus</option>
+                    <option value="collapsible.html">Collapsible</option>
+                    <option value="app.html">App</option>
+                    <option value="footer.html">With footer</option>
+                </select>
+            </div><small class="ucase">This Panel is for demo purposes only</small>
+        </div>
+        <div class="ob_toggle bg-color"><span class="fa fa-cog"></span>
+        </div>
+    </div>
+    <div class="app" data-sidebar="locked">
+
+        <header class="header header-fixed navbar">
+            <div class="brand">
+                <a href="javascript:;" class="fa fa-bars off-left visible-xs" data-toggle="off-canvas" data-move="ltr"></a>
+                <a href="index.html" class="navbar-brand">
+                    <i class="fa fa-stop mg-r-sm"></i>
+                    <span class="heading-font">
+Cameo<b>ADMIN</b>
+</span>
+                </a>
+            </div>
+            <form class="navbar-form navbar-left hidden-xs" role="search">
+                <div class="form-group">
+                    <button class="btn no-border no-margin bg-none no-pd-l" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <input type="text" class="form-control no-border no-padding search" placeholder="Search Workspace">
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right off-right">
+                <li class="hidden-xs">
+                    <a href="javascript:;">
++Gerald Theodore Morris
+</a>
+                </li>
+                <li class="notifications dropdown hidden-xs">
+                    <a href="javascript:;" data-toggle="dropdown">
+                        <i class="fa fa-bell"></i>
+                        <div class="badge badge-top bg-danger animated flash">3</div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right animated slideInRight">
+                        <div class="panel bg-white no-border no-margin">
+                            <div class="panel-heading no-radius">
+                                <small>
+<b>Notifications</b>
+</small>
+                                <small class="pull-right">
+<a href="javascript:;" class="mg-r-xs">mark as read</a>&#8226;
+<a href="javascript:;" class="fa fa-cog mg-l-xs"></a>
+</small>
+                            </div>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="javascript:;">
+                                        <span class="pull-left mg-t-xs mg-r-md">
+<img src="/static/img/face4.jpg" class="avatar avatar-sm img-circle" alt="">
+</span>
+                                        <div class="m-body show pd-t-xs">
+                                            <span>Dean Winchester</span>
+                                            <span>Posted on to your wall</span>
+                                            <small>2 mins ago</small>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="javascript:;">
+                                        <span class="pull-left mg-t-xs mg-r-md">
+<span class="fa-stack fa-lg">
+<i class="fa fa-circle fa-stack-2x text-warning"></i>
+<i class="fa fa-download fa-stack-1x fa-inverse"></i>
+</span>
+                                        </span>
+                                        <div class="m-body show pd-t-xs">
+                                            <span>145 MB download in progress.</span>
+                                            <div class="progress progress-xs mg-t-xs mg-b-xs">
+                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                </div>
+                                            </div>
+                                            <small>Started 23 mins ago</small>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="javascript:;">
+                                        <span class="pull-left mg-t-xs mg-r-md">
+<img src="/static/img/face3.jpg" class="avatar avatar-sm img-circle" alt="">
+</span>
+                                        <div class="m-body show pd-t-xs">
+                                            <span>Application</span>
+                                            <span>Where is my workspace widget</span>
+                                            <small>5 days ago</small>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="panel-footer no-border">
+                                <a href="javascript:;">See all notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="quickmenu">
+                    <a href="javascript:;" data-toggle="dropdown">
+                        <img src="/static/img/avatar.jpg" class="avatar pull-left img-circle" alt="user" title="user">
+                        <i class="caret mg-l-xs hidden-xs no-margin"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right mg-r-xs">
+                        <li>
+                            <a href="javascript:;">
+                                <div class="pd-t-sm">
+                                    gerald@morris.com
+                                    <br>
+                                    <small class="text-muted">4.2 MB of 51.25 GB used</small>
+                                </div>
+                                <div class="progress progress-xs no-radius no-margin mg-b-sm">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="profile.html">Settings</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">Upgrade</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">Notifications
+<div class="badge bg-danger pull-right">3</div>
+</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">Help ?</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="/logout">Logout</a>`
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </header>
+
+        <section class="layout">
+
+            <aside class="sidebar canvas-left">
+
+                <nav class="main-navigation">
+                    <ul>
+                        <li class="active">
+                            <a href="/user_auth">
+                                <i class="fa fa-coffee"></i>
+                                <span>审计日志</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+
+                <footer>
+                    <div class="about-app pd-md animated pulse">
+                        <a href="javascript:;">
+                            <img src="/static/img/about.png" alt="">
+                        </a>
+                        <span>
+<b>Cameo</b>&#32;is a responsive admin template powered by bootstrap 3.
+<a href="javascript:;">
+<b>Find out more</b>
+</a>
+</span>
+                    </div>
+                    <div class="footer-toolbar pull-left">
+                        <a href="javascript:;" class="pull-left help">
+                            <i class="fa fa-question-circle"></i>
+                        </a>
+                        <a href="javascript:;" class="toggle-sidebar pull-right hidden-xs">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    </div>
+                </footer>
+
+            </aside>
+
+
+            <aside class="chat-sidebar canvas-right pull-right">
+                <div class="slimscroll" data-height="auto" data-size="6px" data-distance="0">
+                    <div class="row text-white pd-md">
+                        <div class="col-xs-8">
+                            <p class="mg-t-xs">Mute notifications</p>
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="checkbox" class="js-switch" checked />
+                        </div>
+                    </div>
+                    <b class="center-block text-white pd-md">
+Activity feed
+</b>
+                    <div class="pd-md">
+                        <a href="javascript:;" class="pull-left mg-r-md">
+                            <span class="fa-stack fa-lg">
+<i class="fa fa-circle fa-stack-2x text-warning"></i>
+<i class="fa fa-download fa-stack-1x fa-inverse"></i>
+</span>
+                        </a>
+                        Rose Fournier
+                        <small>Posted on to your wall</small>
+                        <br>
+                        <small>2 mins ago</small>
+                    </div>
+                    <div class="pd-md">
+                        <a href="javascript:;" class="pull-left mg-r-md">
+                            <span class="fa-stack fa-lg">
+<i class="fa fa-circle fa-stack-2x text-danger"></i>
+<i class="fa fa-download fa-stack-1x fa-inverse"></i>
+</span>
+                        </a>
+                        Liviu Cîndea
+                        <small>Shared a photo with you.</small>
+                        <br>
+                        <small>13 mins ago</small>
+                    </div>
+                    <div class="pd-md">
+                        <a href="javascript:;" class="pull-left mg-r-md">
+                            <span class="fa-stack fa-lg">
+<i class="fa fa-circle fa-stack-2x text-success"></i>
+<i class="fa fa-download fa-stack-1x fa-inverse"></i>
+</span>
+                        </a>
+                        Ane Marín
+                        <small>Left the group(HR)</small>
+                        <br>
+                        <small>4 days ago</small>
+                    </div>
+                    <b class="center-block text-white pd-md">
+Favourites
+</b>
+                    <div class="pd-md">
+                        <a href="javascript:;" class="pull-left mg-r-md">
+                            <img src="/static/img/face4.jpg" class="avatar avatar-sm img-circle" alt="">
+                        </a>
+                        <div class="user">
+                            Adi Afrom
+                            <i class="fa fa-circle text-danger pull-right"></i>
+                        </div>
+                        <small>Offline</small>
+                    </div>
+                    <div class="pd-md">
+                        <a href="javascript:;" class="pull-left mg-r-md">
+                            <img src="/static/img/face3.jpg" class="avatar avatar-sm img-circle" alt="">
+                        </a>
+                        <div class="user">
+                            Leonie Horn
+                            <i class="fa fa-circle text-danger pull-right"></i>
+                        </div>
+                        <small>Offline</small>
+                    </div>
+                    <b class="center-block text-white pd-md">
+Friends Online
+</b>
+                    <div class="pd-md">
+                        <a href="javascript:;" class="pull-left mg-r-md">
+                            <img src="/static/img/face1.jpg" class="avatar avatar-sm img-circle" alt="">
+                        </a>
+                        <div class="user">
+                            Joshua Smart
+                            <i class="fa fa-circle text-warning pull-right"></i>
+                        </div>
+                        <small>is thinking of bananas</small>
+                    </div>
+                    <div class="pd-md">
+                        <a href="javascript:;" class="pull-left mg-r-md">
+                            <img src="/static/img/face3.jpg" class="avatar avatar-sm img-circle" alt="">
+                        </a>
+                        <div class="user">
+                            娉 廖
+                            <i class="fa fa-circle text-success pull-right"></i>
+                        </div>
+                        <small>Ready to chat</small>
+                    </div>
+                    <div class="pd-md">
+                        <a href="javascript:;" class="pull-left mg-r-md">
+                            <img src="/static/img/face5.jpg" class="avatar avatar-sm img-circle" alt="">
+                        </a>
+                        <div class="user">
+                            Albert Madsen
+                            <i class="fa fa-circle-o text-default pull-right"></i>
+                        </div>
+                        <small>idle</small>
+                    </div>
+                </div>
+            </aside>
+
+
+            <section class="main-content">
+
+                <div class="content-wrap">
+{#                    <div class="row mg-b">#}
+{#                        <div class="col-xs-6">#}
+{#                            <h3 class="no-margin">Dashboard</h3>#}
+{#                            <small>Welcome back, Gary Stone</small>#}
+{#                        </div>#}
+{#                    </div>#}
+                    {% block body %} body {% endblock %}
+                </div>
+
+            </section>
+
+        </section>
+    </div>
+    <script src="/static/vendor/jquery-1.11.1.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.js"></script>
+    <script src="/static/vendor/jquery.easing.min.js"></script>
+    <script src="/static/vendor/jquery.placeholder.js"></script>
+    <script src="/static/vendor/fastclick.js"></script>
+
+
+    <script src="/static/vendor/moment.js"></script>
+    <script src="/static/vendor/skycons.js"></script>
+    <script src="/static/vendor/jquery.blockUI.js"></script>
+    <script src="/static/vendor/raphael.min.js"></script>
+    <script src="/static/vendor/morris/morris.js"></script>
+    <script src="/static/vendor/switchery/switchery.js"></script>
+    <script src="/static/vendor/jquery.slimscroll.js"></script>
+    <script src="/static/vendor/bxslider/jquery.bxslider.min.js"></script>
+    <script src="/static/vendor/offline/offline.min.js"></script>
+    <script src="/static/vendor/pace/pace.min.js"></script>
+
+
+    <script src="/static/js/off-canvas.js"></script>
+    <script src="/static/js/main.js"></script>
+
+    <script src="/static/js/panel.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+
+</html>
