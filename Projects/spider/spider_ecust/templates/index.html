@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block body %}
+    <section class="main-content">
+
+        <div class="content-wrap">
+                    <div class="row mg-b">
+                        <div class="col-xs-6">
+                            <h3 class="no-margin">Dashboard</h3>
+                            <small>Welcome back, Gary Stone</small>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <a href="javascript:;" class="fa fa-flash pull-right pd-sm toggle-sidebar" data-toggle="off-canvas" data-move="rtl">
+                                <span class="badge bg-danger animated flash">6</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% for item in data %}
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <section class="panel">
+                                <div class="panel-body">
+                                    <div class="circle-icon bg-success">
+                                        <img src={{ item.img }}>
+                                    </div>
+                                    <div>
+                                        <h3 class="no-margin">{{ item.title }}</h3> {{ item.url }}
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+        </div>
+
+    </section>
+{% endblock %}

@@ -13,7 +13,7 @@ def dashboard(request):
     return render(request, 'index.html')
 
 
-def acc_login(request):
+def racc_login(request):
     err_msg = ''
     if request.method == 'POST':
         username = request.POST.get('username')
