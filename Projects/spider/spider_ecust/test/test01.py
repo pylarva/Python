@@ -226,3 +226,11 @@ s = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://ww
 # s1 = '../files/CourseDocs/default/nopic.gif'
 # s2 = s1.split('..')[1]
 # print(s2)
+
+d1 = "{'ASP.NET_SessionId': 'vqmau43urrmbiq3wpe0yz2e0'}"
+
+import json
+
+d = eval(d1)
+
+print(type(d), d)

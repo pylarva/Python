@@ -20,5 +20,6 @@ from ecustCourse import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.dashboard),
-    url(r'^login$', views.acc_login)
+    url(r'^login$', views.acc_login),
+    url(r'^index$', views.dashboard)
 ]

@@ -16,7 +16,7 @@
                     </div>
                     <div class="row">
                         {% for item in data %}
-                        <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="col-md-3 col-sm-6 col-xs-12" style="cursor: pointer;" onclick="post_course_id('{{ item.url }}')">
                             <section class="panel">
                                 <div class="panel-body">
                                     <div class="circle-icon bg-success">
@@ -34,4 +34,12 @@
         </div>
 
     </section>
+{% endblock %}
+{% block js %}
+    <script>
+        function post_course_id(id) {
+            console.log(id);
+            $.post('index', {'course_id': id, csrfmiddlewaretoken: '{{ csrf_token  }}'})
+        }
+    </script>
 {% endblock %}

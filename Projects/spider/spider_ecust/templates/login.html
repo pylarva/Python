@@ -129,10 +129,10 @@
                         <form role="form" method="post">{% csrf_token %}
                             <input type="text" name="username" class="form-control mg-b-sm" placeholder="Username" autofocus>
                             <input type="password" name="password" class="form-control" placeholder="Password">
-{#                            <label class="checkbox pull-left">#}
-{#                                <input type="checkbox" value="remember-me">Remember me#}
-{#                            </label>#}
-                            <span style="color: red">{{ err_msg }}</span>
+                            <label class="pull-left">
+                                <p id="err_msg" style="color: red; margin-top: 10px">{{ err_msg }}</p>
+                            </label>
+{#                            <span style="color: red">{{ err_msg }}</span>#}
                             <div class="text-right mg-b-sm mg-t-sm">
                                 <a href="javascript:;"></a>
                             </div>
@@ -156,5 +156,4 @@
         </div>
     </div>
 </body>
-
 </html>
