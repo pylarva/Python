@@ -249,3 +249,31 @@ class ReleaseView(View):
         print(obj.release_time)
 
         return JsonResponse(response.__dict__)
+
+
+class InstallView(View):
+    # API_URL = 'http://cmdb.xinxindai.com/api/release'
+    def dispatch(self, request, *args, **kwargs):
+        return super(InstallView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        response = BaseResponse()
+        response.status = True
+        return JsonResponse(response.__dict__)
+
+    @method_decorator(auth.api_auths)
+    def post(self, request, *args, **kwargs):
+        response = BaseResponse()
+        n1 = json.loads(request.body.decode('utf-8'))
+        s = json.loads(n1)
+        install_id = s['id']
+        install_msg = s['msg']
+
+        try:
+            models.InstallLog.objects.create(install_id=install_id, install_msg=install_msg)
+            response.status = True
+        except Exception as e:
+            response.status = False
+            print('api InstallView error...')
+
+        return JsonResponse(response.__dict__)

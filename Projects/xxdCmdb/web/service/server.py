@@ -28,7 +28,7 @@ class Asset(BaseServiceList):
                 'title': "SN",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@sn'}},
-                'attr': {'name': 'sn', 'id': '@sn', 'original': '@sn',
+                'attr': {'name': 'sn', 'original': '@sn',
                          'edit-enable': 'true',
                          'edit-type': 'input'}
             },
@@ -127,7 +127,7 @@ class Asset(BaseServiceList):
                 'title': "状态",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@install_status_list'}},
-                'attr': {'name': 'status', 'id': '@status', 'original': '@status',
+                'attr': {'name': 'status', 'id': '', 'original': '@status',
                          'edit-enable': 'true',
                          'edit-type': 'select',
                          'global-name': 'install_status_list'}
@@ -139,7 +139,7 @@ class Asset(BaseServiceList):
                 'text': {
                     'content': "<i class='fa fa-check-circle' aria-hidden='true'></i><a href='#' onclick='do_release(this, {id})'> 开始安装</a> |"
                                "<a href='#' onclick='get_log({id}, false)'> 日志</a>",
-                    'kwargs': {'device_type_id': '@device_type_id', 'id': '@id'}},
+                    'kwargs': {'device_type_id': '@device_type_id'}},
                 'attr': {}
             },
         ]
@@ -180,7 +180,7 @@ class Asset(BaseServiceList):
             conditions = self.assets_condition(request)
             asset_count = models.PhysicsInstall.objects.filter(conditions).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
-            asset_list = models.PhysicsInstall.objects.filter(conditions).extra(select=self.extra_select).values(
+            asset_list = models.PhysicsInstall.objects.filter(conditions).order_by('-id').extra(select=self.extra_select).values(
                 *self.values_list)[page_info.start:page_info.end]
 
             ret['table_config'] = self.table_config

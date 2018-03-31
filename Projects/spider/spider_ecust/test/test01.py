@@ -207,11 +207,12 @@ s = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://ww
     </p>
     </form>
     </body>
+    <script src="/WebResource.axd?d=g6YGCwmmOZ6ToR5cAznB-pdLKoPpemIuoFKJbCJoCBrUiUz9Vj_wShbMCvOP1TT25Ori6ykmXxCPHNKuDGLspKkoKe4CUADR_NlZTyiyra81&amp;t=636396566200000000" type="text/javascript"></script>
 </html>"""
 
-# from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 #
-# soup = BeautifulSoup(s, 'html.parser')
+soup = BeautifulSoup(s, 'html.parser')
 #
 # td_list = soup.find(id='learnedlist').find_all(name='td')
 # for i in td_list:
@@ -226,11 +227,10 @@ s = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://ww
 # s1 = '../files/CourseDocs/default/nopic.gif'
 # s2 = s1.split('..')[1]
 # print(s2)
-
-d1 = "{'ASP.NET_SessionId': 'vqmau43urrmbiq3wpe0yz2e0'}"
-
-import json
-
-d = eval(d1)
-
-print(type(d), d)
+s1 = soup.find_all(name='script')
+for i in s1:
+    print('---')
+    print(i.text)
+    a = i.get('src')
+    if a:
+        print(a)

@@ -1,0 +1,137 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+
+</title><link href="../css/main.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .sec_menu {
+ BORDER-RIGHT: #158BB7 1px solid; BACKGROUND: #ffffff; OVERFLOW: hidden; BORDER-LEFT:#158BB7 1px solid; BORDER-BOTTOM:#158BB7 1px solid
+}
+        .style2
+        {
+            text-align: center;
+        }
+
+        .style4
+        {
+            font-size: 20px;
+            font-family: 微软雅黑;
+            font-weight: bold;
+            text-align: center;
+        }
+        #sellearnpanel
+        {
+            text-align: center;
+            font-size: medium;
+        }
+        .style6
+        {
+            text-align: left;
+        }
+        .style7
+        {
+            line-height: 200%;
+            text-align: left;
+        }
+        .style8
+        {
+            color: #FF0000;
+        }
+        </style>
+
+<script type="text/javascript">
+    function verify(descstr) {
+
+        if (descstr.indexOf("") == -1)
+            return confirm("提示：您的班级没有出现在该任课教师预设的修读班级中。请再次核对您的教学计划，根据您的教学计划修读课程。是否确定选择该教师开始修读本课程？");
+        else
+            return true;
+    }
+</script>
+
+</head>
+<body>
+<noscript><font color="red">您的浏览器不支持javascript，可能无法正常使用网站的部分功能。请尝试降低浏览器安全级别或者开启javascript功能。</font>
+<br /> <a href="setsecurity.htm">不会降低浏览器安全级别？点击查看教程</a>
+
+   
+</noscript>
+    <form method="post" action="./scourse.aspx?courseid=142" onsubmit="javascript:return WebForm_OnSubmit();" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTU0NTI0MzQ0Mg9kFgICAw9kFggCCg8WAh4HVmlzaWJsZWgWBAIBDzwrAA8CChAWABYAFgAOFCsAAGQCBQ88KwARAgEQFgAWABYADBQrAABkAgwPFgIfAGgWCgIBDzwrAA8CChAWABYAFgAOFCsAAGQCAw88KwARAgEQFgAWABYADBQrAABkAgUPZBYCAgEPPCsAEQIBEBYAFgAWAAwUKwAAZAIHD2QWAgIBDzwrABECARAWABYAFgAMFCsAAGQCCw88KwARAgEQFgAWABYADBQrAABkAg4PFgIfAGgWAgIDDzwrAAkAZAIQDxYCHwBoZBgHBQxjb3Vyc2VkZXRhaWwPZ2QFCWhvbWV3b3Jrcw9nZAUGYm9hcmRzD2dkBQ5jb3Vyc2VjaGFwdGVycw9nZAULYmNvdXJzZWluZm8PZ2QFCWJjaGFwdGVycw9nZAUGc3RhZ2VzD2dk9JVXUSDulh4ULWqgz+xuAkUTZxlHGOOZ5k+AfcUJCpQ=" />
+</div>
+
+
+<script src="/WebResource.axd?d=yo92zz_Qetn-NAbBdXYClW1bb-b1Ux6d7MChVxiwT6RF8xIBNgrjsK68mx8R5uJUcLtwLqDowrakDurFXJW8I4qGu_92S8AFljc32A952y41&amp;t=636396566200000000" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="D0F1D967" />
+</div> 
+    <span id="pageinfo" style="font-size:18px;display:none;">CustomValidator</span>
+
+    <br />
+
+    <br />
+    &nbsp;<input type="hidden" name="hcourseid" id="hcourseid" value="142" /><input type="hidden" name="hclassname" id="hclassname" /><script type="text/javascript">
+
+                                                                     if (top == self) {
+                                                                         window.location.href = "../login.aspx?gtpage=student/scourse.aspx?courseid=" + document.getElementById("hcourseid").value;
+                                                                     }
+            </script><a id="HyperLink2" href="allcourse.aspx">华东理工大学继续教育学院</a>&nbsp;&gt;&gt; <a id="mcoursename">课程名称</a>
+        &nbsp;<br />
+    <br />
+    
+      
+       
+    
+        
+        
+    
+<script type="text/javascript">
+//<![CDATA[
+var Page_Validators =  new Array(document.getElementById("pageinfo"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var pageinfo = document.all ? document.all["pageinfo"] : document.getElementById("pageinfo");
+pageinfo.errormessage = "CustomValidator";
+pageinfo.display = "Dynamic";
+pageinfo.evaluationfunction = "CustomValidatorEvaluateIsValid";
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        //]]>
+</script>
+</form>
+</body>
+</html>

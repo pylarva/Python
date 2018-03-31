@@ -745,7 +745,7 @@ class PhysicsInstall(models.Model):
         (1, '待安装'),
         (2, '安装中'),
         (3, '已安装'),
-        (4, '已撤销'),
+        (4, '已失败'),
     )
     sn = models.CharField(max_length=108, unique=True)
     ip = models.GenericIPAddressField(null=True, blank=True)
@@ -766,6 +766,21 @@ class PhysicsInstall(models.Model):
 
     def __str__(self):
         return self.sn
+
+
+class InstallLog(models.Model):
+    """
+    安装物理服务器任务日志
+    """
+    install_id = models.IntegerField(null=True, blank=True)
+    install_msg = models.CharField('日志', max_length=108, null=True, blank=True)
+    install_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "装机任务日志"
+
+    def __str__(self):
+        return self.install_id
 
 
 

@@ -1,5 +1,7 @@
+import json
 import requests
 from conf import config
+from contextlib import closing
 from bs4 import BeautifulSoup
 from ecustCourse import models
 from django.shortcuts import render, redirect
@@ -14,19 +16,7 @@ def all_course(request, username, password, cookies_dict):
     :param cookies_dict:
     :return:
     """
-    s1 = '/wEPDwULLTEwMTQ2MjE4MjhkZC0kr8EqVmReGz8wShIStvlReqepxl2ifQoJhTN8zjbL'
-    s2 = 'C2EE9ABB'
-
-    r3 = requests.post(url='%s/student/allcourse.aspx' % config.school_url,
-                       data={'__VIEWSTATE': s1,
-                             '__VIEWSTATEGENERATOR': s2,
-                             '__EVENTTARGET': '',
-                             '__EVENTARGUMENT': '',
-                             'Button1': '确认登陆',
-                             'username': username,
-                             'pwd': password,
-                             'gtpath': ''},
-                       cookies=cookies_dict)
+    r3 = requests.get(url='%s/student/allcourse.aspx' % config.school_url, cookies=cookies_dict)
 
     soup = BeautifulSoup(r3.text, 'html.parser')
 
@@ -62,8 +52,6 @@ def dashboard(request):
         username = request.session['username']
 
         print(course_id)
-        s1 = '/wEPDwULLTEwMTQ2MjE4MjhkZC0kr8EqVmReGz8wShIStvlReqepxl2ifQoJhTN8zjbL'
-        s2 = 'C2EE9ABB'
 
         cookies_dict_obj = models.UserProfile.objects.filter(username=username).first()
         password = cookies_dict_obj.pwd
@@ -73,14 +61,31 @@ def dashboard(request):
         headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0",
                    "Connection": "close", "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                   "Upgrade-Insecure-Requests": "1"}
+                   "Upgrade-Insecure-Requests": "1",
+                   'Referer': 'http://222.73.34.165:88/student/allcourse.aspx'}
         print(course_url)
 
+        # r1 = requests.get(url=config.script_1)
+        # r2 = requests.get(url=config.script_2)
+
         r3 = requests.get(url=course_url,
-                          headers=headers,
-                          allow_redirects=False,
                           cookies=cookies_dict)
+        print(r3.headers['Content-Length'])
         print(r3.text)
+
+        # r = requests.get(course_url, stream=True)
+        # if int(r.headers['content-length']) < 68221:
+        #     content = r.content
+        #     print(content)
+
+        # with closing(requests.get(url=course_url, headers=headers, cookies=cookies_dict, stream=True)) as r:
+        #     for line in r.iter_lines():
+        #         if line:
+        #             print(line)
+        # with open('11111', 'wb') as fd:
+        #     for chunk in r.iter_content(100):
+        #         fd.write(chunk)
+
         soup = BeautifulSoup(r3.text, 'html.parser')
 
     return render(request, 'index.html')
@@ -97,13 +102,14 @@ def acc_login(request):
         # 尝试登陆学校网站
         cookies_dict = {}
         r1 = requests.get(url=config.school_url)
+        soup = BeautifulSoup(r1.text, 'html.parser')
+        s1 = soup.find(id="__VIEWSTATE").get('value')
+        s2 = soup.find(id="__VIEWSTATEGENERATOR").get('value')
+
         r1_cookies_dict = r1.cookies.get_dict()
 
-        s1 = '/wEPDwULLTEwMTQ2MjE4MjhkZC0kr8EqVmReGz8wShIStvlReqepxl2ifQoJhTN8zjbL'
-        s2 = 'C2EE9ABB'
-        # c1 = {'JSESSIONID': 'B72DDBA8B6E199D9006D9F4C72B675B4', 'ASP.NET_SessionId': 'no0qatloubof1dmj0jzjbycr'}
-
-        response = requests.post(url='%s/login.aspx' % config.school_url,
+        new_url = '%s/login.aspx' % config.school_url
+        response = requests.post(url=new_url,
                                  data={'__VIEWSTATE': s1,
                                        '__VIEWSTATEGENERATOR': s2,
                                        '__EVENTTARGET': '',
@@ -113,7 +119,7 @@ def acc_login(request):
                                        'pwd': password,
                                        'gtpath': ''},
                                  cookies=r1_cookies_dict)
-        # print(response.text)
+
         r2_cookies_dict = response.cookies.get_dict()
         if not r2_cookies_dict:
             err_msg = '用户名或密码错误..'

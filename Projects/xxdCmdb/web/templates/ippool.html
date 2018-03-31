@@ -170,7 +170,25 @@
             $('#add_vlan').click(function () {
                 $('#exampleModal_vlan').modal();
             });
+            window.setTimeout(add_style, 200);
         });
+
+        function add_style() {
+            $('#table_body').children().each(function () {
+                var status = $(this).children().next().next().next().next().next().next().html();
+                console.log(status);
+                if(status=='空闲'){
+                    $(this).children().next().next().next().next().next().next().first().html("<img style='margin-top: -1.5px' src='/static/imgs/dot.png'> 空闲")
+                }else if(status=='在线'){
+                    $(this).children().next().next().next().next().next().next().first().html("<img style='margin-top: -1.5px' src='/static/imgs/dot_2.png'> 在线")
+                }
+                else{
+                    $(this).children().next().next().next().next().next().next().first().html("<img style='margin-top: -1.5px' src='/static/imgs/dot_1.png'> 禁用");
+                    $(this).children().next().next().next().next().next().children().next().next().next().html(' 账号解封');
+
+                }
+            })
+        }
 
         function ChangePage(id) {
                 $.nbDataLists(id);

@@ -31,6 +31,10 @@ class ServerListView(View):
         if ilo_ip:
             server_obj = models.DellServer.objects.filter(manage_ip=ilo_ip).first()
             host_ip = models.Asset.objects.filter(id=asset_id).first().host_ip
+            # 资产状态有两个 一个是asset表里面 另一个是dellserver表里面
+            # (1, '已装机'),
+            # (2, '未装机'),
+            # (3, '故障机'),
             if server_obj.physical_server_status != 2:
                 response.status = False
                 response.message = '物理机已被安装系统或者为故障机'
@@ -59,11 +63,11 @@ class ServerListView(View):
                                                          switch_ip=switch_ip, switch_interface=switch_interface,
                                                          ilo_ip=ilo_ip, server_model=server_model, os_version=os_version,
                                                          vlan=vlan, netmask='24', gateway=gateway, status=1)
+                    print('server_install.py', sn, hostname, ilo_ip)
+                    response.message = '添加装机任务成功！'
                 except Exception as e:
                     response.status = False
-                    response.message = e
-
-                response.message = '添加装机任务成功！'
+                    response.message = str(e)
 
         return JsonResponse(response.__dict__)
 
@@ -83,7 +87,16 @@ class ServerJsonView(View):
         return JsonResponse(response.__dict__)
 
     def post(self, request):
-        response = server.Asset.post_assets(request)
+        """
+        开始执行装机任务
+        :param request:
+        :return:
+        """
+        # response = server.Asset.post_assets(request)
+        response = BaseResponse()
+        install_id = request.POST.get('install_id')
+        print(install_id)
+        response.status = True
         return JsonResponse(response.__dict__)
 
 

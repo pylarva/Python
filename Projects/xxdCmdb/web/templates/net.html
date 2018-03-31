@@ -122,19 +122,19 @@
               <div class="modal-body">
                   <div class="form-group">
                     <label for="recipient-name" class="control-label">vlan名称</label>
-                    <input type="text" class="form-control" id="vlan_name">
+                    <input type="text" class="form-control" placeholder="vlan100" id="vlan_name">
                   </div>
                   <div class="form-group">
                     <label for="recipient-name" class="control-label">网段</label>
-                    <input type="text" class="form-control" id="vlan_network">
+                    <input type="text" class="form-control" placeholder="192.168.0.0" id="vlan_network">
                   </div>
                   <div class="form-group">
                     <label for="recipient-name" class="control-label">掩码</label>
-                    <input type="text" class="form-control" id="vlan_netmask">
+                    <input type="text" class="form-control" placeholder="24" id="vlan_netmask">
                   </div>
                   <div class="form-group">
                     <label for="recipient-name" class="control-label">网关</label>
-                    <input type="text" class="form-control" id="vlan_getway">
+                    <input type="text" class="form-control" placeholder="192.168.0.1" id="vlan_getway">
                   </div>
               </div>
               <div class="modal-footer">
@@ -170,7 +170,17 @@
             $('#add_vlan').click(function () {
                 $('#exampleModal_vlan').modal();
             });
+            window.setTimeout(add_style, 200);
         });
+
+        function add_style() {
+            $('#table_body').children().each(function () {
+                var status = $(this).children().next().next().next().next().next().next().html();
+                if(status!=''){
+                    $(this).children().next().next().next().next().next().next().first().html("<img style='margin-top: -1.5px' src='/static/imgs/dot.png'> " + status)
+                }
+            })
+        }
 
         function ChangePage(id) {
                 $.nbDataLists(id);

@@ -180,39 +180,39 @@
             $('#add_vlan').click(function () {
                 $('#exampleModal_vlan').modal();
             });
+            window.setTimeout(add_style, 200);
         });
 
         function ChangePage(id) {
                 $.nbDataLists(id);
             }
+            
+        function add_style() {
+            $('#table_body').children().each(function () {
+                var v = $(this).children().next().eq(12).html();
+                var i = $(this).children().next().eq(12).attr('id');
+                if(v=='待安装'){
+                    $(this).children().next().eq(12).html("<img src='/static/imgs/check_3.png' style='height:20px; width:20px; margin-top: -5px'> 待安装")
+                }else if(v=='已安装'){
+                    $(this).children().next().eq(12).html("<img src='/static/imgs/check_1.png' style='height:20px; width:20px; margin-top: -5px'> 已安装")
+                }else if(v=='安装中'){
+                    $(this).children().next().eq(12).html("<img src='/static/imgs/avatar/reload.gif' style='height:20px; width:20px; margin-top: -5px'> 安装中")
+                }
+            })
+        }
 
-        $('#do_add_vlan').click(function () {
-            var vlan_name = $('#vlan_name').val();
-            var vlan_network = $('#vlan_network').val();
-            var vlan_netmask = $('#vlan_netmask').val();
-            var vlan_getway = $('#vlan_getway').val();
+        function do_release(eth, id) {
             $.ajax({
-                url: 'nets.html',
+                url: '/server_installs.html',
                 type: 'POST',
-                data: {
-                    'vlan_name': vlan_name, 'vlan_network': vlan_network, 'vlan_netmask': vlan_netmask,
-                    'vlan_getway': vlan_getway
-                },
+                data: {'install_id': id},
                 dataType: 'JSON',
                 success: function (response) {
-                    if (response.status) {
-                        $('#exampleModal').hide();
-                        location.reload();
-                    } else {
-                        alert(response.message);
+                    if(response.status){
+                        alert('...')
                     }
-                    $.Hide('#shade,#modal_delete');
-                },
-                error: function () {
-                    $.Hide('#shade,#modal_delete');
-                    alert('请求异常');
                 }
-            });
-        })
+            })
+        }
     </script>
 {% endblock %}
