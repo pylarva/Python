@@ -108,6 +108,15 @@
                             </select>
                         </div>
                     </div>
+                <label>固定资产编号</label>
+                 <div class="form-group">
+                  <input id="asset_serial_number" type="text" class="form-control" placeholder="">
+                </div>
+
+                <label>是否宿主机</label>
+                 <div class="form-group">
+                  <input id="is_hosts" type="CHECKBOX" class="form-control" placeholder="">
+                </div>
             </form>
         </div>
 
@@ -380,9 +389,11 @@
                 var cpu_num = $('#cpu_num').val();
                 var core_num = $('#core_num').val();
                 var os = $('#os').val();
+                var asset_serial_number = $('#asset_serial_number').val();
                 var physical_server_status = $('#physical_server_status').val();
+                var is_hosts = $('#is_hosts').prop('checked');
                 if(host == '' || ip == '' || idc == '' || cabinet == '' || putaway == '' || machine == '' || sn == '' ||
-                memory == '' || raid == '' || service == ''){
+                memory == '' || raid == '' || service == '' || asset_serial_number == ''){
 {#                if(host == '' || ip == ''){#}
                     alert('输入不能为空...')
                 }else{
@@ -414,7 +425,8 @@
                         data: {'host': host, 'ip': ip, 'memory': memory,
                             'idc': idc, 'cabinet': cabinet, 'putaway': putaway, 'machine': machine, 'sn': sn,
                             'cpu_num': cpu_num, 'core_num': core_num, 'os':os, 'physical_server_status': physical_server_status,
-                            'cpu': cpu, 'service': service, 'raid': raid, 'disk_list': disk_list, 'nic_list': nic_list},
+                            'cpu': cpu, 'service': service, 'raid': raid, 'disk_list': disk_list, 'nic_list': nic_list,
+                            'asset_serial_number': asset_serial_number, 'is_hosts': is_hosts },
                         dataType: 'JSON',
                         traditional: true,
                         success: function (response) {

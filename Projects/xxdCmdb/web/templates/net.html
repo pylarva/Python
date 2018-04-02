@@ -134,7 +134,7 @@
                   </div>
                   <div class="form-group">
                     <label for="recipient-name" class="control-label">网关</label>
-                    <input type="text" class="form-control" placeholder="192.168.0.1" id="vlan_getway">
+                    <input type="text" class="form-control" placeholder="192.168.0.1" id="vlan_gateway">
                   </div>
               </div>
               <div class="modal-footer">
@@ -190,13 +190,13 @@
             var vlan_name = $('#vlan_name').val();
             var vlan_network = $('#vlan_network').val();
             var vlan_netmask = $('#vlan_netmask').val();
-            var vlan_getway = $('#vlan_getway').val();
+            var vlan_gateway = $('#vlan_gateway').val();
             $.ajax({
                 url: 'nets.html',
                 type: 'POST',
                 data: {
                     'vlan_name': vlan_name, 'vlan_network': vlan_network, 'vlan_netmask': vlan_netmask,
-                    'vlan_getway': vlan_getway
+                    'vlan_gateway': vlan_gateway
                 },
                 dataType: 'JSON',
                 success: function (response) {

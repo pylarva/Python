@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+from django.db.models import Q
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -94,9 +95,39 @@ class ServerJsonView(View):
         """
         # response = server.Asset.post_assets(request)
         response = BaseResponse()
-        install_id = request.POST.get('install_id')
-        print(install_id)
         response.status = True
+
+        # 装机日志
+        ret = {}
+
+        install_log_id = request.POST.get('install_log_id')
+        if install_log_id:
+            release_id = int(install_log_id)
+            values = models.InstallLog.objects.filter(install_id=release_id).only('install_time', 'install_msg')
+            result = map(lambda x: {'time': x.install_time, 'msg': "%s" % x.install_msg}, values)
+            result = list(result)
+            if not result:
+                response.status = False
+            ret['data_list'] = result
+            response.data = ret
+
+        install_id = request.POST.get('install_id')
+        if install_id:
+            print(install_id)
+            # 开始执行发布
+            models.InstallLog.objects.create(install_id=install_id, install_msg='开始安装系统...')
+
+        # 前端页面请求任务状态
+        task_id = request.POST.getlist('install_task_id', None)
+        if task_id:
+            task_id_list = task_id
+            con_q = Q()
+            con_q.connector = 'OR'
+            for item in task_id_list:
+                con_q.children.append(('id', item))
+            obj_list = models.PhysicsInstall.objects.filter(con_q).values('id', 'status')
+            response.data = {'data_list': list(obj_list)}
+
         return JsonResponse(response.__dict__)
 
 

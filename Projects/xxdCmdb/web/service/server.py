@@ -19,7 +19,7 @@ class Asset(BaseServiceList):
             {
                 'q': 'id',
                 'title': "ID",
-                'display': 0,
+                'display': 1,
                 'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
                 'attr': {}
             },
@@ -137,9 +137,9 @@ class Asset(BaseServiceList):
                 'title': "选项",
                 'display': 1,
                 'text': {
-                    'content': "<i class='fa fa-check-circle' aria-hidden='true'></i><a href='#' onclick='do_release(this, {id})'> 开始安装</a> |"
+                    'content': "<i class='fa fa-check-circle' aria-hidden='true'></i><a href='#' style='text-decoration: none;' onclick='do_install(this, {id})'> 开始安装</a> | "
                                "<a href='#' onclick='get_log({id}, false)'> 日志</a>",
-                    'kwargs': {'device_type_id': '@device_type_id'}},
+                    'kwargs': {'device_type_id': '@device_type_id', 'id': '@id'}},
                 'attr': {}
             },
         ]

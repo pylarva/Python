@@ -92,6 +92,14 @@
             <td colspan="4">{{ response.data.cabinet }}</td>
         </tr>
         <tr>
+            <td>固定资产编号</td>
+            <td colspan="4">{{ response.data.asset_serial_number }}</td>
+        </tr>
+        <tr>
+            <td>是否为宿主机</td>
+            <td colspan="4">{{ response.data.get_is_hosts_display }}</td>
+        </tr>
+        <tr>
             <td>资产状态</td>
             <td colspan="4">{{ response.data.get_physical_server_status_display }}
             <span class="label label-info" onclick="add_install_task('{{ response.data.manage_ip }}', '{{ response.data.asset_id }}')">开始装机</span>

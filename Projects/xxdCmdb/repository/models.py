@@ -620,6 +620,11 @@ class DellServer(models.Model):
         (3, '故障机'),
     )
 
+    is_hosts_choices = (
+        (1, '是'),
+        (0, '否')
+    )
+
     asset_id = models.IntegerField('资产', null=True, blank=True)
 
     hostname = models.CharField('主机名', max_length=128, null=True, blank=True)
@@ -636,6 +641,9 @@ class DellServer(models.Model):
     raid = models.CharField('Raid', max_length=8, null=True, blank=True)
     service = models.CharField('保修期', max_length=32, null=True, blank=True)
     physical_server_status = models.IntegerField(choices=device_item_choices, default=2)
+    asset_serial_number = models.CharField('固定资产编号', max_length=32, null=True, blank=True)
+    is_hosts = models.IntegerField('是否为宿主机', choices=is_hosts_choices, default=0)
+
 
     class Meta:
         verbose_name_plural = "服务器表"
@@ -747,6 +755,7 @@ class PhysicsInstall(models.Model):
         (3, '已安装'),
         (4, '已失败'),
     )
+
     sn = models.CharField(max_length=108, unique=True)
     ip = models.GenericIPAddressField(null=True, blank=True)
     hostname = models.CharField(max_length=108, null=True, blank=True)

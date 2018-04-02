@@ -449,6 +449,12 @@ class Asset(BaseServiceList):
         nic_list = request.POST.getlist('nic_list')
         os = request.POST.get('os')
         physical_server_status = request.POST.get('physical_server_status')
+        asset_serial_number = request.POST.get('asset_serial_number')
+        is_hosts = request.POST.get('is_hosts')
+        if is_hosts == 'true':
+            is_hosts = 1
+        else:
+            is_hosts = 0
 
         for item in nic_list[2:]:
             item_list = item.split(',')
@@ -468,7 +474,8 @@ class Asset(BaseServiceList):
 
         server_obj = models.DellServer(asset_id=asset_obj.id, hostname=host, manage_ip=ip, idc=idc, cabinet=cabinet,
                                        putaway=putaway, model=machine, sn=sn, cpu_id=cpu, raid=raid, service=service,
-                                       cpu_num=cpu_num, core_num=core_num, os=os)
+                                       cpu_num=cpu_num, core_num=core_num, os=os,
+                                       asset_serial_number=asset_serial_number, is_hosts=is_hosts)
         server_obj.save()
 
         # ['', '', ',1,500G,SAS,7200,SEAGATE ST300MM0006 LS08S0K2B5NV']
