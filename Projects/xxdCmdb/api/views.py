@@ -264,10 +264,22 @@ class InstallView(View):
     @method_decorator(auth.api_auths)
     def post(self, request, *args, **kwargs):
         response = BaseResponse()
+
         n1 = json.loads(request.body.decode('utf-8'))
         s = json.loads(n1)
         install_id = s['id']
         install_msg = s['msg']
+
+        # 脚本上报安装完成
+        if install_msg == 'done':
+            # (1, '待安装'),
+            # (2, '安装中'),
+            # (3, '已安装'),
+            # (4, '已失败'),
+            try:
+                models.PhysicsInstall.objects.filter(id=install_id).update(status=3)
+            except Exception as e:
+                print(e)
 
         try:
             models.InstallLog.objects.create(install_id=install_id, install_msg=install_msg)

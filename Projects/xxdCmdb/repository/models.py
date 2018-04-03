@@ -761,7 +761,7 @@ class PhysicsInstall(models.Model):
     hostname = models.CharField(max_length=108, null=True, blank=True)
     raid_level = models.IntegerField(null=True, blank=True)
     switch_ip = models.GenericIPAddressField(null=True, blank=True)
-    switch_interface = models.IntegerField(null=True, blank=True)
+    switch_interface = models.CharField(max_length=32, null=True, blank=True)
     ilo_ip = models.GenericIPAddressField(null=True, blank=True)
     server_model = models.CharField(max_length=108, null=True, blank=True)
     os_version = models.CharField(max_length=108, null=True, blank=True)

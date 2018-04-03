@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+import paramiko
+from conf import config_config
 from django.db.models import Q
 from django.views import View
 from django.shortcuts import render
@@ -113,9 +115,32 @@ class ServerJsonView(View):
 
         install_id = request.POST.get('install_id')
         if install_id:
-            print(install_id)
-            # 开始执行发布
+
+            # 开始执行安装
             models.InstallLog.objects.create(install_id=install_id, install_msg='开始安装系统...')
+            try:
+                models.PhysicsInstall.objects.filter(id=install_id).update(status=2)
+                i_obj = models.PhysicsInstall.objects.filter(id=install_id).first()
+
+                cmd = 'python {0} {1} {2} {3} {4} RAID{5} {6} {7} {8} ' \
+                      '{9} {10} {11} {12} {13}'.format(config_config.install_scripts_path,
+                                                       i_obj.id, i_obj.sn, i_obj.ip,
+                                                       i_obj.hostname, i_obj.raid_level,
+                                                       i_obj.switch_ip, i_obj.switch_interface,
+                                                       i_obj.ilo_ip, i_obj.server_model,
+                                                       i_obj.os_version, i_obj.vlan,
+                                                       '255.255.255.0', i_obj.gateway)
+                print(cmd)
+                ssh = paramiko.SSHClient()
+                ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                ssh.connect(config_config.config_in_host_ip, port=22, username='root', password='xinxindai318', timeout=3)
+                ssh.exec_command(cmd)
+                models.InstallLog.objects.create(install_id=install_id, install_msg=config_config.install_scripts_ip)
+                models.InstallLog.objects.create(install_id=install_id, install_msg=cmd)
+            except Exception as e:
+                print(e)
+                response.message = str(e)
+                response.status = False
 
         # 前端页面请求任务状态
         task_id = request.POST.getlist('install_task_id', None)
