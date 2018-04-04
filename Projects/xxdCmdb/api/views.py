@@ -281,6 +281,9 @@ class InstallView(View):
             except Exception as e:
                 print(e)
 
+        if install_msg == 'error':
+            models.PhysicsInstall.objects.filter(id=install_id).update(status=4)
+
         try:
             models.InstallLog.objects.create(install_id=install_id, install_msg=install_msg)
             response.status = True

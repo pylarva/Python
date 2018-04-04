@@ -133,7 +133,7 @@ class ServerJsonView(View):
                 print(cmd)
                 ssh = paramiko.SSHClient()
                 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-                ssh.connect(config_config.config_in_host_ip, port=22, username='root', password='xinxindai318', timeout=3)
+                ssh.connect(config_config.install_scripts_ip, port=22, username='root', password='xinxindai318', timeout=3)
                 ssh.exec_command(cmd)
                 models.InstallLog.objects.create(install_id=install_id, install_msg=config_config.install_scripts_ip)
                 models.InstallLog.objects.create(install_id=install_id, install_msg=cmd)

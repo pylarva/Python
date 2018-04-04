@@ -227,10 +227,21 @@ soup = BeautifulSoup(s, 'html.parser')
 # s1 = '../files/CourseDocs/default/nopic.gif'
 # s2 = s1.split('..')[1]
 # print(s2)
-s1 = soup.find_all(name='script')
-for i in s1:
-    print('---')
-    print(i.text)
-    a = i.get('src')
-    if a:
-        print(a)
+
+# 线程 进程
+import requests
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+url_list = ['www.baidu.com', 'http://www.google.com.hk']
+
+def task(url):
+    response = requests.get(url)
+    print(response.content)
+
+# pool = ThreadPoolExecutor(10)
+pool = ProcessPoolExecutor(10)
+
+for url in url_list:
+    pool.submit(task, url)
+
+pool.shutdown(wait=True)
