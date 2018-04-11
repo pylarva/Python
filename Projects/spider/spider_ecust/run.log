@@ -1512,3 +1512,890 @@ KeyError: 'username'
 04/11/2018 10:31:47 AM [黎承兵] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 <script>alert('成功记录学习时间！本章节累计学习时间为：2分53秒');window.opener=null;window.close();</script>
 04/11/2018 10:31:48 AM [黎承兵] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 <script>alert('成功记录学习时间！本章节累计学习时间为：2分58秒');window.opener=null;window.close();</script>
 04/11/2018 10:31:48 AM [黎承兵] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 <script>alert('成功记录学习时间！本章节累计学习时间为：9分41秒');window.opener=null;window.close();</script>
+04/11/2018 11:36:04 AM Internal Server Error: /
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 191, in dashboard
+    data = all_course(request, username, password, cookies_dict)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 31, in all_course
+    td_list = soup.find(id='learnedlist').find_all(name='td')
+AttributeError: 'NoneType' object has no attribute 'find_all'
+04/11/2018 02:22:43 PM Internal Server Error: /course_detail/219
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 165, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:25:58 PM Internal Server Error: /course_detail/70
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 160, in course_detail
+    table_list = soup.find_all(name='table')[-1]
+IndexError: list index out of range
+04/11/2018 02:28:47 PM Internal Server Error: /course_detail/214
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 171, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:30:32 PM Internal Server Error: /course_detail/214
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 171, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:30:37 PM Internal Server Error: /course_detail/134
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 171, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:32:44 PM Internal Server Error: /course_detail/214
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 171, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:37:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：0分10秒');window.opener=null;window.close();
+04/11/2018 02:37:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：0分11秒');window.opener=null;window.close();
+04/11/2018 02:37:10 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：0分12秒');window.opener=null;window.close();
+04/11/2018 02:37:10 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：0分15秒');window.opener=null;window.close();
+04/11/2018 02:37:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：0分15秒');window.opener=null;window.close();
+04/11/2018 02:37:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：0分16秒');window.opener=null;window.close();
+04/11/2018 02:37:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：0分18秒');window.opener=null;window.close();
+04/11/2018 02:37:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：0分19秒');window.opener=null;window.close();
+04/11/2018 02:37:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：0分21秒');window.opener=null;window.close();
+04/11/2018 02:37:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：0分25秒');window.opener=null;window.close();
+04/11/2018 02:37:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：0分25秒');window.opener=null;window.close();
+04/11/2018 02:37:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：0分27秒');window.opener=null;window.close();
+04/11/2018 02:37:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：0分31秒');window.opener=null;window.close();
+04/11/2018 02:37:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：0分33秒');window.opener=null;window.close();
+04/11/2018 02:37:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：0分35秒');window.opener=null;window.close();
+04/11/2018 02:37:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：0分40秒');window.opener=null;window.close();
+04/11/2018 02:37:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：0分40秒');window.opener=null;window.close();
+04/11/2018 02:37:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：0分43秒');window.opener=null;window.close();
+04/11/2018 02:37:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：0分49秒');window.opener=null;window.close();
+04/11/2018 02:37:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：0分52秒');window.opener=null;window.close();
+04/11/2018 02:37:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：0分54秒');window.opener=null;window.close();
+04/11/2018 02:37:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：1分0秒');window.opener=null;window.close();
+04/11/2018 02:37:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：1分0秒');window.opener=null;window.close();
+04/11/2018 02:37:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：1分4秒');window.opener=null;window.close();
+04/11/2018 02:37:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：1分12秒');window.opener=null;window.close();
+04/11/2018 02:37:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：1分16秒');window.opener=null;window.close();
+04/11/2018 02:37:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：1分18秒');window.opener=null;window.close();
+04/11/2018 02:37:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：1分25秒');window.opener=null;window.close();
+04/11/2018 02:37:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：1分25秒');window.opener=null;window.close();
+04/11/2018 02:37:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：1分30秒');window.opener=null;window.close();
+04/11/2018 02:37:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：1分40秒');window.opener=null;window.close();
+04/11/2018 02:37:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：1分45秒');window.opener=null;window.close();
+04/11/2018 02:37:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：1分47秒');window.opener=null;window.close();
+04/11/2018 02:37:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：1分55秒');window.opener=null;window.close();
+04/11/2018 02:37:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：1分55秒');window.opener=null;window.close();
+04/11/2018 02:37:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：2分1秒');window.opener=null;window.close();
+04/11/2018 02:37:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：2分13秒');window.opener=null;window.close();
+04/11/2018 02:37:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：2分19秒');window.opener=null;window.close();
+04/11/2018 02:37:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：2分21秒');window.opener=null;window.close();
+04/11/2018 02:37:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：2分30秒');window.opener=null;window.close();
+04/11/2018 02:37:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：2分30秒');window.opener=null;window.close();
+04/11/2018 02:37:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：2分37秒');window.opener=null;window.close();
+04/11/2018 02:37:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：2分51秒');window.opener=null;window.close();
+04/11/2018 02:37:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：2分58秒');window.opener=null;window.close();
+04/11/2018 02:37:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：3分0秒');window.opener=null;window.close();
+04/11/2018 02:37:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：3分10秒');window.opener=null;window.close();
+04/11/2018 02:37:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：3分11秒');window.opener=null;window.close();
+04/11/2018 02:37:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：3分18秒');window.opener=null;window.close();
+04/11/2018 02:37:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：3分35秒');window.opener=null;window.close();
+04/11/2018 02:37:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：3分42秒');window.opener=null;window.close();
+04/11/2018 02:37:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：3分45秒');window.opener=null;window.close();
+04/11/2018 02:37:51 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：3分55秒');window.opener=null;window.close();
+04/11/2018 02:37:51 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：3分57秒');window.opener=null;window.close();
+04/11/2018 02:37:52 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：4分4秒');window.opener=null;window.close();
+04/11/2018 02:37:54 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：4分24秒');window.opener=null;window.close();
+04/11/2018 02:37:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：4分31秒');window.opener=null;window.close();
+04/11/2018 02:37:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：4分35秒');window.opener=null;window.close();
+04/11/2018 02:37:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：4分45秒');window.opener=null;window.close();
+04/11/2018 02:37:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：4分48秒');window.opener=null;window.close();
+04/11/2018 02:37:57 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：4分55秒');window.opener=null;window.close();
+04/11/2018 02:37:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：5分18秒');window.opener=null;window.close();
+04/11/2018 02:38:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：5分25秒');window.opener=null;window.close();
+04/11/2018 02:38:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：5分30秒');window.opener=null;window.close();
+04/11/2018 02:38:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：5分40秒');window.opener=null;window.close();
+04/11/2018 02:38:02 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：5分44秒');window.opener=null;window.close();
+04/11/2018 02:38:02 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：5分51秒');window.opener=null;window.close();
+04/11/2018 02:38:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：6分17秒');window.opener=null;window.close();
+04/11/2018 02:38:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：6分24秒');window.opener=null;window.close();
+04/11/2018 02:38:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：6分30秒');window.opener=null;window.close();
+04/11/2018 02:38:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：6分41秒');window.opener=null;window.close();
+04/11/2018 02:38:07 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：6分45秒');window.opener=null;window.close();
+04/11/2018 02:38:07 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：6分52秒');window.opener=null;window.close();
+04/11/2018 02:38:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：7分21秒');window.opener=null;window.close();
+04/11/2018 02:38:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：7分54秒');window.opener=null;window.close();
+04/11/2018 02:38:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：7分38秒');window.opener=null;window.close();
+04/11/2018 02:38:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：7分59秒');window.opener=null;window.close();
+04/11/2018 02:38:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：7分44秒');window.opener=null;window.close();
+04/11/2018 02:38:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：8分6秒');window.opener=null;window.close();
+04/11/2018 02:38:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：8分39秒');window.opener=null;window.close();
+04/11/2018 02:38:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：8分57秒');window.opener=null;window.close();
+04/11/2018 02:38:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：9分18秒');window.opener=null;window.close();
+04/11/2018 02:38:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：9分13秒');window.opener=null;window.close();
+04/11/2018 02:38:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：9分3秒');window.opener=null;window.close();
+04/11/2018 02:38:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：9分26秒');window.opener=null;window.close();
+04/11/2018 02:38:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：10分2秒');window.opener=null;window.close();
+04/11/2018 02:38:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：10分21秒');window.opener=null;window.close();
+04/11/2018 02:38:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：10分42秒');window.opener=null;window.close();
+04/11/2018 02:38:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：10分37秒');window.opener=null;window.close();
+04/11/2018 02:38:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：10分27秒');window.opener=null;window.close();
+04/11/2018 02:38:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：10分51秒');window.opener=null;window.close();
+04/11/2018 02:38:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：11分31秒');window.opener=null;window.close();
+04/11/2018 02:38:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：11分50秒');window.opener=null;window.close();
+04/11/2018 02:38:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：12分6秒');window.opener=null;window.close();
+04/11/2018 02:38:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：12分11秒');window.opener=null;window.close();
+04/11/2018 02:38:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：11分56秒');window.opener=null;window.close();
+04/11/2018 02:38:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：12分21秒');window.opener=null;window.close();
+04/11/2018 02:38:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：13分5秒');window.opener=null;window.close();
+04/11/2018 02:38:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：13分24秒');window.opener=null;window.close();
+04/11/2018 02:38:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：13分40秒');window.opener=null;window.close();
+04/11/2018 02:38:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：13分45秒');window.opener=null;window.close();
+04/11/2018 02:38:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：13分31秒');window.opener=null;window.close();
+04/11/2018 02:38:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：13分56秒');window.opener=null;window.close();
+04/11/2018 02:38:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：14分44秒');window.opener=null;window.close();
+04/11/2018 02:38:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：15分3秒');window.opener=null;window.close();
+04/11/2018 02:38:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：15分19秒');window.opener=null;window.close();
+04/11/2018 02:38:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：15分25秒');window.opener=null;window.close();
+04/11/2018 02:38:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：15分11秒');window.opener=null;window.close();
+04/11/2018 02:38:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：15分36秒');window.opener=null;window.close();
+04/11/2018 02:38:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：16分28秒');window.opener=null;window.close();
+04/11/2018 02:38:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：16分47秒');window.opener=null;window.close();
+04/11/2018 02:38:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：17分3秒');window.opener=null;window.close();
+04/11/2018 02:38:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：17分10秒');window.opener=null;window.close();
+04/11/2018 02:38:51 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：16分56秒');window.opener=null;window.close();
+04/11/2018 02:38:51 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：17分21秒');window.opener=null;window.close();
+04/11/2018 02:38:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：18分17秒');window.opener=null;window.close();
+04/11/2018 02:38:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5769 alert('成功记录学习时间！本章节累计学习时间为：18分36秒');window.opener=null;window.close();
+04/11/2018 02:38:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：18分52秒');window.opener=null;window.close();
+04/11/2018 02:38:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：19分0秒');window.opener=null;window.close();
+04/11/2018 02:38:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：18分46秒');window.opener=null;window.close();
+04/11/2018 02:38:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：19分11秒');window.opener=null;window.close();
+04/11/2018 02:39:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：20分11秒');window.opener=null;window.close();
+04/11/2018 02:39:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：20分47秒');window.opener=null;window.close();
+04/11/2018 02:39:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：20分55秒');window.opener=null;window.close();
+04/11/2018 02:39:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：20分41秒');window.opener=null;window.close();
+04/11/2018 02:39:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：21分7秒');window.opener=null;window.close();
+04/11/2018 02:39:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：22分10秒');window.opener=null;window.close();
+04/11/2018 02:39:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5772 alert('成功记录学习时间！本章节累计学习时间为：22分47秒');window.opener=null;window.close();
+04/11/2018 02:39:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：22分55秒');window.opener=null;window.close();
+04/11/2018 02:39:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：22分42秒');window.opener=null;window.close();
+04/11/2018 02:39:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：23分8秒');window.opener=null;window.close();
+04/11/2018 02:39:10 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：24分14秒');window.opener=null;window.close();
+04/11/2018 02:39:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：25分0秒');window.opener=null;window.close();
+04/11/2018 02:39:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：24分48秒');window.opener=null;window.close();
+04/11/2018 02:39:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5770 alert('成功记录学习时间！本章节累计学习时间为：25分14秒');window.opener=null;window.close();
+04/11/2018 02:39:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：26分23秒');window.opener=null;window.close();
+04/11/2018 02:39:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：27分10秒');window.opener=null;window.close();
+04/11/2018 02:39:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：26分59秒');window.opener=null;window.close();
+04/11/2018 02:39:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：28分37秒');window.opener=null;window.close();
+04/11/2018 02:39:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：29分25秒');window.opener=null;window.close();
+04/11/2018 02:39:22 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：29分15秒');window.opener=null;window.close();
+04/11/2018 02:39:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5767 alert('成功记录学习时间！本章节累计学习时间为：30分56秒');window.opener=null;window.close();
+04/11/2018 02:39:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5771 alert('成功记录学习时间！本章节累计学习时间为：31分45秒');window.opener=null;window.close();
+04/11/2018 02:39:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=5768 alert('成功记录学习时间！本章节累计学习时间为：31分36秒');window.opener=null;window.close();
+04/11/2018 02:43:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：0分1秒');window.opener=null;window.close();
+04/11/2018 02:43:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：0分2秒');window.opener=null;window.close();
+04/11/2018 02:43:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：0分2秒');window.opener=null;window.close();
+04/11/2018 02:43:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：0分2秒');window.opener=null;window.close();
+04/11/2018 02:43:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：0分2秒');window.opener=null;window.close();
+04/11/2018 02:43:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：0分3秒');window.opener=null;window.close();
+04/11/2018 02:43:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：0分3秒');window.opener=null;window.close();
+04/11/2018 02:43:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：0分3秒');window.opener=null;window.close();
+04/11/2018 02:43:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：0分4秒');window.opener=null;window.close();
+04/11/2018 02:43:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：0分4秒');window.opener=null;window.close();
+04/11/2018 02:43:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：0分4秒');window.opener=null;window.close();
+04/11/2018 02:43:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：0分4秒');window.opener=null;window.close();
+04/11/2018 02:43:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：0分5秒');window.opener=null;window.close();
+04/11/2018 02:43:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：0分5秒');window.opener=null;window.close();
+04/11/2018 02:43:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：0分6秒');window.opener=null;window.close();
+04/11/2018 02:43:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：0分6秒');window.opener=null;window.close();
+04/11/2018 02:43:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：0分8秒');window.opener=null;window.close();
+04/11/2018 02:43:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：0分7秒');window.opener=null;window.close();
+04/11/2018 02:43:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：0分9秒');window.opener=null;window.close();
+04/11/2018 02:43:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：0分9秒');window.opener=null;window.close();
+04/11/2018 02:43:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：0分10秒');window.opener=null;window.close();
+04/11/2018 02:43:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：0分8秒');window.opener=null;window.close();
+04/11/2018 02:43:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：0分11秒');window.opener=null;window.close();
+04/11/2018 02:43:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：0分11秒');window.opener=null;window.close();
+04/11/2018 02:43:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：0分11秒');window.opener=null;window.close();
+04/11/2018 02:43:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：0分13秒');window.opener=null;window.close();
+04/11/2018 02:43:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：0分9秒');window.opener=null;window.close();
+04/11/2018 02:43:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：0分13秒');window.opener=null;window.close();
+04/11/2018 02:43:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：0分13秒');window.opener=null;window.close();
+04/11/2018 02:43:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：0分13秒');window.opener=null;window.close();
+04/11/2018 02:43:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：0分12秒');window.opener=null;window.close();
+04/11/2018 02:43:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：0分15秒');window.opener=null;window.close();
+04/11/2018 02:43:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：0分17秒');window.opener=null;window.close();
+04/11/2018 02:43:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：0分11秒');window.opener=null;window.close();
+04/11/2018 02:43:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：0分20秒');window.opener=null;window.close();
+04/11/2018 02:43:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：0分12秒');window.opener=null;window.close();
+04/11/2018 02:43:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：0分21秒');window.opener=null;window.close();
+04/11/2018 02:43:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：0分21秒');window.opener=null;window.close();
+04/11/2018 02:43:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：0分19秒');window.opener=null;window.close();
+04/11/2018 02:43:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：0分23秒');window.opener=null;window.close();
+04/11/2018 02:43:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：0分18秒');window.opener=null;window.close();
+04/11/2018 02:43:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：0分19秒');window.opener=null;window.close();
+04/11/2018 02:43:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：0分24秒');window.opener=null;window.close();
+04/11/2018 02:43:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：0分24秒');window.opener=null;window.close();
+04/11/2018 02:43:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：0分21秒');window.opener=null;window.close();
+04/11/2018 02:43:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：0分24秒');window.opener=null;window.close();
+04/11/2018 02:43:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：0分27秒');window.opener=null;window.close();
+04/11/2018 02:43:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：0分23秒');window.opener=null;window.close();
+04/11/2018 02:43:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：0分27秒');window.opener=null;window.close();
+04/11/2018 02:43:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：0分27秒');window.opener=null;window.close();
+04/11/2018 02:43:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：0分27秒');window.opener=null;window.close();
+04/11/2018 02:43:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：0分28秒');window.opener=null;window.close();
+04/11/2018 02:43:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：0分30秒');window.opener=null;window.close();
+04/11/2018 02:43:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：0分33秒');window.opener=null;window.close();
+04/11/2018 02:43:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：0分27秒');window.opener=null;window.close();
+04/11/2018 02:43:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：0分37秒');window.opener=null;window.close();
+04/11/2018 02:43:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：0分29秒');window.opener=null;window.close();
+04/11/2018 02:43:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：0分38秒');window.opener=null;window.close();
+04/11/2018 02:43:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：0分38秒');window.opener=null;window.close();
+04/11/2018 02:43:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：0分36秒');window.opener=null;window.close();
+04/11/2018 02:43:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：0分41秒');window.opener=null;window.close();
+04/11/2018 02:43:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：0分36秒');window.opener=null;window.close();
+04/11/2018 02:43:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：0分37秒');window.opener=null;window.close();
+04/11/2018 02:43:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：0分42秒');window.opener=null;window.close();
+04/11/2018 02:43:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：0分42秒');window.opener=null;window.close();
+04/11/2018 02:43:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：0分39秒');window.opener=null;window.close();
+04/11/2018 02:43:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：0分43秒');window.opener=null;window.close();
+04/11/2018 02:43:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：0分46秒');window.opener=null;window.close();
+04/11/2018 02:43:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：0分42秒');window.opener=null;window.close();
+04/11/2018 02:43:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：0分46秒');window.opener=null;window.close();
+04/11/2018 02:43:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：0分46秒');window.opener=null;window.close();
+04/11/2018 02:43:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：0分47秒');window.opener=null;window.close();
+04/11/2018 02:43:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：0分48秒');window.opener=null;window.close();
+04/11/2018 02:43:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：0分50秒');window.opener=null;window.close();
+04/11/2018 02:43:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：0分54秒');window.opener=null;window.close();
+04/11/2018 02:43:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：0分48秒');window.opener=null;window.close();
+04/11/2018 02:43:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：0分59秒');window.opener=null;window.close();
+04/11/2018 02:43:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：0分51秒');window.opener=null;window.close();
+04/11/2018 02:43:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：1分0秒');window.opener=null;window.close();
+04/11/2018 02:43:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：0分58秒');window.opener=null;window.close();
+04/11/2018 02:43:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：1分4秒');window.opener=null;window.close();
+04/11/2018 02:43:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：1分1秒');window.opener=null;window.close();
+04/11/2018 02:43:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：0分59秒');window.opener=null;window.close();
+04/11/2018 02:43:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：1分5秒');window.opener=null;window.close();
+04/11/2018 02:43:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：1分5秒');window.opener=null;window.close();
+04/11/2018 02:43:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：1分3秒');window.opener=null;window.close();
+04/11/2018 02:43:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：1分7秒');window.opener=null;window.close();
+04/11/2018 02:43:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：1分10秒');window.opener=null;window.close();
+04/11/2018 02:43:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：1分6秒');window.opener=null;window.close();
+04/11/2018 02:43:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：1分10秒');window.opener=null;window.close();
+04/11/2018 02:43:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：1分2秒');window.opener=null;window.close();
+04/11/2018 02:43:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：1分12秒');window.opener=null;window.close();
+04/11/2018 02:43:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：1分11秒');window.opener=null;window.close();
+04/11/2018 02:43:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：1分16秒');window.opener=null;window.close();
+04/11/2018 02:43:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：1分14秒');window.opener=null;window.close();
+04/11/2018 02:43:51 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：1分20秒');window.opener=null;window.close();
+04/11/2018 02:43:51 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：1分15秒');window.opener=null;window.close();
+04/11/2018 02:43:52 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：1分26秒');window.opener=null;window.close();
+04/11/2018 02:43:52 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：1分18秒');window.opener=null;window.close();
+04/11/2018 02:43:52 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：1分27秒');window.opener=null;window.close();
+04/11/2018 02:43:52 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：1分26秒');window.opener=null;window.close();
+04/11/2018 02:43:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：1分32秒');window.opener=null;window.close();
+04/11/2018 02:43:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：1分27秒');window.opener=null;window.close();
+04/11/2018 02:43:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：1分33秒');window.opener=null;window.close();
+04/11/2018 02:43:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：1分34秒');window.opener=null;window.close();
+04/11/2018 02:43:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：1分32秒');window.opener=null;window.close();
+04/11/2018 02:43:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：1分36秒');window.opener=null;window.close();
+04/11/2018 02:43:54 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：1分30秒');window.opener=null;window.close();
+04/11/2018 02:43:54 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：1分35秒');window.opener=null;window.close();
+04/11/2018 02:43:54 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：1分40秒');window.opener=null;window.close();
+04/11/2018 02:43:54 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：1分32秒');window.opener=null;window.close();
+04/11/2018 02:43:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：1分40秒');window.opener=null;window.close();
+04/11/2018 02:43:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：1分41秒');window.opener=null;window.close();
+04/11/2018 02:43:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：1分43秒');window.opener=null;window.close();
+04/11/2018 02:43:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：1分45秒');window.opener=null;window.close();
+04/11/2018 02:43:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：1分51秒');window.opener=null;window.close();
+04/11/2018 02:43:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：1分47秒');window.opener=null;window.close();
+04/11/2018 02:43:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：1分47秒');window.opener=null;window.close();
+04/11/2018 02:43:57 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：1分58秒');window.opener=null;window.close();
+04/11/2018 02:43:57 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：1分50秒');window.opener=null;window.close();
+04/11/2018 02:43:57 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：2分0秒');window.opener=null;window.close();
+04/11/2018 02:43:57 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：1分59秒');window.opener=null;window.close();
+04/11/2018 02:43:58 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：2分5秒');window.opener=null;window.close();
+04/11/2018 02:43:58 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：2分0秒');window.opener=null;window.close();
+04/11/2018 02:43:58 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：2分7秒');window.opener=null;window.close();
+04/11/2018 02:43:58 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：2分8秒');window.opener=null;window.close();
+04/11/2018 02:43:58 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：2分6秒');window.opener=null;window.close();
+04/11/2018 02:43:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：2分10秒');window.opener=null;window.close();
+04/11/2018 02:43:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：2分4秒');window.opener=null;window.close();
+04/11/2018 02:43:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：2分9秒');window.opener=null;window.close();
+04/11/2018 02:43:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：2分15秒');window.opener=null;window.close();
+04/11/2018 02:43:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：2分7秒');window.opener=null;window.close();
+04/11/2018 02:44:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：2分15秒');window.opener=null;window.close();
+04/11/2018 02:44:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：2分16秒');window.opener=null;window.close();
+04/11/2018 02:44:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：2分19秒');window.opener=null;window.close();
+04/11/2018 02:44:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：2分21秒');window.opener=null;window.close();
+04/11/2018 02:44:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：2分27秒');window.opener=null;window.close();
+04/11/2018 02:44:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：2分23秒');window.opener=null;window.close();
+04/11/2018 02:44:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：2分24秒');window.opener=null;window.close();
+04/11/2018 02:44:02 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：2分35秒');window.opener=null;window.close();
+04/11/2018 02:44:02 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：2分27秒');window.opener=null;window.close();
+04/11/2018 02:44:02 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：2分38秒');window.opener=null;window.close();
+04/11/2018 02:44:02 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：2分37秒');window.opener=null;window.close();
+04/11/2018 02:44:03 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：2分43秒');window.opener=null;window.close();
+04/11/2018 02:44:03 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：2分38秒');window.opener=null;window.close();
+04/11/2018 02:44:03 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：2分46秒');window.opener=null;window.close();
+04/11/2018 02:44:03 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：2分47秒');window.opener=null;window.close();
+04/11/2018 02:44:04 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：2分49秒');window.opener=null;window.close();
+04/11/2018 02:44:04 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：2分43秒');window.opener=null;window.close();
+04/11/2018 02:44:04 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：2分45秒');window.opener=null;window.close();
+04/11/2018 02:44:04 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：2分55秒');window.opener=null;window.close();
+04/11/2018 02:44:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：2分47秒');window.opener=null;window.close();
+04/11/2018 02:44:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：2分55秒');window.opener=null;window.close();
+04/11/2018 02:44:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：2分56秒');window.opener=null;window.close();
+04/11/2018 02:44:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：3分0秒');window.opener=null;window.close();
+04/11/2018 02:44:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：3分2秒');window.opener=null;window.close();
+04/11/2018 02:44:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：3分8秒');window.opener=null;window.close();
+04/11/2018 02:44:07 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：3分6秒');window.opener=null;window.close();
+04/11/2018 02:44:07 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：3分17秒');window.opener=null;window.close();
+04/11/2018 02:44:07 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：3分9秒');window.opener=null;window.close();
+04/11/2018 02:44:08 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：3分21秒');window.opener=null;window.close();
+04/11/2018 02:44:08 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：3分20秒');window.opener=null;window.close();
+04/11/2018 02:44:08 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：3分6秒');window.opener=null;window.close();
+04/11/2018 02:44:08 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：3分26秒');window.opener=null;window.close();
+04/11/2018 02:44:08 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：3分21秒');window.opener=null;window.close();
+04/11/2018 02:44:08 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：3分30秒');window.opener=null;window.close();
+04/11/2018 02:44:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：3分31秒');window.opener=null;window.close();
+04/11/2018 02:44:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：2分53秒');window.opener=null;window.close();
+04/11/2018 02:44:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：3分33秒');window.opener=null;window.close();
+04/11/2018 02:44:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：3分27秒');window.opener=null;window.close();
+04/11/2018 02:44:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：3分29秒');window.opener=null;window.close();
+04/11/2018 02:44:10 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：3分40秒');window.opener=null;window.close();
+04/11/2018 02:44:10 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：3分40秒');window.opener=null;window.close();
+04/11/2018 02:44:10 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：3分32秒');window.opener=null;window.close();
+04/11/2018 02:44:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：3分46秒');window.opener=null;window.close();
+04/11/2018 02:44:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：3分48秒');window.opener=null;window.close();
+04/11/2018 02:44:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：3分54秒');window.opener=null;window.close();
+04/11/2018 02:44:12 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：3分53秒');window.opener=null;window.close();
+04/11/2018 02:44:12 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：4分4秒');window.opener=null;window.close();
+04/11/2018 02:44:12 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：3分43秒');window.opener=null;window.close();
+04/11/2018 02:44:13 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：4分9秒');window.opener=null;window.close();
+04/11/2018 02:44:13 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：4分8秒');window.opener=null;window.close();
+04/11/2018 02:44:13 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：3分54秒');window.opener=null;window.close();
+04/11/2018 02:44:13 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：4分14秒');window.opener=null;window.close();
+04/11/2018 02:44:13 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：3分57秒');window.opener=null;window.close();
+04/11/2018 02:44:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：4分19秒');window.opener=null;window.close();
+04/11/2018 02:44:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：4分20秒');window.opener=null;window.close();
+04/11/2018 02:44:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：4分10秒');window.opener=null;window.close();
+04/11/2018 02:44:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：4分22秒');window.opener=null;window.close();
+04/11/2018 02:44:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：4分16秒');window.opener=null;window.close();
+04/11/2018 02:44:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：4分18秒');window.opener=null;window.close();
+04/11/2018 02:44:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：4分30秒');window.opener=null;window.close();
+04/11/2018 02:44:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：4分30秒');window.opener=null;window.close();
+04/11/2018 02:44:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：4分23秒');window.opener=null;window.close();
+04/11/2018 02:44:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：3分44秒');window.opener=null;window.close();
+04/11/2018 02:44:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：4分46秒');window.opener=null;window.close();
+04/11/2018 02:44:17 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：4分45秒');window.opener=null;window.close();
+04/11/2018 02:44:17 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：4分56秒');window.opener=null;window.close();
+04/11/2018 02:44:17 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：4分36秒');window.opener=null;window.close();
+04/11/2018 02:44:18 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：5分2秒');window.opener=null;window.close();
+04/11/2018 02:44:18 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：4分47秒');window.opener=null;window.close();
+04/11/2018 02:44:18 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：5分7秒');window.opener=null;window.close();
+04/11/2018 02:44:18 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：5分2秒');window.opener=null;window.close();
+04/11/2018 02:44:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：5分13秒');window.opener=null;window.close();
+04/11/2018 02:44:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：5分14秒');window.opener=null;window.close();
+04/11/2018 02:44:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：4分51秒');window.opener=null;window.close();
+04/11/2018 02:44:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：5分16秒');window.opener=null;window.close();
+04/11/2018 02:44:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：5分10秒');window.opener=null;window.close();
+04/11/2018 02:44:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：5分13秒');window.opener=null;window.close();
+04/11/2018 02:44:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：5分5秒');window.opener=null;window.close();
+04/11/2018 02:44:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：5分25秒');window.opener=null;window.close();
+04/11/2018 02:44:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：5分26秒');window.opener=null;window.close();
+04/11/2018 02:44:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：5分19秒');window.opener=null;window.close();
+04/11/2018 02:44:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：5分33秒');window.opener=null;window.close();
+04/11/2018 02:44:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：5分35秒');window.opener=null;window.close();
+04/11/2018 02:44:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：4分41秒');window.opener=null;window.close();
+04/11/2018 02:44:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：5分43秒');window.opener=null;window.close();
+04/11/2018 02:44:22 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：5分42秒');window.opener=null;window.close();
+04/11/2018 02:44:22 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：5分53秒');window.opener=null;window.close();
+04/11/2018 02:44:22 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：5分34秒');window.opener=null;window.close();
+04/11/2018 02:44:23 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：6分0秒');window.opener=null;window.close();
+04/11/2018 02:44:23 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：5分45秒');window.opener=null;window.close();
+04/11/2018 02:44:23 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：6分5秒');window.opener=null;window.close();
+04/11/2018 02:44:23 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：6分1秒');window.opener=null;window.close();
+04/11/2018 02:44:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：6分12秒');window.opener=null;window.close();
+04/11/2018 02:44:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：6分13秒');window.opener=null;window.close();
+04/11/2018 02:44:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：5分50秒');window.opener=null;window.close();
+04/11/2018 02:44:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：6分15秒');window.opener=null;window.close();
+04/11/2018 02:44:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：6分10秒');window.opener=null;window.close();
+04/11/2018 02:44:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：6分13秒');window.opener=null;window.close();
+04/11/2018 02:44:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：6分5秒');window.opener=null;window.close();
+04/11/2018 02:44:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：6分25秒');window.opener=null;window.close();
+04/11/2018 02:44:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：6分27秒');window.opener=null;window.close();
+04/11/2018 02:44:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：6分20秒');window.opener=null;window.close();
+04/11/2018 02:44:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：6分34秒');window.opener=null;window.close();
+04/11/2018 02:44:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：6分36秒');window.opener=null;window.close();
+04/11/2018 02:44:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：5分43秒');window.opener=null;window.close();
+04/11/2018 02:44:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：6分45秒');window.opener=null;window.close();
+04/11/2018 02:44:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：6分44秒');window.opener=null;window.close();
+04/11/2018 02:44:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：6分56秒');window.opener=null;window.close();
+04/11/2018 02:44:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：6分37秒');window.opener=null;window.close();
+04/11/2018 02:44:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：7分3秒');window.opener=null;window.close();
+04/11/2018 02:44:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：6分48秒');window.opener=null;window.close();
+04/11/2018 02:44:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：7分9秒');window.opener=null;window.close();
+04/11/2018 02:44:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：7分5秒');window.opener=null;window.close();
+04/11/2018 02:44:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：7分16秒');window.opener=null;window.close();
+04/11/2018 02:44:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：7分17秒');window.opener=null;window.close();
+04/11/2018 02:44:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：6分54秒');window.opener=null;window.close();
+04/11/2018 02:44:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：7分19秒');window.opener=null;window.close();
+04/11/2018 02:44:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：7分15秒');window.opener=null;window.close();
+04/11/2018 02:44:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：7分18秒');window.opener=null;window.close();
+04/11/2018 02:44:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：7分10秒');window.opener=null;window.close();
+04/11/2018 02:44:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：7分30秒');window.opener=null;window.close();
+04/11/2018 02:44:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：7分33秒');window.opener=null;window.close();
+04/11/2018 02:44:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：7分40秒');window.opener=null;window.close();
+04/11/2018 02:44:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：7分26秒');window.opener=null;window.close();
+04/11/2018 02:44:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：7分43秒');window.opener=null;window.close();
+04/11/2018 02:44:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：6分50秒');window.opener=null;window.close();
+04/11/2018 02:44:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：7分52秒');window.opener=null;window.close();
+04/11/2018 02:44:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：7分51秒');window.opener=null;window.close();
+04/11/2018 02:44:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：8分4秒');window.opener=null;window.close();
+04/11/2018 02:44:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：7分45秒');window.opener=null;window.close();
+04/11/2018 02:44:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：8分11秒');window.opener=null;window.close();
+04/11/2018 02:44:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：7分56秒');window.opener=null;window.close();
+04/11/2018 02:44:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：8分18秒');window.opener=null;window.close();
+04/11/2018 02:44:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：8分14秒');window.opener=null;window.close();
+04/11/2018 02:44:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：8分25秒');window.opener=null;window.close();
+04/11/2018 02:44:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：8分26秒');window.opener=null;window.close();
+04/11/2018 02:44:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：8分3秒');window.opener=null;window.close();
+04/11/2018 02:44:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：8分28秒');window.opener=null;window.close();
+04/11/2018 02:44:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：8分25秒');window.opener=null;window.close();
+04/11/2018 02:44:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：8分28秒');window.opener=null;window.close();
+04/11/2018 02:44:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：8分40秒');window.opener=null;window.close();
+04/11/2018 02:44:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：8分20秒');window.opener=null;window.close();
+04/11/2018 02:44:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：8分44秒');window.opener=null;window.close();
+04/11/2018 02:44:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：8分51秒');window.opener=null;window.close();
+04/11/2018 02:44:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：8分55秒');window.opener=null;window.close();
+04/11/2018 02:44:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：8分2秒');window.opener=null;window.close();
+04/11/2018 02:44:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：9分4秒');window.opener=null;window.close();
+04/11/2018 02:44:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：9分3秒');window.opener=null;window.close();
+04/11/2018 02:44:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：9分17秒');window.opener=null;window.close();
+04/11/2018 02:44:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：8分58秒');window.opener=null;window.close();
+04/11/2018 02:44:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：9分24秒');window.opener=null;window.close();
+04/11/2018 02:44:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：8分39秒');window.opener=null;window.close();
+04/11/2018 02:44:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：9分32秒');window.opener=null;window.close();
+04/11/2018 02:44:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：9分28秒');window.opener=null;window.close();
+04/11/2018 02:44:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：9分10秒');window.opener=null;window.close();
+04/11/2018 02:44:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：9分39秒');window.opener=null;window.close();
+04/11/2018 02:44:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：9分40秒');window.opener=null;window.close();
+04/11/2018 02:44:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：9分43秒');window.opener=null;window.close();
+04/11/2018 02:44:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：9分40秒');window.opener=null;window.close();
+04/11/2018 02:44:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：9分18秒');window.opener=null;window.close();
+04/11/2018 02:44:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：9分43秒');window.opener=null;window.close();
+04/11/2018 02:44:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：9分55秒');window.opener=null;window.close();
+04/11/2018 02:44:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：9分36秒');window.opener=null;window.close();
+04/11/2018 02:44:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：10分0秒');window.opener=null;window.close();
+04/11/2018 02:44:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：10分7秒');window.opener=null;window.close();
+04/11/2018 02:44:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：10分12秒');window.opener=null;window.close();
+04/11/2018 02:44:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：9分19秒');window.opener=null;window.close();
+04/11/2018 02:44:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：10分21秒');window.opener=null;window.close();
+04/11/2018 02:44:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：10分20秒');window.opener=null;window.close();
+04/11/2018 02:44:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：10分35秒');window.opener=null;window.close();
+04/11/2018 02:44:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：10分16秒');window.opener=null;window.close();
+04/11/2018 02:44:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：10分42秒');window.opener=null;window.close();
+04/11/2018 02:44:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：9分58秒');window.opener=null;window.close();
+04/11/2018 02:44:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：10分51秒');window.opener=null;window.close();
+04/11/2018 02:44:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：10分47秒');window.opener=null;window.close();
+04/11/2018 02:44:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：10分29秒');window.opener=null;window.close();
+04/11/2018 02:44:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：10分58秒');window.opener=null;window.close();
+04/11/2018 02:44:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：10分59秒');window.opener=null;window.close();
+04/11/2018 02:44:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：11分3秒');window.opener=null;window.close();
+04/11/2018 02:44:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：11分0秒');window.opener=null;window.close();
+04/11/2018 02:44:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：10分38秒');window.opener=null;window.close();
+04/11/2018 02:44:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：11分3秒');window.opener=null;window.close();
+04/11/2018 02:44:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：11分16秒');window.opener=null;window.close();
+04/11/2018 02:44:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：10分57秒');window.opener=null;window.close();
+04/11/2018 02:44:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：11分21秒');window.opener=null;window.close();
+04/11/2018 02:44:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：11分29秒');window.opener=null;window.close();
+04/11/2018 02:44:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：11分34秒');window.opener=null;window.close();
+04/11/2018 02:44:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：10分41秒');window.opener=null;window.close();
+04/11/2018 02:44:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：11分43秒');window.opener=null;window.close();
+04/11/2018 02:44:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：11分43秒');window.opener=null;window.close();
+04/11/2018 02:44:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：11分58秒');window.opener=null;window.close();
+04/11/2018 02:44:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：11分39秒');window.opener=null;window.close();
+04/11/2018 02:44:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：11分22秒');window.opener=null;window.close();
+04/11/2018 02:44:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：12分11秒');window.opener=null;window.close();
+04/11/2018 02:44:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：11分53秒');window.opener=null;window.close();
+04/11/2018 02:44:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：12分28秒');window.opener=null;window.close();
+04/11/2018 02:44:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:51 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：12分47秒');window.opener=null;window.close();
+04/11/2018 02:44:51 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：12分56秒');window.opener=null;window.close();
+04/11/2018 02:44:52 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：13分1秒');window.opener=null;window.close();
+04/11/2018 02:44:52 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：12分8秒');window.opener=null;window.close();
+04/11/2018 02:44:52 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：13分10秒');window.opener=null;window.close();
+04/11/2018 02:44:52 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：13分11秒');window.opener=null;window.close();
+04/11/2018 02:44:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：13分35秒');window.opener=null;window.close();
+04/11/2018 02:44:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:44:54 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：13分44秒');window.opener=null;window.close();
+04/11/2018 02:44:54 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：13分40秒');window.opener=null;window.close();
+04/11/2018 02:44:54 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：13分22秒');window.opener=null;window.close();
+04/11/2018 02:44:54 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：13分51秒');window.opener=null;window.close();
+04/11/2018 02:44:54 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：13分54秒');window.opener=null;window.close();
+04/11/2018 02:44:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：13分58秒');window.opener=null;window.close();
+04/11/2018 02:44:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：13分55秒');window.opener=null;window.close();
+04/11/2018 02:44:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：13分33秒');window.opener=null;window.close();
+04/11/2018 02:44:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：13分58秒');window.opener=null;window.close();
+04/11/2018 02:44:55 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：14分13秒');window.opener=null;window.close();
+04/11/2018 02:44:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：13分54秒');window.opener=null;window.close();
+04/11/2018 02:44:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：14分18秒');window.opener=null;window.close();
+04/11/2018 02:44:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：14分28秒');window.opener=null;window.close();
+04/11/2018 02:44:57 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：14分33秒');window.opener=null;window.close();
+04/11/2018 02:44:57 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：13分40秒');window.opener=null;window.close();
+04/11/2018 02:44:57 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：14分43秒');window.opener=null;window.close();
+04/11/2018 02:44:58 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：14分44秒');window.opener=null;window.close();
+04/11/2018 02:44:58 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：14分59秒');window.opener=null;window.close();
+04/11/2018 02:44:58 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：14分40秒');window.opener=null;window.close();
+04/11/2018 02:44:58 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：15分9秒');window.opener=null;window.close();
+04/11/2018 02:44:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：14分25秒');window.opener=null;window.close();
+04/11/2018 02:44:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：15分18秒');window.opener=null;window.close();
+04/11/2018 02:44:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：15分14秒');window.opener=null;window.close();
+04/11/2018 02:44:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：14分56秒');window.opener=null;window.close();
+04/11/2018 02:44:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：15分26秒');window.opener=null;window.close();
+04/11/2018 02:44:59 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：15分29秒');window.opener=null;window.close();
+04/11/2018 02:45:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：15分33秒');window.opener=null;window.close();
+04/11/2018 02:45:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：15分30秒');window.opener=null;window.close();
+04/11/2018 02:45:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：15分8秒');window.opener=null;window.close();
+04/11/2018 02:45:00 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：15分33秒');window.opener=null;window.close();
+04/11/2018 02:45:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：15分49秒');window.opener=null;window.close();
+04/11/2018 02:45:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：15分30秒');window.opener=null;window.close();
+04/11/2018 02:45:01 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：15分54秒');window.opener=null;window.close();
+04/11/2018 02:45:02 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：16分5秒');window.opener=null;window.close();
+04/11/2018 02:45:02 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：16分10秒');window.opener=null;window.close();
+04/11/2018 02:45:02 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：15分17秒');window.opener=null;window.close();
+04/11/2018 02:45:02 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：16分21秒');window.opener=null;window.close();
+04/11/2018 02:45:03 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：16分22秒');window.opener=null;window.close();
+04/11/2018 02:45:03 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：16分37秒');window.opener=null;window.close();
+04/11/2018 02:45:03 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：16分18秒');window.opener=null;window.close();
+04/11/2018 02:45:04 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：16分48秒');window.opener=null;window.close();
+04/11/2018 02:45:04 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：16分4秒');window.opener=null;window.close();
+04/11/2018 02:45:04 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：16分57秒');window.opener=null;window.close();
+04/11/2018 02:45:04 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：16分53秒');window.opener=null;window.close();
+04/11/2018 02:45:04 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：16分35秒');window.opener=null;window.close();
+04/11/2018 02:45:04 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：17分6秒');window.opener=null;window.close();
+04/11/2018 02:45:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：17分9秒');window.opener=null;window.close();
+04/11/2018 02:45:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：17分13秒');window.opener=null;window.close();
+04/11/2018 02:45:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：17分10秒');window.opener=null;window.close();
+04/11/2018 02:45:05 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：17分14秒');window.opener=null;window.close();
+04/11/2018 02:45:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：16分49秒');window.opener=null;window.close();
+04/11/2018 02:45:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：17分11秒');window.opener=null;window.close();
+04/11/2018 02:45:06 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：17分35秒');window.opener=null;window.close();
+04/11/2018 02:45:07 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：17分47秒');window.opener=null;window.close();
+04/11/2018 02:45:07 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：17分52秒');window.opener=null;window.close();
+04/11/2018 02:45:07 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：16分59秒');window.opener=null;window.close();
+04/11/2018 02:45:08 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:45:08 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:45:08 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：18分20秒');window.opener=null;window.close();
+04/11/2018 02:45:08 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：18分1秒');window.opener=null;window.close();
+04/11/2018 02:45:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：18分32秒');window.opener=null;window.close();
+04/11/2018 02:45:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：17分33秒');window.opener=null;window.close();
+04/11/2018 02:45:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：17分48秒');window.opener=null;window.close();
+04/11/2018 02:45:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：18分41秒');window.opener=null;window.close();
+04/11/2018 02:45:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:45:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:45:09 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：18分51秒');window.opener=null;window.close();
+04/11/2018 02:45:10 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：18分54秒');window.opener=null;window.close();
+04/11/2018 02:45:10 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：18分58秒');window.opener=null;window.close();
+04/11/2018 02:45:10 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：18分55秒');window.opener=null;window.close();
+04/11/2018 02:45:10 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:45:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：18分35秒');window.opener=null;window.close();
+04/11/2018 02:45:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：18分57秒');window.opener=null;window.close();
+04/11/2018 02:45:11 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:45:12 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：19分34秒');window.opener=null;window.close();
+04/11/2018 02:45:12 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：19分39秒');window.opener=null;window.close();
+04/11/2018 02:45:12 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：18分47秒');window.opener=null;window.close();
+04/11/2018 02:45:13 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：19分52秒');window.opener=null;window.close();
+04/11/2018 02:45:13 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：19分53秒');window.opener=null;window.close();
+04/11/2018 02:45:13 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：20分8秒');window.opener=null;window.close();
+04/11/2018 02:45:13 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：19分50秒');window.opener=null;window.close();
+04/11/2018 02:45:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：20分21秒');window.opener=null;window.close();
+04/11/2018 02:45:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：19分22秒');window.opener=null;window.close();
+04/11/2018 02:45:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：19分37秒');window.opener=null;window.close();
+04/11/2018 02:45:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：20分30秒');window.opener=null;window.close();
+04/11/2018 02:45:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：20分27秒');window.opener=null;window.close();
+04/11/2018 02:45:14 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：20分10秒');window.opener=null;window.close();
+04/11/2018 02:45:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：20分41秒');window.opener=null;window.close();
+04/11/2018 02:45:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：20分44秒');window.opener=null;window.close();
+04/11/2018 02:45:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：20分48秒');window.opener=null;window.close();
+04/11/2018 02:45:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：20分45秒');window.opener=null;window.close();
+04/11/2018 02:45:15 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：20分51秒');window.opener=null;window.close();
+04/11/2018 02:45:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：20分26秒');window.opener=null;window.close();
+04/11/2018 02:45:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：20分48秒');window.opener=null;window.close();
+04/11/2018 02:45:16 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：21分13秒');window.opener=null;window.close();
+04/11/2018 02:45:17 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：21分26秒');window.opener=null;window.close();
+04/11/2018 02:45:17 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：21分31秒');window.opener=null;window.close();
+04/11/2018 02:45:17 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：20分40秒');window.opener=null;window.close();
+04/11/2018 02:45:18 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：21分45秒');window.opener=null;window.close();
+04/11/2018 02:45:18 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：21分46秒');window.opener=null;window.close();
+04/11/2018 02:45:18 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：22分1秒');window.opener=null;window.close();
+04/11/2018 02:45:18 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：21分44秒');window.opener=null;window.close();
+04/11/2018 02:45:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：22分15秒');window.opener=null;window.close();
+04/11/2018 02:45:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：21分16秒');window.opener=null;window.close();
+04/11/2018 02:45:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：21分31秒');window.opener=null;window.close();
+04/11/2018 02:45:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：22分25秒');window.opener=null;window.close();
+04/11/2018 02:45:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：22分22秒');window.opener=null;window.close();
+04/11/2018 02:45:19 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：22分5秒');window.opener=null;window.close();
+04/11/2018 02:45:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：22分36秒');window.opener=null;window.close();
+04/11/2018 02:45:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：22分39秒');window.opener=null;window.close();
+04/11/2018 02:45:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：22分43秒');window.opener=null;window.close();
+04/11/2018 02:45:20 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：22分41秒');window.opener=null;window.close();
+04/11/2018 02:45:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：22分47秒');window.opener=null;window.close();
+04/11/2018 02:45:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：22分22秒');window.opener=null;window.close();
+04/11/2018 02:45:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：23分10秒');window.opener=null;window.close();
+04/11/2018 02:45:21 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：22分45秒');window.opener=null;window.close();
+04/11/2018 02:45:22 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：23分23秒');window.opener=null;window.close();
+04/11/2018 02:45:22 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：23分28秒');window.opener=null;window.close();
+04/11/2018 02:45:22 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：22分38秒');window.opener=null;window.close();
+04/11/2018 02:45:23 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：23分43秒');window.opener=null;window.close();
+04/11/2018 02:45:23 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：23分44秒');window.opener=null;window.close();
+04/11/2018 02:45:23 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：24分0秒');window.opener=null;window.close();
+04/11/2018 02:45:23 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：23分43秒');window.opener=null;window.close();
+04/11/2018 02:45:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：24分14秒');window.opener=null;window.close();
+04/11/2018 02:45:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：23分15秒');window.opener=null;window.close();
+04/11/2018 02:45:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：23分30秒');window.opener=null;window.close();
+04/11/2018 02:45:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：24分25秒');window.opener=null;window.close();
+04/11/2018 02:45:24 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：24分22秒');window.opener=null;window.close();
+04/11/2018 02:45:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：24分5秒');window.opener=null;window.close();
+04/11/2018 02:45:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：24分36秒');window.opener=null;window.close();
+04/11/2018 02:45:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：24分39秒');window.opener=null;window.close();
+04/11/2018 02:45:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：24分43秒');window.opener=null;window.close();
+04/11/2018 02:45:25 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：24分42秒');window.opener=null;window.close();
+04/11/2018 02:45:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：24分48秒');window.opener=null;window.close();
+04/11/2018 02:45:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：24分23秒');window.opener=null;window.close();
+04/11/2018 02:45:26 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：25分12秒');window.opener=null;window.close();
+04/11/2018 02:45:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：24分47秒');window.opener=null;window.close();
+04/11/2018 02:45:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：25分25秒');window.opener=null;window.close();
+04/11/2018 02:45:27 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：25分31秒');window.opener=null;window.close();
+04/11/2018 02:45:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 window.opener.location.href=window.opener.location.href;
+04/11/2018 02:45:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：25分46秒');window.opener=null;window.close();
+04/11/2018 02:45:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：25分47秒');window.opener=null;window.close();
+04/11/2018 02:45:28 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：26分4秒');window.opener=null;window.close();
+04/11/2018 02:45:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：25分47秒');window.opener=null;window.close();
+04/11/2018 02:45:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：26分18秒');window.opener=null;window.close();
+04/11/2018 02:45:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：25分19秒');window.opener=null;window.close();
+04/11/2018 02:45:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：25分34秒');window.opener=null;window.close();
+04/11/2018 02:45:29 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：26分30秒');window.opener=null;window.close();
+04/11/2018 02:45:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：26分10秒');window.opener=null;window.close();
+04/11/2018 02:45:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：26分41秒');window.opener=null;window.close();
+04/11/2018 02:45:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：26分44秒');window.opener=null;window.close();
+04/11/2018 02:45:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：26分27秒');window.opener=null;window.close();
+04/11/2018 02:45:30 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：26分49秒');window.opener=null;window.close();
+04/11/2018 02:45:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：26分48秒');window.opener=null;window.close();
+04/11/2018 02:45:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：26分54秒');window.opener=null;window.close();
+04/11/2018 02:45:31 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：26分29秒');window.opener=null;window.close();
+04/11/2018 02:45:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：27分19秒');window.opener=null;window.close();
+04/11/2018 02:45:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：26分54秒');window.opener=null;window.close();
+04/11/2018 02:45:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：27分32秒');window.opener=null;window.close();
+04/11/2018 02:45:32 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：27分39秒');window.opener=null;window.close();
+04/11/2018 02:45:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：26分49秒');window.opener=null;window.close();
+04/11/2018 02:45:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：27分54秒');window.opener=null;window.close();
+04/11/2018 02:45:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：27分55秒');window.opener=null;window.close();
+04/11/2018 02:45:33 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：28分13秒');window.opener=null;window.close();
+04/11/2018 02:45:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：27分56秒');window.opener=null;window.close();
+04/11/2018 02:45:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：28分27秒');window.opener=null;window.close();
+04/11/2018 02:45:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：27分28秒');window.opener=null;window.close();
+04/11/2018 02:45:34 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：27分43秒');window.opener=null;window.close();
+04/11/2018 02:45:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：28分40秒');window.opener=null;window.close();
+04/11/2018 02:45:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：28分20秒');window.opener=null;window.close();
+04/11/2018 02:45:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：28分51秒');window.opener=null;window.close();
+04/11/2018 02:45:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：28分54秒');window.opener=null;window.close();
+04/11/2018 02:45:35 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：29分0秒');window.opener=null;window.close();
+04/11/2018 02:45:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：28分59秒');window.opener=null;window.close();
+04/11/2018 02:45:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：29分5秒');window.opener=null;window.close();
+04/11/2018 02:45:36 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：28分40秒');window.opener=null;window.close();
+04/11/2018 02:45:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：29分31秒');window.opener=null;window.close();
+04/11/2018 02:45:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：29分6秒');window.opener=null;window.close();
+04/11/2018 02:45:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：29分44秒');window.opener=null;window.close();
+04/11/2018 02:45:37 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：29分52秒');window.opener=null;window.close();
+04/11/2018 02:45:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：29分2秒');window.opener=null;window.close();
+04/11/2018 02:45:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：30分7秒');window.opener=null;window.close();
+04/11/2018 02:45:38 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：28分40秒');window.opener=null;window.close();
+04/11/2018 02:45:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：30分27秒');window.opener=null;window.close();
+04/11/2018 02:45:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：30分10秒');window.opener=null;window.close();
+04/11/2018 02:45:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：30分41秒');window.opener=null;window.close();
+04/11/2018 02:45:39 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：29分43秒');window.opener=null;window.close();
+04/11/2018 02:45:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：30分55秒');window.opener=null;window.close();
+04/11/2018 02:45:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：30分35秒');window.opener=null;window.close();
+04/11/2018 02:45:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：31分6秒');window.opener=null;window.close();
+04/11/2018 02:45:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：31分9秒');window.opener=null;window.close();
+04/11/2018 02:45:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：30分11秒');window.opener=null;window.close();
+04/11/2018 02:45:40 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：31分16秒');window.opener=null;window.close();
+04/11/2018 02:45:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：31分15秒');window.opener=null;window.close();
+04/11/2018 02:45:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：29分59秒');window.opener=null;window.close();
+04/11/2018 02:45:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：30分56秒');window.opener=null;window.close();
+04/11/2018 02:45:41 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：31分22秒');window.opener=null;window.close();
+04/11/2018 02:45:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：31分48秒');window.opener=null;window.close();
+04/11/2018 02:45:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：32分1秒');window.opener=null;window.close();
+04/11/2018 02:45:42 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：31分24秒');window.opener=null;window.close();
+04/11/2018 02:45:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：32分10秒');window.opener=null;window.close();
+04/11/2018 02:45:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：31分20秒');window.opener=null;window.close();
+04/11/2018 02:45:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：32分25秒');window.opener=null;window.close();
+04/11/2018 02:45:43 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：30分59秒');window.opener=null;window.close();
+04/11/2018 02:45:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=261 alert('成功记录学习时间！本章节累计学习时间为：32分46秒');window.opener=null;window.close();
+04/11/2018 02:45:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：32分29秒');window.opener=null;window.close();
+04/11/2018 02:45:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=263 alert('成功记录学习时间！本章节累计学习时间为：33分0秒');window.opener=null;window.close();
+04/11/2018 02:45:44 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：32分3秒');window.opener=null;window.close();
+04/11/2018 02:45:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=260 alert('成功记录学习时间！本章节累计学习时间为：33分15秒');window.opener=null;window.close();
+04/11/2018 02:45:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：32分55秒');window.opener=null;window.close();
+04/11/2018 02:45:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=262 alert('成功记录学习时间！本章节累计学习时间为：33分26秒');window.opener=null;window.close();
+04/11/2018 02:45:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=267 alert('成功记录学习时间！本章节累计学习时间为：33分30秒');window.opener=null;window.close();
+04/11/2018 02:45:45 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：32分32秒');window.opener=null;window.close();
+04/11/2018 02:45:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=266 alert('成功记录学习时间！本章节累计学习时间为：33分37秒');window.opener=null;window.close();
+04/11/2018 02:45:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=270 alert('成功记录学习时间！本章节累计学习时间为：33分36秒');window.opener=null;window.close();
+04/11/2018 02:45:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：32分20秒');window.opener=null;window.close();
+04/11/2018 02:45:46 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：33分18秒');window.opener=null;window.close();
+04/11/2018 02:45:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：33分44秒');window.opener=null;window.close();
+04/11/2018 02:45:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=722 alert('成功记录学习时间！本章节累计学习时间为：34分10秒');window.opener=null;window.close();
+04/11/2018 02:45:47 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=723 alert('成功记录学习时间！本章节累计学习时间为：34分24秒');window.opener=null;window.close();
+04/11/2018 02:45:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：33分47秒');window.opener=null;window.close();
+04/11/2018 02:45:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=724 alert('成功记录学习时间！本章节累计学习时间为：34分33秒');window.opener=null;window.close();
+04/11/2018 02:45:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：33分43秒');window.opener=null;window.close();
+04/11/2018 02:45:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=721 alert('成功记录学习时间！本章节累计学习时间为：34分48秒');window.opener=null;window.close();
+04/11/2018 02:45:48 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：33分23秒');window.opener=null;window.close();
+04/11/2018 02:45:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=268 alert('成功记录学习时间！本章节累计学习时间为：34分53秒');window.opener=null;window.close();
+04/11/2018 02:45:49 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=265 alert('成功记录学习时间！本章节累计学习时间为：34分28秒');window.opener=null;window.close();
+04/11/2018 02:45:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=718 alert('成功记录学习时间！本章节累计学习时间为：35分20秒');window.opener=null;window.close();
+04/11/2018 02:45:50 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：34分58秒');window.opener=null;window.close();
+04/11/2018 02:45:51 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：34分46秒');window.opener=null;window.close();
+04/11/2018 02:45:51 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：35分45秒');window.opener=null;window.close();
+04/11/2018 02:45:52 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=717 alert('成功记录学习时间！本章节累计学习时间为：36分11秒');window.opener=null;window.close();
+04/11/2018 02:45:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=264 alert('成功记录学习时间！本章节累计学习时间为：36分15秒');window.opener=null;window.close();
+04/11/2018 02:45:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：36分11秒');window.opener=null;window.close();
+04/11/2018 02:45:53 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=719 alert('成功记录学习时间！本章节累计学习时间为：35分52秒');window.opener=null;window.close();
+04/11/2018 02:45:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=720 alert('成功记录学习时间！本章节累计学习时间为：37分29秒');window.opener=null;window.close();
+04/11/2018 02:45:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=271 alert('成功记录学习时间！本章节累计学习时间为：37分17秒');window.opener=null;window.close();
+04/11/2018 02:45:56 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=269 alert('成功记录学习时间！本章节累计学习时间为：38分17秒');window.opener=null;window.close();
+04/11/2018 02:45:58 PM [陈冬春] http://222.73.34.165:88/student/schapter.aspx?chapterid=272 alert('成功记录学习时间！本章节累计学习时间为：38分44秒');window.opener=null;window.close();
+04/11/2018 02:49:25 PM Internal Server Error: /course_detail/49
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 174, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:49:27 PM Internal Server Error: /course_detail/49
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 174, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:49:30 PM Internal Server Error: /course_detail/49
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 174, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:49:41 PM Internal Server Error: /course_detail/49
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 174, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:51:14 PM Internal Server Error: /course_detail/49
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 178, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:51:19 PM Internal Server Error: /course_detail/49
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 178, in course_detail
+    t1 = line.find(id='coursechapters_Label9_%s' % i).text
+AttributeError: 'NoneType' object has no attribute 'text'
+04/11/2018 02:52:47 PM Internal Server Error: /course_details
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/pylarva/github/Python/Projects/spider/spider_ecust/ecustCourse/views.py", line 123, in course_details
+    url = 'http://222.73.34.165:88/student/schapter.aspx?chapterid=%s' % re.search('\d+', i).group()
+AttributeError: 'NoneType' object has no attribute 'group'

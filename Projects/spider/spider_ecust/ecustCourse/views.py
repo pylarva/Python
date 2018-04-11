@@ -91,11 +91,18 @@ def func(url, cookies_dict, headers, user):
                                  'hlearntime': 3000},
                            cookies=cookies_dict)
         soup2 = BeautifulSoup(r2.text, 'html.parser')
-        msg = soup2.find(name='script')
-        i += 1
-        print(msg)
-        logs.logging.info('[%s] %s %s' % (user, url, msg))
-    print('%s %s done...' % (user, url))
+        times = 1
+        try:
+            msg = soup2.find(name='script').text
+            times = int(re.search('\d+', msg).group())
+        except Exception as e:
+            pass
+        if times > 40:
+            break
+        else:
+            i += 1
+    logs.logging.info('[%s] %s done...' % (user, url))
+
     return True
 
 
@@ -116,15 +123,9 @@ def course_details(request):
             url = 'http://222.73.34.165:88/student/schapter.aspx?chapterid=%s' % re.search('\d+', i).group()
             url_list.append(url)
 
-
-        # pool = ThreadPoolExecutor(5)
         for url in url_list:
-            # v = pool.submit(func, url, cookies_dict, headers)
-            # v.add_done_callback(callback)
             t = threading.Thread(target=func, args=(url, cookies_dict, headers, user))
-            # r = func('http://222.73.34.165:88/student/schapter.aspx?chapterid=2553&add=1', cookies_dict, headers)
             t.start()
-
 
         response.status = True
         return JsonResponse(response.__dict__)
@@ -159,12 +160,22 @@ def course_detail(request, s1):
 
         soup = BeautifulSoup(r3.text, 'html.parser')
 
-        table_list = soup.find_all(name='table')[-1]
+        try:
+            table_list = soup.find_all(name='table')[-1]
+        except Exception as e:
+            data = [{'t1': '该课程已修完'}]
+            return render(request, 'course_detail.html', {'data': data})
+
         tr_list = table_list.find_all(name='tr')
+
         i = 0
         data = []
         for line in tr_list:
-            t1 = line.find(id='coursechapters_Label9_%s' % i).text
+            try:
+                t1 = line.find(id='coursechapters_Label9_%s' % i).text
+            except Exception as e:
+                data = [{'t1': '该课程已修完'}]
+                return render(request, 'course_detail.html', {'data': data})
             t2 = line.find(id='coursechapters_Label11_%s' % i).text
             t3 = line.find(id='coursechapters_HyperLink3_%s' % i).get('onclick')
             t4 = line.find(name='img').get('src')
@@ -240,6 +251,11 @@ def acc_login(request):
         password = request.POST.get('password')
         # username = '26160554'
         # password = 'B'
+        if '26160500' < username < '26160570':
+            pass
+        else:
+            err_msg = '暂不支持该学号..'
+            return render(request, 'login.html', {'err_msg': err_msg})
 
         # 尝试登陆学校网站
         cookies_dict = {}

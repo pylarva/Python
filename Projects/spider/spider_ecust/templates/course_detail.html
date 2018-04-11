@@ -9,7 +9,7 @@
                             <small>Welcome back, Gary Stone</small>
                         </div>
                         <div class="col-xs-6 text-right">
-                            <button type="button" class="btn btn-success" onclick="do_spider()">爬取全部</button>
+                            <button type="button" class="btn btn-success" onclick="do_spider()">全部爬取</button>
                             <a href="javascript:;" class="fa fa-flash pull-right pd-sm toggle-sidebar" data-toggle="off-canvas" data-move="rtl">
                                 <span class="badge bg-danger animated flash">6</span>
                             </a>
@@ -64,6 +64,15 @@
             $.post('index', {'course_id': id, csrfmiddlewaretoken: '{{ csrf_token  }}'})
         }
 
+        function add_loading() {
+            $('#table_list').children().each(function () {
+                var status = $(this).children().next().eq(3).attr('done');
+                if(status == 'no'){
+                    $(this).children().next().eq(3).children().attr('src', '/static/img/loading.gif')
+                }
+            });
+        }
+
         function do_spider() {
             var list_v = [];
             $('#table_list').children().each(function () {
@@ -80,7 +89,8 @@
                     traditional: true,
                     success: function (response) {
                         if(response.status){
-                            alert('添加任务成功，请5分钟后刷新查看是否成功...');
+                            add_loading();
+                            alert('添加任务成功，请3-5分钟后刷新查看是否成功(请勿重复添加任务，可以继续去添加其它课程任务)...');
                         }else {
                             alert('审核失败！');
                         }
