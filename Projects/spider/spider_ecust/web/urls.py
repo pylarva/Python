@@ -21,5 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.dashboard),
     url(r'^login$', views.acc_login),
-    url(r'^index$', views.dashboard)
+    url(r'^index$', views.dashboard),
+    url(r'^course_detail/(?P<s1>\d+)$', views.course_detail),
+    url(r'^course_details$', views.course_details)
 ]

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block body %}
+    <section class="main-content">
+
+        <div class="content-wrap">
+                    <div class="row mg-b">
+                        <div class="col-xs-6">
+                            <h3 class="no-margin">Dashboard</h3>
+                            <small>Welcome back, Gary Stone</small>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <button type="button" class="btn btn-success" onclick="do_spider()">爬取全部</button>
+                            <a href="javascript:;" class="fa fa-flash pull-right pd-sm toggle-sidebar" data-toggle="off-canvas" data-move="rtl">
+                                <span class="badge bg-danger animated flash">6</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="panel-body no-padding">
+                                    <table class="table no-margin">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>UserURL</th>
+                                                <th>Done</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table_list">
+                                    {% for item in data %}
+                                        {% if item.t4 == '../images/Favourite2.png' %}
+                                            <tr class="success">
+                                            {% else %}
+                                            <tr class="warning">
+                                        {% endif %}
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ item.t1 }}</td>
+                                                <td>{{ item.t2 }}</td>
+                                                <td>{{ item.t3 }}</td>
+                                        {% if item.t4 == '../images/Favourite2.png' %}
+
+                                                <td done="done"><img src="/static/img/Favourite2.png" style="width: 20px; height: 20px"></td>
+                                            {% else %}
+                                                <td done="no"><img src="/static/img/Warning.png" style="width: 20px; height: 20px"></td>
+
+                                        {% endif %}
+                                            </tr>
+                                    {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                    </div>
+
+        </div>
+
+    </section>
+{% endblock %}
+{% block js %}
+    <script>
+        function post_course_id(id) {
+            console.log(id);
+            $.post('index', {'course_id': id, csrfmiddlewaretoken: '{{ csrf_token  }}'})
+        }
+
+        function do_spider() {
+            var list_v = [];
+            $('#table_list').children().each(function () {
+                var status = $(this).children().next().eq(3).attr('done');
+                if(status == 'no'){
+                    list_v.push($(this).children().next().eq(2).text())
+                }
+            });
+            $.ajax({
+                    url: '/course_details',
+                    type: 'POST',
+                    data: {'list_v': list_v, csrfmiddlewaretoken: '{{ csrf_token }}'},
+                    dataType: 'JSON',
+                    traditional: true,
+                    success: function (response) {
+                        if(response.status){
+                            alert('添加任务成功，请5分钟后刷新查看是否成功...');
+                        }else {
+                            alert('审核失败！');
+                        }
+                    }
+                })
+        }
+    </script>
+{% endblock %}

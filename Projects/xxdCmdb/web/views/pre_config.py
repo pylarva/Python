@@ -49,11 +49,17 @@ class AssetListView(View):
                     response.data = f.read()
                 f.close()
                 response.status = True
-            except Exception as e:
-                with open(file_path, "r", encoding='gb2312') as f:
-                    response.data = f.read()
-                f.close()
-                response.status = True
+            except UnicodeDecodeError as e:
+                try:
+                    with open(file_path, "r", encoding='gb2312') as f:
+                        response.data = f.read()
+                    f.close()
+                    response.status = True
+                except Exception as ee:
+                    with open(file_path, "r", encoding='latin1') as f:
+                        response.data = f.read()
+                    f.close()
+                    response.status = True
             return JsonResponse(response.__dict__)
 
         business = request.GET.get('business', None)
@@ -210,15 +216,21 @@ class ConfigListView(View):
             business_name = business_obj.name
             file_path = '%sprod/%s/%s' % (jenkins_config.config_path, business_name, file)
             try:
-                with open(file_path, "r") as f:
+                with open(check_file, "r") as f:
                     response.data = f.read()
                 f.close()
                 response.status = True
-            except Exception as e:
-                with open(file_path, "r", encoding='gb2312') as f:
-                    response.data = f.read()
-                f.close()
-                response.status = True
+            except UnicodeDecodeError as e:
+                try:
+                    with open(check_file, "r", encoding='gb2312') as f:
+                        response.data = f.read()
+                    f.close()
+                    response.status = True
+                except Exception as ee:
+                    with open(check_file, "r", encoding='latin1') as f:
+                        response.data = f.read()
+                    f.close()
+                    response.status = True
             return JsonResponse(response.__dict__)
 
         business = request.GET.get('business', None)
@@ -256,11 +268,17 @@ class ConfigListView(View):
                     response.data = f.read()
                 f.close()
                 response.status = True
-            except Exception as e:
-                with open(check_file, "r", encoding='gb2312') as f:
-                    response.data = f.read()
-                f.close()
-                response.status = True
+            except UnicodeDecodeError as e:
+                try:
+                    with open(check_file, "r", encoding='gb2312') as f:
+                        response.data = f.read()
+                    f.close()
+                    response.status = True
+                except Exception as ee:
+                    with open(check_file, "r", encoding='latin1') as f:
+                        response.data = f.read()
+                    f.close()
+                    response.status = True
             return JsonResponse(response.__dict__)
 
         # 新增配置文件

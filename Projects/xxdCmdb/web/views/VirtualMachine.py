@@ -3,6 +3,7 @@
 import os
 import json
 import time
+import queue
 import paramiko
 import threading
 import subprocess
@@ -18,6 +19,7 @@ from django.utils.decorators import method_decorator
 from xml.etree import ElementTree as ET
 from utils import pagination
 from web.service.login import auth_admin
+from concurrent.futures import ThreadPoolExecutor
 
 from conf import kvm_config
 from web.service import asset
@@ -531,14 +533,47 @@ class VirtualListView(View):
         :param host_machine:
         :return:
         """
-        ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
-        for ip in ipaddr:
+
+        def func_get_ip(ip, q):
+            """
+            多线程抓取IP
+            :param url:
+            :return:
+            """
             s = subprocess.call("ssh root@%s 'ping -c1 -W 1 %s > /dev/null'" % (host_machine, ip), shell=True)
             if s != 0:
                 num = models.Asset.objects.filter(host_ip=ip).count()
                 if num == 0:
+                    q.put(ip)
                     return ip
-        return False
+
+        pool = ThreadPoolExecutor(10)
+        q = queue.Queue()
+        ipaddr = IPNetwork('%s/24' % host_machine)[kvm_config.kvm_range_ip[0]:kvm_config.kvm_range_ip[1]]
+        for ip in ipaddr:
+            pool.submit(func_get_ip, ip, q)
+
+        pool.shutdown(wait=False)
+        try:
+            new_ip = q.get(block=True, timeout=10)
+            if new_ip:
+                return new_ip
+        except Exception as e:
+            return False
+
+    def func_get_ip(self, host_machine, ip, q):
+        """
+        多线程抓取IP
+        :param url:
+        :return:
+        """
+        print('start check ip %s' % ip)
+        s = subprocess.call("ssh root@%s 'ping -c1 -W 1 %s > /dev/null'" % (host_machine, ip), shell=True)
+        if s != 0:
+            num = models.Asset.objects.filter(host_ip=ip).count()
+            if num == 0:
+                q.put(ip)
+                return ip
 
 
 class AssetJsonView(View):
