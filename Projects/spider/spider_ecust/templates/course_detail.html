@@ -81,6 +81,10 @@
                     list_v.push($(this).children().next().eq(2).text())
                 }
             });
+            if(list_v.length == 0){
+                alert('当前课程已全部看完...');
+                return false;
+            }
             $.ajax({
                     url: '/course_details',
                     type: 'POST',

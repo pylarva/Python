@@ -95,9 +95,10 @@ def func(url, cookies_dict, headers, user):
         try:
             msg = soup2.find(name='script').text
             times = int(re.search('\d+', msg).group())
+            logs.logging.info('[%s] %s ...' % (user, msg))
         except Exception as e:
             pass
-        if times > 40:
+        if times > 45:
             break
         else:
             i += 1
@@ -251,7 +252,7 @@ def acc_login(request):
         password = request.POST.get('password')
         # username = '26160554'
         # password = 'B'
-        if '26160500' < username < '26160570':
+        if '26160500' < username < '26160580':
             pass
         else:
             err_msg = '暂不支持该学号..'
