@@ -3,6 +3,7 @@
 
 # jenkins配置
 host = '192.168.31.80'
+jenkins_host = '192.168.31.10'
 
 script_path = '/opt/autopublishing.py'
 
@@ -13,6 +14,7 @@ user_name = 'sa'
 api_token = '9e235779d590f7c63d45201bb8c969be'
 
 pkgUrl = 'http://build.xxd.com'
+# pkgUrl = 'http://192.168.31.10'
 
 # source_script_path = '/application/xxdCmdb/scr/autopublishing.py'
 source_script_path = '/Users/pylarva/github/Python/Projects/xxdCmdb/scr/autopublishing.py'
@@ -29,8 +31,8 @@ config_path = '/opt/config/'
 nginx_test_ip_list = ['192.168.33.110']
 
 # 生产环境nginx机器
-# nginx_prod_ip_list = ['10.96.1.69', '10.96.1.70', '10.96.1.71']
-nginx_prod_ip_list = ['192.168.33.110']
+nginx_prod_ip_list = ['10.96.1.69', '10.96.1.70', '10.96.1.71']
+# nginx_prod_ip_list = ['192.168.33.110']
 
 
 # 静态资源包
@@ -63,7 +65,4 @@ jenkins_docker_switch = 0
 
 # 灰度发布开关 0关 1开
 gray_release = 1
-
-# 灰度发布使用的consul地址
-consul_ip = '192.168.129.202:8500'
 

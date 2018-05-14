@@ -18,7 +18,6 @@ from conf import jenkins_config
 import subprocess
 
 
-
 class Asset(BaseServiceList):
     def __init__(self):
         condition_config = [
@@ -473,6 +472,7 @@ class Asset(BaseServiceList):
         # 将发布脚本发送到目标机器
         cmd = "/usr/bin/scp -r %s root@%s:/opt/" % (jenkins_config.source_script_path, jenkins_config.host)
         os.system(cmd)
+        print(cmd)
 
         # 将配置文件发送到目标机器
         cmd = '/usr/bin/scp -r %s root@%s:/opt/' % (jenkins_config.config_path, jenkins_config.host)
@@ -496,6 +496,8 @@ class Asset(BaseServiceList):
         obj = models.ReleaseTask.objects.filter(id=task_id).first()
         md5 = obj.release_md5
         print(md5)
+        if not md5:
+            self.log(task_id, '打包失败或者目标机器未能成功上传MD5...')
 
         # 发布类型为静态资源
         if release_type == 2:
@@ -601,7 +603,20 @@ class Asset(BaseServiceList):
             num = 1
             result = True
             for item in values:
-                print(item.host_ip)
+                # 新加灰度发布 down节点
+                c_args_down = '{"weight":1, "max_fails":2, "fail_timeout":10, "down":1}'
+                c_args_up = '{"weight":1, "max_fails":2, "fail_timeout":10, "down":0}'
+
+                cmd_gray_down = "curl -X PUT -d '%s' http://%s/v1/kv/upstreams/%s/%s:8080" % (c_args_down, jenkins_config.consul_ip,
+                                                                                              business_2, item.host_ip)
+                cmd_gray_up = "curl -X PUT -d '%s' http://%s/v1/kv/upstreams/%s/%s:8080" % (c_args_up, jenkins_config.consul_ip,
+                                                                                            business_2, item.host_ip)
+                if jenkins_config.gray_release:
+                    print(cmd_gray_down)
+                    self.log(task_id, '灰度发布...%s [down]' % item.host_ip)
+                    self.log(task_id, cmd_gray_down)
+                    os.system(cmd_gray_down)
+
                 self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
                 # 目标机开始执行发布脚本
                 ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type, business_2, port)
@@ -612,6 +627,13 @@ class Asset(BaseServiceList):
                     result = False
                     break
                 num += 1
+
+                # 灰度发布 up节点
+                if jenkins_config.gray_release:
+                    print(cmd_gray_up)
+                    self.log(task_id, '灰度发布...%s [up]' % item.host_ip)
+                    self.log(task_id, cmd_gray_up)
+                    os.system(cmd_gray_up)
 
             if result:
                 if release_type == 1:
@@ -665,9 +687,12 @@ class Asset(BaseServiceList):
         self.log(taskId, cmd)
         # 脚本执行过程中 会陆续上传执行日志
         ret = os.system(cmd)
+
         if ret:
             self.log(taskId, '错误代码...%s' % ret)
             print(ret)
+            if ret == '65280':
+                self.log(taskId, 'SSH Permission denied, please try again..')
             return False
         # print(out, err)
         print(ret)

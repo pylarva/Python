@@ -64,6 +64,3 @@ jenkins_docker_switch = 0
 # 灰度发布开关 0关 1开
 gray_release = 1
 
-# 灰度发布使用的consul地址
-consul_ip = '192.168.129.202:8500'
-

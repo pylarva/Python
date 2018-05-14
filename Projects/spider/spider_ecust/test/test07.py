@@ -1,6 +1,12 @@
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-import re
-s = "<script>alert('成功记录学习时间！本章节累计学习时间为：61分0秒');window.opener=null;window.close();</script>"
-print(re.search(('\d+'), s).group())
+
+d1 = {'a': '', 'b': '', 'c': ''}
+d2 = {'e': '4', 'b': '2', 'a': '1'}
+
+for i in d1.keys():
+    if i in d2.keys():
+        d1[i] = d2.get(i)
+
+print(d1)

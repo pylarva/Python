@@ -118,6 +118,7 @@ class ServerJsonView(View):
 
             # 开始执行安装
             models.InstallLog.objects.create(install_id=install_id, install_msg='开始安装系统...')
+            models.InstallLog.objects.create(install_id=install_id, install_msg='连接 %s...' % config_config.install_scripts_ip)
             try:
                 models.PhysicsInstall.objects.filter(id=install_id).update(status=2)
                 i_obj = models.PhysicsInstall.objects.filter(id=install_id).first()
@@ -135,7 +136,6 @@ class ServerJsonView(View):
                 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
                 ssh.connect(config_config.install_scripts_ip, port=22, username='root', password='xinxindai318', timeout=3)
                 ssh.exec_command(cmd)
-                models.InstallLog.objects.create(install_id=install_id, install_msg=config_config.install_scripts_ip)
                 models.InstallLog.objects.create(install_id=install_id, install_msg=cmd)
             except Exception as e:
                 print(e)

@@ -133,6 +133,12 @@ def course_details(request):
 
 
 def course_detail(request, s1):
+    """
+    展示课程详细
+    :param request:
+    :param s1:
+    :return:
+    """
     if request.method == 'GET':
         course_id = s1
         username = request.session['username']
@@ -150,9 +156,6 @@ def course_detail(request, s1):
                    "Upgrade-Insecure-Requests": "1",
                    'Referer': 'http://222.73.34.165:88/student/allcourse.aspx'}
         print(course_url)
-
-        # r1 = requests.get(url=config.script_1)
-        # r2 = requests.get(url=config.script_2)
 
         r3 = requests.get(url=course_url,
                           headers=headers,
@@ -190,6 +193,11 @@ def course_detail(request, s1):
 
 
 def dashboard(request):
+    """
+    index页面
+    :param request:
+    :return:
+    """
     if request.method == 'GET':
         username = request.session['username']
         cookies_dict_obj = models.UserProfile.objects.filter(username=username).first()
@@ -200,52 +208,15 @@ def dashboard(request):
 
         return render(request, 'index.html', {'data': data})
 
-    if request.method == 'POST':
-        course_id = request.POST.get('course_id')
-        username = request.session['username']
-
-        print(course_id)
-
-        cookies_dict_obj = models.UserProfile.objects.filter(username=username).first()
-        password = cookies_dict_obj.pwd
-        cookies_dict = eval(cookies_dict_obj.user_cookies)
-
-        course_url = '%s/student/%s' % (config.school_url, course_id)
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
-                   "Connection": "close", "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
-                   "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                   "Upgrade-Insecure-Requests": "1",
-                   'Referer': 'http://222.73.34.165:88/student/allcourse.aspx'}
-        print(course_url)
-
-        # r1 = requests.get(url=config.script_1)
-        # r2 = requests.get(url=config.script_2)
-
-        r3 = requests.get(url=course_url,
-                          headers=headers,
-                          cookies=cookies_dict)
-        # print(r3.text)
-
-        soup = BeautifulSoup(r3.text, 'html.parser')
-        table_list = soup.find_all(name='table')[-1]
-        tr_list = table_list.find_all(name='tr')
-        i = 0
-        data = []
-        for line in tr_list:
-            t1 = line.find(id='coursechapters_Label9_%s' % i).text
-            t2 = line.find(id='coursechapters_Label11_%s' % i).text
-            t3 = line.find(id='coursechapters_HyperLink3_%s' % i).get('onclick')
-            t4 = line.find(name='img').get('src')
-            i += 1
-            data.append({'t1': t1, 't2': t2, 't3': t3, 't4': t4})
-        print(data)
-
-        return render(request, 'course_detail.html', {'data': data})
-
     return render(request, 'index.html')
 
 
 def acc_login(request):
+    """
+    尝试登陆学校服务器 拿cookies
+    :param request:
+    :return:
+    """
     err_msg = ''
     if request.method == 'POST':
         username = request.POST.get('username')
