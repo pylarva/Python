@@ -13,11 +13,11 @@ user_name = 'sa'
 
 api_token = '9e235779d590f7c63d45201bb8c969be'
 
-pkgUrl = 'http://build.xxd.com'
+pkgUrl = 'http://build.xxd.com:8080'
 # pkgUrl = 'http://192.168.31.10'
 
-# source_script_path = '/application/xxdCmdb/scr/autopublishing.py'
-source_script_path = '/Users/pylarva/github/Python/Projects/xxdCmdb/scr/autopublishing.py'
+source_script_path = '/application/xxdCmdb/scr/autopublishing.py'
+# source_script_path = '/Users/pylarva/github/Python/Projects/xxdCmdb/scr/autopublishing.py'
 
 # 需要进行两次发布的项目
 static_nginx_dict = {'front': '/static/front/', 'webapp': '/static/webapp/'}
@@ -65,4 +65,7 @@ jenkins_docker_switch = 0
 
 # 灰度发布开关 0关 1开
 gray_release = 1
+
+# 灰度发布使用的consul地址
+consul_ip = '10.96.1.196:8500'
 

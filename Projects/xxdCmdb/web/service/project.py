@@ -648,6 +648,20 @@ class Project(BaseServiceList):
             result = True
             for item in values:
                 print(item.host_ip)
+                # 新加灰度发布 down节点
+                c_args_down = '{"weight":1, "max_fails":2, "fail_timeout":10, "down":1}'
+                c_args_up = '{"weight":1, "max_fails":2, "fail_timeout":10, "down":0}'
+
+                cmd_gray_down = "curl -X PUT -d '%s' http://%s/v1/kv/upstreams/%s/%s:8080" % (c_args_down, jenkins_config.consul_ip,
+                                                                                              business_2, item.host_ip)
+                cmd_gray_up = "curl -X PUT -d '%s' http://%s/v1/kv/upstreams/%s/%s:8080" % (c_args_up, jenkins_config.consul_ip,
+                                                                                            business_2, item.host_ip)
+                if jenkins_config.gray_release:
+                    print(cmd_gray_down)
+                    self.log(task_id, '灰度发布...%s [down]' % item.host_ip)
+                    self.log(task_id, cmd_gray_down)
+                    os.system(cmd_gray_down)
+
                 self.log(task_id, '当前发布第%s台%s...' % (num, item.host_ip))
                 # 目标机开始执行发布脚本
                 ret = self.shell_task(item.host_ip, pkg_name, md5sum, task_id, release_type, business_2, port)
@@ -658,6 +672,13 @@ class Project(BaseServiceList):
                     result = False
                     break
                 num += 1
+
+                # 灰度发布 up节点
+                if jenkins_config.gray_release:
+                    print(cmd_gray_up)
+                    self.log(task_id, '灰度发布...%s [up]' % item.host_ip)
+                    self.log(task_id, cmd_gray_up)
+                    os.system(cmd_gray_up)
 
             if result:
                 if release_type == 1:
